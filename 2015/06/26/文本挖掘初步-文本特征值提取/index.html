@@ -1,0 +1,800 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="tfidf,卡方校验,文本特征值," />
+
+
+
+  <link rel="alternate" href="/feed.xml" title="JetMuffin's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="背景继续上文文本中文分词的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。
+语料库本文采用Sougou实验室的语料库，下载地址为：搜狗实验室文本分类资料。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:
+文档结构：C000007 汽车   C000008 财经   C000010  IT   C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文本挖掘初步 - 文本特征值提取">
+<meta property="og:url" content="http://yoursite.com/2015/06/26/文本挖掘初步-文本特征值提取/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="背景继续上文文本中文分词的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。
+语料库本文采用Sougou实验室的语料库，下载地址为：搜狗实验室文本分类资料。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:
+文档结构：C000007 汽车   C000008 财经   C000010  IT   C">
+<meta property="og:image" content="http://i4.tietuku.com/218e13597b4ea3d8.png">
+<meta property="og:image" content="http://i4.tietuku.com/c20eec142f06b175.png">
+<meta property="og:image" content="http://i4.tietuku.com/a15b04b7d23c4837.png">
+<meta property="og:image" content="http://i4.tietuku.com/2dce06a9ac95d718.jpg">
+<meta property="og:image" content="http://i4.tietuku.com/e665571f39dec3cb.png">
+<meta property="og:updated_time" content="2015-10-14T05:41:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文本挖掘初步 - 文本特征值提取">
+<meta name="twitter:description" content="背景继续上文文本中文分词的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。
+语料库本文采用Sougou实验室的语料库，下载地址为：搜狗实验室文本分类资料。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:
+文档结构：C000007 汽车   C000008 财经   C000010  IT   C">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+  <title> 文本挖掘初步 - 文本特征值提取 | JetMuffin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f67ecffc11ffd32260e0bcf804da1040";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">JetMuffin's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            <i class="menu-item-icon icon-next-guestbook"></i> <br />
+            留言
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '4Puw4pvQK1ydAQDsQwaN','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              文本挖掘初步 - 文本特征值提取
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-06-26T22:37:00+08:00" content="2015-06-26">
+            2015-06-26
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/数据挖掘/" itemprop="url" rel="index">
+                  <span itemprop="name">数据挖掘</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/06/26/文本挖掘初步-文本特征值提取/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/26/文本挖掘初步-文本特征值提取/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="背景">背景</h2><p>继续上文<a href="http://www.jetmuffin.com/archives/225" target="_blank" rel="external">文本中文分词</a>的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。</p>
+<h2 id="语料库">语料库</h2><p>本文采用Sougou实验室的语料库，下载地址为：<a href="http://www.sogou.com/labs/dl/c.html" target="_blank" rel="external">搜狗实验室文本分类资料</a>。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:</p>
+<p><strong>文档结构：</strong>C000007 汽车   C000008 财经   C000010  IT   C000013 健康   C000014 体育  C000016 旅游 C000020 教育   C000022 招聘   C000023 文学   C000024 军事</p>
+<p><strong>注意：</strong>搜狗的语料库均为GBK编码，若在Linux环境下会出现乱码影响处理，建议修改文件编码为utf-8</p>
+<h2 id="词袋模型">词袋模型</h2><p>利用中文分词工具，我们对每篇文章进行分词，去停用词后，用一个Map存储每个词的相关信息，保存形式为单词 &lt;词的文本字符串, 词的相关属性&gt;，其中单词(Term)的相关属性有(词性、tf、df、tfidf、chi等)。这样，遍历数据集目录和文件，就能去将全部的文档分词，最终就能构建词袋模型。</p>
+<p>其中词(Term)的类如下：</p>
+<pre><code>    package com<span class="built_in">.</span>jetmuffin<span class="built_in">.</span>TextClassifier<span class="built_in">.</span>common;
+
+    <span class="keyword">public</span> class Term {
+        <span class="keyword">private</span> int id;
+        <span class="keyword">private</span> <span class="built_in">String</span> word;
+        <span class="keyword">private</span> <span class="built_in">String</span> lexicalCategory = <span class="string">"unknown"</span>;
+        <span class="keyword">private</span> int freq = <span class="number">0</span>;
+        <span class="keyword">private</span> double tf;
+        <span class="keyword">private</span> double idf;
+        <span class="keyword">private</span> double tfidf = <span class="number">0</span>;
+        <span class="keyword">private</span> double chi = <span class="number">0</span>;
+
+    <span class="keyword">public</span> <span class="literal">void</span> setId(int id){
+        <span class="attribute">...</span><span class="built_in">.
+    </span>}
+    <span class="attribute">...</span><span class="attribute">...</span>
+<span class="string">`&lt;/pre&gt;
+
+而词袋的存储Map格式如下:
+
+&lt;pre&gt;`</span>    <span class="keyword">private</span> int totalDocCount;
+    <span class="keyword">private</span> final <span class="built_in">List</span> labels = <span class="literal">new</span> ArrayList();
+    <span class="comment">// Map&lt;类别, 文档数量&gt;</span>
+    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt; labelledTotalDocCountMap = <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt;();
+    <span class="comment">// Map&lt;类别, Map&lt;文档 ,Map&lt;词, 词信息&gt;&gt;&gt;</span>
+    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Term&gt;&gt;&gt; termTable =
+        <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Term&gt;&gt;&gt;();
+    <span class="comment">// Map&lt;词 ,Map&lt;类别, Set&lt;文档&gt;&gt;&gt;</span>
+    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&gt;&gt; invertedTable =
+    <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&gt;&gt;();
+</code></pre><h2 id="特征值(TFIDF)计算">特征值(TFIDF)计算</h2><p>tfidf是文本分类中最常使用的特征权值，其中tf(Term Frequency)为词频，idf为(Inverse Document Frequency)，tf反映了该词在该类文本中的热门程度，而idf则反映了该词对于其他文本更好的区别能力。</p>
+<p>tfidf的计算方式如下：</p>
+<h2 id="卡方拟合检验"><img src="http://i4.tietuku.com/218e13597b4ea3d8.png" alt="tf"><img src="http://i4.tietuku.com/c20eec142f06b175.png" alt=""><img src="http://i4.tietuku.com/a15b04b7d23c4837.png" alt="">卡方拟合检验</h2><p>经上一步计算出的tfidf值作为文章的特征值，但因为文章所包含的词往往非常多，特征向量的维数巨大，可能会达到上千维之多。因此需要对文章的特征向量进行降维。</p>
+<p>进行降维，可以达到以下效果：</p>
+<ul>
+<li>避免过拟合（over fitting），提高分类准确度</li>
+<li>通过降维，大大节省计算时间和空间<br>我们选择基于卡方统计量（chi-square statistic， CHI）技术来实现选择，这里根据计算公式：</li>
+</ul>
+<p><img src="http://i4.tietuku.com/2dce06a9ac95d718.jpg" alt=""></p>
+<p>其中，公式中各个参数的含义，说明如下：</p>
+<ul>
+<li>N：训练数据集文档总数</li>
+<li>A：在一个类别中，包含某个词的文档的数量</li>
+<li>B：在一个类别中，排除该类别，其他类别包含某个词的文档的数量</li>
+<li>C：在一个类别中，不包含某个词的文档的数量</li>
+<li>D：在一个类别中，不包含某个词也不在该类别中的文档的数量<br>使用卡方统计量，为每个类别下的每个词都进行计算得到一个CHI值，然后对这个类别下的所有的词基于CHI值进行排序，选择出最大的topN个词；最后将多个类别下选择的多组topN个词进行合并，得到最终的特征向量。</li>
+</ul>
+<h2 id="向量空间模型">向量空间模型</h2><p>提取文档的特征向量，目的是建立向量空间模型，每个文档 dj 可以用标引项向量来表示  (a1j,a2j,…,aMj)  <img src="http://i4.tietuku.com/e665571f39dec3cb.png" alt=""></p>
+<p>利用向量空间模型，可以很容易计算出两个文档的相似度：</p>
+<ul>
+<li>余弦公式（计算向量夹角）</li>
+<li><p>欧式距离（计算两点距离）<br>计算出了文本相似度（文本距离），则可以进行我们的下，即进行分类器的建立了。我们将在后续的文章继续研究不同的分类方法对文本的分类，包括：</p>
+</li>
+<li><p>KNN</p>
+</li>
+<li>SVM</li>
+<li>Naive Bayes</li>
+<li>BP Neural Network (furthermore, RBF Neural Network)</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tfidf/" rel="tag">#tfidf</a>
+          
+            <a href="/tags/卡方校验/" rel="tag">#卡方校验</a>
+          
+            <a href="/tags/文本特征值/" rel="tag">#文本特征值</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/27/hdu-1176-免费馅饼-变型数塔-dp/" rel="prev">hdu 1176 免费馅饼 变型数塔 dp</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/06/hdu-5245-Joyful-ACM上海大都会邀请赛-J题-概率/" rel="next">hdu 5245 Joyful ACM上海大都会邀请赛 J题 概率</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2015/06/26/文本挖掘初步-文本特征值提取/"
+                   data-title="文本挖掘初步 - 文本特征值提取" data-url="http://yoursite.com/2015/06/26/文本挖掘初步-文本特征值提取/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="Jeff Chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jeff Chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">74</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/feed.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jetmuffin" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/jetmuffin" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1922357801" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/JetMuffin" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.jetmuffin.com" target="_blank">JetMuffin</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.sunzequn.com" target="_blank">Sloriac</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://innerac.github.io" target="_blank">InnerAc</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blkstone.github.io/" target="_blank">Neurohazard</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://zcatao.github.io" target="_blank">zcatao</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语料库"><span class="nav-number">2.</span> <span class="nav-text">语料库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#词袋模型"><span class="nav-number">3.</span> <span class="nav-text">词袋模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征值(TFIDF)计算"><span class="nav-number">4.</span> <span class="nav-text">特征值(TFIDF)计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卡方拟合检验"><span class="nav-number">5.</span> <span class="nav-text">卡方拟合检验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向量空间模型"><span class="nav-number">6.</span> <span class="nav-text">向量空间模型</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeff Chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

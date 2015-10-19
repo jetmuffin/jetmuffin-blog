@@ -1,0 +1,871 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="ICTCLAS,NLP,中文分词,文本挖掘," />
+
+
+
+  <link rel="alternate" href="/feed.xml" title="JetMuffin's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="介绍中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。
+如同编译原理中的词法分析的重要性,中文分词是文本挖掘的基础,需要通过机器自动将输入的句子切分成一个个的词语,才能进行更多的处理.
+中文分词和英文分词最大的区别在于,英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记,因此中文分词的难度比英文分词">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文本挖掘初步 - 文本中文分词">
+<meta property="og:url" content="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="介绍中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。
+如同编译原理中的词法分析的重要性,中文分词是文本挖掘的基础,需要通过机器自动将输入的句子切分成一个个的词语,才能进行更多的处理.
+中文分词和英文分词最大的区别在于,英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记,因此中文分词的难度比英文分词">
+<meta property="og:updated_time" content="2015-10-14T05:41:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文本挖掘初步 - 文本中文分词">
+<meta name="twitter:description" content="介绍中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。
+如同编译原理中的词法分析的重要性,中文分词是文本挖掘的基础,需要通过机器自动将输入的句子切分成一个个的词语,才能进行更多的处理.
+中文分词和英文分词最大的区别在于,英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记,因此中文分词的难度比英文分词">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+  <title> 文本挖掘初步 - 文本中文分词 | JetMuffin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f67ecffc11ffd32260e0bcf804da1040";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">JetMuffin's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            <i class="menu-item-icon icon-next-guestbook"></i> <br />
+            留言
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '4Puw4pvQK1ydAQDsQwaN','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              文本挖掘初步 - 文本中文分词
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-06-05T22:32:00+08:00" content="2015-06-05">
+            2015-06-05
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/数据挖掘/" itemprop="url" rel="index">
+                  <span itemprop="name">数据挖掘</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/06/05/文本挖掘初步-文本中文分词/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/05/文本挖掘初步-文本中文分词/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="介绍">介绍</h2><p>中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。</p>
+<p>如同编译原理中的词法分析的重要性,中文分词是文本挖掘的基础,需要通过机器自动将输入的句子切分成一个个的词语,才能进行更多的处理.</p>
+<p>中文分词和英文分词最大的区别在于,英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记,因此中文分词的难度比英文分词大了很多.</p>
+<h2 id="方法">方法</h2><p>分词算法可分为三大类：基于字典、词库匹配的分词方法,基于词频度统计的分词方法和基于知识理解的分词方法。</p>
+<p>1<strong>. 基于字典,词库(字符串匹配)的分词方法</strong></p>
+<p>这种方法按照一定策略将待分析的汉字串与一个“充分大的”机器词典中的词条进行匹配，若在词典中找到某个字符串，则匹配成功。识别出一个词，根据扫描方向的不同分为正向匹配和逆向匹配。采用该方法的分词算法主要有:</p>
+<ul>
+<li>正向最大匹配法（由左到右的方向）</li>
+<li>逆向最大匹配法（由右到左的方向）</li>
+<li>最少切分（使每一句中切出的词数最小）<br><strong>2.基于词频度统计的分词方法</strong></li>
+</ul>
+<p>这是一种全切分方法。它不依靠词典,而是将文章中任意两个字同时出现的频率进行统计,次数越高的就可能是一个词。它首先切分出与词表匹配的所有可能的词,运用统计语言模型和决策算法决定最优的切分结果。它的优点在于可以发现所有的切分歧义并且容易将新词提取出来。</p>
+<p><strong>3.基于知识理解的分词</strong></p>
+<p>该方法主要基于句法、语法分析，并结合语义分析，通过对上下文内容所提供信息的分析对词进行定界，它通常包括三个部分：分词子系统、句法语义子系统、总控部分。在总控部分的协调下，分词子系统可以获得有关词、句子等的句法和语义信息来对分词歧义进行判断。这类方法试图让机器具有人类的理解能力，需要使用大量的语言知识和信息。由于汉语语言知识的笼统、复杂性，难以将各种语言信息组织成机器可直接读取的形式。因此目前基于知识的分词系统还处在试验阶段。</p>
+<h2 id="工具">工具</h2><p>在中文分词领域,有很多已经非常成熟的分词工具可以被使用,以下对各工具的算法和效率(根据网上情报)进行总结.</p>
+<p><strong>1.ICTCLAS(NLPIR)</strong></p>
+<p><a href="http://ictclas.nlpir.org/" target="_blank" rel="external">http://ictclas.nlpir.org/</a></p>
+<p>ICTCLAS是中国科学院计算技术研究所在多年研究基础上，耗时一年研制出了基于多层隐马模型(HMM)的汉语词法分析系统 ，功能有：中文分词；词性标注；自定义词典等。分词正确率高,分词速度快.源代码数以C++编写的,并提供JAVA接口.</p>
+<p>速度: 单机 (996KB/s)</p>
+<p><strong>2.Stanford Word Segmenter || CRF++</strong></p>
+<p><a href="http://nlp.stanford.edu/software/segmenter.shtml" target="_blank" rel="external">http://nlp.stanford.edu/software/segmenter.shtml</a></p>
+<p>这两个中文分词工具都是基于条件随机场CRF(<span lang="EN-US">C</span><span lang="EN-US">onditional<span class="Apple-converted-space"> </span></span><span lang="EN-US">R</span><span lang="EN-US">andom</span><span lang="EN-US"><span class="Apple-converted-space"> </span>F</span><span lang="EN-US">ield)模型实现的,<span lang="ZH-CN">其基本思路是对汉字进行标注即由字构词</span><span lang="EN-US">(</span><span lang="ZH-CN">组词</span><span lang="EN-US">)</span><span lang="ZH-CN">，不仅考虑了文字词语出现的频率信息，同时考虑上下文语境，具备较好的学习能力，因此其对歧义词和未登录词的识别都具有良好的效果；其不足之处是训练周期较长，运营时计算量较大.</span></span></p>
+<p>速度: (暂未获得)</p>
+<p><strong>3.Mmseg </strong></p>
+<p><a href="http://technology.chtsai.org/mmseg/" target="_blank" rel="external">http://technology.chtsai.org/mmseg/</a></p>
+<p>Mmseg是典型的基于字典的中文分词工具,其主要实现原理是基于最大匹配算法.它提供Simple和Complex两种最大匹配算法,即简单的和复杂的.简单的最大匹配算法从字符串开头开始,获取最长的匹配串;而复杂的最大匹配算法则针对存在歧义的单词,向前再看两个单词再进行判断.</p>
+<p>Mmseg支持在lucene和solr中使用,在该二者中配置Mmseg,即可对中文文本进行分词索引.这也是Mmseg被使用广泛的一个原因.同时因为其实现原理简单,效果也很不错,且提供Java支持(Mmseg4j),也是很受欢迎的一款分词工具.</p>
+<p>速度: complex 60W字/s (1200 KB/s)  ；simple 100W字/s (1900 KB/s)</p>
+<p><strong>4.IKAnalyzer</strong></p>
+<p><a href="http://code.google.com/p/ik-analyzer/downloads/list" target="_blank" rel="external">http://code.google.com/p/ik-analyzer/downloads/list</a></p>
+<p>IKAnalyzer是一个开源的，基于java语言开发的轻量级的中文分词工具包。采用了特有的”正向迭代最细粒度切分算法”(我还没取研究这个算法),支持细粒度和智能分词两种切分模式.同样,IKAnalyzer也提供了对Solr和Lucene的支持.</p>
+<p>速度: IK2012 160W字/s (3000KB/s)</p>
+<h2 id="代码">代码</h2><p>根据分词的成功率,速率以及使用接口简单,在之后的所有后续挖掘过程中将采用ICTCLAS2015作为分词器,所以需要对其进行简单的封装.</p>
+<p>JNA实现接口CLibrary:</p>
+<pre><code>    <span class="keyword">package</span> com.jetmuffin.analyzer;
+    <span class="keyword">import</span> com.sun.jna.Library;
+    <span class="keyword">public</span> interface CLibrary extends Library{
+
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_Init(<span class="keyword">String</span> sDataPath, <span class="built_in">int</span> encoding,
+        <span class="keyword">String</span> sLicenceCode);
+
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_ParagraphProcess(<span class="keyword">String</span> sSrc, <span class="built_in">int</span> bPOSTagged);
+
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
+        <span class="built_in">boolean</span> bWeightOut);
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetFileKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
+        <span class="built_in">boolean</span> bWeightOut);
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_AddUserWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_DelUsrWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_ImportUserDict(<span class="keyword">String</span> sWord,<span class="built_in">boolean</span> bOverWrite);
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_WordFreqStat(<span class="keyword">String</span> sWord);
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetLastErrorMsg();
+        <span class="keyword">public</span> <span class="keyword">void</span> NLPIR_Exit();
+    }
+`&lt;/pre&gt;
+
+接口实现类Nlpir:
+
+&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.analyzer;
+    <span class="keyword">import</span> com.sun.jna.Native;
+
+    <span class="keyword">public</span> class NLPIR {
+    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary Instance;
+    <span class="keyword">private</span> <span class="keyword">String</span> systemCharset;
+    <span class="keyword">private</span> <span class="keyword">String</span> systemFolder;
+    <span class="built_in">int</span> charsetType;
+
+    <span class="keyword">public</span> NLPIR(){
+        systemFolder = <span class="string">"/home/jeff/src/ICTCLAS2015"</span>;  <span class="comment">//ICTCLAS的目录,包括字典文件等</span>
+        systemCharset = <span class="string">"UTF-8"</span>;  <span class="comment">//默认字符集</span>
+        charsetType = <span class="number">1</span>;
+
+        Instance = (CLibrary) Native.loadLibrary(
+                <span class="string">"/home/jeff/src/ICTCLAS2015/lib/linux32/libNLPIR.so"</span>, CLibrary.class);  <span class="comment">//ICTCLAS的so文件地址</span>
+        }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary getInstance() {
+        <span class="keyword">return</span> Instance;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> setInstance(CLibrary instance) {
+        Instance = instance;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">String</span> getSystemCharset() {
+        <span class="keyword">return</span> systemCharset;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setSystemCharset(<span class="keyword">String</span> systemCharset) {
+        <span class="keyword">this</span>.systemCharset = systemCharset;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">String</span> getSystemFolder() {
+        <span class="keyword">return</span> systemFolder;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setSystemFolder(<span class="keyword">String</span> systemFolder) {
+        <span class="keyword">this</span>.systemFolder = systemFolder;
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> getCharsetType() {
+        <span class="keyword">return</span> charsetType;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setCharsetType(<span class="built_in">int</span> charsetType) {
+        <span class="keyword">this</span>.charsetType = charsetType;
+    }
+    }
+`&lt;/pre&gt;
+
+测试类:
+
+&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.test;
+
+    <span class="keyword">import</span> org.junit.Test;
+    <span class="keyword">import</span> com.jetmuffin.NLPIR;
+    <span class="keyword">public</span> class TestNlpir {
+
+    @Test
+    <span class="keyword">public</span> <span class="keyword">void</span> test(){
+        NLPIR nlpir = <span class="keyword">new</span> NLPIR();
+        nlpir.Instance.NLPIR_Init(nlpir.getSystemFolder(),nlpir.getCharsetType() ,nlpir.getSystemCharset());
+        <span class="keyword">String</span> nativeBytes = <span class="keyword">null</span>;
+
+        <span class="keyword">String</span> sInput = <span class="string">"什么是机器学习"</span>;
+        nlpir.Instance.NLPIR_ImportUserDict(<span class="string">"/home/jeff/workspace/data/dict"</span>, <span class="keyword">false</span>);  <span class="comment">//加载用户自定义词典</span>
+        nativeBytes = nlpir.Instance.NLPIR_ParagraphProcess(sInput, <span class="number">0</span>); <span class="comment">//分词</span>
+        <span class="keyword">String</span>[] words = nativeBytes.<span class="built_in">split</span>(<span class="string">" "</span>);  <span class="comment">//分词结果以空格进行分割</span>
+        System.out.<span class="built_in">println</span>(words.length); <span class="comment">//输出分词词数</span>
+        System.out.<span class="built_in">println</span>(nativeBytes);  <span class="comment">//输出分词结果</span>
+    }
+    }
+`&lt;/pre&gt;
+
+结果:
+
+&lt;pre&gt;`<span class="number">3</span>
+什么 是 机器学习 
+</code></pre><h2 id="结语">结语</h2><p>进行分类器的封装以后,可以继续进行之后的文本挖掘内容.以上均为本人拙见,且本人为NLP菜鸟,望大牛予以指正! :)</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ICTCLAS/" rel="tag">#ICTCLAS</a>
+          
+            <a href="/tags/NLP/" rel="tag">#NLP</a>
+          
+            <a href="/tags/中文分词/" rel="tag">#中文分词</a>
+          
+            <a href="/tags/文本挖掘/" rel="tag">#文本挖掘</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/06/hdu-5241-Friends-ACM上海大都会邀请赛-F题/" rel="prev">hdu 5241 Friends ACM上海大都会邀请赛 F题</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" rel="next">文本挖掘初步 - 对自由文本进行信息抽取</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2015/06/05/文本挖掘初步-文本中文分词/"
+                   data-title="文本挖掘初步 - 文本中文分词" data-url="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="Jeff Chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jeff Chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">74</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/feed.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jetmuffin" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/jetmuffin" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1922357801" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/JetMuffin" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.jetmuffin.com" target="_blank">JetMuffin</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.sunzequn.com" target="_blank">Sloriac</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://innerac.github.io" target="_blank">InnerAc</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blkstone.github.io/" target="_blank">Neurohazard</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://zcatao.github.io" target="_blank">zcatao</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">3.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">4.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeff Chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

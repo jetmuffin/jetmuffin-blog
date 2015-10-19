@@ -1,0 +1,809 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="循环节,数论," />
+
+
+
+  <link rel="alternate" href="/feed.xml" title="JetMuffin's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="出处转自ACDreamer的博客
+问题给定，满足，求的循环节长度。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[转] 广义Fibonacci数列找循环节">
+<meta property="og:url" content="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="出处转自ACDreamer的博客
+问题给定，满足，求的循环节长度。">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512141202250">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512141344500">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512141547343">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512141934171">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512142241625">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512142408500">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512142715562">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512142408500">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512143016218">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512143448171">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512143448171">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512143448171">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512144649265">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512143448171">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512144531812">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512144745468">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512145327265">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512145502218">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512145712093">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512145910453">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512150102359">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512150213093">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151050140">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151151359">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151341546">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151440765">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151050140">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151151359">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512153301078">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512153500734">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512153750203">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512153930718">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154020390">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154134531">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154236328">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154416203">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154508375">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154416203">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151050140">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151151359">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151341546">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151050140">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512151151359">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512154134531">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512155118687">
+<meta property="og:image" content="http://img.blog.csdn.net/20140512155210937">
+<meta property="og:updated_time" content="2015-10-14T02:42:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[转] 广义Fibonacci数列找循环节">
+<meta name="twitter:description" content="出处转自ACDreamer的博客
+问题给定，满足，求的循环节长度。">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+  <title> [转] 广义Fibonacci数列找循环节 | JetMuffin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f67ecffc11ffd32260e0bcf804da1040";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">JetMuffin's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            <i class="menu-item-icon icon-next-guestbook"></i> <br />
+            留言
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '4Puw4pvQK1ydAQDsQwaN','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              [转] 广义Fibonacci数列找循环节
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-09-20T09:23:00+08:00" content="2015-09-20">
+            2015-09-20
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/算法/" itemprop="url" rel="index">
+                  <span itemprop="name">算法</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/09/20/转-广义Fibonacci数列找循环节/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/20/转-广义Fibonacci数列找循环节/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="出处">出处</h2><p>转自<a href="http://blog.csdn.net/ACdreamers" target="_blank" rel="external">ACDreamer的博客</a></p>
+<h2 id="问题">问题</h2><p>给定<img src="http://img.blog.csdn.net/20140512141202250" alt="img-1">，满足<img src="http://img.blog.csdn.net/20140512141344500" alt="img-2">，求<img src="http://img.blog.csdn.net/20140512141547343" alt="img-3">的循环节长度。<br><a id="more"></a> </p>
+<h2 id="分析">分析</h2><p>我们知道矩阵的递推关系如下:</p>
+<p><img src="http://img.blog.csdn.net/20140512141934171" alt="img-4"></p>
+<p>然后继续有:</p>
+<p><img src="http://img.blog.csdn.net/20140512142241625" alt="img-5"></p>
+<p>那么，现在的问题就转化为求最小的<img src="http://img.blog.csdn.net/20140512142408500" alt="img-6">，使得<img src="http://img.blog.csdn.net/20140512142715562" alt="img-7"></p>
+<p>所以我们可以先找出符合条件的一个<img src="http://img.blog.csdn.net/20140512142408500" alt="img-8">，然后枚举它的因子，找最小的。设</p>
+<p><img src="http://img.blog.csdn.net/20140512143016218" alt="img-9"></p>
+<p>为了好解决问题，我们需要对矩阵<img src="http://img.blog.csdn.net/20140512143448171" alt="img-10">进行相似对角化，即<img src="http://img.blog.csdn.net/20140512143448171" alt="img-11">的特征值</p>
+<p>解得<img src="http://img.blog.csdn.net/20140512143448171" alt="img-11">的特征值为<img src="http://img.blog.csdn.net/20140512144649265" alt="img-12"></p>
+<p>也就是说<img src="http://img.blog.csdn.net/20140512143448171" alt="img-12">的相似对角矩阵<img src="http://img.blog.csdn.net/20140512144531812" alt="img-13">为</p>
+<p><img src="http://img.blog.csdn.net/20140512144745468" alt="img-14"></p>
+<p>因为我们知道<img src="http://img.blog.csdn.net/20140512145327265" alt="img-15">，所以当<img src="http://img.blog.csdn.net/20140512145502218" alt="img-16">时，<img src="http://img.blog.csdn.net/20140512145712093" alt="img-17">，由于</p>
+<p><img src="http://img.blog.csdn.net/20140512145910453" alt="img-18"></p>
+<p>继续得到</p>
+<p><img src="http://img.blog.csdn.net/20140512150102359" alt="img-19"></p>
+<p>设<img src="http://img.blog.csdn.net/20140512150213093" alt="img-20">，那么分情况讨论：</p>
+<ol>
+<li><img src="http://img.blog.csdn.net/20140512151050140" alt="img-21">是模<img src="http://img.blog.csdn.net/20140512151151359" alt="img-22">的二次剩余，由费马小定理得<img src="http://img.blog.csdn.net/20140512151341546" alt="img-23">时，<img src="http://img.blog.csdn.net/20140512151440765" alt="img-24"></li>
+<li><p><img src="http://img.blog.csdn.net/20140512151050140" alt="img-24">是模<img src="http://img.blog.csdn.net/20140512151151359" alt="img-22">的二次非剩余，则有</p>
+<p><img src="http://img.blog.csdn.net/20140512153301078" alt="img-25">,根据欧拉准则有</p>
+<p><img src="http://img.blog.csdn.net/20140512153500734" alt="img-26"></p>
+<p>那么继续得到</p>
+<p><img src="http://img.blog.csdn.net/20140512153750203" alt="img-27"></p>
+<p>然后由费马小定理有<img src="http://img.blog.csdn.net/20140512153930718" alt="img-28">，同理有<img src="http://img.blog.csdn.net/20140512154020390" alt="img-29">所以，当<img src="http://img.blog.csdn.net/20140512154134531" alt="img-30">时，<img src="http://img.blog.csdn.net/20140512154236328" alt="img-31"></p>
+</li>
+<li><img src="http://img.blog.csdn.net/20140512154416203" alt="img-32">时，由于<img src="http://img.blog.csdn.net/20140512154508375" alt="img-33">不存在，所以无法完成相似对角化，好在<img src="http://img.blog.csdn.net/20140512154416203" alt="img-34">情况不存在。</li>
+</ol>
+<p>所以综上所述：</p>
+<ul>
+<li><img src="http://img.blog.csdn.net/20140512151050140" alt="img-35">是模<img src="http://img.blog.csdn.net/20140512151151359" alt="img-36">的二次剩余时，枚举<img src="http://img.blog.csdn.net/20140512151341546" alt="img-37">的因子</li>
+<li><img src="http://img.blog.csdn.net/20140512151050140" alt="img-35">是模<img src="http://img.blog.csdn.net/20140512151151359" alt="img-36">的二次非剩余时，枚举<img src="http://img.blog.csdn.net/20140512154134531" alt="img-38">的因子</li>
+</ul>
+<p>找最小的因子<img src="http://img.blog.csdn.net/20140512155118687" alt="img-39">使得</p>
+<p><img src="http://img.blog.csdn.net/20140512155210937" alt="img-40"></p>
+<p>成立</p>
+<h2 id="代码">代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> LL MOD = <span class="number">1000000007</span>;</span><br><span class="line"></span><br><span class="line">LL fac[<span class="number">2</span>][<span class="number">505</span>];</span><br><span class="line"><span class="keyword">int</span> cnt,ct;</span><br><span class="line"></span><br><span class="line">LL pri[<span class="number">6</span>] = &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">109</span>, <span class="number">167</span>, <span class="number">500000003</span>&#125;;</span><br><span class="line">LL num[<span class="number">6</span>] = &#123;<span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> Matrix</span><br><span class="line">&#123;</span><br><span class="line">    LL m[N][N];</span><br><span class="line">&#125; ;</span><br><span class="line"></span><br><span class="line">Matrix A;</span><br><span class="line">Matrix I = &#123;<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Matrix <span class="title">multi</span><span class="params">(Matrix a,Matrix b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    Matrix c;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;N; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            c.m[i][j]  =<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;N; k++)</span><br><span class="line">            &#123;</span><br><span class="line">                c.m[i][j] += a.m[i][k] * b.m[k][j];</span><br><span class="line">                c.m[i][j] %= MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Matrix <span class="title">power</span><span class="params">(Matrix A,LL n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    Matrix ans = I, p = A;</span><br><span class="line">    <span class="keyword">while</span>(n)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(n &amp; <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans = multi(ans,p);</span><br><span class="line">            n--;</span><br><span class="line">        &#125;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        p = multi(p,p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LL <span class="title">quick_mod</span><span class="params">(LL a,LL b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    LL ans = <span class="number">1</span>;</span><br><span class="line">    a %= MOD;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(b &amp; <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans = ans * a % MOD;</span><br><span class="line">            b--;</span><br><span class="line">        &#125;</span><br><span class="line">        b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        a = a * a % MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LL <span class="title">Legendre</span><span class="params">(LL a,LL p)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    LL t = quick_mod(a,(p-<span class="number">1</span>)&gt;&gt;<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(t == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> dept,LL product = <span class="number">1</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(dept == cnt)</span><br><span class="line">    &#123;</span><br><span class="line">        fac[<span class="number">1</span>][ct++] = product;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=num[dept]; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        dfs(dept+<span class="number">1</span>,product);</span><br><span class="line">        product *= pri[dept];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">OK</span><span class="params">(Matrix A,LL n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    Matrix ans = power(A,n);</span><br><span class="line">    <span class="keyword">return</span> ans.m[<span class="number">0</span>][<span class="number">0</span>] == <span class="number">1</span> &amp;&amp; ans.m[<span class="number">0</span>][<span class="number">1</span>] == <span class="number">0</span> &amp;&amp;</span><br><span class="line">           ans.m[<span class="number">1</span>][<span class="number">0</span>] == <span class="number">0</span> &amp;&amp; ans.m[<span class="number">1</span>][<span class="number">1</span>] == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    fac[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    fac[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">2</span>;</span><br><span class="line">    fac[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">500000003</span>;</span><br><span class="line">    fac[<span class="number">0</span>][<span class="number">3</span>] = <span class="number">1000000006</span>;</span><br><span class="line">    LL a,b,c,d;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b&gt;&gt;c&gt;&gt;d)</span><br><span class="line">    &#123;</span><br><span class="line">        LL t = a * a + <span class="number">4</span> * b;</span><br><span class="line">        A.m[<span class="number">0</span>][<span class="number">0</span>] = a;</span><br><span class="line">        A.m[<span class="number">0</span>][<span class="number">1</span>] = b;</span><br><span class="line">        A.m[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        A.m[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(Legendre(t,MOD) == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">4</span>; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(OK(A,fac[<span class="number">0</span>][i]))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">cout</span>&lt;&lt;fac[<span class="number">0</span>][i]&lt;&lt;endl;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            ct = <span class="number">0</span>;</span><br><span class="line">            cnt = <span class="number">6</span>;</span><br><span class="line">            dfs(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">            sort(fac[<span class="number">1</span>],fac[<span class="number">1</span>]+ct);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;ct;i++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(OK(A,fac[<span class="number">1</span>][i]))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">cout</span>&lt;&lt;fac[<span class="number">1</span>][i]&lt;&lt;endl;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/循环节/" rel="tag">#循环节</a>
+          
+            <a href="/tags/数论/" rel="tag">#数论</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/19/Ambari搭建Hadoop管理平台/" rel="prev">Ambari搭建Hadoop管理平台</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" rel="next">2015 ACM 长春赛区网赛题解 （部分）</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2015/09/20/转-广义Fibonacci数列找循环节/"
+                   data-title="[转] 广义Fibonacci数列找循环节" data-url="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="Jeff Chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jeff Chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">74</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/feed.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jetmuffin" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/jetmuffin" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1922357801" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/JetMuffin" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.jetmuffin.com" target="_blank">JetMuffin</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.sunzequn.com" target="_blank">Sloriac</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://innerac.github.io" target="_blank">InnerAc</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blkstone.github.io/" target="_blank">Neurohazard</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://zcatao.github.io" target="_blank">zcatao</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#出处"><span class="nav-number">1.</span> <span class="nav-text">出处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">3.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">4.</span> <span class="nav-text">代码</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeff Chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

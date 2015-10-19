@@ -1,0 +1,899 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="ACM现场赛," />
+
+
+
+  <link rel="alternate" href="/feed.xml" title="JetMuffin's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="第一次参加ACM地区赛，感受挺深，以下用流水帐的形式记录一下这次的经历。
+从出发开始说起，学校给定的火车票，从南京到鞍山，23小时车程，早上5点从学校出发，也是不容易，上车后发现南航的就在隔壁，压力甚大。报道时没有教练在，都由我们自己处理，有一点印象比较深，当志愿者问我们来自什么学校时，回答“河海大学”让边上天津大学的教练惊讶了一番，不知是学校太不出名还是太弱的原因。。感慨ORZ。主办方辽宁科技大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2014ACM-ICPC 地区赛鞍山站小结">
+<meta property="og:url" content="http://yoursite.com/2014/10/21/2014ACM-ICPC-地区赛鞍山站小结/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="第一次参加ACM地区赛，感受挺深，以下用流水帐的形式记录一下这次的经历。
+从出发开始说起，学校给定的火车票，从南京到鞍山，23小时车程，早上5点从学校出发，也是不容易，上车后发现南航的就在隔壁，压力甚大。报道时没有教练在，都由我们自己处理，有一点印象比较深，当志愿者问我们来自什么学校时，回答“河海大学”让边上天津大学的教练惊讶了一番，不知是学校太不出名还是太弱的原因。。感慨ORZ。主办方辽宁科技大">
+<meta property="og:updated_time" content="2015-10-14T05:41:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2014ACM-ICPC 地区赛鞍山站小结">
+<meta name="twitter:description" content="第一次参加ACM地区赛，感受挺深，以下用流水帐的形式记录一下这次的经历。
+从出发开始说起，学校给定的火车票，从南京到鞍山，23小时车程，早上5点从学校出发，也是不容易，上车后发现南航的就在隔壁，压力甚大。报道时没有教练在，都由我们自己处理，有一点印象比较深，当志愿者问我们来自什么学校时，回答“河海大学”让边上天津大学的教练惊讶了一番，不知是学校太不出名还是太弱的原因。。感慨ORZ。主办方辽宁科技大">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+  <title> 2014ACM-ICPC 地区赛鞍山站小结 | JetMuffin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f67ecffc11ffd32260e0bcf804da1040";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">JetMuffin's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            <i class="menu-item-icon icon-next-guestbook"></i> <br />
+            留言
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '4Puw4pvQK1ydAQDsQwaN','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              2014ACM-ICPC 地区赛鞍山站小结
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2014-10-21T08:05:45+08:00" content="2014-10-21">
+            2014-10-21
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/心路历程/" itemprop="url" rel="index">
+                  <span itemprop="name">心路历程</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2014/10/21/2014ACM-ICPC-地区赛鞍山站小结/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/21/2014ACM-ICPC-地区赛鞍山站小结/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><span style="white-space:pre"></span>第一次参加ACM地区赛，感受挺深，以下用流水帐的形式记录一下这次的经历。</p>
+<p><span style="white-space:pre"></span>从出发开始说起，学校给定的火车票，从南京到鞍山，23小时车程，早上5点从学校出发，也是不容易，上车后发现南航的就在隔壁，压力甚大。报道时没有教练在，都由我们自己处理，有一点印象比较深，当志愿者问我们来自什么学校时，回答“河海大学”让边上天津大学的教练惊讶了一番，不知是学校太不出名还是太弱的原因。。感慨ORZ。主办方辽宁科技大学很周到，一个队伍配了一个志愿者，从开始引导到结束，这点很好～XD。</p>
+<p><span style="white-space:pre"></span>第一天下午参加了热身赛，4道题目。一开始场地的交换机出问题了，不能交题不能看scoreboard，而且problem set三人只能有一份，我们只好每人一张开始切题。我开始看的是A题（不记得了），是要计算一个长度最大为28的全排列中符合条件（即任意一个数与前后两个数都互质）。出于范围比较小，全排列范围是28！，我想了一个搜索+剪枝方法，开始打代码，纪存和范仕良在看其他题。码完题测试下速度，发现当数据到达13的规模时时间超过1秒，果断放弃。这时候切出去看了一下scoreboard，发现好多人做出了D（不记得了），然后范仕良和我交流了一下思路，觉得可行，我花了2分钟打完代码，交了，1Y。随后看其他题，一道概率DP，实在太难找出递推公式，无奈放弃。时间过了2小时时看了一下scoreboad发现AC2道的队伍不超过10支，然后我们就开始很随意聊天了XD～比赛结束看了一下排名，97,铜牌最后一名，还是很不错的～</p>
+<a id="more"></a>
+<p><span style="white-space:pre"></span>吃完晚饭，闲着无聊我们队3人跑到附近的网吧休闲一番～发现有队伍居然在网吧打BC。。给大神跪了OTZ～</p>
+<p><span style="white-space:pre"></span>第二天早上正赛，赛前有点紧张，比赛时发现更紧张。开始时我切的是C，纪存看I，范仕良看的K（不记得了）。3分钟左右看一下排名，I有人出了，立马转战I，了解题意后还是由我主打代码，打完后稍微检查一番决定交，结果WA，当时就蒙了，再次审查一遍，认为是sqrt中double的问题，修改再交，依然WA。当时真是整个情绪有点崩溃，毕竟这只是道签到题。再次审查，把该改的地方再完善，依然WA。最后发现错误错在一个平时都不注意的地方。大概是：</p>
+<p><span style="white-space:pre"></span></p>
+<pre code_snippet_id="490578" snippet_file_name="blog_20141021_1_3526745" name="code" class="cpp">double dis = (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)</pre>
+
+<p>其中x1,x2,y1,y2都是1e5的范围，当时我们一直觉得这样赋&#20540;，计算后的结果范围1e10肯定不会超double，但是居然是这儿出错了，原因是该语句先计算结果后转换精度，而结果爆int了。修改后AC，这时候看一下排行，120+，有些崩溃。</p>
+<p><span style="white-space:pre"></span>转战E题，我认为这题只要弄清楚各个情况即可，于是我开始打代码，写完发现测试数据都过不了。这时范仕良已经整理思路，换他来写了一个DP，1Y。</p>
+<p><span style="white-space:pre"></span>这时我们看了下排行，110+，而3题的大概只有30队。迅速看完D题，讨论，想出思路时大概50支队伍3题，赛后发现如果这时候1Y很有希望拿铜。</p>
+<p><span style="white-space:pre"></span>E题题意大概是有n个点，去掉k个点使得剩下的点方差最小。</p>
+<p><span style="white-space:pre"></span>一开始范仕良的思路是：最后得到的一定是个连续的区间，所以枚举各个长度为n-k的区间即可，但是被我和纪存否定了，原因是我们认为对于每次枚举要重新计算方差，整体复杂度为o(n*k)，会超时。之后纪存想出了一个方法，每次删去离重心最远的点，更新重心，复杂度o(n)，讨论后我们都觉得此方法可行，由我打代码，打完交后WA，再次找错误，改精度，依然WA，最后卡题到结束。没能拿到牌都挺郁闷。</p>
+<p><span style="white-space:pre"></span>返程的火车上和南理工的同学讨论了下，他们指出了错误。当一堆数据中有一部分密集无效数据和有效数据距离太远时，我们的算法结果是删后的数据重心在有效和无效数据之间，而正确的结果应该是删除无效的数据。之后我随机生成数据进行测试，发现错误所在。</p>
+<p><span style="white-space:pre"></span>以下为我们的错误代码：</p>
+<p><span style="white-space:pre"></span></p>
+<p>`#include <iostream></iostream></p>
+<p>#include <algorithm></algorithm></p>
+<p>#include <cstring></cstring></p>
+<p>#include <cstdio></cstdio></p>
+<p>double p[50005];</p>
+<p>using namespace std;</p>
+<p>int main()</p>
+<p>{</p>
+<p>int T;</p>
+<p>cin&gt;&gt;T;</p>
+<p>while(T–)</p>
+<p>{</p>
+<p>memset(p,0,sizeof(p));</p>
+<p>int n,k;</p>
+<p>cin&gt;&gt;n&gt;&gt;k;</p>
+<p>double sum = 0;</p>
+<p>for(int i = 1;i&lt;=n;i++)</p>
+<p>{</p>
+<p>cin&gt;&gt;p[i];</p>
+<p>sum+= p[i];</p>
+<p>}</p>
+<p>sort(p+1,p+n+1);</p>
+<p>double avp = sum/(double)n;</p>
+<p>int fst = 1;</p>
+<p>int lst = n;</p>
+<p>for(int i = 0;i &lt; k; i++)</p>
+<p>{</p>
+<p>double fstv = avp - p[fst];</p>
+<p>double lstv = p[lst] - avp;</p>
+<p>cout &lt;&lt; p[fst]&lt;&lt;” : “&lt;&lt;fstv &lt;&lt; “ “&lt;&lt;p[lst]&lt;&lt;” : “&lt;&lt;lstv&lt;&lt;endl;</p>
+<p>if(fstv &gt; lstv)</p>
+<p>{</p>
+<p>sum -= p[fst];</p>
+<p>fst ++;</p>
+<p>avp = sum/(double)(n-i-1);</p>
+<p>}else{</p>
+<p>sum -= p[lst];</p>
+<p>lst –;</p>
+<p>avp = sum/(double)(n-i-1);</p>
+<p>}</p>
+<p>}</p>
+<p>double ans = 0;</p>
+<p>for(int i=fst;i&lt;=lst;i++)</p>
+<p>{</p>
+<p>cout&lt;&lt;p[i]&lt;&lt;” “;</p>
+<p>}</p>
+<p>cout&lt;&lt;endl;</p>
+<p>for(int i=fst;i&lt;=lst;i++)</p>
+<p>{</p>
+<p>ans += (p[i] - avp)*(p[i] - avp);</p>
+<p>}</p>
+<p>printf(“%.10f\n”,ans);</p>
+<p>}</p>
+<p>return 0;</p>
+<p>}</p>
+<p></p>
+<p><span style="white-space:pre"></span>当该算法碰到如下数据时：</p>
+<p><span style="white-space:pre"></span>1</p>
+<p>13 4</p>
+<p>1 1 1 1 5 6 7 8 9 10 11 12 13</p>
+<p>会将10 11 12 13删除得道错误答案90</p>
+<p>而正确答案则是删去4个1得到60.</p>
+<p>再次思考原范仕良的思路是对的，只要事先处理一下方差公式:</p>
+<p>(xi - x平均)^2 = xi^2 + x平均^2 - 2<em>xi</em>x平均</p>
+<p>所以方差 = ∑xi^2 + n<em>x平均 - 2</em>∑xi*x平均</p>
+<p>事先计算∑xi^2和∑xi，便可以以o(n)扫一遍得出结果。</p>
+<p>代码：</p>
+<p><code lang="cpp">#include <iostream>  </iostream></code></p>
+<p>#include <algorithm>  </algorithm></p>
+<p>#include <cstring>  </cstring></p>
+<p>#include <cstdio>  </cstdio></p>
+<p>double p[50005];  </p>
+<p>using namespace std;  </p>
+<p>int main()  </p>
+<p>{  </p>
+<pre><code><span class="keyword">int</span> T;  
+
+<span class="built_in">cin</span>&gt;&gt;T;  
+
+<span class="keyword">while</span>(T--)  
+
+{  
+
+    <span class="built_in">memset</span>(p,<span class="number">0</span>,<span class="keyword">sizeof</span>(p));  
+
+    <span class="keyword">int</span> n,k;  
+
+    <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;k;  
+
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=n;i++)  
+
+        <span class="built_in">cin</span>&gt;&gt;p[i];  
+
+    <span class="keyword">if</span>(n==k)  
+
+    {  
+
+        <span class="built_in">printf</span>(<span class="string">"%.9f\n"</span>,<span class="number">0</span>);   
+
+        <span class="keyword">continue</span>;      
+
+    }   
+
+    sort(p+<span class="number">1</span>,p+n+<span class="number">1</span>);  
+
+    <span class="keyword">double</span> sum = <span class="number">0</span>;  
+
+    <span class="keyword">double</span> sqrsum = <span class="number">0</span>;  
+
+     <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=n-k;i++)  
+
+     {  
+
+            sum += p[i];  
+
+            sqrsum += p[i] * p[i];  
+
+     }  
+
+    <span class="keyword">double</span> avg  = sum/(<span class="keyword">double</span>) (n-k);  
+
+    <span class="keyword">double</span> min = sqrsum + (n-k)*avg*avg - <span class="number">2</span>*sum*avg;  
+
+   <span class="comment">// cout&lt;&lt;sum&lt;&lt;" "&lt;&lt;sqrsum&lt;&lt;" "&lt;&lt;avg&lt;&lt;" "&lt;&lt;min&lt;&lt;endl;  </span>
+
+    <span class="keyword">int</span> flag = <span class="number">0</span>;  
+
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span> ;i &lt;= k; i++)  
+
+    {  
+
+            sum = sum + p[n-k+i] - p[i];  
+
+            sqrsum = sqrsum + p[n-k+i]*p[n-k+i] - p[i]*p[i];  
+
+            avg = sum/(<span class="keyword">double</span>) (n-k);  
+
+            <span class="keyword">double</span> now  = sqrsum + (n-k)*avg*avg - <span class="number">2</span>*sum*avg;  
+
+          <span class="comment">//     cout&lt;&lt;i&lt;&lt;" "&lt;&lt;sum&lt;&lt;" "&lt;&lt;sqrsum&lt;&lt;" "&lt;&lt;avg&lt;&lt;" "&lt;&lt;min&lt;&lt;endl;  </span>
+
+            <span class="keyword">if</span>(now &lt; min)  
+
+            {  
+
+                min = now;  
+
+                flag = i;  
+
+            }  
+
+    }  
+
+    <span class="built_in">printf</span>(<span class="string">"%.10f\n"</span>,min);  
+</code></pre><p>}  </p>
+<p>}`</p>
+<p>鞍山赛区失利，不过没有关系，西安争取拿牌～</p>
+<p>最后感谢一下比赛期间一直引导我们的志愿者粘微微（姓很奇怪XD～）</p>
+<p>文章流水帐，无所谓啦～</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ACM现场赛/" rel="tag">#ACM现场赛</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/10/22/stl-set和map应用记录/" rel="prev">stl set和map应用记录</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/10/15/hdu-2080-夹角有多大II/" rel="next">hdu 2080 夹角有多大II</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2014/10/21/2014ACM-ICPC-地区赛鞍山站小结/"
+                   data-title="2014ACM-ICPC 地区赛鞍山站小结" data-url="http://yoursite.com/2014/10/21/2014ACM-ICPC-地区赛鞍山站小结/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="Jeff Chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jeff Chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">74</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/feed.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jetmuffin" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/jetmuffin" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1922357801" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/JetMuffin" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.jetmuffin.com" target="_blank">JetMuffin</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.sunzequn.com" target="_blank">Sloriac</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://innerac.github.io" target="_blank">InnerAc</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blkstone.github.io/" target="_blank">Neurohazard</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://zcatao.github.io" target="_blank">zcatao</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeff Chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,821 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="BestCoder,hdu,二分答案,离线查询," />
+
+
+
+  <link rel="alternate" href="/feed.xml" title="JetMuffin's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="题目要求找出1e9范围内的满足条件的数，且对于每次查询要给出范围内的数的个数，复杂度条件非常苛刻。
+但是该类数本身数量就不多，于是想到离线算出所有数，然后二分答案。
+离线求这些数的方法可以DFS或者直接暴力，为了方便我就直接暴力了，半分钟左右出答案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hdu 5179 BestCoder #31 1002 beautiful number 解题报告">
+<meta property="og:url" content="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="题目要求找出1e9范围内的满足条件的数，且对于每次查询要给出范围内的数的个数，复杂度条件非常苛刻。
+但是该类数本身数量就不多，于是想到离线算出所有数，然后二分答案。
+离线求这些数的方法可以DFS或者直接暴力，为了方便我就直接暴力了，半分钟左右出答案。">
+<meta property="og:updated_time" content="2015-10-14T05:41:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hdu 5179 BestCoder #31 1002 beautiful number 解题报告">
+<meta name="twitter:description" content="题目要求找出1e9范围内的满足条件的数，且对于每次查询要给出范围内的数的个数，复杂度条件非常苛刻。
+但是该类数本身数量就不多，于是想到离线算出所有数，然后二分答案。
+离线求这些数的方法可以DFS或者直接暴力，为了方便我就直接暴力了，半分钟左右出答案。">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+  <title> hdu 5179 BestCoder #31 1002 beautiful number 解题报告 | JetMuffin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f67ecffc11ffd32260e0bcf804da1040";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">JetMuffin's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            <i class="menu-item-icon icon-next-guestbook"></i> <br />
+            留言
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '4Puw4pvQK1ydAQDsQwaN','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              hdu 5179 BestCoder #31 1002 beautiful number 解题报告
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-03-07T10:05:51+08:00" content="2015-03-07">
+            2015-03-07
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/算法/" itemprop="url" rel="index">
+                  <span itemprop="name">算法</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>题目要求找出1e9范围内的满足条件的数，且对于每次查询要给出范围内的数的个数，复杂度条件非常苛刻。</p>
+<p>但是该类数本身数量就不多，于是想到离线算出所有数，然后二分答案。</p>
+<p>离线求这些数的方法可以DFS或者直接暴力，为了方便我就直接暴力了，半分钟左右出答案。</p>
+<a id="more"></a>
+<p>离线代码：</p>
+<p>`#include <iostream></iostream></p>
+<p>#include <algorithm></algorithm></p>
+<p>#include <cstdio></cstdio></p>
+<p>#include <cstring></cstring></p>
+<p>using namespace std;</p>
+<p>int x[9];</p>
+<p>int len;</p>
+<p>void work(int n)</p>
+<p>{</p>
+<p>  int i = 0;</p>
+<p>  while(n&gt;0)</p>
+<p>  {</p>
+<pre><code>x[i++] = n % <span class="number">10</span>;
+
+n /= <span class="number">10</span>;
+</code></pre><p>  }</p>
+<p>  len = i;</p>
+<p>}</p>
+<p>int check()</p>
+<p>{</p>
+<p>  for(int i = 0 ; i &lt; len - 1; i++)</p>
+<pre><code><span class="keyword">if</span>(x[i] &gt; x[i+<span class="number">1</span>]) <span class="keyword">return</span> <span class="number">0</span>;
+</code></pre><p>  for(int i = 0 ; i &lt; len ; i++)</p>
+<pre><code><span class="keyword">if</span>(x[i] == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+</code></pre><p>  for(int i = 0 ; i &lt; len - 1; i++)</p>
+<pre><code><span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; len; j++)
+
+  <span class="keyword">if</span>(x[j] % x[i] != <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+</code></pre><p>  return 1;</p>
+<p>}</p>
+<p>int main()</p>
+<p>{</p>
+<p>  freopen(“out”,”w”,stdout);</p>
+<p>  int cnt = 0;</p>
+<p>  for(int i = 1; i &lt;= 999999999; i++)</p>
+<p>  {</p>
+<pre><code>work(i);
+
+<span class="keyword">if</span>(check())
+
+{
+
+  cnt++;
+
+  <span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="string">","</span>;    
+
+}
+</code></pre><p>  }</p>
+<p>  cout&lt;&lt;endl;</p>
+<p>  cout&lt;&lt;cnt&lt;&lt;endl;</p>
+<p>}`</p>
+<p>求出这些数大概有1299个，然后对于每次查询，可以直接遍历范围在L～R之间的个数，也可以二分L，二分R，然后序号相减，代码很长，前方高能预警。</p>
+<p>`#include <iostream></iostream></p>
+<p>#include <algorithm></algorithm></p>
+<p>#include <cstdio></cstdio></p>
+<p>#include <cstring></cstring></p>
+<p>using namespace std;</p>
+<p>int f[]={1,2,3,4,5,6,7,8,9,11,21,22,31,33,41,42,44,51,55,61,62,63,66,71,77,81,82,84,88,91,93,99,111,211,221,222,311,331,333,411,421,422,441,442,444,511,551,555,611,621,622,631,633,661,662,663,666,711,771,777,811,821,822,841,842,844,881,882,884,888,911,931,933,991,993,999,1111,2111,2211,2221,2222,3111,3311,3331,3333,4111,4211,4221,4222,4411,4421,4422,4441,4442,4444,5111,5511,5551,5555,6111,6211,6221,6222,6311,6331,6333,6611,6621,6622,6631,6633,6661,6662,6663,6666,7111,7711,7771,7777,8111,8211,8221,8222,8411,8421,8422,8441,8442,8444,8811,8821,8822,8841,8842,8844,8881,8882,8884,8888,9111,9311,9331,9333,9911,9931,9933,9991,9993,9999,11111,21111,22111,22211,22221,22222,31111,33111,33311,33331,33333,41111,42111,42211,42221,42222,44111,44211,44221,44222,44411,44421,44422,44441,44442,44444,51111,55111,55511,55551,55555,61111,62111,62211,62221,62222,63111,63311,63331,63333,66111,66211,66221,66222,66311,66331,66333,66611,66621,66622,66631,66633,66661,66662,66663,66666,71111,77111,77711,77771,77777,81111,82111,82211,82221,82222,84111,84211,84221,84222,84411,84421,84422,84441,84442,84444,88111,88211,88221,88222,88411,88421,88422,88441,88442,88444,88811,88821,88822,88841,88842,88844,88881,88882,88884,88888,91111,93111,93311,93331,93333,99111,99311,99331,99333,99911,99931,99933,99991,99993,99999,111111,211111,221111,222111,222211,222221,222222,311111,331111,333111,333311,333331,333333,411111,421111,422111,422211,422221,422222,441111,442111,442211,442221,442222,444111,444211,444221,444222,444411,444421,444422,444441,444442,444444,511111,551111,555111,555511,555551,555555,611111,621111,622111,622211,622221,622222,631111,633111,633311,633331,633333,661111,662111,662211,662221,662222,663111,663311,663331,663333,666111,666211,666221,666222,666311,666331,666333,666611,666621,666622,666631,666633,666661,666662,666663,666666,711111,771111,777111,777711,777771,777777,811111,821111,822111,822211,822221,822222,841111,842111,842211,842221,842222,844111,844211,844221,844222,844411,844421,844422,844441,844442,844444,881111,882111,882211,882221,882222,884111,884211,884221,884222,884411,884421,884422,884441,884442,884444,888111,888211,888221,888222,888411,888421,888422,888441,888442,888444,888811,888821,888822,888841,888842,888844,888881,888882,888884,888888,911111,931111,933111,933311,933331,933333,991111,993111,993311,993331,993333,999111,999311,999331,999333,999911,999931,999933,999991,999993,999999,1111111,2111111,2211111,2221111,2222111,2222211,2222221,2222222,3111111,3311111,3331111,3333111,3333311,3333331,3333333,4111111,4211111,4221111,4222111,4222211,4222221,4222222,4411111,4421111,4422111,4422211,4422221,4422222,4441111,4442111,4442211,4442221,4442222,4444111,4444211,4444221,4444222,4444411,4444421,4444422,4444441,4444442,4444444,5111111,5511111,5551111,5555111,5555511,5555551,5555555,6111111,6211111,6221111,6222111,6222211,6222221,6222222,6311111,6331111,6333111,6333311,6333331,6333333,6611111,6621111,6622111,6622211,6622221,6622222,6631111,6633111,6633311,6633331,6633333,6661111,6662111,6662211,6662221,6662222,6663111,6663311,6663331,6663333,6666111,6666211,6666221,6666222,6666311,6666331,6666333,6666611,6666621,6666622,6666631,6666633,6666661,6666662,6666663,6666666,7111111,7711111,7771111,7777111,7777711,7777771,7777777,8111111,8211111,8221111,8222111,8222211,8222221,8222222,8411111,8421111,8422111,8422211,8422221,8422222,8441111,8442111,8442211,8442221,8442222,8444111,8444211,8444221,8444222,8444411,8444421,8444422,8444441,8444442,8444444,8811111,8821111,8822111,8822211,8822221,8822222,8841111,8842111,8842211,8842221,8842222,8844111,8844211,8844221,8844222,8844411,8844421,8844422,8844441,8844442,8844444,8881111,8882111,8882211,8882221,8882222,8884111,8884211,8884221,8884222,8884411,8884421,8884422,8884441,8884442,8884444,8888111,8888211,8888221,8888222,8888411,8888421,8888422,8888441,8888442,8888444,8888811,8888821,8888822,8888841,8888842,8888844,8888881,8888882,8888884,8888888,9111111,9311111,9331111,9333111,9333311,9333331,9333333,9911111,9931111,9933111,9933311,9933331,9933333,9991111,9993111,9993311,9993331,9993333,9999111,9999311,9999331,9999333,9999911,9999931,9999933,9999991,9999993,9999999,11111111,21111111,22111111,22211111,22221111,22222111,22222211,22222221,22222222,31111111,33111111,33311111,33331111,33333111,33333311,33333331,33333333,41111111,42111111,42211111,42221111,42222111,42222211,42222221,42222222,44111111,44211111,44221111,44222111,44222211,44222221,44222222,44411111,44421111,44422111,44422211,44422221,44422222,44441111,44442111,44442211,44442221,44442222,44444111,44444211,44444221,44444222,44444411,44444421,44444422,44444441,44444442,44444444,51111111,55111111,55511111,55551111,55555111,55555511,55555551,55555555,61111111,62111111,62211111,62221111,62222111,62222211,62222221,62222222,63111111,63311111,63331111,63333111,63333311,63333331,63333333,66111111,66211111,66221111,66222111,66222211,66222221,66222222,66311111,66331111,66333111,66333311,66333331,66333333,66611111,66621111,66622111,66622211,66622221,66622222,66631111,66633111,66633311,66633331,66633333,66661111,66662111,66662211,66662221,66662222,66663111,66663311,66663331,66663333,66666111,66666211,66666221,66666222,66666311,66666331,66666333,66666611,66666621,66666622,66666631,66666633,66666661,66666662,66666663,66666666,71111111,77111111,77711111,77771111,77777111,77777711,77777771,77777777,81111111,82111111,82211111,82221111,82222111,82222211,82222221,82222222,84111111,84211111,84221111,84222111,84222211,84222221,84222222,84411111,84421111,84422111,84422211,84422221,84422222,84441111,84442111,84442211,84442221,84442222,84444111,84444211,84444221,84444222,84444411,84444421,84444422,84444441,84444442,84444444,88111111,88211111,88221111,88222111,88222211,88222221,88222222,88411111,88421111,88422111,88422211,88422221,88422222,88441111,88442111,88442211,88442221,88442222,88444111,88444211,88444221,88444222,88444411,88444421,88444422,88444441,88444442,88444444,88811111,88821111,88822111,88822211,88822221,88822222,88841111,88842111,88842211,88842221,88842222,88844111,88844211,88844221,88844222,88844411,88844421,88844422,88844441,88844442,88844444,88881111,88882111,88882211,88882221,88882222,88884111,88884211,88884221,88884222,88884411,88884421,88884422,88884441,88884442,88884444,88888111,88888211,88888221,88888222,88888411,88888421,88888422,88888441,88888442,88888444,88888811,88888821,88888822,88888841,88888842,88888844,88888881,88888882,88888884,88888888,91111111,93111111,93311111,93331111,93333111,93333311,93333331,93333333,99111111,99311111,99331111,99333111,99333311,99333331,99333333,99911111,99931111,99933111,99933311,99933331,99933333,99991111,99993111,99993311,99993331,99993333,99999111,99999311,99999331,99999333,99999911,99999931,99999933,99999991,99999993,99999999,111111111,211111111,221111111,222111111,222211111,222221111,222222111,222222211,222222221,222222222,311111111,331111111,333111111,333311111,333331111,333333111,333333311,333333331,333333333,411111111,421111111,422111111,422211111,422221111,422222111,422222211,422222221,422222222,441111111,442111111,442211111,442221111,442222111,442222211,442222221,442222222,444111111,444211111,444221111,444222111,444222211,444222221,444222222,444411111,444421111,444422111,444422211,444422221,444422222,444441111,444442111,444442211,444442221,444442222,444444111,444444211,444444221,444444222,444444411,444444421,444444422,444444441,444444442,444444444,511111111,551111111,555111111,555511111,555551111,555555111,555555511,555555551,555555555,611111111,621111111,622111111,622211111,622221111,622222111,622222211,622222221,622222222,631111111,633111111,633311111,633331111,633333111,633333311,633333331,633333333,661111111,662111111,662211111,662221111,662222111,662222211,662222221,662222222,663111111,663311111,663331111,663333111,663333311,663333331,663333333,666111111,666211111,666221111,666222111,666222211,666222221,666222222,666311111,666331111,666333111,666333311,666333331,666333333,666611111,666621111,666622111,666622211,666622221,666622222,666631111,666633111,666633311,666633331,666633333,666661111,666662111,666662211,666662221,666662222,666663111,666663311,666663331,666663333,666666111,666666211,666666221,666666222,666666311,666666331,666666333,666666611,666666621,666666622,666666631,666666633,666666661,666666662,666666663,666666666,711111111,771111111,777111111,777711111,777771111,777777111,777777711,777777771,777777777,811111111,821111111,822111111,822211111,822221111,822222111,822222211,822222221,822222222,841111111,842111111,842211111,842221111,842222111,842222211,842222221,842222222,844111111,844211111,844221111,844222111,844222211,844222221,844222222,844411111,844421111,844422111,844422211,844422221,844422222,844441111,844442111,844442211,844442221,844442222,844444111,844444211,844444221,844444222,844444411,844444421,844444422,844444441,844444442,844444444,881111111,882111111,882211111,882221111,882222111,882222211,882222221,882222222,884111111,884211111,884221111,884222111,884222211,884222221,884222222,884411111,884421111,884422111,884422211,884422221,884422222,884441111,884442111,884442211,884442221,884442222,884444111,884444211,884444221,884444222,884444411,884444421,884444422,884444441,884444442,884444444,888111111,888211111,888221111,888222111,888222211,888222221,888222222,888411111,888421111,888422111,888422211,888422221,888422222,888441111,888442111,888442211,888442221,888442222,888444111,888444211,888444221,888444222,888444411,888444421,888444422,888444441,888444442,888444444,888811111,888821111,888822111,888822211,888822221,888822222,888841111,888842111,888842211,888842221,888842222,888844111,888844211,888844221,888844222,888844411,888844421,888844422,888844441,888844442,888844444,888881111,888882111,888882211,888882221,888882222,888884111,888884211,888884221,888884222,888884411,888884421,888884422,888884441,888884442,888884444,888888111,888888211,888888221,888888222,888888411,888888421,888888422,888888441,888888442,888888444,888888811,888888821,888888822,888888841,888888842,888888844,888888881,888888882,888888884,888888888,911111111,931111111,933111111,933311111,933331111,933333111,933333311,933333331,933333333,991111111,993111111,993311111,993331111,993333111,993333311,993333331,993333333,999111111,999311111,999331111,999333111,999333311,999333331,999333333,999911111,999931111,999933111,999933311,999933331,999933333,999991111,999993111,999993311,999993331,999993333,999999111,999999311,999999331,999999333,999999911,999999931,999999933,999999991,999999993,999999999};</p>
+<p>int n = 1299;</p>
+<p>int main()</p>
+<p>{</p>
+<p>  int T;</p>
+<p>  cin&gt;&gt;T;</p>
+<p>  while(T–)</p>
+<p>  {</p>
+<pre><code><span class="keyword">int</span> L,R;
+
+<span class="built_in">cin</span>&gt;&gt;L&gt;&gt;R;
+
+<span class="keyword">int</span> ans = <span class="number">0</span>;
+
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ;i &lt; n;i++)
+
+{
+
+  <span class="keyword">if</span>(f[i]&gt;= L &amp;&amp; f[i]&lt;=R)
+
+    ans++;
+
+}
+
+<span class="built_in">cout</span>&lt;&lt;ans&lt;&lt;endl;
+</code></pre><p>  }</p>
+<p>}`</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/BestCoder/" rel="tag">#BestCoder</a>
+          
+            <a href="/tags/hdu/" rel="tag">#hdu</a>
+          
+            <a href="/tags/二分答案/" rel="tag">#二分答案</a>
+          
+            <a href="/tags/离线查询/" rel="tag">#离线查询</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/" rel="prev">蓝桥杯算法训练-逆序对 解题报告</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/06/Hdu-5178-BestCoder-31-1001-Pairs-解题报告/" rel="next">Hdu 5178 BestCoder #31 1001 Pairs 解题报告</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/"
+                   data-title="hdu 5179 BestCoder #31 1002 beautiful number 解题报告" data-url="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="Jeff Chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jeff Chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">74</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/feed.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jetmuffin" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/jetmuffin" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1922357801" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/JetMuffin" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.jetmuffin.com" target="_blank">JetMuffin</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.sunzequn.com" target="_blank">Sloriac</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://innerac.github.io" target="_blank">InnerAc</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blkstone.github.io/" target="_blank">Neurohazard</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://zcatao.github.io" target="_blank">zcatao</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeff Chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

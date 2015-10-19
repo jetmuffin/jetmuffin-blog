@@ -1,0 +1,875 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="dp," />
+
+
+
+  <link rel="alternate" href="/feed.xml" title="JetMuffin's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="算法导论结课题目。
+题目很长，大义是给出每个商品的编码和费用，再给出某些商品的组合价，求买了所需商品的最少费用。
+样例输入：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最少费用购物问题，裸DP，动态规划">
+<meta property="og:url" content="http://yoursite.com/2014/10/30/最少费用购物问题，裸DP，动态规划/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="算法导论结课题目。
+题目很长，大义是给出每个商品的编码和费用，再给出某些商品的组合价，求买了所需商品的最少费用。
+样例输入：">
+<meta property="og:updated_time" content="2015-10-14T05:41:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最少费用购物问题，裸DP，动态规划">
+<meta name="twitter:description" content="算法导论结课题目。
+题目很长，大义是给出每个商品的编码和费用，再给出某些商品的组合价，求买了所需商品的最少费用。
+样例输入：">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+  <title> 最少费用购物问题，裸DP，动态规划 | JetMuffin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f67ecffc11ffd32260e0bcf804da1040";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">JetMuffin's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            <i class="menu-item-icon icon-next-guestbook"></i> <br />
+            留言
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '4Puw4pvQK1ydAQDsQwaN','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              最少费用购物问题，裸DP，动态规划
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2014-10-30T07:05:55+08:00" content="2014-10-30">
+            2014-10-30
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/算法/" itemprop="url" rel="index">
+                  <span itemprop="name">算法</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2014/10/30/最少费用购物问题，裸DP，动态规划/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/30/最少费用购物问题，裸DP，动态规划/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>算法导论结课题目。</p>
+<p>题目很长，大义是给出每个商品的编码和费用，再给出某些商品的组合价，求买了所需商品的最少费用。</p>
+<p>样例输入：</p>
+<a id="more"></a>
+<p>2</p>
+<p>7  3  2</p>
+<p>8  2  5</p>
+<p>2</p>
+<p>1  7  3  5</p>
+<p>2  7  1  8  2  10</p>
+<p>样例输出：</p>
+<p>14</p>
+<p>样例解释：</p>
+<p>第一行2代表有2个商品，之后两行中，第一个数字是商品编码，第二个数字是商品所需购买数量，第三个数字是商品单价。</p>
+<p>第二行2代表优惠组合数，第一个数字代表有多少商品的组合，之后每一对数字代表组合的商品的编码和数量，该行最后一个数字代表优惠组合优惠价格。</p>
+<p>题目看起来很复杂，读起来更复杂- -。</p>
+<p>第一眼看上去很像背包，刚开始试着用多重背包的思想去做，发现二维完全解决不了（因为需要各个商品的数量作为状态）。仔细看发现商品数量最大为5，果断使用普通的裸DP，不过维数较多，有5维，也就意味着有至少5个for循环，蛋疼至极。打算试试状态压缩，发现不好办，最后还是老老实实编码了。</p>
+<p>注意点：优惠商品数量不能大于需求数量，同时注意商品编码和输入的i、j的关系要处理好。</p>
+<p>PS：写完后雪林哥给了一组数据，我的程序跪了，发现就是商品编码没处理好，ORZ～</p>
+<p>分享该数据：</p>
+<p>输入：</p>
+<p>5</p>
+<p>1 1 2</p>
+<p>2 1 3</p>
+<p>3 1 4 </p>
+<p>4 1 5</p>
+<p>5 1 6</p>
+<p>6</p>
+<p>1 2 1 3 </p>
+<p>2 1 1 2 1 5</p>
+<p>5 1 1 2 1 3 1 4 1 5 1 3</p>
+<p>3 1 1 3 1 4 1 1</p>
+<p>2 2 1 5 1 1</p>
+<p>1 1 1 3</p>
+<p>输出：2</p>
+<p>代码如下：</p>
+<p>`#include <iostream>  </iostream></p>
+<p>#include <cstdio>  </cstdio></p>
+<p>#include <algorithm>  </algorithm></p>
+<p>#include <cstring>  </cstring></p>
+<p>#include <queue>  </queue></p>
+<p>#include <set>  </set></p>
+<p>#include <map>  </map></p>
+<p>#include <time.h>  </time.h></p>
+<p>using namespace std;  </p>
+<p>int sale[1000][6] = {0};    //分别表示每个优惠中每个商品数量   </p>
+<p>int saleprice[1000] = {0};  //优惠总价   </p>
+<p>int salelength[1000] = {0}; //优惠总共有几个商品   </p>
+<p>int salenumber[1000][1000] = {0};   //优惠商品的ID   </p>
+<p>int good[6][4] = {0};       //1 -&gt; number   2 -&gt; price  3 -&gt; last num  </p>
+<p>int num[1000];              //商品ID   </p>
+<p>int dp[6][6][6][6][6];    </p>
+<p>int n,m;  </p>
+<p>void input()  </p>
+<p>{  </p>
+<pre><code>cin&gt;&gt;n;  
+
+for(int i = 1; i  <span class="xml"><span class="tag">&lt;<span class="title">=</span> <span class="attribute">n</span>; <span class="attribute">i</span>++)  
+
+{  
+
+    <span class="attribute">cin</span>&gt;</span></span>&gt;good[<span class="link_label">i</span>][<span class="link_reference">1</span>]&gt;&gt;good[<span class="link_label">i</span>][<span class="link_reference">3</span>]&gt;&gt;good[<span class="link_label">i</span>][<span class="link_reference">2</span>];  
+
+<span class="code">    num[i] = good[i][1];  </span>
+
+}  
+
+cin&gt;&gt;m;  
+
+for(int i = 1; i <span class="xml"><span class="tag">&lt;<span class="title">=</span> <span class="attribute">m</span>; <span class="attribute">i</span>++)  
+
+{  
+
+        <span class="attribute">cin</span>&gt;</span></span>&gt;salelength[i];  
+
+<span class="code">        for(int j = 1; j &lt;= salelength[i]; j++)  </span>
+
+<span class="code">        {  </span>
+
+<span class="code">                cin&gt;&gt;salenumber[i][j];  </span>
+
+<span class="code">                cin&gt;&gt;sale[i][salenumber[i][j]];  </span>
+
+<span class="code">        }  </span>
+
+<span class="code">        cin&gt;&gt;saleprice[i];  </span>
+
+}  
+</code></pre><p>}  </p>
+<p>void output()  </p>
+<p>{  </p>
+<pre><code><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i  &lt;= n; i++)  
+
+    <span class="built_in">cout</span>&lt;&lt;<span class="string">"goodnum: "</span>&lt;&lt;good[i][<span class="number">1</span>]&lt;&lt;<span class="string">" goodprice: "</span>&lt;&lt;good[i][<span class="number">2</span>]&lt;&lt;<span class="string">" goodlast: "</span>&lt;&lt;good[i][<span class="number">3</span>]&lt;&lt;endl;  
+
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i  &lt;= m; i++)  
+
+{  
+
+    <span class="comment">//cout&lt;&lt;salelength[i]&lt;&lt;endl;  </span>
+
+    <span class="built_in">cout</span>&lt;&lt;<span class="string">"sale"</span>&lt;&lt;i&lt;&lt;<span class="string">" : "</span>;  
+
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= salelength[i]; j++)  
+
+            <span class="built_in">cout</span>&lt;&lt;<span class="string">"num: "</span>&lt;&lt;salenumber[i][j]&lt;&lt;<span class="string">" count: "</span>&lt;&lt;sale[i][salenumber[i][j]]&lt;&lt;<span class="string">" "</span>;  
+
+    <span class="built_in">cout</span>&lt;&lt;endl;  
+
+   <span class="built_in">cout</span>&lt;&lt;<span class="string">" price: "</span>&lt;&lt;saleprice[i]&lt;&lt;endl;  
+
+}  
+</code></pre><p>}  </p>
+<p>int main()  </p>
+<p>{  </p>
+<pre><code>//freopen<span class="list">(<span class="string">"in2"</span>,<span class="string">"r"</span>,stdin)</span><span class="comment">;  </span>
+
+input<span class="list">()</span><span class="comment">;  </span>
+</code></pre><p>   // output();  </p>
+<pre><code>dp[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;  
+
+  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= good[<span class="number">1</span>][<span class="number">3</span>]; i++)  
+
+        <span class="keyword">for</span>(<span class="keyword">int</span> j= <span class="number">0</span>; j &lt;= good[<span class="number">2</span>][<span class="number">3</span>]; j++)  
+
+                <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= good[<span class="number">3</span>][<span class="number">3</span>] ;k++)  
+
+                        <span class="keyword">for</span>(<span class="keyword">int</span> l = <span class="number">0</span>; l &lt;= good[<span class="number">4</span>][<span class="number">3</span>]; l++)  
+
+                                <span class="keyword">for</span>(<span class="keyword">int</span> p = <span class="number">0</span>; p &lt;= good[<span class="number">5</span>][<span class="number">3</span>]; p++)  
+</code></pre><p>{  </p>
+<p>int minx = i <em> good[1][2] + j </em> good[2][2] + k * good[3][2]  </p>
+<ul>
+<li><p>l <em> good[4][2] + p </em> good[5][2];  </p>
+<p> for(int q = 1; q &lt;= m; q++)  </p>
+<p> {  </p>
+<pre><code> if(i -sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[1]</span>]</span>&lt;0 || i - sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[2]</span>]</span>&lt;0 ||   i-sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[3]</span>]</span>&lt;0 || i-sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[4]</span>]</span>&lt;0 ||i-sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[5]</span>]</span>&lt;0)          continue;  
+
+ int t = dp<span class="comment">[i - sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[1]</span>]</span>]</span><span class="comment">[j - sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[2]</span>]</span>]</span><span class="comment">[k - sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[3]</span>]</span>]</span><span class="comment">[l - sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[4]</span>]</span>]</span><span class="comment">[p - sale<span class="comment">[q]</span><span class="comment">[num<span class="comment">[5]</span>]</span>]</span> + saleprice<span class="comment">[q]</span>;  
+
+if(t &lt; minx) minx = t;  
+</code></pre><p> }  </p>
+<pre><code>dp[<span class="link_label">i</span>][<span class="link_reference">j</span>][<span class="link_label">k</span>][<span class="link_reference">l</span>][<span class="link_label">p</span>] = minx;  
+</code></pre></li>
+</ul>
+<p>}  </p>
+<pre><code>cout&lt;&lt;dp<span class="comment">[good<span class="comment">[1]</span><span class="comment">[3]</span>]</span><span class="comment">[good<span class="comment">[2]</span><span class="comment">[3]</span>]</span><span class="comment">[good<span class="comment">[3]</span><span class="comment">[3]</span>]</span><span class="comment">[good<span class="comment">[4]</span><span class="comment">[3]</span>]</span><span class="comment">[good<span class="comment">[5]</span><span class="comment">[3]</span>]</span>&lt;&lt;endl;  
+</code></pre><p>return 0;  </p>
+<p>}`</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/dp/" rel="tag">#dp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/10/30/最短加法链问题，POJ2248，BFS，搜索/" rel="prev">最短加法链问题，POJ2248，BFS，搜索</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/10/28/2014-ACM-ICPC-亚洲地区赛-西安站小结/" rel="next">2014 ACM-ICPC 亚洲地区赛 西安站小结</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2014/10/30/最少费用购物问题，裸DP，动态规划/"
+                   data-title="最少费用购物问题，裸DP，动态规划" data-url="http://yoursite.com/2014/10/30/最少费用购物问题，裸DP，动态规划/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="Jeff Chen" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jeff Chen</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">74</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/feed.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jetmuffin" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/jetmuffin" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1922357801" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/JetMuffin" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.jetmuffin.com" target="_blank">JetMuffin</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.sunzequn.com" target="_blank">Sloriac</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://innerac.github.io" target="_blank">InnerAc</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blkstone.github.io/" target="_blank">Neurohazard</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://zcatao.github.io" target="_blank">zcatao</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeff Chen</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
