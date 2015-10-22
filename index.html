@@ -161,56 +161,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-                
         <h1 id="源码编译安装Ambari">源码编译安装Ambari</h1><h2 id="Why">Why</h2><p>笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译</p>
-<h2 id="What">What</h2><p>源码编译需要以下环境，需要提前安装：</p>
-<ul>
-<li>JDK</li>
-<li>Maven</li>
-<li>Python 2.6+</li>
-<li>rpm-build</li>
-<li>g++,gcc,make等</li>
-<li>NodeJS</li>
-<li>Brunch<br>因此需要先配置环境</li>
-</ul>
-<h3 id="安装JDK">安装JDK</h3><p>可以使用系统(CentOS)自带的openjdk，或者下载Oracle的JDK。<br>安装后配置环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# vim /etc/profile&#10;# &#22312;&#26411;&#23614;&#28155;&#21152; export JAVA_HOME=&#20320;&#30340;java&#22320;&#22336;&#10;# &#22312;&#26411;&#23614;&#28155;&#21152; export path=$path:$JAVA_HOME/bin&#10;[root@cloud01 ~]# source /etc/profile&#10;[root@cloud01 ~]# java -version&#10;java version &#34;1.7.0_51&#34;&#10;Java(TM) SE Runtime Environment (build 1.7.0_51-b13)&#10;Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)</span><br></pre></td></tr></table></figure></p>
-<p>如果<code>java -version</code>正常，则JDK安装成功</p>
-<h3 id="安装Maven">安装Maven</h3><ol>
-<li>官网下载maven对应版本</li>
-<li><p>解压</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# tar -zxvf apache-maven-3.0.3-bin.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>设置环境变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# vim /etc/profile&#10;#&#26411;&#23614;&#28155;&#21152; export MAVEN_HOME=&#20320;&#30340;maven&#22320;&#22336;&#10;#&#26411;&#23614;&#28155;&#21152; export path=$path:$MAVEN_HOME/bin&#10;[root@cloud01 ~]# source /etc/profile&#10;[root@cloud01 ~]# mvn -v&#10;Apache Maven 3.0.3&#10;Maven home: /usr/local/apache-maven-3.0.3&#10;Java version: 1.7.0_51, vendor: Oracle Corporation&#10;Java home: /usr/local/jdk1.7.0_51/jre&#10;Default locale: en_US, platform encoding: UTF-8&#10;OS name: &#34;linux&#34;, version: &#34;2.6.32-358.el6.x86_64&#34;, arch: &#34;amd64&#34;, family: &#34;unix&#34;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>若 <code>mvn -v</code>正常，则maven安装成功</p>
-<h3 id="安装Python">安装Python</h3><p>CentOS自带Python，且CentOS6.5自带Python2.6，可以直接使用<br>若版本过低或者未安装则执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum install python</span><br></pre></td></tr></table></figure></p>
-<h3 id="安装rpm-build">安装rpm-build</h3><ol>
-<li><p>检测rpm-build是否已经安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# rpm -qa | grep rpm-build</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>若未安装，执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum install rpm-build</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="安装g++等依赖">安装g++等依赖</h3><p>执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum -y install gcc make gcc-c++ openssl-devel wget</span><br></pre></td></tr></table></figure></p>
-<h3 id="安装NodeJS">安装NodeJS</h3><ol>
-<li><p>下载源码及解压</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# wget http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz&#10;[root@cloud01 ~]# tar -zvxf node-v0.10.26.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译及安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# cd node-v0.10.26&#10;[root@cloud01 ~]# ./configuration&#10;[root@cloud01 ~]# make &#38;&#38; make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>验证安装配置是否成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-
+        
+          <p class="article-more-link">
+            <a href="/2015/10/22/源码编译安装Ambari/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/22/源码编译安装Ambari/" data-id="cig1s48em001in8taafku2t2g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/22/源码编译安装Ambari/" data-id="cig1sfx34001ivgtanpgvll01" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/10/22/源码编译安装Ambari/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -268,7 +228,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/19/Ambari搭建Hadoop管理平台/" data-id="cig1s48kn00acn8ta0s35nxu8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/19/Ambari搭建Hadoop管理平台/" data-id="cig1sfxaf00acvgta6eugleg6" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/10/19/Ambari搭建Hadoop管理平台/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -327,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/" data-id="cig1s48dw000bn8taciyqxmy8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/" data-id="cig1sfx1u000bvgtawku3kb38" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -385,7 +345,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" data-id="cig1s48kt00ain8ta0ybmc1bo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" data-id="cig1sfxam00aivgtasbrg69fw" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -443,7 +403,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/HHU-ACM第五周-数论专题（二）题解/" data-id="cig1s48jl008wn8tat5nkowy5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/08/HHU-ACM第五周-数论专题（二）题解/" data-id="cig1sfx99008wvgtautpae0yp" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/08/HHU-ACM第五周-数论专题（二）题解/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -505,7 +465,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/05/Floyd-Warshall算法-多源最短路径/" data-id="cig1s48jp0095n8ta07amcsfw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/05/Floyd-Warshall算法-多源最短路径/" data-id="cig1sfx9e0095vgtabj2no3fo" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/05/Floyd-Warshall算法-多源最短路径/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -563,7 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/" data-id="cig1s48js009an8ta5bgogfsw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/" data-id="cig1sfx9h009avgta7oswv14n" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -621,7 +581,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/" data-id="cig1s48j2007xn8tah53k7434" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/" data-id="cig1sfx8o007xvgtaxgrjnapf" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -680,7 +640,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/" data-id="cig1s48ki00a7n8ta8k23m0a1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/" data-id="cig1sfxa900a7vgta2upw3s0b" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -742,7 +702,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/" data-id="cig1s48gu004gn8ta6uahfazp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/" data-id="cig1sfx6g004gvgtad2w537yb" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/#ds-thread" class="article-comment-link">Comments</a>
       
