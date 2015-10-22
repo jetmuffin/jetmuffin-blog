@@ -5,16 +5,49 @@
   
   <title>源码编译安装Ambari | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="源码编译安装AmbariWhy笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译">
+  <meta name="description" content="源码编译安装Ambari
+为什么笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译
+环境准备源码编译需要以下环境，需要提前安装：
+
+
+JDK
+Maven
+Python 2.6+
+rpm-build
+g++,gcc,make等
+NodeJS
+Brunch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="源码编译安装Ambari">
 <meta property="og:url" content="http://yoursite.com/2015/10/22/源码编译安装Ambari/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="源码编译安装AmbariWhy笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译">
-<meta property="og:updated_time" content="2015-10-22T05:28:12.507Z">
+<meta property="og:description" content="源码编译安装Ambari
+为什么笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译
+环境准备源码编译需要以下环境，需要提前安装：
+
+
+JDK
+Maven
+Python 2.6+
+rpm-build
+g++,gcc,make等
+NodeJS
+Brunch">
+<meta property="og:updated_time" content="2015-10-22T08:43:19.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="源码编译安装Ambari">
-<meta name="twitter:description" content="源码编译安装AmbariWhy笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译">
+<meta name="twitter:description" content="源码编译安装Ambari
+为什么笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译
+环境准备源码编译需要以下环境，需要提前安装：
+
+
+JDK
+Maven
+Python 2.6+
+rpm-build
+g++,gcc,make等
+NodeJS
+Brunch">
   
   
     <link rel="icon" href="favicon.png">
@@ -162,9 +195,10 @@
     <div class="article-entry" itemprop="articleBody">
       
                 
-        <h1 id="源码编译安装Ambari">源码编译安装Ambari</h1><h2 id="Why">Why</h2><p>笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译</p>
-<a id="more"></a>
-<h2 id="What">What</h2><p>源码编译需要以下环境，需要提前安装：</p>
+        <h1 id="源码编译安装Ambari">源码编译安装Ambari</h1><hr>
+<h2 id="为什么">为什么</h2><p>笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译</p>
+<h2 id="环境准备">环境准备</h2><p>源码编译需要以下环境，需要提前安装：</p>
+<blockquote>
 <ul>
 <li>JDK</li>
 <li>Maven</li>
@@ -172,46 +206,77 @@
 <li>rpm-build</li>
 <li>g++,gcc,make等</li>
 <li>NodeJS</li>
-<li>Brunch<br>因此需要先配置环境</li>
+<li>Brunch</li>
 </ul>
+</blockquote>
+<p>因此需要先配置环境</p>
 <h3 id="安装JDK">安装JDK</h3><p>可以使用系统(CentOS)自带的openjdk，或者下载Oracle的JDK。<br>安装后配置环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# vim /etc/profile&#10;# &#22312;&#26411;&#23614;&#28155;&#21152; export JAVA_HOME=&#20320;&#30340;java&#22320;&#22336;&#10;# &#22312;&#26411;&#23614;&#28155;&#21152; export path=$path:$JAVA_HOME/bin&#10;[root@cloud01 ~]# source /etc/profile&#10;[root@cloud01 ~]# java -version&#10;java version &#34;1.7.0_51&#34;&#10;Java(TM) SE Runtime Environment (build 1.7.0_51-b13)&#10;Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)</span><br></pre></td></tr></table></figure></p>
 <p>如果<code>java -version</code>正常，则JDK安装成功</p>
 <h3 id="安装Maven">安装Maven</h3><ol>
 <li>官网下载maven对应版本</li>
 <li><p>解压</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# tar -zxvf apache-maven-3.0.3-bin.tar.gz</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# tar -zxvf apache-maven-3.0.3-bin.tar.gz</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol>
 <li><p>设置环境变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# vim /etc/profile&#10;#&#26411;&#23614;&#28155;&#21152; export MAVEN_HOME=&#20320;&#30340;maven&#22320;&#22336;&#10;#&#26411;&#23614;&#28155;&#21152; export path=$path:$MAVEN_HOME/bin&#10;[root@cloud01 ~]# source /etc/profile&#10;[root@cloud01 ~]# mvn -v&#10;Apache Maven 3.0.3&#10;Maven home: /usr/local/apache-maven-3.0.3&#10;Java version: 1.7.0_51, vendor: Oracle Corporation&#10;Java home: /usr/local/jdk1.7.0_51/jre&#10;Default locale: en_US, platform encoding: UTF-8&#10;OS name: &#34;linux&#34;, version: &#34;2.6.32-358.el6.x86_64&#34;, arch: &#34;amd64&#34;, family: &#34;unix&#34;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# vim /etc/profile&#10;#&#26411;&#23614;&#28155;&#21152; export MAVEN_HOME=&#20320;&#30340;maven&#22320;&#22336;&#10;#&#26411;&#23614;&#28155;&#21152; export path=$path:$MAVEN_HOME/bin&#10;[root@cloud01 ~]# source /etc/profile&#10;[root@cloud01 ~]# mvn -v&#10;Apache Maven 3.0.3&#10;Maven home: /usr/local/apache-maven-3.0.3&#10;Java version: 1.7.0_51, vendor: Oracle Corporation&#10;Java home: /usr/local/jdk1.7.0_51/jre&#10;Default locale: en_US, platform encoding: UTF-8&#10;OS name: &#34;linux&#34;, version: &#34;2.6.32-358.el6.x86_64&#34;, arch: &#34;amd64&#34;, family: &#34;unix&#34;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>若 <code>mvn -v</code>正常，则maven安装成功</p>
 <h3 id="安装Python">安装Python</h3><p>CentOS自带Python，且CentOS6.5自带Python2.6，可以直接使用<br>若版本过低或者未安装则执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum install python</span><br></pre></td></tr></table></figure></p>
 <h3 id="安装rpm-build">安装rpm-build</h3><ol>
 <li><p>检测rpm-build是否已经安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# rpm -qa | grep rpm-build</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# rpm -qa | grep rpm-build</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol>
 <li><p>若未安装，执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum install rpm-build</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum install rpm-build</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h3 id="安装g++等依赖">安装g++等依赖</h3><p>执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum -y install gcc make gcc-c++ openssl-devel wget</span><br></pre></td></tr></table></figure></p>
 <h3 id="安装NodeJS">安装NodeJS</h3><ol>
 <li><p>下载源码及解压</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# wget http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz&#10;[root@cloud01 ~]# tar -zvxf node-v0.10.26.tar.gz</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# wget http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz&#10;[root@cloud01 ~]# tar -zvxf node-v0.10.26.tar.gz</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>编译及安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# cd node-v0.10.26&#10;[root@cloud01 ~]# ./configuration&#10;[root@cloud01 ~]# make &#38;&#38; make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>验证安装配置是否成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# cd node-v0.10.26&#10;[root@cloud01 ~]# ./configuration&#10;[root@cloud01 ~]# make &#38;&#38; make install</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<ol>
+<li><p>验证安装配置是否成功</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="编译">编译</h2><ol>
+<li><p>下载并解压源码</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# wget http://www.apache.org/dist/ambari/ambari-2.1.2/apache-ambari-2.1.2-src.tar.gz&#10;[root@cloud01 ~]# tar xfvz apache-ambari-2.1.2-src.tar.gz&#10;[root@cloud01 ~]# cd apache-ambari-2.1.2-src</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# mvn versions:set -DnewVersion=2.1.2&#10;[root@cloud01 ~]# pushd ambari-metrics&#10;[root@cloud01 ~]# mvn versions:set -DnewVersion=2.1.2&#10;[root@cloud01 ~]# popd&#10;[root@cloud01 ~]# mvn -B clean install package rpm:rpm -DnewVersion=2.1.2 -DskipTests -Dpython.ver=&#34;python &#62;= 2.6&#34;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装rpm</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@cloud01 ~]# yum install ambari-server*.rpm</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="错误总结">错误总结</h2><ol>
+<li><p>出现异常：ClassNotFoundException: org.slf4j.helpers.MarkerIgnoringBase</p>
+<blockquote>
+<p>使用低于Maven 3.3.3的版本，我用的是Maven 3.0.5</p>
+</blockquote>
+</li>
+<li><p>node-gyp rebuilt卡住<br>原因是node-gyp rebuilt 会去下载源码rebuilt生成头文件，而国外的npm源非常慢，所以可以手动修改<br>执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install node-gyp &#10;node-gyp install --dist-url http://npm.taobao.org/mirrors/node</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>或者直接修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># &#33719;&#24471; nodejs &#29256;&#26412;&#21495;&#10;NODE_VERSION=`node -v | cut -d&#39;v&#39; -f 2`&#10;# &#19979;&#36733;&#28304;&#30721;&#21253;&#10;wget http://npm.taobao.org/mirrors/node/v$NODE_VERSION/node-v$NODE_VERSION.tar.gz&#10;# &#21024;&#38500;&#29616;&#26377;&#20869;&#23481;&#19981;&#23436;&#25972;&#30340;&#30446;&#24405;&#10;rm -rf ~/.node-gyp&#10;mkdir ~/.node-gyp&#10;# &#35299;&#21387;&#32553;&#24182;&#37325;&#21629;&#21517;&#21040;&#27491;&#30830;&#26684;&#24335;&#10;tar zxf node-v$NODE_VERSION.tar.gz -C ~/.node-gyp&#10;mv ~/.node-gyp/node-v$NODE_VERSION ~/.node-gyp/$NODE_VERSION&#10;# &#21019;&#24314;&#19968;&#20010;&#26631;&#35760;&#25991;&#20214;&#10;printf &#34;9\n&#34;&#62;~/.node-gyp/$NODE_VERSION/installVersion</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/22/源码编译安装Ambari/" data-id="cig1sfx34001ivgtanpgvll01" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/22/源码编译安装Ambari/" data-id="cig1zfi9h001i8wtawdiswuxf" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/10/22/源码编译安装Ambari/#ds-thread" class="article-comment-link">Comments</a>
       
