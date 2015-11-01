@@ -94,7 +94,7 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        75
+        76
         <span>posts</span>
       </div>
       <div class="article-info-block">
@@ -127,6 +127,199 @@
 
       
       <section id="main">
+      <article id="post-文本挖掘初步-文本中文分词" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/05/文本挖掘初步-文本中文分词/">文本挖掘初步 - 文本中文分词</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2015/06/05/文本挖掘初步-文本中文分词/">
+      <time datetime="2015-06-05T14:32:00.000Z" itemprop="datePublished">2015-06-05</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/数据挖掘/">数据挖掘</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <h2 id="介绍">介绍</h2><p>中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。</p>
+<p>如同编译原理中的词法分析的重要性,中文分词是文本挖掘的基础,需要通过机器自动将输入的句子切分成一个个的词语,才能进行更多的处理.</p>
+<p>中文分词和英文分词最大的区别在于,英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记,因此中文分词的难度比英文分词大了很多.</p>
+<h2 id="方法">方法</h2><p>分词算法可分为三大类：基于字典、词库匹配的分词方法,基于词频度统计的分词方法和基于知识理解的分词方法。</p>
+<p>1<strong>. 基于字典,词库(字符串匹配)的分词方法</strong></p>
+<p>这种方法按照一定策略将待分析的汉字串与一个“充分大的”机器词典中的词条进行匹配，若在词典中找到某个字符串，则匹配成功。识别出一个词，根据扫描方向的不同分为正向匹配和逆向匹配。采用该方法的分词算法主要有:</p>
+<ul>
+<li>正向最大匹配法（由左到右的方向）</li>
+<li>逆向最大匹配法（由右到左的方向）</li>
+<li>最少切分（使每一句中切出的词数最小）<br><strong>2.基于词频度统计的分词方法</strong></li>
+</ul>
+<p>这是一种全切分方法。它不依靠词典,而是将文章中任意两个字同时出现的频率进行统计,次数越高的就可能是一个词。它首先切分出与词表匹配的所有可能的词,运用统计语言模型和决策算法决定最优的切分结果。它的优点在于可以发现所有的切分歧义并且容易将新词提取出来。</p>
+<p><strong>3.基于知识理解的分词</strong></p>
+<p>该方法主要基于句法、语法分析，并结合语义分析，通过对上下文内容所提供信息的分析对词进行定界，它通常包括三个部分：分词子系统、句法语义子系统、总控部分。在总控部分的协调下，分词子系统可以获得有关词、句子等的句法和语义信息来对分词歧义进行判断。这类方法试图让机器具有人类的理解能力，需要使用大量的语言知识和信息。由于汉语语言知识的笼统、复杂性，难以将各种语言信息组织成机器可直接读取的形式。因此目前基于知识的分词系统还处在试验阶段。</p>
+<h2 id="工具">工具</h2><p>在中文分词领域,有很多已经非常成熟的分词工具可以被使用,以下对各工具的算法和效率(根据网上情报)进行总结.</p>
+<p><strong>1.ICTCLAS(NLPIR)</strong></p>
+<p><a href="http://ictclas.nlpir.org/" target="_blank" rel="external">http://ictclas.nlpir.org/</a></p>
+<p>ICTCLAS是中国科学院计算技术研究所在多年研究基础上，耗时一年研制出了基于多层隐马模型(HMM)的汉语词法分析系统 ，功能有：中文分词；词性标注；自定义词典等。分词正确率高,分词速度快.源代码数以C++编写的,并提供JAVA接口.</p>
+<p>速度: 单机 (996KB/s)</p>
+<p><strong>2.Stanford Word Segmenter || CRF++</strong></p>
+<p><a href="http://nlp.stanford.edu/software/segmenter.shtml" target="_blank" rel="external">http://nlp.stanford.edu/software/segmenter.shtml</a></p>
+<p>这两个中文分词工具都是基于条件随机场CRF(<span lang="EN-US">C</span><span lang="EN-US">onditional<span class="Apple-converted-space"> </span></span><span lang="EN-US">R</span><span lang="EN-US">andom</span><span lang="EN-US"><span class="Apple-converted-space"> </span>F</span><span lang="EN-US">ield)模型实现的,<span lang="ZH-CN">其基本思路是对汉字进行标注即由字构词</span><span lang="EN-US">(</span><span lang="ZH-CN">组词</span><span lang="EN-US">)</span><span lang="ZH-CN">，不仅考虑了文字词语出现的频率信息，同时考虑上下文语境，具备较好的学习能力，因此其对歧义词和未登录词的识别都具有良好的效果；其不足之处是训练周期较长，运营时计算量较大.</span></span></p>
+<p>速度: (暂未获得)</p>
+<p><strong>3.Mmseg </strong></p>
+<p><a href="http://technology.chtsai.org/mmseg/" target="_blank" rel="external">http://technology.chtsai.org/mmseg/</a></p>
+<p>Mmseg是典型的基于字典的中文分词工具,其主要实现原理是基于最大匹配算法.它提供Simple和Complex两种最大匹配算法,即简单的和复杂的.简单的最大匹配算法从字符串开头开始,获取最长的匹配串;而复杂的最大匹配算法则针对存在歧义的单词,向前再看两个单词再进行判断.</p>
+<p>Mmseg支持在lucene和solr中使用,在该二者中配置Mmseg,即可对中文文本进行分词索引.这也是Mmseg被使用广泛的一个原因.同时因为其实现原理简单,效果也很不错,且提供Java支持(Mmseg4j),也是很受欢迎的一款分词工具.</p>
+<p>速度: complex 60W字/s (1200 KB/s)  ；simple 100W字/s (1900 KB/s)</p>
+<p><strong>4.IKAnalyzer</strong></p>
+<p><a href="http://code.google.com/p/ik-analyzer/downloads/list" target="_blank" rel="external">http://code.google.com/p/ik-analyzer/downloads/list</a></p>
+<p>IKAnalyzer是一个开源的，基于java语言开发的轻量级的中文分词工具包。采用了特有的”正向迭代最细粒度切分算法”(我还没取研究这个算法),支持细粒度和智能分词两种切分模式.同样,IKAnalyzer也提供了对Solr和Lucene的支持.</p>
+<p>速度: IK2012 160W字/s (3000KB/s)</p>
+<h2 id="代码">代码</h2><p>根据分词的成功率,速率以及使用接口简单,在之后的所有后续挖掘过程中将采用ICTCLAS2015作为分词器,所以需要对其进行简单的封装.</p>
+<p>JNA实现接口CLibrary:</p>
+<pre><code>    <span class="keyword">package</span> com.jetmuffin.analyzer;
+    <span class="keyword">import</span> com.sun.jna.Library;
+    <span class="keyword">public</span> interface CLibrary extends Library{
+
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_Init(<span class="keyword">String</span> sDataPath, <span class="built_in">int</span> encoding,
+        <span class="keyword">String</span> sLicenceCode);
+
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_ParagraphProcess(<span class="keyword">String</span> sSrc, <span class="built_in">int</span> bPOSTagged);
+
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
+        <span class="built_in">boolean</span> bWeightOut);
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetFileKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
+        <span class="built_in">boolean</span> bWeightOut);
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_AddUserWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_DelUsrWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
+        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_ImportUserDict(<span class="keyword">String</span> sWord,<span class="built_in">boolean</span> bOverWrite);
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_WordFreqStat(<span class="keyword">String</span> sWord);
+        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetLastErrorMsg();
+        <span class="keyword">public</span> <span class="keyword">void</span> NLPIR_Exit();
+    }
+`&lt;/pre&gt;
+
+接口实现类Nlpir:
+
+&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.analyzer;
+    <span class="keyword">import</span> com.sun.jna.Native;
+
+    <span class="keyword">public</span> class NLPIR {
+    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary Instance;
+    <span class="keyword">private</span> <span class="keyword">String</span> systemCharset;
+    <span class="keyword">private</span> <span class="keyword">String</span> systemFolder;
+    <span class="built_in">int</span> charsetType;
+
+    <span class="keyword">public</span> NLPIR(){
+        systemFolder = <span class="string">"/home/jeff/src/ICTCLAS2015"</span>;  <span class="comment">//ICTCLAS的目录,包括字典文件等</span>
+        systemCharset = <span class="string">"UTF-8"</span>;  <span class="comment">//默认字符集</span>
+        charsetType = <span class="number">1</span>;
+
+        Instance = (CLibrary) Native.loadLibrary(
+                <span class="string">"/home/jeff/src/ICTCLAS2015/lib/linux32/libNLPIR.so"</span>, CLibrary.class);  <span class="comment">//ICTCLAS的so文件地址</span>
+        }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary getInstance() {
+        <span class="keyword">return</span> Instance;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> setInstance(CLibrary instance) {
+        Instance = instance;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">String</span> getSystemCharset() {
+        <span class="keyword">return</span> systemCharset;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setSystemCharset(<span class="keyword">String</span> systemCharset) {
+        <span class="keyword">this</span>.systemCharset = systemCharset;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">String</span> getSystemFolder() {
+        <span class="keyword">return</span> systemFolder;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setSystemFolder(<span class="keyword">String</span> systemFolder) {
+        <span class="keyword">this</span>.systemFolder = systemFolder;
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> getCharsetType() {
+        <span class="keyword">return</span> charsetType;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setCharsetType(<span class="built_in">int</span> charsetType) {
+        <span class="keyword">this</span>.charsetType = charsetType;
+    }
+    }
+`&lt;/pre&gt;
+
+测试类:
+
+&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.test;
+
+    <span class="keyword">import</span> org.junit.Test;
+    <span class="keyword">import</span> com.jetmuffin.NLPIR;
+    <span class="keyword">public</span> class TestNlpir {
+
+    @Test
+    <span class="keyword">public</span> <span class="keyword">void</span> test(){
+        NLPIR nlpir = <span class="keyword">new</span> NLPIR();
+        nlpir.Instance.NLPIR_Init(nlpir.getSystemFolder(),nlpir.getCharsetType() ,nlpir.getSystemCharset());
+        <span class="keyword">String</span> nativeBytes = <span class="keyword">null</span>;
+
+        <span class="keyword">String</span> sInput = <span class="string">"什么是机器学习"</span>;
+        nlpir.Instance.NLPIR_ImportUserDict(<span class="string">"/home/jeff/workspace/data/dict"</span>, <span class="keyword">false</span>);  <span class="comment">//加载用户自定义词典</span>
+        nativeBytes = nlpir.Instance.NLPIR_ParagraphProcess(sInput, <span class="number">0</span>); <span class="comment">//分词</span>
+        <span class="keyword">String</span>[] words = nativeBytes.<span class="built_in">split</span>(<span class="string">" "</span>);  <span class="comment">//分词结果以空格进行分割</span>
+        System.out.<span class="built_in">println</span>(words.length); <span class="comment">//输出分词词数</span>
+        System.out.<span class="built_in">println</span>(nativeBytes);  <span class="comment">//输出分词结果</span>
+    }
+    }
+`&lt;/pre&gt;
+
+结果:
+
+&lt;pre&gt;`<span class="number">3</span>
+什么 是 机器学习 
+</code></pre><h2 id="结语">结语</h2><p>进行分类器的封装以后,可以继续进行之后的文本挖掘内容.以上均为本人拙见,且本人为NLP菜鸟,望大牛予以指正! :)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="ciggfi2vj002ahktamqyhd1mz" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ICTCLAS/">ICTCLAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/">NLP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/中文分词/">中文分词</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/文本挖掘/">文本挖掘</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-文本挖掘初步-对自由文本进行信息抽取" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -171,7 +364,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" data-id="cig1zfian002k8wtae0d5op2p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" data-id="ciggfi2vj002khktajljdc57i" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -226,7 +419,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/04/25/Jena本体框架使用范例/" data-id="cig1zfif2008c8wtai7gwtfqr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/04/25/Jena本体框架使用范例/" data-id="ciggfi301008dhktabi7kchho" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/04/25/Jena本体框架使用范例/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -286,7 +479,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/04/25/编程之美初赛第三题-质数相关-小数据解法/" data-id="cig1zfi9600198wtawz3i1kn0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/04/25/编程之美初赛第三题-质数相关-小数据解法/" data-id="ciggfi2uo0019hktaisrwifwt" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/04/25/编程之美初赛第三题-质数相关-小数据解法/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -345,7 +538,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/" data-id="cig1zfi8f000m8wta74kyfb7t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/" data-id="ciggfi2tt000mhktakhtpl30s" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -405,7 +598,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/" data-id="cig1zfida00648wtax5ruoyii" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/" data-id="ciggfi2yq0065hktau0f0yilr" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -465,7 +658,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/06/Hdu-5178-BestCoder-31-1001-Pairs-解题报告/" data-id="cig1zfif6008i8wta4ztxwde7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/06/Hdu-5178-BestCoder-31-1001-Pairs-解题报告/" data-id="ciggfi30h008jhktahchz392y" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/03/06/Hdu-5178-BestCoder-31-1001-Pairs-解题报告/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -524,7 +717,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/04/弹出框popover点击框外区域关闭弹出框效果/" data-id="cig1zfiaw002v8wtam314lu1m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/04/弹出框popover点击框外区域关闭弹出框效果/" data-id="ciggfi2w5002vhktaqpnffuri" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/03/04/弹出框popover点击框外区域关闭弹出框效果/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -580,7 +773,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/07/BestCoder-29-1002-hdu-5171-GTY-s-birthday-gift-题解/" data-id="cig1zfigl009y8wtahsxjkz44" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/07/BestCoder-29-1002-hdu-5171-GTY-s-birthday-gift-题解/" data-id="ciggfi31s009zhktansh6dz7j" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/02/07/BestCoder-29-1002-hdu-5171-GTY-s-birthday-gift-题解/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -638,72 +831,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/04/hdu-4549-费马小定理-矩阵快速幂/" data-id="cig1zfids006o8wtal7qizm8b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/04/hdu-4549-费马小定理-矩阵快速幂/" data-id="ciggfi2z6006phktagqonoauv" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/02/04/hdu-4549-费马小定理-矩阵快速幂/#ds-thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdu/">hdu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数论/">数论</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/矩阵快速幂/">矩阵快速幂</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/费马小定理/">费马小定理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-    
-      <article id="post-蓝桥杯校内选拔赛第6题题解-poj-2676" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/">蓝桥杯校内选拔赛第6题题解 poj 2676</a>
-    </h1>
-  
-
-        <div class="article-meta">
-          
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/">
-      <time datetime="2015-02-03T10:51:54.000Z" itemprop="datePublished">2015-02-03</time>
-    </a>
-  </div>
-
-
-          
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>题目就是输入一个9*9的数独，然后解出数独的最终解。</p>
-<p>大体思路还是搜索，dfs即可，写一个检查函数判断行、列、小方阵是否违规。</p>
-<p>dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个点，枚举1-9个数字中可用的数字，但是由于每次到一行的末尾需要换行到下一行比较麻烦，索性将二维数组一维化，仅使用一个变量k即可。</p>
-        
-          <p class="article-more-link">
-            <a href="/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/" data-id="cig1zfi8p000w8wta9n4a9nr2" class="article-share-link">Share</a>
-      
-        <a href="http://yoursite.com/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/#ds-thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dfs/">dfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/poj/">poj</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/搜索/">搜索</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/蓝桥杯/">蓝桥杯</a></li></ul>
 
     </footer>
   </div>
@@ -725,6 +858,23 @@
     <h3 class="widget-title">recents</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/01/匈牙利算法/" class="thumbnail">
+  
+    <span class="thumbnail-image thumbnail-none"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2015/11/01/匈牙利算法/" class="title">匈牙利算法</a></p>
+              <p class="item-date"><time datetime="2015-11-01T11:19:16.000Z" itemprop="datePublished">2015-11-01</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -796,23 +946,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/09/08/HHU-ACM第五周-数论专题（二）题解/" class="thumbnail">
-  
-    <span class="thumbnail-image thumbnail-none"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/算法/">算法</a></p>
-              <p class="item-title"><a href="/2015/09/08/HHU-ACM第五周-数论专题（二）题解/" class="title">HHU ACM第五周 数论专题（二）题解</a></p>
-              <p class="item-date"><time datetime="2015-09-08T05:17:00.000Z" itemprop="datePublished">2015-09-08</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -840,7 +973,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
