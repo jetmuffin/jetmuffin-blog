@@ -94,11 +94,11 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        76
+        77
         <span>posts</span>
       </div>
       <div class="article-info-block">
-        94
+        95
         <span>tags</span>
       </div>
     </div>
@@ -127,6 +127,200 @@
 
       
       <section id="main">
+      <article id="post-Mesos-Framework解析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/07/Mesos-Framework解析/">Mesos Framework解析</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2015/11/07/Mesos-Framework解析/">
+      <time datetime="2015-11-07T02:53:58.000Z" itemprop="datePublished">2015-11-07</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/云计算/">云计算</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <h1 id="Mesos_Framework_解析">Mesos Framework 解析</h1><h2 id="介绍">介绍</h2><h3 id="Mesos">Mesos</h3><p>Mesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。</p>
+<h3 id="Mesos_Framework">Mesos Framework</h3><p>Mesos采用两层架构，所有计算框架均在底层，即Mesos Master负责对任务的资源分配给各个框架；在计算框架之上为Mesos Framework，它可用是通用的框架，也可用为特定软件编写的框架，如Framework一个长时间运行的服务（比如JobTracker等），也可以是一个短生命周期的Job或者Application。这样设计的好处是，<strong>作为底层的Mesos不需要知道顶层的应用的细节，只负责根据slave资源状况提供offers，而调度由顶层的Framework进行实现</strong>，这样底层的Mesos对所有应用（分布式or集中式，长时间服务or短暂性任务等）均可适用。</p>
+<p>Framework可以根据是否符合任务对资源的约束，选择接受或拒绝资源邀约。一旦资源邀约被接受，Framework将与Master协作调度任务，并在数据中心的相应Slave节点上运行任务。</p>
+<p>Framework包含两大部分：</p>
+<ul>
+<li><p><strong>Scheduler</strong></p>
+<p>  Scheduler负责管理框架所获得的资源，按照作业的输入量，将其分解成若干任务，并未这些任务申请资源，监控这些任务的运行状态，一旦发现某个任务运行失败则重新为其申请资源。</p>
+</li>
+<li><p><strong>Executor</strong> </p>
+<p>  Executor负责执行调度器所分配的任务。</p>
+</li>
+</ul>
+<p>Framework结构如图：<br><img src="http://cdn1.infoqstatic.com/statics_s2_20151020-0055-2/resource/articles/analyse-mesos-part-04/zh/resources/0604001.jpg" alt="Framework Structure"></p>
+<h2 id="分析">分析</h2><h3 id="Framework任务分配过程">Framework任务分配过程</h3><p>Framework任务分配流程图如下：<br><img src="http://s2.51cto.com/wyfs02/M01/09/F3/wKiom1LKbc-DCmXcAACKJCK6gs4287.jpg" alt="Framework Task"></p>
+<p>Mesos的资源分配行为发生在：<strong>新框架注册</strong>，<strong>框架注销</strong>，<strong>增加节点</strong>，<strong>出现空闲资源</strong>等情况，对Mesos Framework进行资源分配的流程如下：</p>
+<ol>
+<li><p>Mesos Master中的<code>Allocator</code>模块将要为某个Framework分配资源，则将资源封装到<code>ResourceOffersMessage</code>中，通过网络传输发送给<code>SchedulerProcess</code></p>
+</li>
+<li><p><code>SchedulerProcess</code>调用用户在Scheduler中编写的<code>resourceOffers</code>函数，告知有新资源可用；</p>
+</li>
+<li><p>Framework的Scheduler调用<code>MesosSchedulerDriver</code>中的<code>launchTasks()</code>函数，告知将要启动的任务；</p>
+</li>
+<li><p>Mesos Master将待启动的任务分装成<code>RunTaskMessage</code>发送给各个Mesos Slave；</p>
+</li>
+<li><p>Mesos Slave收到<code>RunTaskMessage</code>消息后，将其发送给对应的<code>ExecutorProcess</code>；</p>
+</li>
+<li><p><code>ExecutorProcess</code>收到消息后，进行资源本地化，并准备任务环境，最终调度用户编写的Exector中的<code>launchTask</code>任务启动任务。</p>
+</li>
+</ol>
+<h3 id="Framework开放接口及作用">Framework开放接口及作用</h3><p>Mesos向开发者开放了API，API隐藏了Mesos底层和分布式交互的具体的细节，使得开发者可方便地用根据相应使用环境编写对应的Framework，提供的接口支持<code>C++</code>，<code>Go</code>，<code>Haskell</code>，<code>Java</code>，<code>Python</code>，和<code>Scala</code>语言。</p>
+<p><strong>Scheduler API</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>registered()</td>
+<td>当Scheduler成功向Master注册时被调用</td>
+</tr>
+<tr>
+<td>reregistered()</td>
+<td>当Scheduler再次注册成功时被调用</td>
+</tr>
+<tr>
+<td>disconnected()</td>
+<td>当Scheduler和Master失去连接时被调用</td>
+</tr>
+<tr>
+<td><strong>resourcesOffers()</strong></td>
+<td>当Framework收到Mesos提供的资源时被调用</td>
+</tr>
+<tr>
+<td>offerRescinded()</td>
+<td>当某个offer不再适用时调用(Slave丢失或者其他Framework正在适用这个offer),master撤销发送给Framework的资源</td>
+</tr>
+<tr>
+<td>statusUpdate()</td>
+<td>当Mesos向框架发送消息时被调用</td>
+</tr>
+<tr>
+<td>frameworkMessage()</td>
+<td>用来向Scheduler传递Executor发送的消息</td>
+</tr>
+<tr>
+<td>slaveLost()</td>
+<td>通知Mesos无法和指定ID的slave通信</td>
+</tr>
+<tr>
+<td>executorLost()</td>
+<td>通知Scheduler指定的Executor已经以某个状态结束了</td>
+</tr>
+<tr>
+<td>error()</td>
+<td>当Scheduler出现可恢复的错误时被调用</td>
+</tr>
+</tbody>
+</table>
+<p>其中最重要的为<br><code>resourceOffers(SchedulerDriver,  List&lt;Offer&gt;)</code>方法。Master向Framework提供资源offer，每一份资源offer包含从某个slave上获取的资源列表（包括CPU，内存，硬盘等）。开发者重写该方法，可用根据特定的情况接受资源offer，并利用offersId交给Executor启动任务，或者拒绝该offer。<strong>一个offer会提供给多个Framework，但是第一个使用offer启动任务的Framework会获胜，其他的Framework将受到<code>offerRescinded()</code>发出的消息。</strong></p>
+<p><strong>Scheduler API</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>registered()</td>
+<td>当Executor驱动成功和Mesos连接上时调用</td>
+</tr>
+<tr>
+<td>reregistered()</td>
+<td>当Executor再次向某个重启的slave注册时调用</td>
+</tr>
+<tr>
+<td>disconnected()</td>
+<td>当Executor和slave失去连接时调用</td>
+</tr>
+<tr>
+<td><strong>launchTask()</strong></td>
+<td>当Executor启动某个任务时调用</td>
+</tr>
+<tr>
+<td>killTask()</td>
+<td>当Executor杀死某个task时被调用</td>
+</tr>
+<tr>
+<td>frameworkMessage()</td>
+<td>当Framework的信息到达Executor时被调用</td>
+</tr>
+<tr>
+<td>shutdown()</td>
+<td>当Executor需要终止所有task时被调用</td>
+</tr>
+<tr>
+<td>error()</td>
+<td>当Scheduler出现不可恢复的错误时被调用</td>
+</tr>
+</tbody>
+</table>
+<p>同样，Executor中最核心的方法是<code>launchTask(ExecutorDriver, TaskInfo)</code>。可重写该方法实现执行任务，任务将在offer来源的slave上执行。<strong>执行任务在方法调用时会被阻塞，在回调完成前，该Executor无法执行其他的任务。</strong>因此如果要执行一个长时间的任务（如Web应用)，可用把任务放在线程里，通过线程的方式启动。</p>
+<h2 id="Framework实例分析">Framework实例分析</h2><p>Mesos上已有许多Framework，包括支持MPI，Hadoop，Spark，Storm等应用的。这里主要利用简单的Framework分析如何实现一个Framework。</p>
+<ul>
+<li><p><a href="https://github.com/mesosphere/mesos-hydra" target="_blank" rel="external">mesos-hydra</a>，MPI Framework，该Framework是利用python进行的实现。</p>
+</li>
+<li><p><a href="https://github.com/mesosphere/RENDLER" target="_blank" rel="external">RENDLER</a>,一个利用Mesos框架实现的分布式爬虫</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#22635;&#22353;&#65292;&#24453;&#30475;&#23436;&#20840;&#37096;&#20195;&#30721;&#21518;&#34917;&#19978;&#28304;&#30721;&#20998;&#26512;</span><br></pre></td></tr></table></figure>
+<h2 id="Framework设计模式">Framework设计模式</h2><p>从现有的Mesos Framework分配调度使用资源的方式中，可用总结出以下几种模式。</p>
+<ul>
+<li>用于协调资源：设计的Framework作为其他Framework的资源协调者，作为服务运行，如<code>Mesos-DNS</code>。</li>
+<li>基于负载状况：设计的Framework根据负载来调节资源使用，如<code>Marathon</code>和<code>Aurora</code>，会根据约定自动进行扩容和缩容。</li>
+<li>基于预留的框架：这里主要指，某些分布式应用，在设计时已经预留了资源调度的接口，如<code>Hadoop</code>，<code>Spark</code>，<code>Storm</code>，因此只要实现接口，就可以将应用从原有的调度框架（如Hadoop原有框架为<code>YARN</code>)移植到Mesos上来。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cigoi0cha00891gta0rk9exmm" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2015/11/07/Mesos-Framework解析/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mesos/">Mesos</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-二分图匹配-匈牙利算法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -172,7 +366,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/01/二分图匹配-匈牙利算法/" data-id="ciggfr1oq003esctabgzce9wo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/01/二分图匹配-匈牙利算法/" data-id="cigoi0cdo003e1gtab0rgubtu" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/01/二分图匹配-匈牙利算法/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -231,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/22/源码编译安装Ambari/" data-id="ciggfr1nf001iscta0o0u6ny3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/22/源码编译安装Ambari/" data-id="cigoi0ccc001i1gtaxnnlljmo" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/10/22/源码编译安装Ambari/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -289,7 +483,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/19/Ambari搭建Hadoop管理平台/" data-id="ciggfr1ul00agscta3in7y9n7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/19/Ambari搭建Hadoop管理平台/" data-id="cigoi0cix00ak1gtalrtqkdc3" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/10/19/Ambari搭建Hadoop管理平台/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -348,7 +542,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/" data-id="ciggfr1mi000bscta3o4l7ddd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/" data-id="cigoi0cbk000b1gta7v1kllzw" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/20/转-广义Fibonacci数列找循环节/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -406,7 +600,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" data-id="ciggfr1uq00amsctasaq0g2ss" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" data-id="cigoi0cj200aq1gta9h1bk9ej" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -464,7 +658,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/HHU-ACM第五周-数论专题（二）题解/" data-id="ciggfr1t10090sctab4p0k3r3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/08/HHU-ACM第五周-数论专题（二）题解/" data-id="cigoi0chu00941gtajq51hudf" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/08/HHU-ACM第五周-数论专题（二）题解/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -526,7 +720,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/05/Floyd-Warshall算法-多源最短路径/" data-id="ciggfr1t60099sctacz4js9h5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/05/Floyd-Warshall算法-多源最短路径/" data-id="cigoi0ci0009d1gtago0zs5dd" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/05/Floyd-Warshall算法-多源最短路径/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -584,7 +778,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/" data-id="ciggfr1th009escta2qlyzo8p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/" data-id="cigoi0ci4009i1gtan3vq6as0" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -642,71 +836,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/" data-id="ciggfr1sb0081sctaq0o82p9a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/" data-id="cigoi0ch600811gta31x79v2b" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/#ds-thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spfa/">spfa</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/图论/">图论</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/最短路径/">最短路径</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-    
-      <article id="post-Bellman-ford算法-图论-单源最短路径-求负权环" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/">Bellman-ford算法 图论 单源最短路径 求负权环</a>
-    </h1>
-  
-
-        <div class="article-meta">
-          
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/">
-      <time datetime="2015-09-04T03:25:00.000Z" itemprop="datePublished">2015-09-04</time>
-    </a>
-  </div>
-
-
-          
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="概念">概念</h2><p>Bellman-ford算法可以用来计算图中的单源最短路径。同时该算法可以处理边权为负的情况（Dijkstra算法无法处理负权），同时可以判断图中是否含有负权环。</p>
-<p>设dis[v]为从源点s到v的最短路径长度。对于任意与v相连的顶点u，dis[v]可以满足三角不等式，即<code>dis[v]&lt;=dis[u]+w(u,v)</code>，根据该性质可以设置松弛操作。<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/" data-id="ciggfr1uh00absctad9dob7wt" class="article-share-link">Share</a>
-      
-        <a href="http://yoursite.com/2015/09/04/Bellman-ford算法-图论-单源最短路径-求负权环/#ds-thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bellman-ford/">bellman-ford</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/图论/">图论</a></li></ul>
 
     </footer>
   </div>
@@ -728,6 +863,24 @@
     <h3 class="widget-title">recents</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/07/Mesos-Framework解析/" class="thumbnail">
+  
+    <span style="background-image:url(http://cdn1.infoqstatic.com/statics_s2_20151020-0055-2/resource/articles/analyse-mesos-part-04/zh/resources/0604001.jpg
+)" alt="Mesos Framework解析" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+              <p class="item-title"><a href="/2015/11/07/Mesos-Framework解析/" class="title">Mesos Framework解析</a></p>
+              <p class="item-date"><time datetime="2015-11-07T02:53:58.000Z" itemprop="datePublished">2015-11-07</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -799,24 +952,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" class="thumbnail">
-  
-    <span style="background-image:url(http://i1.tietuku.com/7ef99cd19149a4c2.png
-)" alt="2015 ACM 长春赛区网赛题解 （部分）" class="thumbnail-image"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/算法/">算法</a></p>
-              <p class="item-title"><a href="/2015/09/14/2015-ACM-长春赛区网赛题解-（部分）/" class="title">2015 ACM 长春赛区网赛题解 （部分）</a></p>
-              <p class="item-date"><time datetime="2015-09-14T02:16:00.000Z" itemprop="datePublished">2015-09-14</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -826,7 +961,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">4</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -835,7 +970,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">tag cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 11.43px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 11.43px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 11.43px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 12.86px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 10px;">模拟</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
+      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 11.43px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 11.43px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 11.43px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 12.86px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 10px;">模拟</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
     </div>
   </div>
 
@@ -844,7 +979,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
