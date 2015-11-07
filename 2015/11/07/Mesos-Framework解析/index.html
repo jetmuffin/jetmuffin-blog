@@ -5,21 +5,18 @@
   
   <title>Mesos Framework解析 | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Mesos Framework 解析介绍MesosMesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。
-Mesos FrameworkMesos采用两层架构，所有计算框架均在底层，即Mesos Master负责对任务的资源分配给各个框架；在计算框架之">
+  <meta name="description" content="Mesos Framework 解析介绍MesosMesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mesos Framework解析">
 <meta property="og:url" content="http://yoursite.com/2015/11/07/Mesos-Framework解析/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="Mesos Framework 解析介绍MesosMesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。
-Mesos FrameworkMesos采用两层架构，所有计算框架均在底层，即Mesos Master负责对任务的资源分配给各个框架；在计算框架之">
+<meta property="og:description" content="Mesos Framework 解析介绍MesosMesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。">
 <meta property="og:image" content="http://cdn1.infoqstatic.com/statics_s2_20151020-0055-2/resource/articles/analyse-mesos-part-04/zh/resources/0604001.jpg">
 <meta property="og:image" content="http://s2.51cto.com/wyfs02/M01/09/F3/wKiom1LKbc-DCmXcAACKJCK6gs4287.jpg">
-<meta property="og:updated_time" content="2015-11-07T02:55:08.401Z">
+<meta property="og:updated_time" content="2015-11-07T02:57:18.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mesos Framework解析">
-<meta name="twitter:description" content="Mesos Framework 解析介绍MesosMesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。
-Mesos FrameworkMesos采用两层架构，所有计算框架均在底层，即Mesos Master负责对任务的资源分配给各个框架；在计算框架之">
+<meta name="twitter:description" content="Mesos Framework 解析介绍MesosMesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。">
   
   
     <link rel="icon" href="favicon.png">
@@ -167,7 +164,7 @@ Mesos FrameworkMesos采用两层架构，所有计算框架均在底层，即Mes
     <div class="article-entry" itemprop="articleBody">
       
                 
-        <h1 id="Mesos_Framework_解析">Mesos Framework 解析</h1><h2 id="介绍">介绍</h2><h3 id="Mesos">Mesos</h3><p>Mesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。</p>
+        <h1 id="Mesos_Framework_解析">Mesos Framework 解析</h1><h2 id="介绍">介绍</h2><h3 id="Mesos">Mesos</h3><p>Mesos是Apache旗下的开源集群资源计算框架，它能将多台机器（包括物理机和虚拟机）的资源，包括CPU，内存，硬盘等计算资源抽象出来，进行资源隔离和共享，构建高容错性、高可用性的分布式资源管理系统。<br><a id="more"></a></p>
 <h3 id="Mesos_Framework">Mesos Framework</h3><p>Mesos采用两层架构，所有计算框架均在底层，即Mesos Master负责对任务的资源分配给各个框架；在计算框架之上为Mesos Framework，它可用是通用的框架，也可用为特定软件编写的框架，如Framework一个长时间运行的服务（比如JobTracker等），也可以是一个短生命周期的Job或者Application。这样设计的好处是，<strong>作为底层的Mesos不需要知道顶层的应用的细节，只负责根据slave资源状况提供offers，而调度由顶层的Framework进行实现</strong>，这样底层的Mesos对所有应用（分布式or集中式，长时间服务or短暂性任务等）均可适用。</p>
 <p>Framework可以根据是否符合任务对资源的约束，选择接受或拒绝资源邀约。一旦资源邀约被接受，Framework将与Master协作调度任务，并在数据中心的相应Slave节点上运行任务。</p>
 <p>Framework包含两大部分：</p>
@@ -311,7 +308,7 @@ Mesos FrameworkMesos采用两层架构，所有计算框架均在底层，即Mes
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cigoi0cha00891gta0rk9exmm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cigoi3b7l0089u0ta4zx15idu" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/07/Mesos-Framework解析/#ds-thread" class="article-comment-link">Comments</a>
       
