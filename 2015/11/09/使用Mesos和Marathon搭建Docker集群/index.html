@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用Mesos和Marathon搭建Docker集群 | JetMuffin&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="利用Mesos，Marathon对Docker集群进行管理，保证高容错性，高拓展性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Mesos和Marathon搭建Docker集群">
+<meta property="og:url" content="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="利用Mesos，Marathon对Docker集群进行管理，保证高容错性，高拓展性。">
+<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/09/1.png">
+<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/09/2.png">
+<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/09/3.png">
+<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/09/4.png">
+<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/09/5.png">
+<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/09/6.png">
+<meta property="og:updated_time" content="2015-11-09T09:31:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Mesos和Marathon搭建Docker集群">
+<meta name="twitter:description" content="利用Mesos，Marathon对Docker集群进行管理，保证高容错性，高拓展性。">
+  
+  
+    <link rel="icon" href="favicon.png">
+  
+  
+
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css" type="text/css">
+  
+
+  
+
+  
+</head>
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo"><i class="logo" style="background-image: url(/css/images/logo.png)"></i><span class="site-title">JetMuffin&#39;s Blog</span></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/.">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/categories">Categories</a>
+        
+          <a class="main-nav-link" href="/tags">Tags</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/uploads/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+      
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"> </button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tr>
+        
+          <td><a class="main-nav-link" href="/.">Home</a></td>
+        
+          <td><a class="main-nav-link" href="/archives">Archives</a></td>
+        
+          <td><a class="main-nav-link" href="/categories">Categories</a></td>
+        
+          <td><a class="main-nav-link" href="/tags">Tags</a></td>
+        
+          <td><a class="main-nav-link" href="/about">About</a></td>
+        
+        <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</header>
+
+    <div class="outer">
+      
+        <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="/uploads/avatar.jpg">
+      <h2 id="name">JetMuffin</h2>
+      <h3 id="title">ACMer &amp; ITman</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Nanjing, China</span>
+      <a id="follow" href="https://github.com/jetmuffin/">FOLLOW</a>
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        78
+        <span>posts</span>
+      </div>
+      <div class="article-info-block">
+        96
+        <span>tags</span>
+      </div>
+    </div>
+    
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+          <td><a href="http://github.com/jetmuffin" target="_blank" title="github"><i class="fa fa-github"></i></a></td>
+          
+          <td><a href="http://weibo.com/1922357801" target="_blank" title="weibo"><i class="fa fa-weibo"></i></a></td>
+          
+          <td><a href="https://twitter.com/jetmuffin" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></td>
+          
+          <td><a href="/#" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></td>
+          
+          <td><a href="/atom.xml" target="_blank" title="rss"><i class="fa fa-rss"></i></a></td>
+          
+        </tr>
+      </table>
+    </div>
+    
+    
+  </div>
+</aside>
+
+      
+      <section id="main"><article id="post-使用Mesos和Marathon搭建Docker集群" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Mesos和Marathon搭建Docker集群
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2015/11/09/使用Mesos和Marathon搭建Docker集群/">
+      <time datetime="2015-11-09T09:27:14.000Z" itemprop="datePublished">2015-11-09</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/云计算/">云计算</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <p>利用Mesos，Marathon对Docker集群进行管理，保证高容错性，高拓展性。</p>
+<a id="more"></a>
+<h2 id="部署">部署</h2><h3 id="1-创建Master节点虚拟机">1.创建Master节点虚拟机</h3><p>执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vagrant init</span><br></pre></td></tr></table></figure>
+<p>这时候会在当前文件夹下创建文件<code>Vagrantfile</code>，该文件是<code>ruby</code>语法的虚拟机配置文件，然后我们用vim修改该文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vim Vagrantfile</span><br></pre></td></tr></table></figure>
+<p>将内容修改如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- mode: ruby -*-</span></span><br><span class="line"><span class="comment"># vi: set ft=ruby :</span></span><br><span class="line"></span><br><span class="line"><span class="constant">Vagrant</span>.configure(<span class="number">2</span>) <span class="keyword">do</span> |config|</span><br><span class="line">  config.vm.box = <span class="string">"bento/centos-7.1"</span></span><br><span class="line">  config.ssh.insert_key = <span class="keyword">false</span></span><br><span class="line">  config.vm.define <span class="string">"node1"</span> <span class="keyword">do</span> |node1|</span><br><span class="line">      node1.vm.network <span class="string">"private_network"</span>, <span class="symbol">ip:</span> <span class="string">"192.168.33.10"</span></span><br><span class="line">      node1.vm.hostname = <span class="string">"node1"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  config.vm.define <span class="string">"node2"</span> <span class="keyword">do</span> |node2|</span><br><span class="line">      node2.vm.network <span class="string">"private_network"</span>, <span class="symbol">ip:</span> <span class="string">"192.168.33.11"</span></span><br><span class="line">      node2.vm.hostname = <span class="string">"node2"</span></span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>该配置会生成两个使用系统centos-7.1的节点，分别分配IP为<code>192.168.33.10</code>和<code>192.168.33.11</code>，作为我们的<code>Master</code>和<code>Slave</code>。</p>
+<p>然后我们启动第一个节点<code>node1</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vagrant up node1&#10;Bringing machine &#39;node1&#39; up with &#39;virtualbox&#39; provider...&#10;==&#62; node1: Checking if box &#39;bento/centos-7.1&#39; is up to date...&#10;==&#62; node1: Clearing any previously set forwarded ports...&#10;==&#62; node1: Clearing any previously set network interfaces...&#10;==&#62; node1: Preparing network interfaces based on configuration...&#10;    node1: Adapter 1: nat&#10;    node1: Adapter 2: hostonly&#10;==&#62; node1: Forwarding ports...&#10;    node1: 22 =&#62; 2222 (adapter 1)&#10;==&#62; node1: Booting VM...&#10;==&#62; node1: Waiting for machine to boot. This may take a few minutes...&#10;    node1: SSH address: 127.0.0.1:2222&#10;    node1: SSH username: vagrant&#10;    node1: SSH auth method: private key&#10;    node1: Warning: Connection timeout. Retrying...&#10;    node1: Warning: Remote connection disconnect. Retrying...&#10;==&#62; node1: Machine booted and ready!&#10;==&#62; node1: Checking for guest additions in VM...&#10;==&#62; node1: Setting hostname...&#10;==&#62; node1: Configuring and enabling network interfaces...&#10;==&#62; node1: Mounting shared folders...&#10;    node1: /vagrant =&#62; /Users/jeff/workspace/mesos/cluster&#10;==&#62; node1: Machine already provisioned. Run `vagrant provision` or use the `--provision`&#10;==&#62; node1: flag to force provisioning. Provisioners marked to run always will still run.</span><br></pre></td></tr></table></figure>
+<p>这样第一个节点就成功启动了，然后我们通过<code>ssh</code>连接到<code>node1</code>进行操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$:vagrant ssh node1&#10;[vagrant@node1 ~]$</span><br></pre></td></tr></table></figure>
+<p>这样就成功创建了第一个节点。</p>
+<h3 id="2-下载启动Mesos和Marathon">2.下载启动Mesos和Marathon</h3><p>在下载<code>Mesos</code>和<code>Marathon</code>之前，需要先把<strong>hosts文件修改一下</strong>，把<code>127.0.0.1</code>对应的解析中的<code>node1</code>删除，并在最后加上<code>node1</code>和<code>node2</code>的IP，修改后的<code>hosts</code>可见cat后的输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo vi /etc/hosts&#10;[vagrant@node1 ~]$ cat /etc/hosts&#10;127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4&#10;::1         localhost localhost.localdomain localhost6 localhost6.localdomain6&#10;&#10;192.168.33.10 node1&#10;192.168.33.11 node2</span><br></pre></td></tr></table></figure>
+<p>然后下载mesos的仓库，再安装mesos和marathon</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo rpm -Uvh http://repos.mesosphere.com/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm&#10;[vagrant@node1 ~]$ sudo yum install mesos marathon</span><br></pre></td></tr></table></figure>
+<h3 id="3-下载配置Zookeeper">3.下载配置Zookeeper</h3><p>下载zookeeper仓库并安装Zookeeper</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo rpm -Uvh http://archive.cloudera.com/cdh4/one-click-install/redhat/6/x86_64/cloudera-cdh-4-0.x86_64.rpm&#10;[vagrant@node1 ~]$ sudo yum -y install zookeeper zookeeper-server</span><br></pre></td></tr></table></figure>
+<p>初始化并启动Zookeeper</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo -u zookeeper zookeeper-server-initialize --myid=1&#10;Using myid of 1&#10;[vagrant@node1 ~]$ sudo service zookeeper-server start&#10;JMX enabled by default&#10;Using config: /etc/zookeeper/conf/zoo.cfg&#10;Starting zookeeper ... STARTED</span><br></pre></td></tr></table></figure>
+<h3 id="4-下载安装Docker">4.下载安装Docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo yum install -y docker&#10;[vagrant@node1 ~]$ sudo chkconfig docker on&#10;[vagrant@node1 ~]$ sudo service docker start</span><br></pre></td></tr></table></figure>
+<p>然后告诉mesos，允许使用Docker作为Container</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ echo &#39;docker,mesos&#39; | sudo tee /etc/mesos-slave/containerizers&#10;[vagrant@node1 ~]$ sudo service mesos-slave restart</span><br></pre></td></tr></table></figure>
+<h3 id="5-启动Mesos和Marathon">5.启动Mesos和Marathon</h3><p>启动Mesos</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo service mesos-master start&#10;[vagrant@node1 ~]$ sudo service mesos-slave start</span><br></pre></td></tr></table></figure>
+<p>这时可以从外部访问已经启动的Mesos的GUI界面了，访问地址为<code>192.168.33.10:5050</code></p>
+<p><img src="/uploads/images/2015/11/09/1.png" alt="start-mesos"></p>
+<p>启动Marathon</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node1 ~]$ sudo service marathon start</span><br></pre></td></tr></table></figure>
+<p>同样可以从GUI访问Marathon了，访问地址为<code>192.168.33.10:8080</code></p>
+<p><img src="/uploads/images/2015/11/09/2.png" alt="start-marathon"></p>
+<p>至此，Master节点的配置就已经结束了</p>
+<h3 id="6-创建配置Slave节点">6.创建配置Slave节点</h3><p>首先启动slave节点并用ssh登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vagrant up node2&#10;$: vagrant ssh node2&#10;[vagrant@node2 ~]$</span><br></pre></td></tr></table></figure>
+<p>然后修改<code>/etc/hosts</code>并且下载Mesos，具体过程同<a href="#">步骤4</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node2 ~]$ sudo vi /etc/hosts&#10;[vagrant@node2 ~]$ cat /etc/hosts&#10;127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4&#10;::1         localhost localhost.localdomain localhost6 localhost6.localdomain6&#10;&#10;192.168.33.10 node1&#10;192.168.33.11 node2&#10;[vagrant@node2 ~]$ sudo rpm -Uvh http://repos.mesosphere.com/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm&#10;[vagrant@node2 ~]$ sudo yum install mesos</span><br></pre></td></tr></table></figure>
+<p>编辑node2的<code>/etc/mesos/zk</code>文件，使得它指向node1。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node2 ~]$ sudo vi /etc/mesos/zk&#10;[vagrant@node2 ~]$ cat /etc/mesos/zk&#10;zk://192.168.33.10:2181/mesos</span><br></pre></td></tr></table></figure>
+<p>启动Mesos（作为slave），并且关闭<code>mesos-master</code>服务的自动启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node2 ~]$  sudo service mesos-slave start&#10;[vagrant@node2 ~]$ sudo chkconfig mesos-slave on&#10;[vagrant@node2 ~]$  sudo chkconfig mesos-master off</span><br></pre></td></tr></table></figure>
+<p>安装Docker,并允许使用Docker作为容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[vagrant@node2 ~]$ sudo yum install -y docker&#10;[vagrant@node2 ~]$ sudo chkconfig docker on&#10;[vagrant@node2 ~]$ sudo service docker start&#10;[vagrant@node2 ~]$ echo &#39;docker,mesos&#39; | sudo tee /etc/mesos-slave/containerizers&#10;[vagrant@node2 ~]$ sudo service mesos-slave restart</span><br></pre></td></tr></table></figure>
+<p>这样，slave节点的配置也结束了</p>
+<h3 id="6-测试">6.测试</h3><p>我们打开Mesos的GUI界面，查看slave，可以看到现在已经有2个slave节点了，如下图。</p>
+<p><img src="/uploads/images/2015/11/09/3.png" alt="check-slaves"></p>
+<p>然后我们创建一个简单的webapp，使用<code>python -m SimpleHTTPServer</code></p>
+<p><img src="/uploads/images/2015/11/09/4.png" alt="create-webapp"></p>
+<p>然后将webapp应用scale到2个实例</p>
+<p><img src="/uploads/images/2015/11/09/5.png" alt="scale-instance"></p>
+<p>可以看到两个实例分别在两个不同的slave中运行了</p>
+<p><img src="/uploads/images/2015/11/09/6.png" alt="result"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//Todo &#21518;&#38754;&#20250;&#21152;&#19978;&#37096;&#32626;Docker&#30340;&#23454;&#20363;&#27979;&#35797;</span><br></pre></td></tr></table></figure>
+<h2 id="打包虚拟机">打包虚拟机</h2><p>为了之后能够快速的部署，我们可以将<code>node1</code>和<code>node2</code>分别打包成<code>mesos-master</code>和<code>mesos-slave</code>，以便于增加节点。</p>
+<p>退出ssh，首先将node1打包为<code>mesos-master</code>，在宿主机上执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vagrant package node1&#10;$: vagrant box add mesos-master package.box&#10;$: vagrant destroy node1</span><br></pre></td></tr></table></figure>
+<p>同样对node2我们也将其打包为<code>mesos-slave</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vagrant package node2&#10;$: vagrant box add mesos-slave package.box&#10;$: vagrant destroy node2</span><br></pre></td></tr></table></figure>
+<p>然后修改<code>Vagrantfile</code>，将其修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># -*- mode: ruby -*-&#10;# vi: set ft=ruby :&#10;&#10;Vagrant.configure(2) do |config|&#10;  config.vm.box = &#34;bento/centos-7.1&#34;&#10;  config.ssh.insert_key = false&#10;  config.vm.define &#34;node1&#34; do |node1|&#10;      node1.vm.network &#34;private_network&#34;, ip: &#34;192.168.33.10&#34;&#10;      node1.vm.hostname = &#34;node1&#34;&#10;      node1.vm.box = &#34;mesos-master&#34;&#10;  end&#10;&#10;  config.vm.define &#34;node2&#34; do |node2|&#10;      node2.vm.network &#34;private_network&#34;, ip: &#34;192.168.33.11&#34;&#10;      node2.vm.hostname = &#34;node2&#34;&#10; end&#10;end</span><br></pre></td></tr></table></figure>
+<p>这样就完成了虚拟机的打包，然后分别运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: vagrant up node1&#10;$: vagrant up node2</span><br></pre></td></tr></table></figure>
+<p>就可以运行了，修改集群的slave数量，则可以直接修改<code>Vagrantfile</code>即可！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/" data-id="cigrqxksu003bjaqqgrctwsvr" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mesos-marathon-docker/">mesos,marathon,docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/11/07/Mesos-Framework解析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Mesos Framework解析</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/" data-title="使用Mesos和Marathon搭建Docker集群" data-url="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by DuoShuo.</a></noscript>
+      </div>
+  </section>
+
+</section>
+      
+        <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">recents</h3>
+    <div class="widget">
+      <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/09/使用Mesos和Marathon搭建Docker集群/" class="thumbnail">
+  
+    <span style="background-image:url(/uploads/images/2015/11/09/1.png
+)" alt="使用Mesos和Marathon搭建Docker集群" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+              <p class="item-title"><a href="/2015/11/09/使用Mesos和Marathon搭建Docker集群/" class="title">使用Mesos和Marathon搭建Docker集群</a></p>
+              <p class="item-date"><time datetime="2015-11-09T09:27:14.000Z" itemprop="datePublished">2015-11-09</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/07/Mesos-Framework解析/" class="thumbnail">
+  
+    <span style="background-image:url(http://cdn1.infoqstatic.com/statics_s2_20151020-0055-2/resource/articles/analyse-mesos-part-04/zh/resources/0604001.jpg
+)" alt="Mesos Framework解析" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+              <p class="item-title"><a href="/2015/11/07/Mesos-Framework解析/" class="title">Mesos Framework解析</a></p>
+              <p class="item-date"><time datetime="2015-11-07T02:53:58.000Z" itemprop="datePublished">2015-11-07</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/01/二分图匹配-匈牙利算法/" class="thumbnail">
+  
+    <span style="background-image:url(http://i11.tietuku.com/e19acdb1257218aa.png
+)" alt="二分图的最大匹配 匈牙利算法" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/算法/">算法</a></p>
+              <p class="item-title"><a href="/2015/11/01/二分图匹配-匈牙利算法/" class="title">二分图的最大匹配 匈牙利算法</a></p>
+              <p class="item-date"><time datetime="2015-11-01T11:19:16.000Z" itemprop="datePublished">2015-11-01</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/10/22/源码编译安装Ambari/" class="thumbnail">
+  
+    <span class="thumbnail-image thumbnail-none"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+              <p class="item-title"><a href="/2015/10/22/源码编译安装Ambari/" class="title">源码编译安装Ambari</a></p>
+              <p class="item-date"><time datetime="2015-10-22T05:18:06.000Z" itemprop="datePublished">2015-10-22</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/10/19/Ambari搭建Hadoop管理平台/" class="thumbnail">
+  
+    <span class="thumbnail-image thumbnail-none"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+              <p class="item-title"><a href="/2015/10/19/Ambari搭建Hadoop管理平台/" class="title">Ambari搭建Hadoop管理平台</a></p>
+              <p class="item-date"><time datetime="2015-10-19T02:32:15.000Z" itemprop="datePublished">2015-10-19</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">tag cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 11.43px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/mesos-marathon-docker/" style="font-size: 10px;">mesos,marathon,docker</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 11.43px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 11.43px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 12.86px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 10px;">模拟</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+  <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 JetMuffin<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"jetmuffin"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+
+<script src="/js/jquery.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
