@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: web前端 | JetMuffin&#39;s Blog</title>
+  <title>hdu-5546-Acient-go-CCPC-G题-BFS | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="JetMuffin&apos;s Blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JetMuffin's Blog">
-<meta property="og:url" content="http://yoursite.com/tags/web前端/index.html">
+  <meta name="description" content="hdu 5546 Acient go CCPC G题 BFSCCPC(中国大学生程序设计竞赛）G题Acient go解题报告">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hdu-5546-Acient-go-CCPC-G题-BFS">
+<meta property="og:url" content="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="JetMuffin&apos;s Blog">
+<meta property="og:description" content="hdu 5546 Acient go CCPC G题 BFSCCPC(中国大学生程序设计竞赛）G题Acient go解题报告">
+<meta property="og:updated_time" content="2015-11-12T07:27:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JetMuffin's Blog">
-<meta name="twitter:description" content="JetMuffin&apos;s Blog">
+<meta name="twitter:title" content="hdu-5546-Acient-go-CCPC-G题-BFS">
+<meta name="twitter:description" content="hdu 5546 Acient go CCPC G题 BFSCCPC(中国大学生程序设计竞赛）G题Acient go解题报告">
   
   
     <link rel="icon" href="favicon.png">
@@ -126,49 +127,94 @@
 </aside>
 
       
-      <section id="main">
-    <section class="archives-wrap">
-    <div class="archive-tag-wrap">
-      <span class="archive-tag">#web前端</span>
-    </div>
-    <div class="archives">
+      <section id="main"><article id="post-hdu-5546-Acient-go-CCPC-G题-BFS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
     
-    <div class="archive-article-thumbnail">
-      <a href="/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/" class="thumbnail">
-  
-    <span class="thumbnail-image thumbnail-none"></span>
-  
-</a>
-    </div>
     
-    <header class="archive-article-header">
-      
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/">extjs 解决rowEditing不满足allowBlank时，无法save的问题</a>
+    <h1 class="article-title" itemprop="name">
+      hdu-5546-Acient-go-CCPC-G题-BFS
     </h1>
   
 
-      
-        
-  <div class="archive-article-date">
+        <div class="article-meta">
+          
+  <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/">
-      <time datetime="2014-10-21T19:58:26.000Z" itemprop="datePublished">2014 Oct 22</time>
+    <a href="/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/">
+      <time datetime="2015-11-12T07:12:31.000Z" itemprop="datePublished">2015-11-12</time>
     </a>
   </div>
 
 
-      
-    </header>
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
   </div>
-</article>
+
+        </div>
+      </header>
     
-    </div></section>
-    </section>
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <h1 id="hdu_5546_Acient_go_CCPC_G题_BFS">hdu 5546 Acient go CCPC G题 BFS</h1><p>CCPC(中国大学生程序设计竞赛）G题<code>Acient go</code>解题报告</p>
+<a id="more"></a>
+<h2 id="题目链接">题目链接</h2><p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=5546" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=5546</a></p>
+<h2 id="题意">题意</h2><p>两人下棋，给定了现在的棋盘状况，轮到当前玩家下棋，问是否能够下一步棋将对方棋子吃掉</p>
+<h2 id="分析">分析</h2><p>当时在赛场上的思路还是正确的，求每个联通块周围的<code>.</code>的个数，计算的方法用bfs。然而我们在另一个地方出现了分歧，是否要取掉现在棋盘上已经被吃掉的棋子？题目上写着</p>
+<blockquote>
+<p>When one of the player makes his move, check the opponent’s first. After removing the dead opponent;s components, check with the player’s components and remove the dead components.</p>
+</blockquote>
+<p>然后我们就针对着这句话纠结了好久，要不要拿掉对方的死子，要不要拿掉自己的死子，孰先孰后？</p>
+<p>然而这也不是重点，敲完代码交了好几发WA，一直找不到错误出在哪里，卡了很久很久。</p>
+<p>赛后良哥才发现一个最重要的问题，bfs计算每个联通块周围的<code>.</code>时，有可能会出现一个<code>.</code>被计算多次，顿时醒悟。</p>
+<p>回来后把代码重新敲了，成功得到一个<code>Accept</code>，也是感慨地不行。</p>
+<p>错误情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. . x x .&#10;. x o o x&#10;. . . o x&#10;. x o o x&#10;. . x x .</span><br></pre></td></tr></table></figure>
+<p>若简单相加，3行3列处的<code>.</code>会重复累加导致错误，正确的计算方法是类似<code>floodfill</code>的算法把每个联通块标号，相同联通块只能访问同一个<code>.</code>一次，而不同的联通块可以同时访问一个<code>.</code></p>
+<h2 id="代码">代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> cb[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">char</span> s[<span class="number">9</span>];</span><br><span class="line"><span class="keyword">struct</span> node&#123;</span><br><span class="line">    <span class="keyword">int</span> x, y;</span><br><span class="line">    node()&#123;&#125;</span><br><span class="line">    node(<span class="keyword">int</span> a,<span class="keyword">int</span> b):x(a),y(b)&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;x&lt;&lt;<span class="string">" "</span>&lt;&lt;y&lt;&lt;<span class="string">" "</span>&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">queue</span> &lt;node&gt;q;</span><br><span class="line"><span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> vis[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> colors[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> dx[<span class="number">4</span>] = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> dy[<span class="number">4</span>] = &#123;<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> tot,color;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    node a = node(x, y);</span><br><span class="line">    q.push(a);</span><br><span class="line">    <span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">        node b = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        <span class="keyword">int</span> curx = b.x;</span><br><span class="line">        <span class="keyword">int</span> cury = b.y;</span><br><span class="line">        vis[curx][cury] = <span class="number">1</span>;    </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="number">4</span>; k++)&#123;</span><br><span class="line">            <span class="keyword">int</span> nextx = curx + dx[k];</span><br><span class="line">            <span class="keyword">int</span> nexty = cury + dy[k];</span><br><span class="line">            <span class="keyword">if</span>(cb[nextx][nexty] == <span class="string">'.'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(colors[nextx][nexty] != color)&#123;</span><br><span class="line">                    tot++;</span><br><span class="line">                    colors[nextx][nexty] = color;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(cb[nextx][nexty] == <span class="string">'o'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(!vis[nextx][nexty])&#123;</span><br><span class="line">                    q.push(node(nextx,nexty));    </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">judge</span><span class="params">()</span></span>&#123;</span><br><span class="line">    flag = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));    </span><br><span class="line">    <span class="built_in">memset</span>(colors, <span class="number">0</span>, <span class="keyword">sizeof</span>(colors));</span><br><span class="line">    color = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">9</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= <span class="number">9</span>; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(cb[i][j] == <span class="string">'o'</span> &amp;&amp; !vis[i][j])&#123;</span><br><span class="line">                tot = <span class="number">0</span>;</span><br><span class="line">                color++;</span><br><span class="line">                bfs(i, j);</span><br><span class="line">                <span class="keyword">if</span>(tot == <span class="number">1</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cas = <span class="number">0</span>,T;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> ONLINE_JUDGE  </span></span><br><span class="line">  freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);  </span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span> <span class="comment">// ONLINE_JUDGE </span></span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;T);</span><br><span class="line">    <span class="keyword">while</span>(T--)&#123;</span><br><span class="line">        cas++;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">9</span>; i++)&#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%s"</span>, s);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= <span class="number">9</span>; j++)&#123;</span><br><span class="line">                cb[i][j] = s[j-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">11</span>; i++)&#123;</span><br><span class="line">            cb[i][<span class="number">0</span>] = <span class="string">'-'</span>;</span><br><span class="line">            cb[<span class="number">0</span>][i] = <span class="string">'-'</span>;</span><br><span class="line">            cb[i][<span class="number">10</span>] = <span class="string">'-'</span>;</span><br><span class="line">            cb[<span class="number">10</span>][i] = <span class="string">'-'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(judge())&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"Case #%d: Can kill in one move!!!\n"</span>, cas);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"Case #%d: Can not kill in one move!!!\n"</span>,cas);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/" data-id="cigvwxf7t004s92qq8k7vuy6h" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bfs/">bfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/搜索/">搜索</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/11/09/使用Mesos和Marathon搭建Docker集群/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用Mesos和Marathon搭建Docker集群</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/" data-title="hdu-5546-Acient-go-CCPC-G题-BFS" data-url="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by DuoShuo.</a></noscript>
+      </div>
+  </section>
+
+</section>
       
         <aside id="sidebar">
   
