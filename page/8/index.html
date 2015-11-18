@@ -94,11 +94,11 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        79
+        81
         <span>posts</span>
       </div>
       <div class="article-info-block">
-        98
+        99
         <span>tags</span>
       </div>
     </div>
@@ -127,6 +127,135 @@
 
       
       <section id="main">
+      <article id="post-hdu-3076-ssworld-VS-DDD-概率dp" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">hdu 3076 ssworld VS DDD 概率dp</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">
+      <time datetime="2014-10-14T10:24:35.000Z" itemprop="datePublished">2014-10-14</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>题意应该很明显，甩骰子决定谁扣血，输的扣血，赢的不变，平局双方都不变。</p>
+<p>解题时有好几个地方想错了：</p>
+<p>1. 原本以为dp[i][j]表示当前A和B的血量，结果想反了，整个思路貌似有点偏</p>
+<p>2. 以为平局的概率也要加入，事实上也是错误1引起的，修改为dp[i][j]表示A和B赢的次数就好理解了，简化问题，去掉平局，p1 = win/(win+lose) ; p2 = lose/(win+lose)</p>
+<p>3. 最后的答案不是dp数组中的一个，而是A赢了hp2次的概率，就是dp[hp2-1][j(j从0到hp1-1求和)]*win </p>
+<p>解决了这几个问题，结果提交还是WA，后来看了discuss才发现数据错了，两人血量反了，所以把其中的i和j互换。</p>
+        
+          <p class="article-more-link">
+            <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/" data-id="cih4r744f007muhqqhph6llkw" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdu/">hdu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/概率dp/">概率dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
+      <article id="post-CodeForces-148D-Bags-of-mice-概率dp" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/">CodeForces 148D Bags of mice 概率dp</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/">
+      <time datetime="2014-10-14T09:47:35.000Z" itemprop="datePublished">2014-10-14</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>开始看概率dp的内容，碰到算期望的题目，一般就要用概率dp了。这是道入门的概率dp，弄清楚每一步发生的事件和对应的概率，求出递推公式就OK了。</p>
+<p>dp[i][j][0]表示轮到公主取，还剩下i只白鼠，j只黑鼠；</p>
+<p>dp[i][j][1]表示轮到龙取，还剩下i只白鼠，j只黑鼠；</p>
+<p>获胜的期望就是dp[w][b][0]。</p>
+<p>dp[i][j][0] = p1  //公主抽到的是白鼠概率p1，结束</p>
+<p>dp[i][j][0] += dp[i][j-1][1] * p2 //公主抽到的是黑鼠概率p2</p>
+<p>dp[i][j][1] += dp[i-1][j-1][0] * p3 // 龙抽到的是黑鼠，吓跑一只白鼠概率p3</p>
+<p>dp[i][j][1] += dp[i][j-2][0] * p4 //龙抽到黑鼠，吓跑一只黑鼠概率p4</p>
+<p>再依次算概率 就OK了。</p>
+        
+          <p class="article-more-link">
+            <a href="/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/" data-id="cih4r746a00anuhqqkfuv98du" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CodeForces/">CodeForces</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/概率dp/">概率dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-hdu-2098-分拆素数和-水题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -170,7 +299,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/12/hdu-2098-分拆素数和-水题/" data-id="cigvwxf9d007m92qqf86468lq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/12/hdu-2098-分拆素数和-水题/" data-id="cih4r744i007ruhqq785kdh9i" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/12/hdu-2098-分拆素数和-水题/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -226,7 +355,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/" data-id="cigvwxf4z000a92qqzazo6b0l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/" data-id="cih4r73zh000auhqqjrem52aj" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -289,7 +418,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/08/算m点问题，深搜解决/" data-id="cigvwxf5q001f92qqnncq63fq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/08/算m点问题，深搜解决/" data-id="cih4r7406001fuhqqhqg8c3y8" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/08/算m点问题，深搜解决/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -343,7 +472,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/" data-id="cigvwxfbe00b192qqwrqosb45" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/" data-id="cih4r746r00bauhqqasn94drw" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -402,7 +531,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/" data-id="cigvwxf7a004392qq4iqrzi0m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/" data-id="cih4r74280048uhqq7g4e66ba" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -461,7 +590,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/" data-id="cigvwxf7l004a92qqpgc3bhjs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/" data-id="cih4r742e004fuhqq7x3kazgd" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -520,7 +649,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/" data-id="cigvwxf7o004g92qqxqhrzk1o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/" data-id="cih4r742h004luhqqgn4yga3b" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -582,7 +711,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/" data-id="cigvwxfbo00bl92qqve2dqrf9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/" data-id="cih4r747100buuhqqlhu9pqk4" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -597,73 +726,8 @@
 
 
     
-      <article id="post-hdu4828-Grids-百度之星初赛1002解题报告" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">hdu4828 Grids 百度之星初赛1002解题报告</a>
-    </h1>
-  
-
-        <div class="article-meta">
-          
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">
-      <time datetime="2014-07-21T03:09:36.000Z" itemprop="datePublished">2014-07-21</time>
-    </a>
-  </div>
-
-
-          
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>搞ACM起步比较晚，但是对这方面兴趣很大，第一次参加百度之星，资格赛水过一道题进入初赛，结果初赛被一道题难倒了。</p>
-<p>初赛分两场，每场筛选500人（赛程规定），而之后的结果上看，只有约250人A出题，而大多数人都是通过这道题拿到复赛入场券。这道题我一直觉得非常接近结果了，但是在最重要的环节，也就是取模上出了很大的问题，导致没有A出该题，下面是该题的分析。</p>
-<p>题干上，大多数人可以看出看出规律，即求卡特兰数，HDOJ上有相类似的题目，但是这道题的数据量非常大，有100万之多，因而题目上要求对1000000007取模。</p>
-<p>卡特兰数有很多递推公式，我选择的是h(n)=h(n-1)<em>(4</em>n-2)/(n+1);这条。</p>
-<p>由于数据量比较大，因而我选择用打表的方式，但是这里出现了一个问题，卡特兰数的数据在不断的增大，因而一定要在取模的基础上进行递推，然而简单地进行取模会造成递推公式出错，即不能在原结果上直接取模。</p>
-<p>比赛时就卡在这点上了，怎么想都想不出改进的方法。</p>
-<p>直到后来做到HDOJ的拓展欧几里德的题目（HDOJ 1576），才直到这道题的解法。</p>
-<p>除法的取模需要用extgcd的算法进行取逆，这是该题的关键。</p>
-        
-          <p class="article-more-link">
-            <a href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/" data-id="cigvwxf7r004m92qqqgdusjby" class="article-share-link">Share</a>
-      
-        <a href="http://yoursite.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/#ds-thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdu/">hdu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数论/">数论</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百度之星/">百度之星</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-    
       <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+        <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
       </nav>
     </section>
       
@@ -674,6 +738,42 @@
     <h3 class="widget-title">recents</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/18/Mac-OS-X-安装Less编译器/" class="thumbnail">
+  
+    <span style="background-image:url(/uploads/images/2015/11/18/QQ20151118-0@2x.png
+)" alt="Mac OS X 安装Less编译器" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/前端开发/">前端开发</a></p>
+              <p class="item-title"><a href="/2015/11/18/Mac-OS-X-安装Less编译器/" class="title">Mac OS X 安装Less编译器</a></p>
+              <p class="item-date"><time datetime="2015-11-18T11:46:37.000Z" itemprop="datePublished">2015-11-18</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/" class="thumbnail">
+  
+    <span style="background-image:url(/uploads/images/11/16/m-shop-architecture-final-800x532@2x.png
+)" alt="利用Docker和Marathon构建带数据分析的Web应用" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+              <p class="item-title"><a href="/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/" class="title">利用Docker和Marathon构建带数据分析的Web应用</a></p>
+              <p class="item-date"><time datetime="2015-11-16T11:33:33.000Z" itemprop="datePublished">2015-11-16</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -728,41 +828,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/11/01/二分图匹配-匈牙利算法/" class="thumbnail">
-  
-    <span style="background-image:url(http://i11.tietuku.com/e19acdb1257218aa.png
-)" alt="二分图的最大匹配 匈牙利算法" class="thumbnail-image"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/算法/">算法</a></p>
-              <p class="item-title"><a href="/2015/11/01/二分图匹配-匈牙利算法/" class="title">二分图的最大匹配 匈牙利算法</a></p>
-              <p class="item-date"><time datetime="2015-11-01T11:19:16.000Z" itemprop="datePublished">2015-11-01</time></p>
-            </div>
-          </li>
-        
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/10/22/源码编译安装Ambari/" class="thumbnail">
-  
-    <span class="thumbnail-image thumbnail-none"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
-              <p class="item-title"><a href="/2015/10/22/源码编译安装Ambari/" class="title">源码编译安装Ambari</a></p>
-              <p class="item-date"><time datetime="2015-10-22T05:18:06.000Z" itemprop="datePublished">2015-10-22</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -772,7 +837,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">55</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">4</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">55</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -781,7 +846,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">tag cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.86px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 10px;">marathon</a> <a href="/tags/mesos/" style="font-size: 10px;">mesos</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 11.43px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 11.43px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 14.29px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 10px;">模拟</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
+      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.86px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 11.43px;">docker</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.43px;">marathon</a> <a href="/tags/mesos/" style="font-size: 11.43px;">mesos</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 11.43px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 11.43px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 14.29px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 10px;">模拟</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
     </div>
   </div>
 
@@ -790,7 +855,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
