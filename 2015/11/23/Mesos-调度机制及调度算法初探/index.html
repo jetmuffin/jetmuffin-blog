@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://cdn3.infoqstatic.com/statics_s1_20151118-0143/resource/articles/analyse-mesos-part-04/zh/resources/0604003.jpg">
 <meta property="og:image" content="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos-elastic-cea4da90b3c819bd96b3158da1a6f86b.jpg">
 <meta property="og:image" content="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos_frameworks.png">
-<meta property="og:updated_time" content="2015-11-23T15:00:15.000Z">
+<meta property="og:updated_time" content="2015-11-23T15:03:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mesos 调度机制及调度算法初探">
 <meta name="twitter:description" content="再次分析Mesos的工作原理，将Mesos中出现的各个名词串联到一起。">
@@ -206,12 +206,12 @@
 <p><img src="http://cdn3.infoqstatic.com/statics_s1_20151118-0143/resource/articles/analyse-mesos-part-04/zh/resources/0604003.jpg" alt="DRF-Table"></p>
 <p>上面表中的每一行提供了以下信息：</p>
 <ul>
-<li>Framework chosen——收到最新offer的Framework。</li>
-<li>Resource Shares——给定时间内Framework接受的资源总数，包括CPU和内存，以占资源总量的比例表示。</li>
-<li>Dominant Share（主导份额）——给定时间内Framework主导资源占总份额的比例，以占资源总量的比例表示。</li>
-<li>Dominant Share %（主导份额百分比）——给定时间内Framework主导资源占总份额的百分比，以占资源总量的百分比表示。</li>
-<li>CPU Total Allocation——给定时间内接受的所有Framework的总CPU资源。</li>
-<li>RAM Total Allocation——给定时间内接受的所有Framework的总内存资源。</li>
+<li><strong>Framework chosen：</strong>收到最新offer的Framework。</li>
+<li><strong>Resource Shares：</strong>给定时间内Framework接受的资源总数，包括CPU和内存，以占资源总量的比例表示。</li>
+<li><strong>Dominant Share（主导份额：</strong>给定时间内Framework主导资源占总份额的比例，以占资源总量的比例表示。</li>
+<li><strong>Dominant Share %（主导份额百分比）：</strong>给定时间内Framework主导资源占总份额的百分比，以占资源总量的百分比表示。</li>
+<li><strong>CPU Total Allocation：</strong>给定时间内接受的所有Framework的总CPU资源。</li>
+<li><strong>RAM Total Allocation：</strong>给定时间内接受的所有Framework的总内存资源。</li>
 </ul>
 <p>最初，两个Framework的主导份额是0％，我们假设DRF首先选择的是Framework 2，当然我们也可以假设Framework 1，但是最终的结果是一样的。</p>
 <ol>
@@ -244,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihc2yogi008vj4se2yg2tsff" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihc33vr9008vmeseowdg82fq" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/#ds-thread" class="article-comment-link">Comments</a>
       
