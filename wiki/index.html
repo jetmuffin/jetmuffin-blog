@@ -3,21 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>extjs 解决rowEditing不满足allowBlank时，无法save的问题 | JetMuffin&#39;s Blog</title>
+  <title>wiki | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近一个项目使用了extjs，在用rowEditing的时候遇到了棘手的问题，当某一column的editor使用了属性allowBlank:true时，启用编辑时会报错（“该行不能为空”），这时save按钮是灰色的无法提交。然而填了该行，save仍然无法提交。
-经过google之后发现这是个bug，最好的解决方法就是重写rowEditing~ORZ">
-<meta property="og:type" content="article">
-<meta property="og:title" content="extjs 解决rowEditing不满足allowBlank时，无法save的问题">
-<meta property="og:url" content="http://yoursite.com/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/index.html">
+  <meta name="description" content="JetMuffin&apos;s Blog">
+<meta property="og:type" content="website">
+<meta property="og:title" content="wiki">
+<meta property="og:url" content="http://yoursite.com/wiki/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="最近一个项目使用了extjs，在用rowEditing的时候遇到了棘手的问题，当某一column的editor使用了属性allowBlank:true时，启用编辑时会报错（“该行不能为空”），这时save按钮是灰色的无法提交。然而填了该行，save仍然无法提交。
-经过google之后发现这是个bug，最好的解决方法就是重写rowEditing~ORZ">
-<meta property="og:updated_time" content="2015-10-14T05:41:24.000Z">
+<meta property="og:description" content="JetMuffin&apos;s Blog">
+<meta property="og:updated_time" content="2015-11-24T05:50:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="extjs 解决rowEditing不满足allowBlank时，无法save的问题">
-<meta name="twitter:description" content="最近一个项目使用了extjs，在用rowEditing的时候遇到了棘手的问题，当某一column的editor使用了属性allowBlank:true时，启用编辑时会报错（“该行不能为空”），这时save按钮是灰色的无法提交。然而填了该行，save仍然无法提交。
-经过google之后发现这是个bug，最好的解决方法就是重写rowEditing~ORZ">
+<meta name="twitter:title" content="wiki">
+<meta name="twitter:description" content="JetMuffin&apos;s Blog">
   
   
     <link rel="icon" href="favicon.png">
@@ -130,7 +127,7 @@
 </aside>
 
       
-      <section id="main"><article id="post-extjs-解决rowEditing不满足allowBlank时，无法save的问题" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     
@@ -139,7 +136,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      extjs 解决rowEditing不满足allowBlank时，无法save的问题
+      wiki
     </h1>
   
 
@@ -147,153 +144,39 @@
           
   <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/">
-      <time datetime="2014-10-21T19:58:26.000Z" itemprop="datePublished">2014-10-22</time>
+    <a href="/wiki/index.html">
+      <time datetime="2015-11-24T05:50:12.000Z" itemprop="datePublished">2015-11-24</time>
     </a>
   </div>
 
 
           
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/前端开发/">前端开发</a>
-  </div>
-
         </div>
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
                 
-        <p><span style="white-space:pre"></span>最近一个项目使用了extjs，在用rowEditing的时候遇到了棘手的问题，当某一column的editor使用了属性allowBlank:true时，启用编辑时会报错（“该行不能为空”），这时save按钮是灰色的无法提交。然而填了该行，save仍然无法提交。</p>
-<p><span style="white-space:pre"></span>经过google之后发现这是个bug，最好的解决方法就是重写rowEditing~ORZ</p>
-<a id="more"></a>
-<p><span style="white-space:pre"></span>JS如下：</p>
-<p><span style="white-space:pre"></span>`Ext.override(Ext.grid.RowEditor, {</p>
-<pre><code><span class="attribute">addFieldsForColumn</span>: <span class="string">function(column, initial) {</span>
-
-<span class="cpp">    var me = <span class="keyword">this</span>,
-
-    i, length, field;
-
-    <span class="keyword">if</span> (Ext.isArray(column)) {
-
-        <span class="keyword">for</span> (i = <span class="number">0</span>, length = column.length; i &lt; length; i++) {
-
-            me.addFieldsForColumn(column[i], initial);
-
-        }
-
-        <span class="keyword">return</span>;
-
-    }
-
-    <span class="keyword">if</span> (column.getEditor) {
-
-        field = column.getEditor(null, {
-
-            xtype: &amp;<span class="preprocessor">#<span class="number">39</span>;displayfield&amp;#<span class="number">39</span>;,</span>
-
-            getModelData: function() {
-
-                <span class="keyword">return</span> null;
-
-            }
-
-        });
-
-        <span class="keyword">if</span> (column.align === &amp;<span class="preprocessor">#<span class="number">39</span>;right&amp;#<span class="number">39</span>;) {</span>
-
-            field.fieldStyle = &amp;<span class="preprocessor">#<span class="number">39</span>;text-align:right&amp;#<span class="number">39</span>;;</span>
-
-        }
-
-        <span class="keyword">if</span> (column.xtype === &amp;<span class="preprocessor">#<span class="number">39</span>;actioncolumn&amp;#<span class="number">39</span>;) {</span>
-
-            field.fieldCls += &amp;<span class="preprocessor">#<span class="number">39</span>; &amp;#<span class="number">39</span>; + Ext.baseCSSPrefix + &amp;#<span class="number">39</span>;form-action-col-field&amp;#<span class="number">39</span>;;</span>
-
-        }
-
-        <span class="keyword">if</span> (me.isVisible() &amp;&amp; me.context) {
-
-            <span class="keyword">if</span> (field.is(&amp;<span class="preprocessor">#<span class="number">39</span>;displayfield&amp;#<span class="number">39</span>;)) {</span>
-
-                me.renderColumnData(field, me.context.record, column);
-
-            } <span class="keyword">else</span> {
-
-                field.suspendEvents();
-
-                field.setValue(me.context.record.get(column.dataIndex));
-
-                field.resumeEvents();
-
-            }
-
-        }
-
-        <span class="keyword">if</span> (column.hidden) {
-
-            me.onColumnHide(column);
-
-        } <span class="keyword">else</span> <span class="keyword">if</span> (column.rendered &amp;&amp; !initial) {
-
-            me.onColumnShow(column);
-
-        }
-
-        <span class="comment">// -- start edit</span>
-
-        me.mon(field, &amp;<span class="preprocessor">#<span class="number">39</span>;change&amp;#<span class="number">39</span>;, me.onFieldChange, me);</span>
-
-        <span class="comment">// -- end edit</span>
-
-    }
-
-}</span>
-</code></pre><p>});</p>
-<p>//重写RowEditor`<span style="white-space:pre"></span>如果大家有遇到该问题的，只要在js文件里添加该段代码即可～</p>
-
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/" data-id="cihcytvg5008iglqq29yl8fzf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/wiki/index.html" data-id="cihcytvas0001glqq23jitjr2" class="article-share-link">Share</a>
       
-        <a href="http://yoursite.com/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/wiki/index.html#ds-thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/extjs/">extjs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web前端/">web前端</a></li></ul>
-
     </footer>
   </div>
   
     
-<nav id="article-nav">
-  
-    <a href="/2014/10/28/2014-ACM-ICPC-亚洲地区赛-西安站小结/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          2014 ACM-ICPC 亚洲地区赛 西安站小结
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2014/10/22/stl-set和map应用记录/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">stl set和map应用记录</div>
-    </a>
-  
-</nav>
-
 
   
 </article>
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/" data-title="extjs 解决rowEditing不满足allowBlank时，无法save的问题" data-url="http://yoursite.com/2014/10/22/extjs-解决rowEditing不满足allowBlank时，无法save的问题/">
+    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/wiki/index.html" data-title="wiki" data-url="http://yoursite.com/wiki/index.html">
       <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by DuoShuo.</a></noscript>
       </div>
   </section>
