@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://cdn3.infoqstatic.com/statics_s1_20151118-0143/resource/articles/analyse-mesos-part-04/zh/resources/0604003.jpg">
 <meta property="og:image" content="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos-elastic-cea4da90b3c819bd96b3158da1a6f86b.jpg">
 <meta property="og:image" content="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos_frameworks.png">
-<meta property="og:updated_time" content="2015-11-23T15:03:40.000Z">
+<meta property="og:updated_time" content="2015-11-24T01:54:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mesos 调度机制及调度算法初探">
 <meta name="twitter:description" content="再次分析Mesos的工作原理，将Mesos中出现的各个名词串联到一起。">
@@ -197,6 +197,7 @@
 <h2 id="DRF算法">DRF算法</h2><p>如何作出offer分配的决定是由资源分配模块<code>Allocator</code>实现的，该模块存在于Master之中。资源分配模块确定Framework接受offer的顺序，与此同时，确保在资源利用最大化的条件下公平地共享资源。</p>
 <p>由于Mesos为跨数据中心调度资源并且是异构的资源需求时，资源分配相比普通调度将会更加困难。因此Mesos采用了<code>DRF（主导资源公平算法 Dominant Resource Fairness）</code>,该算法同样出自于UC Berkeley。DRF的目标是确保每一个用户，即Mesos中的Framework，在异质环境中能够接收到其最需资源的公平份额。</p>
 <p>Framework拥有的全部资源类型份额中占最高百分比的就是Framework的<code>主导份额</code>。DRF算法会使用所有已注册的Framework来计算<code>主导份额</code>，以确保每个Framework能接收到其<code>主导资源</code>的<code>公平份额</code>。</p>
+<p>Mesos源码中默认的Allocator，即<code>HierarchicalDRFAllocator</code>的位置在<code>$MESOS_HOME/src/master/allocator/mesos/hierarchical.hpp</code>，而DRF中对每个Framework排序的<code>Sorter</code>位于<code>$MESOS_HOME/src/master/allocator/sorter/drf/sorter.cpp</code>，可以查看其源码了解它的工作原理。</p>
 <h3 id="一个说明性的例子">一个说明性的例子</h3><p>考虑一个<code>9CPU，18GBRAM</code>的系统，拥有两个用户，其中用户A运行的任务的需求向量为<code>{1CPU, 4GB}</code>，用户B运行的任务的需求向量为<code>{3CPU，1GB}</code>，用户可以执行尽量多的任务来使用系统的资源。</p>
 <p>在上述方案中，A的每个任务消耗总cpu的<code>1/9</code>和总内存的<code>2/9</code>，所以A的<strong>dominant resource</strong>是<code>内存</code>；B的每个任务消耗总cpu的<code>1/3</code>和总内存的<code>1/18</code>，所以B的<strong>dominant resource</strong>为<code>CPU</code>。DRF会均衡用户的<strong>dominant shares</strong>，执行3个用户A的任务，执行2个用户B的任务。三个用户A的任务总共消耗了{3CPU，12GB}，两个用户B的任务总共消耗了{6CPU，2GB}；在这个分配中，每一个用户的<strong>dominant share</strong>是相等的，用户A获得了2/3的RAM，而用户B获得了2/3的CPU。</p>
 <p>以上的这个分配可以用如下方式计算出来：x和y分别是用户A和用户B的分配任务的数目，那么用户A消耗了{xCPU，4xGB}，用户B消耗了{3yCPU，yGB}，在图三中用户A和用户B消耗了同等dominant resource；用户A的dominant share为4x/18，用户B的dominant share为3y/9。所以DRF分配可以通过求解以下的优化问题来得到：</p>
@@ -244,7 +245,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihc33vr9008vmeseowdg82fq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihcqcmsz008vieqqtsdr3czz" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/#ds-thread" class="article-comment-link">Comments</a>
       
