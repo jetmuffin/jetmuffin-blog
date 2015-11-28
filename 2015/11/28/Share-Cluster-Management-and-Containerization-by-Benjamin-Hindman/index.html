@@ -3,24 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>hdu 5105 Math Problem BestCoder#18 1002 求最大值 | JetMuffin&#39;s Blog</title>
+  <title>[Share] Cluster Management and Containerization by Benjamin Hindman | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="f(x) = ax^3+bx^2+cx+d，最大&amp;#20540;只会出现在几个地方：左端点，右端点，极&amp;#20540;点。
-求导后是个二次函数，可以求根，然后判断根是否在(L,R)范围内，若在范围内，直接求max(f(x),f(L),f(R))就是最大&amp;#20540;了。
-PS：要考虑a=0，b=0的情况，WA了一次ORZ">
+  <meta name="description" content="Ben’s Presentation on dockercon14">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hdu 5105 Math Problem BestCoder#18 1002 求最大值">
-<meta property="og:url" content="http://yoursite.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-求最大值/index.html">
+<meta property="og:title" content="[Share] Cluster Management and Containerization by Benjamin Hindman">
+<meta property="og:url" content="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="f(x) = ax^3+bx^2+cx+d，最大&amp;#20540;只会出现在几个地方：左端点，右端点，极&amp;#20540;点。
-求导后是个二次函数，可以求根，然后判断根是否在(L,R)范围内，若在范围内，直接求max(f(x),f(L),f(R))就是最大&amp;#20540;了。
-PS：要考虑a=0，b=0的情况，WA了一次ORZ">
-<meta property="og:updated_time" content="2015-10-14T02:23:02.000Z">
+<meta property="og:description" content="Ben’s Presentation on dockercon14">
+<meta property="og:updated_time" content="2015-11-28T12:27:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hdu 5105 Math Problem BestCoder#18 1002 求最大值">
-<meta name="twitter:description" content="f(x) = ax^3+bx^2+cx+d，最大&amp;#20540;只会出现在几个地方：左端点，右端点，极&amp;#20540;点。
-求导后是个二次函数，可以求根，然后判断根是否在(L,R)范围内，若在范围内，直接求max(f(x),f(L),f(R))就是最大&amp;#20540;了。
-PS：要考虑a=0，b=0的情况，WA了一次ORZ">
+<meta name="twitter:title" content="[Share] Cluster Management and Containerization by Benjamin Hindman">
+<meta name="twitter:description" content="Ben’s Presentation on dockercon14">
   
   
     <link rel="icon" href="favicon.png">
@@ -137,7 +131,7 @@ PS：要考虑a=0，b=0的情况，WA了一次ORZ">
 </aside>
 
       
-      <section id="main"><article id="post-hdu-5105-Math-Problem-BestCoder-18-1002-求最大值" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     
@@ -146,7 +140,7 @@ PS：要考虑a=0，b=0的情况，WA了一次ORZ">
         
   
     <h1 class="article-title" itemprop="name">
-      hdu 5105 Math Problem BestCoder#18 1002 求最大值
+      [Share] Cluster Management and Containerization by Benjamin Hindman
     </h1>
   
 
@@ -154,8 +148,8 @@ PS：要考虑a=0，b=0的情况，WA了一次ORZ">
           
   <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-求最大值/">
-      <time datetime="2014-11-19T14:07:59.000Z" itemprop="datePublished">2014-11-19</time>
+    <a href="/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/">
+      <time datetime="2015-11-28T12:17:34.000Z" itemprop="datePublished">2015-11-28</time>
     </a>
   </div>
 
@@ -167,156 +161,35 @@ PS：要考虑a=0，b=0的情况，WA了一次ORZ">
     <div class="article-entry" itemprop="articleBody">
       
                 
-        <p><span style="white-space:pre"></span>f(x) = ax^3+bx^2+cx+d，最大&#20540;只会出现在几个地方：左端点，右端点，极&#20540;点。</p>
-<p><span style="white-space:pre"></span>求导后是个二次函数，可以求根，然后判断根是否在(L,R)范围内，若在范围内，直接求max(f(x),f(L),f(R))就是最大&#20540;了。</p>
-<p><span style="white-space:pre"></span>PS：要考虑a=0，b=0的情况，WA了一次ORZ</p>
+        <p>Ben’s Presentation on <strong>dockercon14</strong></p>
 <a id="more"></a>
-<p><span style="white-space:pre"></span>`#include <iostream></iostream></p>
-<p>#include <cstdio></cstdio></p>
-<p>#include <cstring></cstring></p>
-<p>#include <string></string></p>
-<p>#include <algorithm></algorithm></p>
-<p>#include <cmath></cmath></p>
-<p>#include <vector></vector></p>
-<p>#include <map></map></p>
-<p>#include <queue></queue></p>
-<p>#include <ctime></ctime></p>
-<p>using namespace std;</p>
-<p>#define LL long long</p>
-<p>#define ULL unsigned long long</p>
-<p>//#define mod 1000000007</p>
-<p>#define eps 1e-8</p>
-<p>#define MP make_pair</p>
-<p>#define REP(i,a,b) for(int i = a; i &lt; b; ++i)</p>
-<p>#define RREP(i,a,b) for(int i = b; i &gt; a ; –i)</p>
-<p>#define RE freopen(“in.txt”,”r”,stdin)</p>
-<p>//#define WE freopen(“out.txt”,”w”,stdout) </p>
-<p>const double INF = 99999;</p>
-<p>double a,b,c,d,L,R;</p>
-<p>double max(double a,double b)</p>
-<p>{</p>
-<pre><code><span class="tag">return</span> <span class="tag">a</span>&gt;<span class="tag">b</span>?<span class="rule"><span class="attribute">a</span>:<span class="value">b</span></span>;
-</code></pre><p>}</p>
-<p>double fun(double x)</p>
-<p>{</p>
-<pre><code>return fabs(a<span class="keyword">*</span>x<span class="keyword">*</span>x<span class="keyword">*</span>x+b<span class="keyword">*</span>x<span class="keyword">*</span>x+c<span class="keyword">*</span>x+d);
-</code></pre><p>}</p>
-<p>int main()</p>
-<p>{</p>
-<pre><code><span class="keyword">while</span>(~scanf(<span class="string">"%lf %lf %lf %lf %lf %lf"</span>,&amp;a,&amp;b,&amp;c,&amp;d,&amp;<span class="constant">L</span>,&amp;<span class="constant">R</span>))
+<p>觉得讲的很精彩，把mesos的精髓都体现了~share一下</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F1-UEIG7u5g" frameborder="0" allowfullscreen></iframe>
 
-{
-
-    double ans;
-
-    double left = <span class="function"><span class="keyword">fun</span>(<span class="title">L</span></span>);
-
-    double right = <span class="function"><span class="keyword">fun</span>(<span class="title">R</span></span>);
-
-    double sans = max(left,right);
-
-    <span class="keyword">if</span>(a==<span class="number">0</span>)
-
-    {
-
-        <span class="keyword">if</span>(b == <span class="number">0</span>){
-
-            ans = sans;
-
-        }<span class="keyword">else</span>{
-
-            double x = -c/(<span class="number">2</span>*b);
-
-            <span class="keyword">if</span>(x&lt;=<span class="constant">R</span>&amp;&amp;x&gt;=<span class="constant">L</span>)
-
-                ans = <span class="function"><span class="keyword">fun</span>(<span class="title">x</span></span>);
-
-            <span class="keyword">else</span> 
-
-                ans = <span class="number">0</span>;
-
-            ans = max(ans,sans);                
-
-        }
-
-    }
-
-    <span class="keyword">else</span>{
-
-        double deta = <span class="number">4</span>*b*b - <span class="number">12</span>*a*c;
-
-        <span class="keyword">if</span>(deta &lt; <span class="number">0</span>){
-
-            ans = <span class="number">0</span>;
-
-            ans = max(ans,sans);
-
-        }
-
-        <span class="keyword">else</span>{
-
-            double x1 = (sqrt(deta)-<span class="number">2</span>*b)/(<span class="number">6</span>*a);
-
-            double x2 = (-sqrt(deta)-<span class="number">2</span>*b)/(<span class="number">6</span>*a);
-
-            double k1,k2;
-
-            <span class="keyword">if</span>(x1&lt;=<span class="constant">R</span>&amp;&amp;x1&gt;=<span class="constant">L</span>)
-
-                k1 = <span class="function"><span class="keyword">fun</span>(<span class="title">x1</span></span>);
-
-            <span class="keyword">else</span>
-
-                k1 = <span class="number">0</span>;
-
-            <span class="keyword">if</span>(x2&lt;=<span class="constant">R</span>&amp;&amp;x2&gt;=<span class="constant">L</span>)
-
-                k2 = <span class="function"><span class="keyword">fun</span>(<span class="title">x2</span></span>);
-
-            <span class="keyword">else</span>
-
-                k2 = <span class="number">0</span>;    
-
-            ans = max(k1,k2);
-
-            ans = max(ans,sans);
-
-        }                    
-
-    }
-
-    printf(<span class="string">"%.2lf\n"</span>,ans);
-
-}
-</code></pre><p>}`</p>
+<p>可能需要翻越GFW，╮(╯▽╰)╭</p>
+<p>此外，分享一下Ben在UC Berkeley念PHD时发表的关于Mesos的文章</p>
+<p><a href="#">Mesos: A Platform for Fine-Grained Resource Sharing in the Data Center</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-求最大值/" data-id="cihj2p9xf0079lyseuwhi35cd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/" data-id="cihj2p9y8008olysebqnquydb" class="article-share-link">Share</a>
       
-        <a href="http://yoursite.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-求最大值/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/#ds-thread" class="article-comment-link">Comments</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mesos/">mesos</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2014/11/25/Codeforces-279-A-Team-Olympiad-瞎搞/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Codeforces #279 A Team Olympiad 瞎搞
-        
-      </div>
-    </a>
   
-  
-    <a href="/2014/11/19/HDU-5104-BestCoder-18-1001-Primes-Problem-水题/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/11/23/Mesos-调度机制及调度算法初探/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">HDU 5104 BestCoder #18 1001 Primes Problem 水题</div>
+      <div class="article-nav-title">Mesos 调度机制及调度算法初探</div>
     </a>
   
 </nav>
@@ -327,7 +200,7 @@ PS：要考虑a=0，b=0的情况，WA了一次ORZ">
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-求最大值/" data-title="hdu 5105 Math Problem BestCoder#18 1002 求最大值" data-url="http://yoursite.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-求最大值/">
+    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/" data-title="[Share] Cluster Management and Containerization by Benjamin Hindman" data-url="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/">
       <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by DuoShuo.</a></noscript>
       </div>
   </section>
