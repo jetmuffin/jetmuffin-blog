@@ -98,11 +98,11 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        85
+        86
         <span>posts</span>
       </div>
       <div class="article-info-block">
-        103
+        104
         <span>tags</span>
       </div>
     </div>
@@ -131,6 +131,60 @@
 
       
       <section id="main">
+      <article id="post-FZUOJ-1759-Super-A-B-mod-C-指数循环节" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/">FZUOJ 1759 Super A^B mod C 指数循环节</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/">
+      <time datetime="2015-12-08T12:38:44.000Z" itemprop="datePublished">2015-12-08</time>
+    </a>
+  </div>
+
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <h2 id="题目">题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=1759" target="_blank" rel="external">http://acm.fzu.edu.cn/problem.php?pid=1759</a></p>
+<h2 id="题意">题意</h2><p>给定A，B和C的值，求A^B%C的值，其中<code>1&lt;=A,C&lt;=1e9,1&lt;=B&lt;=10e1000000</code></p>
+<h2 id="分析">分析</h2><p>今天刚刚学到一个内容，指数降幂公式，即A^{B}modC=A^{Bmodphi(c)+phi(c)}modC</p>
+<p>用这个公式，可以很方便地对大指数问题进行降维处理。</p>
+<h2 id="代码">代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1000005</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> str[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">phi</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> res = n;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i * i &lt;= n; i++)&#123;</span><br><span class="line">	<span class="keyword">if</span>(n % i == <span class="number">0</span>)&#123;</span><br><span class="line">	  res = res - res / i;</span><br><span class="line">	  <span class="keyword">while</span>(n % i == <span class="number">0</span>) n /= i;</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(n &gt; <span class="number">1</span>)</span><br><span class="line">	res = res - res / n;</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">multi</span><span class="params">(ll a, ll b, ll m)</span></span>&#123;</span><br><span class="line">	ll ans = <span class="number">0</span>;</span><br><span class="line">	a %= m;</span><br><span class="line">	<span class="keyword">while</span>(b)&#123;</span><br><span class="line">		<span class="keyword">if</span>(b &amp; <span class="number">1</span>)&#123;</span><br><span class="line">			ans = (ans + a) % m;</span><br><span class="line">			b--;</span><br><span class="line">		&#125;</span><br><span class="line">		b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">		a = (a + a) % m;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">quickmod</span><span class="params">(ll a, ll b, ll m)</span></span>&#123;</span><br><span class="line">	ll ans = <span class="number">1</span>;</span><br><span class="line">	a %= m;</span><br><span class="line">	<span class="keyword">while</span>(b)&#123;</span><br><span class="line">		<span class="keyword">if</span>(b &amp; <span class="number">1</span>)&#123;</span><br><span class="line">			ans = multi(ans, a, m);</span><br><span class="line">			b--;</span><br><span class="line">		&#125;</span><br><span class="line">		b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">		a = multi(a,a,m);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 	ll a,c;</span><br><span class="line"> 	<span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%I64d%s%I64d"</span>, &amp;a, str, &amp;c))&#123;</span><br><span class="line"> 		ll len = <span class="built_in">strlen</span>(str);</span><br><span class="line"> 		ll ans = <span class="number">0</span>;</span><br><span class="line"> 		ll p = phi(c);</span><br><span class="line"> 		<span class="keyword">if</span>(len &lt;= <span class="number">15</span>)&#123;</span><br><span class="line"> 			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; len; i++)</span><br><span class="line"> 				ans = ans * <span class="number">10</span> + str[i] - <span class="string">'0'</span>;</span><br><span class="line"> 		&#125;<span class="keyword">else</span>&#123; <span class="comment">// A^B%C = A^(B%phi(C)+phi(C))%C</span></span><br><span class="line"> 			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; len ; i++)&#123;</span><br><span class="line"> 				ans = ans * <span class="number">10</span> + str[i] - <span class="string">'0'</span>;</span><br><span class="line"> 				ans %= p;</span><br><span class="line"> 			&#125;</span><br><span class="line"> 			ans += p;</span><br><span class="line"> 		&#125;</span><br><span class="line"> 		<span class="built_in">printf</span>(<span class="string">"%I64d\n"</span>, quickmod(a,ans,c));</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/" data-id="cihxdqzqs00apo6qqly50he8o" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/循环节/">循环节</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数论/">数论</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/欧拉函数/">欧拉函数</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-杭电校赛部分赛题题解" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -174,7 +228,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/29/杭电校赛部分赛题题解/" data-id="cihm092rc001zhwseqegrzq40" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/29/杭电校赛部分赛题题解/" data-id="cihxdqzlq001zo6qq1iiuj0w8" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/29/杭电校赛部分赛题题解/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -227,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/" data-id="cihm092va008uhwsevbxclp52" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/" data-id="cihxdqzpo008uo6qqj12hrznm" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -285,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihm092vf0095hwse8nl0tv94" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihxdqzpu0095o6qq9r8qk8bz" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -343,7 +397,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/" data-id="cihm092qz001ghwsertmor3ye" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/" data-id="cihxdqzl4001go6qqbhm86clc" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -401,7 +455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/18/Mac-OS-X-安装Less编译器/" data-id="cihm092vq009khwse9bxuhg18" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/18/Mac-OS-X-安装Less编译器/" data-id="cihxdqzq4009ko6qq8pkvk73x" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/18/Mac-OS-X-安装Less编译器/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -459,7 +513,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/" data-id="cihm092sa003phwsew4nqcsfg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/" data-id="cihxdqzms003po6qq29gjd4k7" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -517,7 +571,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/" data-id="cihm092th005ahwsephgvyj3h" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/" data-id="cihxdqznv005ao6qqqmfuvjtp" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -575,7 +629,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/" data-id="cihm092sd003whwsesnfyeacs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/" data-id="cihxdqzmu003wo6qqz10vcx07" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -633,72 +687,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cihm092vk009chwse0pw2d2e6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cihxdqzpz009co6qq5vmzjpyc" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/07/Mesos-Framework解析/#ds-thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mesos/">Mesos</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-    
-      <article id="post-二分图匹配-匈牙利算法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/01/二分图匹配-匈牙利算法/">二分图的最大匹配 匈牙利算法</a>
-    </h1>
-  
-
-        <div class="article-meta">
-          
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2015/11/01/二分图匹配-匈牙利算法/">
-      <time datetime="2015-11-01T11:19:16.000Z" itemprop="datePublished">2015-11-01</time>
-    </a>
-  </div>
-
-
-          
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="二分图的最大匹配_匈牙利算法">二分图的最大匹配 匈牙利算法</h1><h2 id="概念">概念</h2><p><strong>匹配:</strong></p>
-<blockquote>
-<p>给定一个无向图G=(V, E),一个匹配是边的一个子集M⊇E，使得对于所有节点v∈V，子集M中最多有一条边与节点v相连。<br>—— 《算法导论》<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/11/01/二分图匹配-匈牙利算法/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/01/二分图匹配-匈牙利算法/" data-id="cihm092si0044hwsew9dt2iye" class="article-share-link">Share</a>
-      
-        <a href="http://yoursite.com/2015/11/01/二分图匹配-匈牙利算法/#ds-thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/二分图-图论-匈牙利算法/">二分图,图论,匈牙利算法</a></li></ul>
 
     </footer>
   </div>
@@ -720,6 +714,23 @@
     <h3 class="widget-title">recents</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/" class="thumbnail">
+  
+    <span class="thumbnail-image thumbnail-none"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/" class="title">FZUOJ 1759 Super A^B mod C 指数循环节</a></p>
+              <p class="item-date"><time datetime="2015-12-08T12:38:44.000Z" itemprop="datePublished">2015-12-08</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -773,24 +784,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/11/23/给Mesos换一个新的WebUI/" class="thumbnail">
-  
-    <span style="background-image:url(/uploads/images/2015/11/23/mesos-ui.png
-)" alt="给Mesos换一个新的WebUI" class="thumbnail-image"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
-              <p class="item-title"><a href="/2015/11/23/给Mesos换一个新的WebUI/" class="title">给Mesos换一个新的WebUI</a></p>
-              <p class="item-date"><time datetime="2015-11-23T10:29:00.000Z" itemprop="datePublished">2015-11-23</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -837,7 +830,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">tag cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.86px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.86px;">docker</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.43px;">marathon</a> <a href="/tags/mesos/" style="font-size: 15.71px;">mesos</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.86px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 11.43px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 14.29px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.43px;">模拟</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
+      <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.86px;">bfs</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.86px;">docker</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.43px;">marathon</a> <a href="/tags/mesos/" style="font-size: 15.71px;">mesos</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.86px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 12.86px;">循环节</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 14.29px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.43px;">模拟</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a>
     </div>
   </div>
 
@@ -846,7 +839,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
