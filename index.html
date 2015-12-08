@@ -160,17 +160,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-                
-        <h2 id="题目">题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=1759" target="_blank" rel="external">http://acm.fzu.edu.cn/problem.php?pid=1759</a></p>
+        <h2 id="题目">题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=1759">http://acm.fzu.edu.cn/problem.php?pid=1759</a></p>
 <h2 id="题意">题意</h2><p>给定A，B和C的值，求A^B%C的值，其中<code>1&lt;=A,C&lt;=1e9,1&lt;=B&lt;=10e1000000</code></p>
-<h2 id="分析">分析</h2><p>今天刚刚学到一个内容，指数降幂公式，即A^{B}modC=A^{Bmodphi(c)+phi(c)}modC</p>
-<p>用这个公式，可以很方便地对大指数问题进行降维处理。</p>
-<h2 id="代码">代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1000005</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> str[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">phi</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> res = n;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i * i &lt;= n; i++)&#123;</span><br><span class="line">	<span class="keyword">if</span>(n % i == <span class="number">0</span>)&#123;</span><br><span class="line">	  res = res - res / i;</span><br><span class="line">	  <span class="keyword">while</span>(n % i == <span class="number">0</span>) n /= i;</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(n &gt; <span class="number">1</span>)</span><br><span class="line">	res = res - res / n;</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">multi</span><span class="params">(ll a, ll b, ll m)</span></span>&#123;</span><br><span class="line">	ll ans = <span class="number">0</span>;</span><br><span class="line">	a %= m;</span><br><span class="line">	<span class="keyword">while</span>(b)&#123;</span><br><span class="line">		<span class="keyword">if</span>(b &amp; <span class="number">1</span>)&#123;</span><br><span class="line">			ans = (ans + a) % m;</span><br><span class="line">			b--;</span><br><span class="line">		&#125;</span><br><span class="line">		b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">		a = (a + a) % m;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">quickmod</span><span class="params">(ll a, ll b, ll m)</span></span>&#123;</span><br><span class="line">	ll ans = <span class="number">1</span>;</span><br><span class="line">	a %= m;</span><br><span class="line">	<span class="keyword">while</span>(b)&#123;</span><br><span class="line">		<span class="keyword">if</span>(b &amp; <span class="number">1</span>)&#123;</span><br><span class="line">			ans = multi(ans, a, m);</span><br><span class="line">			b--;</span><br><span class="line">		&#125;</span><br><span class="line">		b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">		a = multi(a,a,m);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> 	ll a,c;</span><br><span class="line"> 	<span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%I64d%s%I64d"</span>, &amp;a, str, &amp;c))&#123;</span><br><span class="line"> 		ll len = <span class="built_in">strlen</span>(str);</span><br><span class="line"> 		ll ans = <span class="number">0</span>;</span><br><span class="line"> 		ll p = phi(c);</span><br><span class="line"> 		<span class="keyword">if</span>(len &lt;= <span class="number">15</span>)&#123;</span><br><span class="line"> 			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; len; i++)</span><br><span class="line"> 				ans = ans * <span class="number">10</span> + str[i] - <span class="string">'0'</span>;</span><br><span class="line"> 		&#125;<span class="keyword">else</span>&#123; <span class="comment">// A^B%C = A^(B%phi(C)+phi(C))%C</span></span><br><span class="line"> 			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; len ; i++)&#123;</span><br><span class="line"> 				ans = ans * <span class="number">10</span> + str[i] - <span class="string">'0'</span>;</span><br><span class="line"> 				ans %= p;</span><br><span class="line"> 			&#125;</span><br><span class="line"> 			ans += p;</span><br><span class="line"> 		&#125;</span><br><span class="line"> 		<span class="built_in">printf</span>(<span class="string">"%I64d\n"</span>, quickmod(a,ans,c));</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h2 id="分析">分析</h2><p>今天刚刚学到一个内容，指数降幂公式，即$A^{B}modC=A^{Bmodphi(c)+phi(c)}modC$</p>
+<p>用这个公式，可以很方便地对大指数问题进行降维处理。<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/" data-id="cihxdqzqs00apo6qqly50he8o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/" data-id="cihxdvkid00appgqqjw66dp8b" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -228,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/29/杭电校赛部分赛题题解/" data-id="cihxdqzlq001zo6qq1iiuj0w8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/29/杭电校赛部分赛题题解/" data-id="cihxdvkc0001zpgqqgww8tt07" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/29/杭电校赛部分赛题题解/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -281,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/" data-id="cihxdqzpo008uo6qqj12hrznm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/" data-id="cihxdvkh3008upgqqn3w4b3gs" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/28/Share-Cluster-Management-and-Containerization-by-Benjamin-Hindman/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -339,7 +341,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihxdqzpu0095o6qq9r8qk8bz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/" data-id="cihxdvkh80095pgqqhum6y9zc" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/23/Mesos-调度机制及调度算法初探/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -397,7 +399,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/" data-id="cihxdqzl4001go6qqbhm86clc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/" data-id="cihxdvkbo001gpgqqlfvrk6n6" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -455,7 +457,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/18/Mac-OS-X-安装Less编译器/" data-id="cihxdqzq4009ko6qq8pkvk73x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/18/Mac-OS-X-安装Less编译器/" data-id="cihxdvkhk009kpgqqekmhnwu2" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/18/Mac-OS-X-安装Less编译器/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -513,7 +515,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/" data-id="cihxdqzms003po6qq29gjd4k7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/" data-id="cihxdvkcz003ppgqqniu528y5" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/16/利用Docker和Marathon构建带数据分析的Web服务/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -571,7 +573,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/" data-id="cihxdqznv005ao6qqqmfuvjtp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/" data-id="cihxdvkdx005apgqqsl9h0vju" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/12/hdu-5546-Acient-go-CCPC-G题-BFS/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -629,7 +631,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/" data-id="cihxdqzmu003wo6qqz10vcx07" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/" data-id="cihxdvkd2003wpgqq6kyywodt" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/09/使用Mesos和Marathon搭建Docker集群/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -687,7 +689,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cihxdqzpz009co6qq5vmzjpyc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/07/Mesos-Framework解析/" data-id="cihxdvkhd009cpgqq0ntypxmr" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/11/07/Mesos-Framework解析/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -884,5 +886,35 @@
 <script src="/js/script.js" type="text/javascript"></script>
 
   </div>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 </body>
 </html>
