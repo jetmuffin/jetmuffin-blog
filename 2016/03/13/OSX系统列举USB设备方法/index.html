@@ -5,22 +5,16 @@
   
   <title>OSX系统列举USB设备方法 | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Linux 用户在列举USB设备时，可以使用lsusb命令来查看所有已经连接的usb设备，或者进入/dev/bus/usb/001之类进行查看。
-而在Mac OS下，系统自带的命令则是system_profiler SPUSBDataType，使用这条命令可以查看所有连接的USB设备，如下：
-1 jeff@promote &amp;#11136; ~ &amp;#11136; system_profiler SP">
+  <meta name="description" content="Linux 用户在列举USB设备时，可以使用lsusb命令来查看所有已经连接的usb设备，或者进入/dev/bus/usb/001之类进行查看。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OSX系统列举USB设备方法">
 <meta property="og:url" content="http://yoursite.com/2016/03/13/OSX系统列举USB设备方法/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="Linux 用户在列举USB设备时，可以使用lsusb命令来查看所有已经连接的usb设备，或者进入/dev/bus/usb/001之类进行查看。
-而在Mac OS下，系统自带的命令则是system_profiler SPUSBDataType，使用这条命令可以查看所有连接的USB设备，如下：
-1 jeff@promote &amp;#11136; ~ &amp;#11136; system_profiler SP">
-<meta property="og:updated_time" content="2016-03-13T13:45:34.000Z">
+<meta property="og:description" content="Linux 用户在列举USB设备时，可以使用lsusb命令来查看所有已经连接的usb设备，或者进入/dev/bus/usb/001之类进行查看。">
+<meta property="og:updated_time" content="2016-03-13T13:46:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OSX系统列举USB设备方法">
-<meta name="twitter:description" content="Linux 用户在列举USB设备时，可以使用lsusb命令来查看所有已经连接的usb设备，或者进入/dev/bus/usb/001之类进行查看。
-而在Mac OS下，系统自带的命令则是system_profiler SPUSBDataType，使用这条命令可以查看所有连接的USB设备，如下：
-1 jeff@promote &amp;#11136; ~ &amp;#11136; system_profiler SP">
+<meta name="twitter:description" content="Linux 用户在列举USB设备时，可以使用lsusb命令来查看所有已经连接的usb设备，或者进入/dev/bus/usb/001之类进行查看。">
   
   
     <link rel="icon" href="favicon.png">
@@ -168,6 +162,7 @@
       
                 
         <p>Linux 用户在列举USB设备时，可以使用<code>lsusb</code>命令来查看所有已经连接的usb设备，或者进入<code>/dev/bus/usb/001</code>之类进行查看。</p>
+<a id="more"></a>
 <p>而在Mac OS下，系统自带的命令则是<code>system_profiler SPUSBDataType</code>，使用这条命令可以查看所有连接的USB设备，如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> jeff@promote &#11136; ~ &#11136; system_profiler SPUSBDataType&#10;USB:&#10;&#10;    USB 3.0 Bus:&#10;&#10;      BSD Name: en4&#10;      Host Controller Driver: AppleUSBXHCIWPT&#10;      PCI Device ID: 0x9cb1&#10;      PCI Revision ID: 0x0003&#10;      PCI Vendor ID: 0x8086&#10;&#10;        USB3.0 Hub:&#10;&#10;          Product ID: 0x0612&#10;          Vendor ID: 0x05e3  (Genesys Logic, Inc.)&#10;          Version: 92.16&#10;          Speed: Up to 5 Gb/sec&#10;          Manufacturer: GenesysLogic&#10;          Location ID: 0x14400000 / 6&#10;          Current Available (mA): 1800&#10;          Current Required (mA): 0&#10;          Extra Operating Current (mA): 0&#10;&#10;        Bluetooth USB Host Controller:&#10;&#10;          Product ID: 0x8290&#10;          Vendor ID: 0x05ac  (Apple Inc.)&#10;          Version: 1.11&#10;          Speed: Up to 12 Mb/sec&#10;          Manufacturer: Broadcom Corp.&#10;          Location ID: 0x14300000 / 2&#10;          Current Available (mA): 1000&#10;          Current Required (mA): 0&#10;          Extra Operating Current (mA): 0&#10;          Built-In: Yes&#10;&#10;        Razer DeathAdder:&#10;&#10;          Product ID: 0x0016&#10;          Vendor ID: 0x1532&#10;          Version: 1.00&#10;          Speed: Up to 12 Mb/sec&#10;          Manufacturer: Razer&#10;          Location ID: 0x14200000 / 4&#10;          Current Available (mA): 1000&#10;          Current Required (mA): 100&#10;          Extra Operating Current (mA): 0&#10;&#10;        USB2.0 Hub:&#10;&#10;          Product ID: 0x0610&#10;          Vendor ID: 0x05e3  (Genesys Logic, Inc.)&#10;          Version: 92.16&#10;          Speed: Up to 480 Mb/sec&#10;          Manufacturer: GenesysLogic&#10;          Location ID: 0x14100000 / 5&#10;          Current Available (mA): 1000&#10;          Current Required (mA): 100&#10;          Extra Operating Current (mA): 0&#10;          BSD Name: en4&#10;&#10;            Apple USB Ethernet Adapter:&#10;&#10;              Product ID: 0x1402&#10;              Vendor ID: 0x05ac  (Apple Inc.)&#10;              Version: 0.01&#10;              Serial Number: 1460AB&#10;              Speed: Up to 480 Mb/sec&#10;              Manufacturer: Apple Inc.&#10;              Location ID: 0x14140000 / 7&#10;              Current Available (mA): 1000&#10;              Current Required (mA): 250&#10;              Extra Operating Current (mA): 0&#10;              BSD Name: en4&#10;&#10;            iPhone:&#10;&#10;              Product ID: 0x12a8&#10;              Vendor ID: 0x05ac  (Apple Inc.)&#10;              Version: 7.02&#10;              Serial Number: 1ba089f6c8745ae921e95dea83879c7e36b43b9c&#10;              Speed: Up to 480 Mb/sec&#10;              Manufacturer: Apple Inc.&#10;              Location ID: 0x14130000 / 8&#10;              Current Available (mA): 1000&#10;              Current Required (mA): 500&#10;              Extra Operating Current (mA): 0&#10;              Sleep current (mA): 500</span><br></pre></td></tr></table></figure>
 <p>而在图形界面上<code>EL Capitan</code>的操作步骤为：</p>
@@ -181,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/13/OSX系统列举USB设备方法/" data-id="cilqm68vb009av4sehwh90id6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/03/13/OSX系统列举USB设备方法/" data-id="cilqm8i9t009aw0seoa561ka8" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2016/03/13/OSX系统列举USB设备方法/#ds-thread" class="article-comment-link">Comments</a>
       
