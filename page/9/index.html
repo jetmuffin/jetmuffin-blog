@@ -98,7 +98,7 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        90
+        91
         <span>posts</span>
       </div>
       <div class="article-info-block">
@@ -131,6 +131,69 @@
 
       
       <section id="main">
+      <article id="post-hdu-3076-ssworld-VS-DDD-概率dp" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">hdu 3076 ssworld VS DDD 概率dp</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">
+      <time datetime="2014-10-14T10:24:35.000Z" itemprop="datePublished">2014-10-14</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>题意应该很明显，甩骰子决定谁扣血，输的扣血，赢的不变，平局双方都不变。</p>
+<p>解题时有好几个地方想错了：</p>
+<p>1. 原本以为dp[i][j]表示当前A和B的血量，结果想反了，整个思路貌似有点偏</p>
+<p>2. 以为平局的概率也要加入，事实上也是错误1引起的，修改为dp[i][j]表示A和B赢的次数就好理解了，简化问题，去掉平局，p1 = win/(win+lose) ; p2 = lose/(win+lose)</p>
+<p>3. 最后的答案不是dp数组中的一个，而是A赢了hp2次的概率，就是dp[hp2-1][j(j从0到hp1-1求和)]*win </p>
+<p>解决了这几个问题，结果提交还是WA，后来看了discuss才发现数据错了，两人血量反了，所以把其中的i和j互换。</p>
+        
+          <p class="article-more-link">
+            <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/" data-id="cilqm68um0083v4sel2klfecc" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdu/">hdu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/概率dp/">概率dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-CodeForces-148D-Bags-of-mice-概率dp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -182,7 +245,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/" data-id="cijateq3r00c2hrqqyv6v8kyx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/" data-id="cilqm68wu00c3v4seupcfhvtx" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -240,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/12/hdu-2098-分拆素数和-水题/" data-id="cijateq1t0088hrqqehu7z97j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/12/hdu-2098-分拆素数和-水题/" data-id="cilqm68up0088v4senv9p84q6" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/12/hdu-2098-分拆素数和-水题/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -296,7 +359,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/" data-id="cijatepws000bhrqqf0m444qx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/" data-id="cilqm68pz000bv4sezyopqd2x" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -359,7 +422,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/08/算m点问题，深搜解决/" data-id="cijatepxp001shrqqzzlhcknx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/08/算m点问题，深搜解决/" data-id="cilqm68qv001sv4senw00efj5" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/10/08/算m点问题，深搜解决/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -413,7 +476,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/" data-id="cijateq4600cphrqqw4kuf4jn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/" data-id="cilqm68xb00cqv4seye40l5ee" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -472,7 +535,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/" data-id="cijatepzp004qhrqqqlnw5rf9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/" data-id="cilqm68ss004qv4seaajoxasq" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -531,7 +594,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/" data-id="cijatepzt004xhrqq989xikok" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/" data-id="cilqm68sw004xv4se5lkqgap4" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -590,7 +653,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/" data-id="cijatepzx0053hrqqnu5bmy4w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/" data-id="cilqm68sz0053v4sed9859jvb" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -652,7 +715,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/" data-id="cijateq4g00d9hrqqbn5p8qpy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/" data-id="cilqm68xk00dav4seuzeph6jq" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -667,73 +730,8 @@
 
 
     
-      <article id="post-hdu4828-Grids-百度之星初赛1002解题报告" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">hdu4828 Grids 百度之星初赛1002解题报告</a>
-    </h1>
-  
-
-        <div class="article-meta">
-          
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">
-      <time datetime="2014-07-21T03:09:36.000Z" itemprop="datePublished">2014-07-21</time>
-    </a>
-  </div>
-
-
-          
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>搞ACM起步比较晚，但是对这方面兴趣很大，第一次参加百度之星，资格赛水过一道题进入初赛，结果初赛被一道题难倒了。</p>
-<p>初赛分两场，每场筛选500人（赛程规定），而之后的结果上看，只有约250人A出题，而大多数人都是通过这道题拿到复赛入场券。这道题我一直觉得非常接近结果了，但是在最重要的环节，也就是取模上出了很大的问题，导致没有A出该题，下面是该题的分析。</p>
-<p>题干上，大多数人可以看出看出规律，即求卡特兰数，HDOJ上有相类似的题目，但是这道题的数据量非常大，有100万之多，因而题目上要求对1000000007取模。</p>
-<p>卡特兰数有很多递推公式，我选择的是h(n)=h(n-1)<em>(4</em>n-2)/(n+1);这条。</p>
-<p>由于数据量比较大，因而我选择用打表的方式，但是这里出现了一个问题，卡特兰数的数据在不断的增大，因而一定要在取模的基础上进行递推，然而简单地进行取模会造成递推公式出错，即不能在原结果上直接取模。</p>
-<p>比赛时就卡在这点上了，怎么想都想不出改进的方法。</p>
-<p>直到后来做到HDOJ的拓展欧几里德的题目（HDOJ 1576），才直到这道题的解法。</p>
-<p>除法的取模需要用extgcd的算法进行取逆，这是该题的关键。</p>
-        
-          <p class="article-more-link">
-            <a href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/" data-id="cijateq010059hrqq9g5a5oh7" class="article-share-link">Share</a>
-      
-        <a href="http://yoursite.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/#ds-thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdu/">hdu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数论/">数论</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百度之星/">百度之星</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-    
       <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
+        <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
       </nav>
     </section>
       
@@ -744,6 +742,23 @@
     <h3 class="widget-title">recents</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2016/03/13/OSX系统列举USB设备方法/" class="thumbnail">
+  
+    <span class="thumbnail-image thumbnail-none"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2016/03/13/OSX系统列举USB设备方法/" class="title">OSX系统列举USB设备方法</a></p>
+              <p class="item-date"><time datetime="2016-03-13T13:38:34.000Z" itemprop="datePublished">2016-03-13</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -795,23 +810,6 @@
               <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
               <p class="item-title"><a href="/2015/12/28/Mesos-Authentication详解/" class="title">Mesos Authentication详解</a></p>
               <p class="item-date"><time datetime="2015-12-28T09:01:24.000Z" itemprop="datePublished">2015-12-28</time></p>
-            </div>
-          </li>
-        
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/12/23/Mesos-Monitoring机制总结/" class="thumbnail">
-  
-    <span class="thumbnail-image thumbnail-none"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
-              <p class="item-title"><a href="/2015/12/23/Mesos-Monitoring机制总结/" class="title">Mesos Monitoring机制总结</a></p>
-              <p class="item-date"><time datetime="2015-12-23T14:24:56.000Z" itemprop="datePublished">2015-12-23</time></p>
             </div>
           </li>
         
@@ -870,7 +868,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 

@@ -98,7 +98,7 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        90
+        91
         <span>posts</span>
       </div>
       <div class="article-info-block">
@@ -131,6 +131,114 @@
 
       
       <section id="main">
+      <article id="post-基础算法训练-排序专题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/12/基础算法训练-排序专题/">基础算法训练 - 排序专题</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2015/07/12/基础算法训练-排序专题/">
+      <time datetime="2015-07-12T02:13:00.000Z" itemprop="datePublished">2015-07-12</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <h1 id="前言">前言</h1><p>以前的算法和数据结构基础不是很扎实，从现在开始，弄懂每个算法的原理，打好基础。</p>
+<h2 id="1-快速排序">1.快速排序</h2><p>快排的核心思想是分治，核心算法则是对数组的划分：</p>
+<p>`quicksort(A,p,r):</p>
+<p>if p &lt; r</p>
+<p>q = partition(A,p,r)</p>
+<p>quicksort(A,p,q-1)</p>
+<p>quicksort(A,q+1,r)`</p>
+<p>其中划分函数partition的核心操作是：</p>
+<ol>
+<li>将数组最后一个元素A[r]作为比较对象</li>
+<li>i = p-1 , j = p, j不停自加，判断A[r]和A[j]大小，若A[j]小于A[r]则将后游标i前进1位，并交换a[i]和a[j]</li>
+<li>最后交换a[i+1]和a[r]</li>
+<li>交换所得目的数将所有比a[r]小的数放在数组前面，所有比a[r]大的数放在数组后面，a[r]则在数组中间，返回数字为比a[r]小的数的个数</li>
+</ol>
+<p>代码：</p>
+<p>`#include <iostream></iostream></p>
+<p>using namespace std;</p>
+<p>int a[100] = {13,19,9,5,12,8,7,4,21,2,6,11};</p>
+<p>void swap(int &amp;x,int &amp;y){</p>
+<p>  int t = x;</p>
+<p>  x = y;</p>
+<p>  y = t;</p>
+<p>}</p>
+<p>int partition(int p,int r){</p>
+<p>  int i = p - 1;</p>
+<p>  int j = p;</p>
+<p>  for(;j &lt; r; j++){</p>
+<pre><code><span class="keyword">if</span><span class="comment">(a[j] &lt; a[r])</span>{
+
+  i++;
+
+  swap<span class="comment">(a[i],a[j])</span>;
+
+}
+</code></pre><p>  }</p>
+<p>  swap(a[r],a[i+1]);</p>
+<p>  return i+1;</p>
+<p>}</p>
+<p>void quicksort(int p,int r){</p>
+<p>  if(p &lt; r){</p>
+<pre><code>int q = partition<span class="list">(<span class="keyword">p</span>,r)</span><span class="comment">;</span>
+
+quicksort<span class="list">(<span class="keyword">p</span>,q-1)</span><span class="comment">;</span>
+
+quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span class="comment">;</span>
+</code></pre><p>  }</p>
+<p>}</p>
+<p>int main(){</p>
+<p> quicksort(0,11); </p>
+<p>  // int n = partition(0,11);</p>
+<p>  for(int i = 0 ; i &lt; 12;i++)</p>
+<pre><code>cout&lt;&lt;a<span class="string">[i]</span>&lt;&lt;<span class="string">" "</span>;
+</code></pre><p>  cout&lt;&lt;endl;</p>
+<p>}`</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/07/12/基础算法训练-排序专题/" data-id="cilqm68s2003ov4sendjddk8l" class="article-share-link">Share</a>
+      
+        <a href="http://yoursite.com/2015/07/12/基础算法训练-排序专题/#ds-thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基础算法/">基础算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/排序/">排序</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-hdu-1176-免费馅饼-变型数塔-dp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -240,7 +348,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/27/hdu-1176-免费馅饼-变型数塔-dp/" data-id="cijateq1x008hhrqqgmqptqui" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/27/hdu-1176-免费馅饼-变型数塔-dp/" data-id="cilqm68uu008hv4seatx6h6vk" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/06/27/hdu-1176-免费馅饼-变型数塔-dp/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -359,7 +467,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/26/文本挖掘初步-文本特征值提取/" data-id="cijatepya002khrqqa6io5ycw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/26/文本挖掘初步-文本特征值提取/" data-id="cilqm68re002kv4se1bbmd6jt" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/06/26/文本挖掘初步-文本特征值提取/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -417,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/06/hdu-5245-Joyful-ACM上海大都会邀请赛-J题-概率/" data-id="cijateq0x006qhrqq4ohs4nwk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/06/hdu-5245-Joyful-ACM上海大都会邀请赛-J题-概率/" data-id="cilqm68tv006qv4secoyqbnz8" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/06/06/hdu-5245-Joyful-ACM上海大都会邀请赛-J题-概率/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -475,7 +583,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/06/hdu-5241-Friends-ACM上海大都会邀请赛-F题/" data-id="cijateq11006zhrqqqmuafgyi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/06/hdu-5241-Friends-ACM上海大都会邀请赛-F题/" data-id="cilqm68ty006zv4seo935j9xk" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/06/06/hdu-5241-Friends-ACM上海大都会邀请赛-F题/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -668,7 +776,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="cijatepyg002thrqqnxpy6lp6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="cilqm68rj002tv4sex75l02ws" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/06/05/文本挖掘初步-文本中文分词/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -727,7 +835,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" data-id="cijatepyk0033hrqql15mfzy8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" data-id="cilqm68ro0033v4sezmna3p8t" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -782,7 +890,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/04/25/Jena本体框架使用范例/" data-id="cijateq2u00a6hrqqycuczbkr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/04/25/Jena本体框架使用范例/" data-id="cilqm68vz00a7v4sek0nn0skj" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/04/25/Jena本体框架使用范例/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -842,7 +950,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/04/25/编程之美初赛第三题-质数相关-小数据解法/" data-id="cijatepxh001hhrqqs3t29avb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/04/25/编程之美初赛第三题-质数相关-小数据解法/" data-id="cilqm68qn001hv4sehaimidt9" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/04/25/编程之美初赛第三题-质数相关-小数据解法/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -901,7 +1009,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/" data-id="cijatepx4000uhrqqgxhi6a4x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/" data-id="cilqm68qb000uv4se8hfe4g3u" class="article-share-link">Share</a>
       
         <a href="http://yoursite.com/2015/03/28/蓝桥杯算法训练-逆序对-解题报告/#ds-thread" class="article-comment-link">Comments</a>
       
@@ -916,68 +1024,8 @@
 
 
     
-      <article id="post-hdu-5179-BestCoder-31-1002-beautiful-number-解题报告" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/">hdu 5179 BestCoder #31 1002 beautiful number 解题报告</a>
-    </h1>
-  
-
-        <div class="article-meta">
-          
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/">
-      <time datetime="2015-03-07T02:05:51.000Z" itemprop="datePublished">2015-03-07</time>
-    </a>
-  </div>
-
-
-          
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>题目要求找出1e9范围内的满足条件的数，且对于每次查询要给出范围内的数的个数，复杂度条件非常苛刻。</p>
-<p>但是该类数本身数量就不多，于是想到离线算出所有数，然后二分答案。</p>
-<p>离线求这些数的方法可以DFS或者直接暴力，为了方便我就直接暴力了，半分钟左右出答案。</p>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/" data-id="cijateq140076hrqq3ftzikss" class="article-share-link">Share</a>
-      
-        <a href="http://yoursite.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-解题报告/#ds-thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BestCoder/">BestCoder</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hdu/">hdu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/二分答案/">二分答案</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/离线查询/">离线查询</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-    
       <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+        <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
       </nav>
     </section>
       
@@ -988,6 +1036,23 @@
     <h3 class="widget-title">recents</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2016/03/13/OSX系统列举USB设备方法/" class="thumbnail">
+  
+    <span class="thumbnail-image thumbnail-none"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2016/03/13/OSX系统列举USB设备方法/" class="title">OSX系统列举USB设备方法</a></p>
+              <p class="item-date"><time datetime="2016-03-13T13:38:34.000Z" itemprop="datePublished">2016-03-13</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -1039,23 +1104,6 @@
               <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
               <p class="item-title"><a href="/2015/12/28/Mesos-Authentication详解/" class="title">Mesos Authentication详解</a></p>
               <p class="item-date"><time datetime="2015-12-28T09:01:24.000Z" itemprop="datePublished">2015-12-28</time></p>
-            </div>
-          </li>
-        
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/12/23/Mesos-Monitoring机制总结/" class="thumbnail">
-  
-    <span class="thumbnail-image thumbnail-none"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
-              <p class="item-title"><a href="/2015/12/23/Mesos-Monitoring机制总结/" class="title">Mesos Monitoring机制总结</a></p>
-              <p class="item-date"><time datetime="2015-12-23T14:24:56.000Z" itemprop="datePublished">2015-12-23</time></p>
             </div>
           </li>
         
@@ -1114,7 +1162,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
