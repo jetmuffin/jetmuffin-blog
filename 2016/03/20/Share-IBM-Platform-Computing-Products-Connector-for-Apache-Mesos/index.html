@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>给Mesos换一个新的WebUI | JetMuffin&#39;s Blog</title>
+  <title>[Share]IBM Platform Computing Products Connector for Apache Mesos | JetMuffin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="虽然Mesos已经给用户提供了一个webui(http://master:5050)，然而这个UI无法很直观地显示集群的资源状况，因此可以给Mesos换一个更帅气的UI！">
+  <meta name="description" content="IBM整合Docker，Mesos，K8s，Marathon的集群管理系统，ym~">
 <meta property="og:type" content="article">
-<meta property="og:title" content="给Mesos换一个新的WebUI">
-<meta property="og:url" content="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/index.html">
+<meta property="og:title" content="[Share]IBM Platform Computing Products Connector for Apache Mesos">
+<meta property="og:url" content="http://yoursite.com/2016/03/20/Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
-<meta property="og:description" content="虽然Mesos已经给用户提供了一个webui(http://master:5050)，然而这个UI无法很直观地显示集群的资源状况，因此可以给Mesos换一个更帅气的UI！">
-<meta property="og:image" content="http://yoursite.com/uploads/images/2015/11/23/mesos-ui.png">
-<meta property="og:updated_time" content="2015-11-23T10:48:03.000Z">
+<meta property="og:description" content="IBM整合Docker，Mesos，K8s，Marathon的集群管理系统，ym~">
+<meta property="og:updated_time" content="2016-03-20T14:37:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="给Mesos换一个新的WebUI">
-<meta name="twitter:description" content="虽然Mesos已经给用户提供了一个webui(http://master:5050)，然而这个UI无法很直观地显示集群的资源状况，因此可以给Mesos换一个更帅气的UI！">
+<meta name="twitter:title" content="[Share]IBM Platform Computing Products Connector for Apache Mesos">
+<meta name="twitter:description" content="IBM整合Docker，Mesos，K8s，Marathon的集群管理系统，ym~">
   
   
     <link rel="icon" href="favicon.png">
@@ -132,7 +131,7 @@
 </aside>
 
       
-      <section id="main"><article id="post-给Mesos换一个新的WebUI" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     
@@ -141,7 +140,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      给Mesos换一个新的WebUI
+      [Share]IBM Platform Computing Products Connector for Apache Mesos
     </h1>
   
 
@@ -149,75 +148,40 @@
           
   <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2015/11/23/给Mesos换一个新的WebUI/">
-      <time datetime="2015-11-23T11:29:00.000Z" itemprop="datePublished">2015-11-23</time>
+    <a href="/2016/03/20/Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos/">
+      <time datetime="2016-03-20T14:35:04.000Z" itemprop="datePublished">2016-03-20</time>
     </a>
   </div>
 
 
           
-  <div class="article-category">
-  	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/云计算/">云计算</a>
-  </div>
-
         </div>
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
                 
-        <p>虽然Mesos已经给用户提供了一个webui(<code>http://master:5050</code>)，然而这个UI无法很直观地显示集群的资源状况，因此可以给Mesos换一个更帅气的UI！</p>
-<a id="more"></a>
-<h2 id="依赖">依赖</h2><p>由于项目需要<code>nodejs</code>和<code>npm</code>环境，所以最好先配置好<code>nodejs</code>环境，最好<code>node</code>版本高于4.0，不然可能会出现错误。</p>
-<p>然后是构建项目需要的<code>gulp</code>，运行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g gulp</span><br></pre></td></tr></table></figure>
-<p>就可以了</p>
-<h2 id="安装">安装</h2><p>这里使用的是<a href="https://github.com/Capgemini" target="_blank" rel="external">Capgemini</a> group写的开源UI，首先感谢一下作者们~</p>
-<p>项目地址为<a href="https://github.com/Capgemini/mesos-ui" target="_blank" rel="external">Capgemini/mesos-ui</a></p>
-<p>首先把整个项目clone下来</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Capgemini/mesos-ui mesos-ui</span><br></pre></td></tr></table></figure>
-<p>然后安装相关的依赖</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd mesos-ui&#10;sudo npm install</span><br></pre></td></tr></table></figure>
-<p>最后使用<code>gulp</code>对项目进行build就行了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp build</span><br></pre></td></tr></table></figure>
-<h2 id="使用">使用</h2><p>Mesos配置web地址非常方便，只需要在启动Mesos时添加<code>webui_dir=your_webui_dir</code>就好了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/mesos-master.sh --ip=127.0.0.1 --work_dir=/var/lib/mesos --webui_dir=your_webui_dir</span><br></pre></td></tr></table></figure>
-<p>如果你的Mesos是以service的形式存在（换句话说就是不用自己手动启），也可以这么搞<code>export MESOS_WEBUI_DIR=/your-path/mesos-ui/build/</code>，然后重启服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mesos-master restart</span><br></pre></td></tr></table></figure>
-<p>也就OK了</p>
-<p>然后可以登陆<code>127.0.0.1:5050</code>去看看新UI了~</p>
-<p><img src="/uploads/images/2015/11/23/mesos-ui.png" alt="mesos-ui"></p>
-
+        <a id="more"></a>
+<p>IBM整合Docker，Mesos，K8s，Marathon的集群管理系统，ym~</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3z7DUojwwuk" frameborder="0" allowfullscreen></iframe>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/" data-id="cim0o3riq001nn76cfd6are1c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/03/20/Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos/" data-id="cim0o3rnb008zn76cgw29cllo" class="article-share-link">Share</a>
       
-        <a href="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2016/03/20/Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos/#ds-thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mesos/">mesos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webui/">webui</a></li></ul>
-
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2015/11/23/Mesos-调度机制及调度算法初探/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Mesos 调度机制及调度算法初探
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/11/18/Mac-OS-X-安装Less编译器/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2016/03/13/OSX系统列举USB设备方法/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Mac OS X 安装Less编译器</div>
+      <div class="article-nav-title">OSX系统列举USB设备方法</div>
     </a>
   
 </nav>
@@ -228,7 +192,7 @@
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/" data-title="给Mesos换一个新的WebUI" data-url="http://yoursite.com/2015/11/23/给Mesos换一个新的WebUI/">
+    <div id="ds-thread" class="ds-thread" data-thread-key="http://yoursite.com/2016/03/20/Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos/" data-title="[Share]IBM Platform Computing Products Connector for Apache Mesos" data-url="http://yoursite.com/2016/03/20/Share-IBM-Platform-Computing-Products-Connector-for-Apache-Mesos/">
       <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by DuoShuo.</a></noscript>
       </div>
   </section>
