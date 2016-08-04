@@ -99,5 +99,5 @@ baidu_analytics: f67ecffc11ffd32260e0bcf804da1040
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:JetMuffin/JetMuffin.github.io.git
+  repository: git@github.com:JetMuffin/jetmuffin.github.io.git
   branch: gh-pages
