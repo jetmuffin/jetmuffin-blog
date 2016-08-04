@@ -17,8 +17,8 @@ since: 2015 # The start year showing in your copyright section.
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-#url: http://ppoffice.github.io/hexo-theme-icarus
-#root: /hexo-theme-icarus/
+url: https://jetmuffin.github.io
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
