@@ -15,7 +15,7 @@ dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个�
 <meta property="og:description" content="题目就是输入一个9*9的数独，然后解出数独的最终解。
 大体思路还是搜索，dfs即可，写一个检查函数判断行、列、小方阵是否违规。
 dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个点，枚举1-9个数字中可用的数字，但是由于每次到一行的末尾需要换行到下一行比较麻烦，索性将二维数组一维化，仅使用一个变量k即可。">
-<meta property="og:updated_time" content="2015-10-14T05:41:12.000Z">
+<meta property="og:updated_time" content="2016-08-27T12:31:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蓝桥杯校内选拔赛第6题题解 poj 2676">
 <meta name="twitter:description" content="题目就是输入一个9*9的数独，然后解出数独的最终解。
@@ -159,11 +159,11 @@ dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个�
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                94
+                91
                 <span>posts</span>
             </div>
             <div class="article-info-block">
-                115
+                116
                 <span>tags</span>
             </div>
         </div>
@@ -232,7 +232,7 @@ dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个�
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
+        <a class="article-category-link" href="/categories/算法题解/">算法题解</a>
     </div>
 
                         
@@ -254,184 +254,9 @@ dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个�
 <a id="more"></a>
 <p>调试的时候出现各种错误，还是要细心的问题= =</p>
 <p>代码：</p>
-<p>`#include <iostream></iostream></p>
-<p>#include <cstdio></cstdio></p>
-<p>#include <cstring></cstring></p>
-<p>using namespace std;</p>
-<p>int m[9][9];</p>
-<p>char buffer[9]; </p>
-<p>bool check(int k,int v)</p>
-<p>{</p>
-<pre><code><span class="keyword">int</span> x = (k-<span class="number">1</span>)/<span class="number">9</span>;
-
-<span class="keyword">int</span> y = k - x*<span class="number">9</span> -<span class="number">1</span>;
-
-<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ;i &lt; <span class="number">9</span>; i++)  <span class="comment">//column</span>
-
-    <span class="keyword">if</span>(m[i][y] == v) <span class="keyword">return</span> <span class="number">0</span>;
-
-<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ;j &lt; <span class="number">9</span>; j++)  <span class="comment">//row</span>
-
-    <span class="keyword">if</span>(m[x][j] == v) <span class="keyword">return</span> <span class="number">0</span>;
-
-<span class="keyword">int</span> a,b;   <span class="comment">//small square</span>
-
-a = x/<span class="number">3</span>*<span class="number">3</span>;
-
-b = y/<span class="number">3</span>*<span class="number">3</span>;
-
-<span class="keyword">for</span>(<span class="keyword">int</span> i = a; i &lt; a+<span class="number">3</span>; i++)
-
-    <span class="keyword">for</span>(<span class="keyword">int</span> j = b; j &lt; b+<span class="number">3</span> ; j++)
-
-    {
-
-        <span class="keyword">if</span>(m[i][j] == v)
-
-            <span class="keyword">return</span> <span class="number">0</span>;
-
-    }
-
-<span class="keyword">return</span> <span class="number">1</span>;
-</code></pre><p>}</p>
-<p>bool dfs(int k)</p>
-<p>{</p>
-<pre><code><span class="comment">//cout&lt;&lt;k&lt;&lt;endl;</span>
-
-<span class="keyword">if</span>(k &gt; <span class="number">81</span>)
-
-{
-
-    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">9</span>; i++)
-
-    {
-
-        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ; j &lt; <span class="number">9</span>; j++)
-
-            <span class="built_in">cout</span>&lt;&lt;m[i][j]&lt;&lt;<span class="string">" "</span>;
-
-        <span class="built_in">cout</span>&lt;&lt;endl;
-
-    }        
-
-    <span class="keyword">return</span> <span class="number">1</span>;
-
-}
-
-<span class="keyword">int</span> x = (k-<span class="number">1</span>)/<span class="number">9</span>;
-
-<span class="keyword">int</span> y = k - x*<span class="number">9</span> -<span class="number">1</span>;
-
-<span class="keyword">if</span>(m[x][y] != <span class="number">0</span>)
-
-    dfs(k+<span class="number">1</span>);
-
-<span class="keyword">else</span>{
-
-    <span class="keyword">int</span> i;
-
-    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">9</span>; i++)
-
-    {
-
-        <span class="keyword">if</span>(check(k,i))
-
-        {
-
-        <span class="comment">//    cout&lt;&lt;k&lt;&lt;" "&lt;&lt;i&lt;&lt;endl;</span>
-
-            m[x][y] = i;
-
-            <span class="keyword">if</span>(dfs(k+<span class="number">1</span>)) <span class="keyword">return</span> <span class="number">1</span>;
-
-            m[x][y] = <span class="number">0</span>;
-
-        }
-
-    }    
-
-}
-
-<span class="keyword">return</span> <span class="number">0</span>;
-</code></pre><p>}</p>
-<p>int main()</p>
-<p>{</p>
-<pre><code>freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);
-
-<span class="keyword">int</span> tmp;
-
-<span class="keyword">int</span> cnt = <span class="number">0</span>;
-
-<span class="built_in">memset</span>(c,<span class="number">0</span>,<span class="keyword">sizeof</span>(c));
-
-<span class="built_in">memset</span>(r,<span class="number">0</span>,<span class="keyword">sizeof</span>(r));
-
-<span class="built_in">memset</span>(m,<span class="number">0</span>,<span class="keyword">sizeof</span>(m));
-
-<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt;<span class="number">9</span>; i++)
-
-{
-
-    <span class="built_in">cin</span>&gt;&gt;buffer;
-
-    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ; j &lt; <span class="number">9</span>;j++)
-
-    {
-
-        tmp = buffer[j] - <span class="string">'0'</span>;
-
-        m[i][j] = tmp;
-
-        <span class="keyword">if</span>(tmp)
-
-        {
-
-            c[i][tmp-<span class="number">1</span>]++;
-
-            r[j][tmp-<span class="number">1</span>]++;
-
-            cnt++;                
-
-        }                
-
-    }
-
-} 
-</code></pre><p>/*    for(int i = 0; i &lt; 9; i++)</p>
-<pre><code>{
-
-    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ; j &lt; <span class="number">9</span>; j++)
-
-        <span class="built_in">cout</span>&lt;&lt;m[i][j]&lt;&lt;<span class="string">" "</span>;
-
-    <span class="built_in">cout</span>&lt;&lt;endl;
-
-}
-
-<span class="built_in">cout</span>&lt;&lt;endl;*/
-
-dfs(<span class="number">1</span>);
-</code></pre><p>}`</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> m[<span class="number">9</span>][<span class="number">9</span>];</span><br><span class="line"><span class="keyword">char</span> buffer[<span class="number">9</span>]; </span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> k,<span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> x = (k-<span class="number">1</span>)/<span class="number">9</span>;</span><br><span class="line">	<span class="keyword">int</span> y = k - x*<span class="number">9</span> -<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ;i &lt; <span class="number">9</span>; i++)  <span class="comment">//column</span></span><br><span class="line">		<span class="keyword">if</span>(m[i][y] == v) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ;j &lt; <span class="number">9</span>; j++)  <span class="comment">//row</span></span><br><span class="line">		<span class="keyword">if</span>(m[x][j] == v) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> a,b;   <span class="comment">//small square</span></span><br><span class="line">	a = x/<span class="number">3</span>*<span class="number">3</span>;</span><br><span class="line">	b = y/<span class="number">3</span>*<span class="number">3</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = a; i &lt; a+<span class="number">3</span>; i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = b; j &lt; b+<span class="number">3</span> ; j++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(m[i][j] == v)</span><br><span class="line">				<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//cout&lt;&lt;k&lt;&lt;endl;</span></span><br><span class="line">	<span class="keyword">if</span>(k &gt; <span class="number">81</span>) &#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">9</span>; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ; j &lt; <span class="number">9</span>; j++)</span><br><span class="line">				<span class="built_in">cout</span>&lt;&lt;m[i][j]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">			<span class="built_in">cout</span>&lt;&lt;endl;</span><br><span class="line">		&#125;		</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> x = (k-<span class="number">1</span>)/<span class="number">9</span>;</span><br><span class="line">	<span class="keyword">int</span> y = k - x*<span class="number">9</span> -<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(m[x][y] != <span class="number">0</span>) &#123;</span><br><span class="line">		dfs(k+<span class="number">1</span>);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">int</span> i;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">9</span>; i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(check(k,i)) &#123;</span><br><span class="line">			<span class="comment">//	cout&lt;&lt;k&lt;&lt;" "&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">				m[x][y] = i;</span><br><span class="line">				<span class="keyword">if</span>(dfs(k+<span class="number">1</span>)) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">				m[x][y] = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);</span><br><span class="line">	<span class="keyword">int</span> tmp;</span><br><span class="line">	<span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">memset</span>(c,<span class="number">0</span>,<span class="keyword">sizeof</span>(c));</span><br><span class="line">	<span class="built_in">memset</span>(r,<span class="number">0</span>,<span class="keyword">sizeof</span>(r));</span><br><span class="line">	<span class="built_in">memset</span>(m,<span class="number">0</span>,<span class="keyword">sizeof</span>(m));</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt;<span class="number">9</span>; i++) &#123;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;buffer;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span> ; j &lt; <span class="number">9</span>;j++) &#123;</span><br><span class="line">			tmp = buffer[j] - <span class="string">'0'</span>;</span><br><span class="line">			m[i][j] = tmp;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(tmp) &#123;</span><br><span class="line">				c[i][tmp-<span class="number">1</span>]++;</span><br><span class="line">				r[j][tmp-<span class="number">1</span>]++;</span><br><span class="line">				cnt++;				</span><br><span class="line">			&#125;				</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	dfs(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>测试：</p>
-<p>`005300000</p>
-<p>800000020</p>
-<p>070010500</p>
-<p>400005300</p>
-<p>010070006</p>
-<p>003200080</p>
-<p>060500009</p>
-<p>004000030</p>
-<p>000009700</p>
-<p>145327698</p>
-<p>839654127</p>
-<p>672918543</p>
-<p>496185372</p>
-<p>218473956</p>
-<p>753296481</p>
-<p>367542819</p>
-<p>984761235</p>
-<p>521839764`</p>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">005300000&#10;&#10;800000020&#10;&#10;070010500&#10;&#10;400005300&#10;&#10;010070006&#10;&#10;003200080&#10;&#10;060500009&#10;&#10;004000030&#10;&#10;000009700&#10;&#10;145327698&#10;&#10;839654127&#10;&#10;672918543&#10;&#10;496185372&#10;&#10;218473956&#10;&#10;753296481&#10;&#10;367542819&#10;&#10;984761235&#10;&#10;521839764</span><br></pre></td></tr></table></figure>
         
         </div>
         <footer class="article-footer">
@@ -441,7 +266,7 @@ dfs(<span class="number">1</span>);
 
 </div>
 
-    <a data-url="https://jetmuffin.github.io/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/" data-id="cirviidh30014fs6cwgyzqzpy" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://jetmuffin.github.io/2015/02/03/蓝桥杯校内选拔赛第6题题解-poj-2676/" data-id="cisd41s140014ir6cn88cnpt0" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -685,7 +510,7 @@ dfs(<span class="number">1</span>);
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/云计算/">云计算</a></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/设计开发/">设计开发</a></p>
                             <p class="item-title"><a href="/2016/01/05/运行Mesos-Framework报no-mesos-in-java-library-path解决方法/" class="title">运行Mesos Framework报no mesos in java.library.path解决方法</a></p>
                             <p class="item-date"><time datetime="2016-01-05T07:08:33.000Z" itemprop="datePublished">2016-01-05</time></p>
                         </div>
@@ -700,7 +525,7 @@ dfs(<span class="number">1</span>);
     <div class="widget-wrap">
         <h3 class="widget-title">categories</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">56</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">4</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础架构/">基础架构</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/心路历程/">心路历程</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/竞赛历程/">竞赛历程</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">39</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法分析/">算法分析</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法题解/">算法题解</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计开发/">设计开发</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -709,7 +534,7 @@ dfs(<span class="number">1</span>);
     <div class="widget-wrap">
         <h3 class="widget-title">archives</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -718,7 +543,7 @@ dfs(<span class="number">1</span>);
     <div class="widget-wrap">
         <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
-            <a href="/tags/ACM现场赛/" style="font-size: 11.43px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/InfiniBand/" style="font-size: 10px;">InfiniBand</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-云计算/" style="font-size: 10px;">ambari,云计算</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.86px;">bfs</a> <a href="/tags/bugfix/" style="font-size: 10px;">bugfix</a> <a href="/tags/chronos/" style="font-size: 10px;">chronos</a> <a href="/tags/dfs/" style="font-size: 15.71px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.86px;">docker</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/hpc/" style="font-size: 10px;">hpc</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.43px;">marathon</a> <a href="/tags/mesos/" style="font-size: 18.57px;">mesos</a> <a href="/tags/poj/" style="font-size: 11.43px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.86px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 12.86px;">循环节</a> <a href="/tags/批处理/" style="font-size: 10px;">批处理</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 14.29px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.43px;">模拟</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/脚本/" style="font-size: 10px;">脚本</a> <a href="/tags/蓝桥杯/" style="font-size: 11.43px;">蓝桥杯</a> <a href="/tags/蓝桥杯-dfs/" style="font-size: 10px;">蓝桥杯.dfs</a> <a href="/tags/计信院程序设计大赛/" style="font-size: 10px;">计信院程序设计大赛</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源管理/" style="font-size: 10px;">资源管理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/随便写写/" style="font-size: 11.43px;">随便写写</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+            <a href="/tags/ACM/" style="font-size: 10px;">ACM</a> <a href="/tags/ACM现场赛/" style="font-size: 10px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.86px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15.71px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 14.29px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/InfiniBand/" style="font-size: 10px;">InfiniBand</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari-hadoop/" style="font-size: 10px;">ambari,hadoop</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.86px;">bfs</a> <a href="/tags/bugfix/" style="font-size: 10px;">bugfix</a> <a href="/tags/chronos/" style="font-size: 10px;">chronos</a> <a href="/tags/dfs/" style="font-size: 17.14px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.86px;">docker</a> <a href="/tags/dp/" style="font-size: 12.86px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/hpc/" style="font-size: 10px;">hpc</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.43px;">marathon</a> <a href="/tags/mesos/" style="font-size: 18.57px;">mesos</a> <a href="/tags/poj/" style="font-size: 10px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 11.43px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/加法链/" style="font-size: 10px;">加法链</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.43px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15.71px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 17.14px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.86px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 12.86px;">循环节</a> <a href="/tags/批处理/" style="font-size: 10px;">批处理</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 14.29px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.57px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.43px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.43px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.43px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.43px;">最短路径</a> <a href="/tags/期望/" style="font-size: 10px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.43px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.43px;">模拟</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/水题/" style="font-size: 14.29px;">水题</a> <a href="/tags/测试/" style="font-size: 11.43px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/脚本/" style="font-size: 10px;">脚本</a> <a href="/tags/蓝桥杯/" style="font-size: 12.86px;">蓝桥杯</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/质数/" style="font-size: 10px;">质数</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源管理/" style="font-size: 10px;">资源管理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/遗传算法/" style="font-size: 10px;">遗传算法</a> <a href="/tags/邀请赛/" style="font-size: 11.43px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.43px;">队列</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
         </div>
     </div>
 
