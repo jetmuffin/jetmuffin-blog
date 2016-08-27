@@ -1,7 +1,7 @@
 title: 给Mesos换一个新的WebUI
 date: 2015-11-23 18:29:00
 tags: [mesos,webui]
-categories: 云计算
+categories: 基础架构
 ---
 虽然Mesos已经给用户提供了一个webui(`http://master:5050`)，然而这个UI无法很直观地显示集群的资源状况，因此可以给Mesos换一个更帅气的UI！
 

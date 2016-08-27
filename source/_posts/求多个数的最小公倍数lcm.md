@@ -1,6 +1,6 @@
 title: 求多个数的最小公倍数lcm
 tags: [数论,最小公倍数]
-categories: 算法
+categories: 算法分析
 date: 2015-09-04 10:21:00
 ---
 

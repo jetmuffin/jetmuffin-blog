@@ -1,7 +1,7 @@
 title: 源码编译安装Ambari
 date: 2015-10-22 13:18:06
-tags: ambari,云计算
-categories: 云计算
+tags: ambari,hadoop
+categories: 基础架构
 ---
 # 源码编译安装Ambari
 

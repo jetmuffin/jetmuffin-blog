@@ -1,6 +1,6 @@
 title: '[转] 广义Fibonacci数列找循环节'
 tags: [数论,循环节]
-categories: '算法'
+categories: 算法分析
 date: 2015-09-20 09:23:00
 ---
 

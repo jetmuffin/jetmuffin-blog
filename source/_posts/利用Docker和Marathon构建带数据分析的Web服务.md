@@ -1,7 +1,7 @@
 title: 利用Docker和Marathon构建带数据分析的Web应用
 date: 2015-11-16 19:33:33
 tags: [docker,mesos,marathon]
-categories: 云计算
+categories: 基础架构
 ---
 利用搭建的Mesos、Marathon和Docker的环境，搭建一个带数据分析模块的Web应用。
 

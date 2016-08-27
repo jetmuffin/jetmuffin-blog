@@ -1,6 +1,6 @@
 title: nginx 配置图片缓存服务器，nginx.conf的配置
 tags: [Nginx,缓存]
-categories: 前端开发
+categories: 设计开发
 date: 2014-11-19 04:38:01
 ---
 

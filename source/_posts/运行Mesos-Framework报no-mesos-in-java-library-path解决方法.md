@@ -1,7 +1,7 @@
 title: 运行Mesos Framework报no mesos in java.library.path解决方法
 date: 2016-01-05 15:08:33
 tags: [mesos,bugfix]
-categories: 云计算
+categories: 设计开发
 ---
 
 在运行自己用scala编写的Framework时遇到了一个巨大的问题，即

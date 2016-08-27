@@ -1,6 +1,6 @@
 title: 2014ACM-ICPC 地区赛鞍山站小结
 tags: [ACM现场赛]
-categories: 心路历程
+categories: 竞赛历程
 date: 2014-10-21 08:05:45
 ---
 
@@ -35,117 +35,62 @@ date: 2014-10-21 08:05:45
 
 <span style="white-space:pre"></span>
 
-`#include <iostream>
-
+```cpp
+#include <iostream>
 #include <algorithm>
-
 #include <cstring>
-
 #include <cstdio>
-
 double p[50005];
-
 using namespace std;
 
-int main()
+int main() {
+    int T;
+    cin>>T;
+    
+    while(T--) {
+        memset(p,0,sizeof(p));
+        int n,k;
+        cin>>n>>k;
 
-{
+        double sum = 0;
+        for(int i = 1;i<=n;i++) {
+            cin>>p[i];
+            sum+= p[i];
+        }
 
-int T;
+        sort(p+1,p+n+1);
+        double avp = sum/(double)n;
+        int fst = 1;
+        int lst = n;
 
-cin>>T;
+        for(int i = 0;i < k; i++) {
+                double fstv = avp - p[fst];
+                double lstv = p[lst] - avp;
+                cout << p[fst]<<" : "<<fstv << " "<<p[lst]<<" : "<<lstv<<endl;
+            if(fstv > lstv) {
+                sum -= p[fst];
+                fst ++;
+                avp = sum/(double)(n-i-1);
+            }else{
+                sum -= p[lst];
+                lst --;
+                avp = sum/(double)(n-i-1);
+            }
+        }
 
-while(T--)
-
-{
-
-memset(p,0,sizeof(p));
-
-int n,k;
-
-cin>>n>>k;
-
-double sum = 0;
-
-for(int i = 1;i<=n;i++)
-
-{
-
-cin>>p[i];
-
-sum+= p[i];
-
+        double ans = 0;
+        for(int i=fst;i<=lst;i++) {
+            cout<<p[i]<<" ";
+        }
+        cout<<endl;
+        for(int i=fst;i<=lst;i++) {
+            ans += (p[i] - avp)*(p[i] - avp);
+        }
+        printf("%.10f\n",ans);
+    }
+    return 0;
 }
-
-sort(p+1,p+n+1);
-
-double avp = sum/(double)n;
-
-int fst = 1;
-
-int lst = n;
-
-for(int i = 0;i < k; i++)
-
-{
-
-double fstv = avp - p[fst];
-
-double lstv = p[lst] - avp;
-
-cout << p[fst]<<" : "<<fstv << " "<<p[lst]<<" : "<<lstv<<endl;
-
-if(fstv > lstv)
-
-{
-
-sum -= p[fst];
-
-fst ++;
-
-avp = sum/(double)(n-i-1);
-
-}else{
-
-sum -= p[lst];
-
-lst --;
-
-avp = sum/(double)(n-i-1);
-
-}
-
-}
-
-double ans = 0;
-
-for(int i=fst;i<=lst;i++)
-
-{
-
-cout<<p[i]<<" ";
-
-}
-
-cout<<endl;
-
-for(int i=fst;i<=lst;i++)
-
-{
-
-ans += (p[i] - avp)*(p[i] - avp);
-
-}
-
-printf("%.10f\n",ans);
-
-}
-
-return 0;
-
-}
-
-</pre>
+```
 
 <span style="white-space:pre"></span>当该算法碰到如下数据时：
 
@@ -169,105 +114,60 @@ return 0;
 
 代码：
 
-<code lang="cpp">#include <iostream>  
-
+```cpp
+#include <iostream>
 #include <algorithm>  
-
 #include <cstring>  
-
 #include <cstdio>  
-
 double p[50005];  
-
 using namespace std;  
 
-int main()  
-
-{  
-
+int main() {  
     int T;  
-
     cin>>T;  
 
-    while(T--)  
-
-    {  
-
+    while(T--) {  
         memset(p,0,sizeof(p));  
-
         int n,k;  
-
         cin>>n>>k;  
 
         for(int i = 1;i<=n;i++)  
-
             cin>>p[i];  
 
-        if(n==k)  
-
-        {  
-
+        if(n==k) {  
             printf("%.9f\n",0);   
-
             continue;      
-
         }   
 
         sort(p+1,p+n+1);  
-
         double sum = 0;  
-
         double sqrsum = 0;  
 
-         for(int i = 1;i<=n-k;i++)  
-
-         {  
-
-                sum += p[i];  
-
-                sqrsum += p[i] * p[i];  
-
-         }  
-
-        double avg  = sum/(double) (n-k);  
-
-        double min = sqrsum + (n-k)*avg*avg - 2*sum*avg;  
-
-       // cout<<sum<<" "<<sqrsum<<" "<<avg<<" "<<min<<endl;  
-
-        int flag = 0;  
-
-        for(int i = 1 ;i <= k; i++)  
-
-        {  
-
-                sum = sum + p[n-k+i] - p[i];  
-
-                sqrsum = sqrsum + p[n-k+i]*p[n-k+i] - p[i]*p[i];  
-
-                avg = sum/(double) (n-k);  
-
-                double now  = sqrsum + (n-k)*avg*avg - 2*sum*avg;  
-
-              //     cout<<i<<" "<<sum<<" "<<sqrsum<<" "<<avg<<" "<<min<<endl;  
-
-                if(now < min)  
-
-                {  
-
-                    min = now;  
-
-                    flag = i;  
-
-                }  
-
+        for(int i = 1;i<=n-k;i++) {  
+            sum += p[i];  
+            sqrsum += p[i] * p[i];  
         }  
 
+        double avg  = sum/(double) (n-k);  
+        double min = sqrsum + (n-k)*avg*avg - 2*sum*avg;  
+       // cout<<sum<<" "<<sqrsum<<" "<<avg<<" "<<min<<endl;  
+        int flag = 0;  
+
+        for(int i = 1 ;i <= k; i++) {  
+            sum = sum + p[n-k+i] - p[i];  
+            sqrsum = sqrsum + p[n-k+i]*p[n-k+i] - p[i]*p[i];  
+            avg = sum/(double) (n-k);  
+            double now  = sqrsum + (n-k)*avg*avg - 2*sum*avg;  
+              //     cout<<i<<" "<<sum<<" "<<sqrsum<<" "<<avg<<" "<<min<<endl;  
+            if(now < min) {  
+                    min = now;  
+                    flag = i;  
+            }
+        }  
         printf("%.10f\n",min);  
-
-}  
-
-}`
+    }  
+}
+```
 
 鞍山赛区失利，不过没有关系，西安争取拿牌～
 

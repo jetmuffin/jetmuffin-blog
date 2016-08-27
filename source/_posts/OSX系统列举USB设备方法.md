@@ -1,6 +1,6 @@
 title: OSX系统列举USB设备方法
 date: 2016-03-13 21:38:34
-tags:
+tags: 系统运维
 ---
 Linux 用户在列举USB设备时，可以使用`lsusb`命令来查看所有已经连接的usb设备，或者进入`/dev/bus/usb/001`之类进行查看。
 

@@ -1,7 +1,7 @@
 title: 使用Mesos和Marathon搭建Docker集群
 date: 2015-11-09 17:27:14
 tags: [mesos,marathon,docker]
-categories: 云计算
+categories: 基础架构
 ---
 
 利用Mesos，Marathon对Docker集群进行管理，保证高容错性，高拓展性。

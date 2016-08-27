@@ -1,6 +1,6 @@
 title: 使用slurm进行集群的资源管理（vagrant）
 tags: [资源管理,集群]
-categories: 分布式
+categories: 基础架构
 date: 2016-05-30 09:42:48
 ---
 ## 简介

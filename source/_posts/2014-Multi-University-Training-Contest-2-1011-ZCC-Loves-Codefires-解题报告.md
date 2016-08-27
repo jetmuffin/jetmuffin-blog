@@ -1,6 +1,6 @@
 title: 2014 Multi-University Training Contest 2 1011 ZCC Loves Codefires 解题报告
 tags: [dp,多校联训]
-categories: 算法
+categories: 算法题解
 date: 2014-07-24 11:06:19
 ---
 
@@ -17,13 +17,15 @@ date: 2014-07-24 11:06:19
 <!--more-->
 
 定义结构体
-`point{  
+```
+point{  
 
     int E;  
 
     int K;  
 
-}`
+}
+```
 
 先用快速排序将按分值将point从大到小排序，然后依次从大到小进行冒泡，每次冒泡能保证前几次会使函数值减小，当再冒泡函数值增加时就停止该数的冒泡，换第二大的数进行冒泡。但是该算法每进行一次冒泡需要计算一次函数值，且n过大，最后导致TLE。
 
@@ -58,70 +60,43 @@ Ki	3	4	2	1
 根据s对 point进行快速排序，排序得到的就是最优解，求和就是要出的结果了。
 
 代码
-`#include<algorithm>
-
+```cpp
+#include<algorithm>
 using namespace std;
-
 struct point{
-
 	int E;
-
 	int K;
-
 	double s;
-
 };
 
 struct point p[100001]; 
-
-int cmp(point p1,point p2)
-
-{
-
+int cmp(point p1,point p2) {
 	return p1.s<p2.s;
-
 }
 
-int main()
-
-{
-
+int main() {
 	freopen("in.txt","r",stdin);
-
 	int i,j,N;
-
 	int min;
 
 	__int64 sum=0;
-
 	__int64 totE=0;
 
 	cin>>N;
-
 	for(i=1;i<=N;i++)
-
 		cin>>p[i].E;
-
 	for(i=1;i<=N;i++)
-
 		cin>>p[i].K;
 
 	for(i=1;i<=N;i++)
-
 		p[i].s = p[i].E/(double)p[i].K;
-
 	sort(p+1,p+N+1,cmp);
 
-	for(i=1;i<=N;i++)
-
-		{
-
-			totE+=p[i].E;
-
-			sum+= totE*p[i].K;
-
-		}
+	for(i=1;i<=N;i++) {
+		totE+=p[i].E;
+		sum+= totE*p[i].K;
+	}
 
 	cout<<sum<<endl;
-
-}`
+}
+```

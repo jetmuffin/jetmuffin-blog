@@ -1,6 +1,6 @@
 title: 2014 ACM-ICPC 亚洲地区赛 西安站小结
-tags: [ACM现场赛]
-categories: 心路历程
+tags: [ACM]
+categories: 竞赛历程
 date: 2014-10-28 20:46:48
 ---
 
@@ -22,19 +22,15 @@ date: 2014-10-28 20:46:48
 
 <span style="white-space:pre"></span>
 
-`while(x%y!=0)
-
-{
-
+```
+while(x%y!=0) {
     ans += x / y;
-
     int z =  x % y;
-
     x = y;
-
     y = z;
-
-}`<span style="white-space:pre"></span>最后这种类别的会转化为A%B==0的，ans再加上A/B+1就OK了。要提的一点是题干上貌&#20284;没说A>B，所以要先交换下。
+}
+```
+<span style="white-space:pre"></span>最后这种类别的会转化为A%B==0的，ans再加上A/B+1就OK了。要提的一点是题干上貌&#20284;没说A>B，所以要先交换下。
 
 <span style="white-space:pre"><span style="white-space:pre"></span>写完提交，发现WA，当时就慌了，忽然发现当A=0或B=0时会出现/0的RE，修改后提交依然WA。这才发现前两次提交交到A题上了ORZ，不过A题已经AC，不算次数，再次提交K的时候1Y，真是运气好。。查看一下排名60左右，很有希望。</span>
 

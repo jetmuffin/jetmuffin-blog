@@ -1,6 +1,6 @@
 title: 弹出框popover点击框外区域关闭弹出框效果
 tags: [jquery,popover]
-categories: 前端开发
+categories: 设计开发
 date: 2015-03-04 22:11:51
 ---
 

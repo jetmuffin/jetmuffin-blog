@@ -1,6 +1,6 @@
 title: stl set和map应用记录
 tags: [stl,map]
-categories: 算法
+categories: 算法分析
 date: 2014-10-22 03:52:45
 ---
 

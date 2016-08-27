@@ -1,6 +1,7 @@
 title: '[Share] Cluster Management and Containerization by Benjamin Hindman'
 date: 2015-11-28 20:17:34
 tags: [mesos,docker]
+categories: 精华分享
 ---
 
 Ben's Presentation on **dockercon14**

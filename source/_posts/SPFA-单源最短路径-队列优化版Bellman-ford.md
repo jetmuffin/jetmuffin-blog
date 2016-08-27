@@ -1,6 +1,6 @@
 title: SPFA 单源最短路径 队列优化版Bellman-ford
 tags: [图论,spfa,最短路径]
-categories: 算法
+categories: 算法分析
 date: 2015-09-04 17:34:00
 ---
 
