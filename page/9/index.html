@@ -163,11 +163,11 @@ var _hmt = _hmt || [];
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                91
+                88
                 <span>posts</span>
             </div>
             <div class="article-info-block">
-                120
+                123
                 <span>tags</span>
             </div>
         </div>
@@ -210,418 +210,6 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-hdu-3076-ssworld-VS-DDD-概率dp" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">hdu 3076 ssworld VS DDD 概率dp</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">
-            <time datetime="2014-10-14T10:24:35.000Z" itemprop="datePublished">2014-10-14</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/hdu/">hdu</a>, <a class="tag-link" href="/tags/概率dp/">概率dp</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>题意应该很明显，甩骰子决定谁扣血，输的扣血，赢的不变，平局双方都不变。</p>
-<p>解题时有好几个地方想错了：</p>
-<p>1. 原本以为dp[i][j]表示当前A和B的血量，结果想反了，整个思路貌似有点偏</p>
-<p>2. 以为平局的概率也要加入，事实上也是错误1引起的，修改为dp[i][j]表示A和B赢的次数就好理解了，简化问题，去掉平局，p1 = win/(win+lose) ; p2 = lose/(win+lose)</p>
-<p>3. 最后的答案不是dp数组中的一个，而是A赢了hp2次的概率，就是dp[hp2-1][j(j从0到hp1-1求和)]*win </p>
-<p>解决了这几个问题，结果提交还是WA，后来看了discuss才发现数据错了，两人血量反了，所以把其中的i和j互换。</p></p>
-            <p class="article-more-link">
-                <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/#more">Read More</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="https://www.jetmuffin.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/" data-id="cises9s7o007yk3se170qk6n7" class="article-share-link"><i class="fa fa-share"></i>Share</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-        <a href="https://www.jetmuffin.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/#comments" class="article-comment-link ds-thread-count" data-thread-key="https://www.jetmuffin.com/2014/10/14/hdu-3076-ssworld-VS-DDD-概率dp/">Comments</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-CodeForces-148D-Bags-of-mice-概率dp" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/">CodeForces 148D Bags of mice 概率dp</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/">
-            <time datetime="2014-10-14T09:47:35.000Z" itemprop="datePublished">2014-10-14</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/CodeForces/">CodeForces</a>, <a class="tag-link" href="/tags/概率dp/">概率dp</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>开始看概率dp的内容，碰到算期望的题目，一般就要用概率dp了。这是道入门的概率dp，弄清楚每一步发生的事件和对应的概率，求出递推公式就OK了。</p>
-<p>dp[i][j][0]表示轮到公主取，还剩下i只白鼠，j只黑鼠；</p>
-<p>dp[i][j][1]表示轮到龙取，还剩下i只白鼠，j只黑鼠；</p>
-<p>获胜的期望就是dp[w][b][0]。</p>
-<p>dp[i][j][0] = p1  //公主抽到的是白鼠概率p1，结束</p>
-<p>dp[i][j][0] += dp[i][j-1][1] * p2 //公主抽到的是黑鼠概率p2</p>
-<p>dp[i][j][1] += dp[i-1][j-1][0] * p3 // 龙抽到的是黑鼠，吓跑一只白鼠概率p3</p>
-<p>dp[i][j][1] += dp[i][j-2][0] * p4 //龙抽到黑鼠，吓跑一只黑鼠概率p4</p>
-<p>再依次算概率 就OK了。</p></p>
-            <p class="article-more-link">
-                <a href="/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/#more">Read More</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="https://www.jetmuffin.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/" data-id="cises9sax00cqk3sepibx13g5" class="article-share-link"><i class="fa fa-share"></i>Share</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-        <a href="https://www.jetmuffin.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/#comments" class="article-comment-link ds-thread-count" data-thread-key="https://www.jetmuffin.com/2014/10/14/CodeForces-148D-Bags-of-mice-概率dp/">Comments</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-hdu-2098-分拆素数和-水题" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2014/10/12/hdu-2098-分拆素数和-水题/">hdu 2098 分拆素数和 水题</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2014/10/12/hdu-2098-分拆素数和-水题/">
-            <time datetime="2014-10-12T11:02:27.000Z" itemprop="datePublished">2014-10-12</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/hdu/">hdu</a>, <a class="tag-link" href="/tags/水题/">水题</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>偶尔一水，打个素数表，再正向打ans表。</p></p>
-            <p class="article-more-link">
-                <a href="/2014/10/12/hdu-2098-分拆素数和-水题/#more">Read More</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="https://www.jetmuffin.com/2014/10/12/hdu-2098-分拆素数和-水题/" data-id="cises9s7t0083k3semikqw6c4" class="article-share-link"><i class="fa fa-share"></i>Share</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-        <a href="https://www.jetmuffin.com/2014/10/12/hdu-2098-分拆素数和-水题/#comments" class="article-comment-link ds-thread-count" data-thread-key="https://www.jetmuffin.com/2014/10/12/hdu-2098-分拆素数和-水题/">Comments</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <article id="post-遗传算法求x-2-y-2的最大值，C-实现" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -680,7 +268,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/" data-id="cises9s1p0006k3sepj9vtos9" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/10/08/遗传算法求x-2-y-2的最大值，C-实现/" data-id="cish94vpv00068qseqlbo70xj" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -820,7 +408,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/10/08/算m点问题，深搜解决/" data-id="cises9s3b001qk3sem1ljofkq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/10/08/算m点问题，深搜解决/" data-id="cish94vqx001q8qsexopu9acq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -954,7 +542,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/" data-id="cises9sbf00dhk3sewfw0se96" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/09/22/8个8通过加减乘除得到1000-深搜-剪枝-算法实现/" data-id="cish94vxj00cz8qsetoi5bwv1" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1059,13 +647,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
+        <a class="article-category-link" href="/categories/算法题解/">算法题解</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a>, <a class="tag-link" href="/tags/bfs/">bfs</a>, <a class="tag-link" href="/tags/hdu/">hdu</a>
+        <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a>, <a class="tag-link" href="/tags/bfs/">bfs</a>
     </div>
 
                     </div>
@@ -1090,7 +678,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/" data-id="cises9s59004kk3se0q5br8p4" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/09/14/hdu5012-ACM-ICPC-西安赛区E题-Dice/" data-id="cish94vsn004p8qseejrela4w" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1195,13 +783,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
+        <a class="article-category-link" href="/categories/算法题解/">算法题解</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a>, <a class="tag-link" href="/tags/hdu/">hdu</a>, <a class="tag-link" href="/tags/博弈论/">博弈论</a>
+        <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a>, <a class="tag-link" href="/tags/博弈论/">博弈论</a>
     </div>
 
                     </div>
@@ -1224,7 +812,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/" data-id="cises9s5e004sk3sewt3bb6rx" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/09/14/hdu5011-西安邀请赛E题-Game-博弈论/" data-id="cish94vsq004u8qseieuqszmy" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1329,13 +917,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/算法/">算法</a>
+        <a class="article-category-link" href="/categories/算法题解/">算法题解</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a>, <a class="tag-link" href="/tags/KMP/">KMP</a>, <a class="tag-link" href="/tags/hdu/">hdu</a>
+        <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a>, <a class="tag-link" href="/tags/KMP/">KMP</a>
     </div>
 
                     </div>
@@ -1358,7 +946,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/" data-id="cises9s5h004yk3selvebjkoq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/09/14/hdu5007-ACM-ICPC-西安赛区网赛A题-水题/" data-id="cish94vst004z8qsegjm58p8j" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1495,7 +1083,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/" data-id="cises9sbs00e5k3serh61i1pj" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-解题报告/" data-id="cish94vxv00dn8qsertl6343i" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1573,8 +1161,148 @@ var _hmt = _hmt || [];
 
 
 
+    <article id="post-hdu4828-Grids-百度之星初赛1002解题报告" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">hdu4828 Grids 百度之星初赛1002解题报告</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">
+            <time datetime="2014-07-21T03:09:36.000Z" itemprop="datePublished">2014-07-21</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/算法题解/">算法题解</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/数论/">数论</a>, <a class="tag-link" href="/tags/百度之星/">百度之星</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>搞ACM起步比较晚，但是对这方面兴趣很大，第一次参加百度之星，资格赛水过一道题进入初赛，结果初赛被一道题难倒了。</p>
+<p>初赛分两场，每场筛选500人（赛程规定），而之后的结果上看，只有约250人A出题，而大多数人都是通过这道题拿到复赛入场券。这道题我一直觉得非常接近结果了，但是在最重要的环节，也就是取模上出了很大的问题，导致没有A出该题，下面是该题的分析。</p>
+<p>题干上，大多数人可以看出看出规律，即求卡特兰数，HDOJ上有相类似的题目，但是这道题的数据量非常大，有100万之多，因而题目上要求对1000000007取模。</p>
+<p>卡特兰数有很多递推公式，我选择的是h(n)=h(n-1)<em>(4</em>n-2)/(n+1);这条。</p>
+<p>由于数据量比较大，因而我选择用打表的方式，但是这里出现了一个问题，卡特兰数的数据在不断的增大，因而一定要在取模的基础上进行递推，然而简单地进行取模会造成递推公式出错，即不能在原结果上直接取模。</p>
+<p>比赛时就卡在这点上了，怎么想都想不出改进的方法。</p>
+<p>直到后来做到HDOJ的拓展欧几里德的题目（HDOJ 1576），才直到这道题的解法。</p>
+<p>除法的取模需要用extgcd的算法进行取逆，这是该题的关键。</p></p>
+            <p class="article-more-link">
+                <a href="/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/#more">Read More</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="https://www.jetmuffin.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/" data-id="cish94vsv00548qseerd24mm9" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="https://www.jetmuffin.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/#comments" class="article-comment-link ds-thread-count" data-thread-key="https://www.jetmuffin.com/2014/07/21/hdu4828-Grids-百度之星初赛1002解题报告/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
+        <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
     </nav>
 </section>
             
@@ -1599,7 +1327,7 @@ var _hmt = _hmt || [];
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/分布式/">分布式</a></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/基础架构/">基础架构</a></p>
                             <p class="item-title"><a href="/2016/06/07/InfiniBand技术介绍及其相关操作总结/" class="title">InfiniBand技术介绍</a></p>
                             <p class="item-date"><time datetime="2016-06-07T01:51:44.000Z" itemprop="datePublished">2016-06-07</time></p>
                         </div>
@@ -1690,7 +1418,7 @@ var _hmt = _hmt || [];
     <div class="widget-wrap">
         <h3 class="widget-title">categories</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/云计算/">云计算</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式计算/">分布式计算</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端开发/">前端开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础架构/">基础架构</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/竞赛历程/">竞赛历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">36</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法分析/">算法分析</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法题解/">算法题解</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/精华分享/">精华分享</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计开发/">设计开发</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随意/">随意</a><span class="category-list-count">2</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/分布式计算/">分布式计算</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础架构/">基础架构</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/竞赛历程/">竞赛历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法分析/">算法分析</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法题解/">算法题解</a><span class="category-list-count">48</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/精华分享/">精华分享</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计开发/">设计开发</a><span class="category-list-count">8</span></li></ul>
         </div>
     </div>
 
@@ -1699,7 +1427,7 @@ var _hmt = _hmt || [];
     <div class="widget-wrap">
         <h3 class="widget-title">archives</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -1708,7 +1436,7 @@ var _hmt = _hmt || [];
     <div class="widget-wrap">
         <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
-            <a href="/tags/ACM/" style="font-size: 10px;">ACM</a> <a href="/tags/ACM现场赛/" style="font-size: 10px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.5px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 15px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 13.75px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/InfiniBand/" style="font-size: 10px;">InfiniBand</a> <a href="/tags/Jena/" style="font-size: 10px;">Jena</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 11.25px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PaaS/" style="font-size: 10px;">PaaS</a> <a href="/tags/ambari/" style="font-size: 10px;">ambari</a> <a href="/tags/ambari-hadoop/" style="font-size: 10px;">ambari,hadoop</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.5px;">bfs</a> <a href="/tags/bugfix/" style="font-size: 10px;">bugfix</a> <a href="/tags/chronos/" style="font-size: 10px;">chronos</a> <a href="/tags/dfs/" style="font-size: 17.5px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/dp/" style="font-size: 12.5px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 20px;">hdu</a> <a href="/tags/hpc/" style="font-size: 10px;">hpc</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.25px;">marathon</a> <a href="/tags/mesos/" style="font-size: 18.75px;">mesos</a> <a href="/tags/poj/" style="font-size: 10px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 10px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/剪枝/" style="font-size: 10px;">剪枝</a> <a href="/tags/加法链/" style="font-size: 10px;">加法链</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.25px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 16.25px;">多校联训</a> <a href="/tags/容斥原理/" style="font-size: 10px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.5px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 12.5px;">循环节</a> <a href="/tags/批处理/" style="font-size: 10px;">批处理</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 13.75px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 18.75px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.25px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/暴力/" style="font-size: 11.25px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.25px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.25px;">最短路径</a> <a href="/tags/期望/" style="font-size: 11.25px;">期望</a> <a href="/tags/本体/" style="font-size: 10px;">本体</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.25px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.25px;">模拟</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/水题/" style="font-size: 13.75px;">水题</a> <a href="/tags/测试/" style="font-size: 11.25px;">测试</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/矩阵快速幂/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/系统运维/" style="font-size: 10px;">系统运维</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/脚本/" style="font-size: 10px;">脚本</a> <a href="/tags/蓝桥杯/" style="font-size: 12.5px;">蓝桥杯</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/质数/" style="font-size: 10px;">质数</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源管理/" style="font-size: 10px;">资源管理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/遗传算法/" style="font-size: 10px;">遗传算法</a> <a href="/tags/邀请赛/" style="font-size: 11.25px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.25px;">队列</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+            <a href="/tags/ACM/" style="font-size: 10px;">ACM</a> <a href="/tags/ACM现场赛/" style="font-size: 10px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.5px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 10px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 12.5px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/InfiniBand/" style="font-size: 10px;">InfiniBand</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 11.25px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/PaaS/" style="font-size: 10px;">PaaS</a> <a href="/tags/ambari/" style="font-size: 10px;">ambari</a> <a href="/tags/ambari-hadoop/" style="font-size: 10px;">ambari,hadoop</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.5px;">bfs</a> <a href="/tags/bugfix/" style="font-size: 10px;">bugfix</a> <a href="/tags/chronos/" style="font-size: 10px;">chronos</a> <a href="/tags/dfs/" style="font-size: 17.5px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/dp/" style="font-size: 12.5px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 11.25px;">hdu</a> <a href="/tags/hpc/" style="font-size: 10px;">hpc</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/macos/" style="font-size: 10px;">macos</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.25px;">marathon</a> <a href="/tags/mesos/" style="font-size: 18.75px;">mesos</a> <a href="/tags/poj/" style="font-size: 10px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 10px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/剪枝/" style="font-size: 10px;">剪枝</a> <a href="/tags/加法链/" style="font-size: 10px;">加法链</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/单色三角/" style="font-size: 10px;">单色三角</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.25px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 16.25px;">多校联训</a> <a href="/tags/威尔逊定理/" style="font-size: 10px;">威尔逊定理</a> <a href="/tags/容斥原理/" style="font-size: 11.25px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.5px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 12.5px;">循环节</a> <a href="/tags/批处理/" style="font-size: 10px;">批处理</a> <a href="/tags/拓展欧几里得/" style="font-size: 10px;">拓展欧几里得</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 13.75px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数学/" style="font-size: 10px;">数学</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 20px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.25px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/斐波那契/" style="font-size: 10px;">斐波那契</a> <a href="/tags/暴力/" style="font-size: 11.25px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.25px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.25px;">最短路径</a> <a href="/tags/期望/" style="font-size: 11.25px;">期望</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.25px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.25px;">模拟</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/水题/" style="font-size: 13.75px;">水题</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/矩阵快速幂/" style="font-size: 12.5px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/系统运维/" style="font-size: 10px;">系统运维</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/脚本/" style="font-size: 10px;">脚本</a> <a href="/tags/蓝桥杯/" style="font-size: 12.5px;">蓝桥杯</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/质数/" style="font-size: 10px;">质数</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源管理/" style="font-size: 10px;">资源管理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/遗传算法/" style="font-size: 10px;">遗传算法</a> <a href="/tags/邀请赛/" style="font-size: 11.25px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.25px;">队列</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
         </div>
     </div>
 
