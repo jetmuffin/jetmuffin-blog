@@ -1,6 +1,6 @@
 title: hdu 3076 ssworld VS DDD 概率dp
-tags: [hdu,概率dp]
-categories: 算法
+tags: [概率dp]
+categories: 算法题解
 date: 2014-10-14 18:24:35
 ---
 
@@ -8,11 +8,11 @@ date: 2014-10-14 18:24:35
 
 解题时有好几个地方想错了：
 
-1\. 原本以为dp[i][j]表示当前A和B的血量，结果想反了，整个思路貌似有点偏
+1. 原本以为dp[i][j]表示当前A和B的血量，结果想反了，整个思路貌似有点偏
 
-2\. 以为平局的概率也要加入，事实上也是错误1引起的，修改为dp[i][j]表示A和B赢的次数就好理解了，简化问题，去掉平局，p1 = win/(win+lose) ; p2 = lose/(win+lose)
+2. 以为平局的概率也要加入，事实上也是错误1引起的，修改为dp[i][j]表示A和B赢的次数就好理解了，简化问题，去掉平局，p1 = win/(win+lose) ; p2 = lose/(win+lose)
 
-3\. 最后的答案不是dp数组中的一个，而是A赢了hp2次的概率，就是dp[hp2-1][j(j从0到hp1-1求和)]*win 
+3. 最后的答案不是dp数组中的一个，而是A赢了hp2次的概率，就是dp[hp2-1][j(j从0到hp1-1求和)]*win 
 
 解决了这几个问题，结果提交还是WA，后来看了discuss才发现数据错了，两人血量反了，所以把其中的i和j互换。
 
@@ -20,7 +20,8 @@ date: 2014-10-14 18:24:35
 
 代码：
 
-`#include <iostream>  
+```cpp
+#include <iostream>  
 
 #include <cstdio>  
 
@@ -148,4 +149,5 @@ int main()
 
     }  
 
-}`
+}
+```

@@ -1,7 +1,7 @@
 title: Mesos Monitoring机制总结
 date: 2015-12-23 22:24:56
 tags: [mesos,监控]
-categories: 云计算
+categories: 基础架构
 ---
 Mesos的master和slave提供了一组统计数据和指标，使用户能够方便地监控资源使用情况并且尽早发现异常状态。Mesos的监控包括可用资源，已经使用的资源，已经注册的框架，活跃的slave和任务的状态等。开发者可以利用这些监控信息实现自动化的报警，也可以在监控界面里绘制动态的监控图表。
 

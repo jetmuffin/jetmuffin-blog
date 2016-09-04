@@ -1,6 +1,7 @@
 title: FZUOJ 1759 Super A^B mod C 指数循环节
 date: 2015-12-08 20:38:44
 tags: [数论,欧拉函数,循环节]
+categories: 算法题解
 ---
 
 ## 题目

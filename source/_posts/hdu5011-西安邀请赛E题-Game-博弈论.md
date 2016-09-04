@@ -1,6 +1,6 @@
 title: hdu5011 西安邀请赛E题 Game 博弈论
-tags: [hdu,ACM网络赛,博弈论]
-categories: 算法
+tags: [ACM网络赛,博弈论]
+categories: 算法题解
 date: 2014-09-14 11:01:11
 ---
 
@@ -11,7 +11,8 @@ date: 2014-09-14 11:01:11
 <!--more-->
 
 代码：
-`#include<iostream>
+```cpp
+#include<iostream>
 
 using namespace std;
 
@@ -47,4 +48,5 @@ int main()
 
 	}
 
-}`
+}
+```

@@ -1,6 +1,6 @@
 title: Floyd-Warshall算法 多源最短路径
 tags: [图论,floyd]
-categories: 算法
+categories: 算法分析
 date: 2015-09-05 11:36:00
 ---
 

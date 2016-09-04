@@ -1,6 +1,7 @@
 title: "BestCoder #29 1002 hdu 5171 GTY's birthday gift 题解"
-tags: []
+tags: [矩阵快速幂,斐波那契]
 date: 2015-02-07 21:56:20
+categories: 算法题解
 ---
 
 假期放松了太多，状态太差，水题都WA了好几发。。
@@ -21,7 +22,8 @@ HACK时看到好多人直接for循环跑。。交了两发，都Invalid Input的
 
 代码：
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstring>
 
@@ -179,4 +181,5 @@ int main()
 
 	}
 
-}`
+}
+```

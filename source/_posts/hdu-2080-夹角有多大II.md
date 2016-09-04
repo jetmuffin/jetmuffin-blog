@@ -1,6 +1,6 @@
 title: hdu 2080 夹角有多大II
 tags: [hdu,几何]
-categories: 算法
+categories: 算法题解
 date: 2014-10-15 04:38:35
 ---
 
@@ -18,7 +18,8 @@ date: 2014-10-15 04:38:35
 
 <span style="white-space:pre"></span>代码：
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -90,4 +91,5 @@ int main()
 
 	}
 
-}`
+}
+```

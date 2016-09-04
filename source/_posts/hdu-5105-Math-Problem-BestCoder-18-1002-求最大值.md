@@ -1,5 +1,6 @@
 title: 'hdu 5105 Math Problem BestCoder#18 1002 求最大值'
-tags: []
+tags: [数学]
+categories: 算法题解
 date: 2014-11-19 22:07:59
 ---
 
@@ -11,7 +12,8 @@ date: 2014-11-19 22:07:59
 
 <!--more-->
 
-<span style="white-space:pre"></span>`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -161,4 +163,5 @@ int main()
 
 	}
 
-}`
+}
+```

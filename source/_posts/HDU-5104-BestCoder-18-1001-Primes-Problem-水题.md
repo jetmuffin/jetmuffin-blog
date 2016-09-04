@@ -1,6 +1,6 @@
 title: 'HDU 5104 BestCoder #18 1001 Primes Problem 水题'
-tags: [BestCoder,hdu,水题,素数]
-categories: 算法
+tags: [水题,素数]
+categories: 算法题解
 date: 2014-11-19 21:39:37
 ---
 
@@ -12,7 +12,8 @@ date: 2014-11-19 21:39:37
 
 <span style="white-space:pre"></span>代码：
 
-<span style="white-space:pre"></span>`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -146,4 +147,5 @@ int main()
 
     }
 
-}`
+}
+```

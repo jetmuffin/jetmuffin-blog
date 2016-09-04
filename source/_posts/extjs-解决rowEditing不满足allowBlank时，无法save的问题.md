@@ -1,6 +1,6 @@
 title: extjs 解决rowEditing不满足allowBlank时，无法save的问题
 tags: [extjs,web前端]
-categories: 前端开发
+categories: 设计开发
 date: 2014-10-22 03:58:26
 ---
 
@@ -10,9 +10,10 @@ date: 2014-10-22 03:58:26
 
 <!--more-->
 
-<span style="white-space:pre"></span>JS如下：
+JS如下：
 
-<span style="white-space:pre"></span>`Ext.override(Ext.grid.RowEditor, {
+```js
+Ext.override(Ext.grid.RowEditor, {
 
     addFieldsForColumn: function(column, initial) {
 
@@ -98,4 +99,7 @@ date: 2014-10-22 03:58:26
 
 });
 
-//重写RowEditor`<span style="white-space:pre"></span>如果大家有遇到该问题的，只要在js文件里添加该段代码即可～
+//重写RowEditor
+```
+
+如果大家有遇到该问题的，只要在js文件里添加该段代码即可～

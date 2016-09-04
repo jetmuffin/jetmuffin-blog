@@ -1,6 +1,6 @@
 title: Bellman-ford算法 图论 单源最短路径 求负权环
 tags: [bellman-ford,图论]
-categories: 算法
+categories: 算法分析
 date: 2015-09-04 11:25:00
 ---
 

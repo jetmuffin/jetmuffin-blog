@@ -1,6 +1,6 @@
 title: hdu 4135 Co-prime 容斥原理
-tags: [容斥原理,hdu]
-categories: 算法
+tags: [容斥原理]
+categories: 算法题解
 date: 2014-11-28 01:27:33
 ---
 
@@ -26,7 +26,9 @@ date: 2014-11-28 01:27:33
 
 <!--more-->
 
-<span style="white-space:pre"></span>代码：`#include <iostream>
+代码：
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -156,4 +158,5 @@ int main()
 
 	return 0;	
 
-}`
+}
+```

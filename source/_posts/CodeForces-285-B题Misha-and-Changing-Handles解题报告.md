@@ -1,13 +1,13 @@
 title: 'CodeForces #285 B题Misha and Changing Handles解题报告'
 tags: [CodeForces]
-categories:  算法
+categories:  算法题解
 date: 2015-01-14 22:48:12
 ---
 
 本题的意思是，给定多个改名的查询，每个查询包括一个新名字和旧名字，一个人可以多次更改，最终得到一个新名字，求这些查询中一共有多少个人，并且输出他最初的名字和最后的名字。(1<=q<=100）
 
 <!--more-->
-
+```
 input
 
 5
@@ -31,14 +31,15 @@ Petya Ivanov
 Misha MikeMirzayanov
 
 Vasya VasyaPetrov123
-
+```
 考虑到q比较小，所以可以瞎搞。。直接对于每个节点设置sid和pid分别连接下一个名字和上一个名字，对于每一个查询，维护它的前驱和后继，最后便利一遍找到没有sid和没有pid的就是最初和最末的名字，最后根据循环找出每个初始名的结束名即可。
 
 比的时候居然没注意到要用2*q存储，结果RE了，这点要注意。
 
 代码：
 
-`#include <iostream>  
+```cpp
+#include <iostream>  
 
 #include <cstdio>  
 
@@ -196,4 +197,5 @@ int main()
 
     }  
 
-}`
+}
+```

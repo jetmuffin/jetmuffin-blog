@@ -1,7 +1,7 @@
 title: Mesos Framework解析
 date: 2015-11-07 10:53:58
 tags: Mesos
-categories: 云计算
+categories: 基础架构
 ---
 # Mesos Framework 解析
 

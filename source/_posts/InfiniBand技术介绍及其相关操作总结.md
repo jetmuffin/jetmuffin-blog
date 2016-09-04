@@ -1,7 +1,7 @@
 title: InfiniBand技术介绍
 date: 2016-06-07 09:51:44
 tags: [hpc,网络,InfiniBand]
-categories: 分布式
+categories: 基础架构
 date: 2016-06-07 09:51:44
 ---
 

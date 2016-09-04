@@ -1,13 +1,14 @@
 title: hdu5007 ACM-ICPC 西安赛区网赛A题 水题
-tags: [hdu,KMP,ACM网络赛]
-categories: 算法
+tags: [KMP,ACM网络赛]
+categories: 算法题解
 date: 2014-09-14 10:59:01
 ---
 
 题意为 只要文章中出现相应词语，就输出语句。第一眼看这题想用字典树，想想不对，后来果断拉了一段KMP代码AC了，后来才发现根本不需要这么复杂KMP，直接每碰到一个‘A’，'i'，‘S’,进行相应判断就好了，不过用KMP直接码一小段代码就可以快速AC也是不错的！
 
 代码：<!--more-->
-`#include<iostream>
+```cpp
+#include<iostream>
 
 #include<string.h>
 
@@ -131,4 +132,5 @@ int main()
 
     }
 
-}`
+}
+```

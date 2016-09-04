@@ -1,6 +1,6 @@
 title: 'hdu 5124 BestCoder #20 1002 lines 解题报告'
-tags: [BestCoder,标记法]
-categories: 算法
+tags: [标记法]
+categories: 算法题解
 date: 2014-11-30 06:11:56
 ---
 
@@ -14,9 +14,9 @@ date: 2014-11-30 06:11:56
 
 <span style="white-space:pre"></span>代码：
 
-<span style="white-space:pre"></span>
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -106,4 +106,5 @@ int main()
 
     return 0;
 
-}`
+}
+```

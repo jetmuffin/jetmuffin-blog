@@ -1,17 +1,17 @@
 title: CodeForces 148D Bags of mice 概率dp
 tags: [CodeForces,概率dp]
-categories: 算法
+categories: 算法题解
 date: 2014-10-14 17:47:35
 ---
 
 开始看概率dp的内容，碰到算期望的题目，一般就要用概率dp了。这是道入门的概率dp，弄清楚每一步发生的事件和对应的概率，求出递推公式就OK了。
-
+```
 dp[i][j][0]表示轮到公主取，还剩下i只白鼠，j只黑鼠；
 
 dp[i][j][1]表示轮到龙取，还剩下i只白鼠，j只黑鼠；
-
+```
 获胜的期望就是dp[w][b][0]。
-
+```
 dp[i][j][0] = p1  //公主抽到的是白鼠概率p1，结束
 
 dp[i][j][0] += dp[i][j-1][1] * p2 //公主抽到的是黑鼠概率p2
@@ -19,14 +19,15 @@ dp[i][j][0] += dp[i][j-1][1] * p2 //公主抽到的是黑鼠概率p2
 dp[i][j][1] += dp[i-1][j-1][0] * p3 // 龙抽到的是黑鼠，吓跑一只白鼠概率p3
 
 dp[i][j][1] += dp[i][j-2][0] * p4 //龙抽到黑鼠，吓跑一只黑鼠概率p4
-
+```
 再依次算概率 就OK了。
 
 <!--more-->
 
 代码：
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -106,4 +107,6 @@ int main()
 
 	  printf("%.9lf\n",dp[w][b][0]);
 
-}`
+}
+
+```

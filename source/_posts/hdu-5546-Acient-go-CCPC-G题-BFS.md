@@ -1,7 +1,7 @@
 title: hdu-5546-Acient-go-CCPC-G题-BFS
 date: 2015-11-12 15:12:31
 tags: [bfs,搜索]
-categories: 算法
+categories: 算法题解
 
 ---
 # hdu 5546 Acient go CCPC G题 BFS

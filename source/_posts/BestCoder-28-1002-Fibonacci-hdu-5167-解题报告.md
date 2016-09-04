@@ -1,6 +1,6 @@
 title: 'BestCoder #28 1002 Fibonacci hdu 5167 解题报告'
 tags: [BestCoder,hdu,dfs,fibonacci]
-categories: 算法
+categories: 算法题解
 date: 2015-02-03 15:20:35
 ---
 
@@ -16,146 +16,80 @@ date: 2015-02-03 15:20:35
 
 dfs的主体内容就是：
 
+```
 for i:= t to cnt 
 
 val *= f[i];
 
 dfs(i,val);
+```
 
 其中t为当前搜索的index，val为当前乘积值，再加上一些限制条件就可以了。
 
-`#include <iostream>
-
+```cpp
+#include <iostream>
 #include <cstring>
-
 #include <algorithm>
-
 #include <vector>
-
 using namespace std;
-
 #define INF 1000000000
-
 #define LL long long
-
 LL f[100];
-
 int vis[100];
 
 int cnt;
-
 int flag;
-
 LL now = 1;
-
 LL n;
-
 vector<LL> v;
-
 vector<LL>::iterator it;
-
-void dfs(int t,LL val)
-
-{
-
+void dfs(int t,LL val) {
 	//cout<<t<<" "<<val<<endl; 
-
 	v.push_back(val);
-
 	if(t >= cnt)
-
 		return;
-
-	for(int i = t; i < cnt; i++)
-
-	{
-
+	for(int i = t; i < cnt; i++) {
 		LL tmp = val * f[i];
-
 		if(tmp > INF)
-
 			break;
-
 		dfs(i,tmp);
-
 	}
-
 }
 
-void init()
-
-{
-
+void init() {
 	f[0] = 0;
-
 	f[1] = 1;
-
 	cnt = 2;
-
-	for(int i = 2;f[i] < 100;i++)
-
-	{
-
+	for(int i = 2;f[i] < 100;i++) {
 		f[i] = f[i-1] + f[i-2];
-
 		if(f[i] > INF) break;
-
 		cnt++;
-
 	}	
-
 	//cnt = 5;
-
     v.push_back(0);	
-
 	dfs(3,1);
-
 	sort(v.begin(),v.end());
-
 	v.erase(unique(v.begin(),v.end()),v.end());
-
 }
 
-int main()
-
-{
-
+int main() {
 	 #ifndef ONLINE_JUDGE
-
         freopen("in.txt", "r", stdin);
-
         freopen("out.txt", "w", stdout);
-
     #endif
-
 	init();
-
 	int T;
-
 	cin>>T;
-
-	while(T--)
-
-	{
-
+	while(T--) {
 		cin>>n;
-
 		flag = 0;
-
 		memset(vis,0,sizeof(vis));
-
 		it = lower_bound(v.begin(),v.end(),n);
-
 		if( it!= v.end() && *it== n) flag = 1;
-
 		if(!flag)
-
 			puts("No");
-
 		else
-
 			puts("Yes");
-
 	}
-
-}`
+}
+```

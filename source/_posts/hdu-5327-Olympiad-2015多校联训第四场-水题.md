@@ -1,6 +1,6 @@
 title: hdu 5327 Olympiad 2015多校联训第四场 水题
 tags: [水题,多校联训]
-categories: 算法
+categories: 算法题解
 date: 2015-08-01 10:08:39
 ---
 
@@ -17,7 +17,7 @@ date: 2015-08-01 10:08:39
 求各位不重复，逐位分解打标记即可；然后对于个数，可以直接打表`f[i]`表示`1-i`中符合条件的数的个数，然后对于每次查询，输出`f[b]-f[a-1]`即可
 
 ## 代码
-
+```cpp
     #include <iostream>
     #include <cstring>
     #include <cstdio>
@@ -52,4 +52,4 @@ date: 2015-08-01 10:08:39
         cout<<f[b]-f[a-1]<<endl;
       }
     }
-    
+```

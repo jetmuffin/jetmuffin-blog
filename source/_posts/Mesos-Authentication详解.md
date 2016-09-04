@@ -1,7 +1,7 @@
 title: Mesos Authentication详解
 date: 2015-12-28 17:01:24
 tags: [mesos,authentication]
-categories: 云计算
+categories: 基础架构
 ---
 Authentication模块是Mesos中较为重要的一部分，涉及了整个系统的安全性。Mesos 0.15.0引入了framework authentication，0.19.0引入了slave authentication。Mesos Authentication只允许信任的实体可以和Mesos集群进行交互。
 

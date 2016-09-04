@@ -1,6 +1,6 @@
 title: hdu 5241 Friends ACM上海大都会邀请赛 F题
-tags: [数论,hdu,邀请赛,结论题]
-categories: 算法
+tags: [数论,邀请赛,结论题]
+categories: 算法题解
 date: 2015-06-06 23:16:31
 ---
 
@@ -30,7 +30,8 @@ i = h
 
 再根据以上条件暴力解的k的大小为32：
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <algorithm>
 
@@ -106,4 +107,5 @@ public class Main {
 
     }
 
-}`
+}
+```

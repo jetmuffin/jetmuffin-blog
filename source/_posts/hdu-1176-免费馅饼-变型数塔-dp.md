@@ -1,6 +1,6 @@
 title: hdu 1176 免费馅饼 变型数塔 dp
-tags: [hdu,dp,数塔]
-categories: 算法
+tags: [dp,数塔]
+categories: 算法题解
 date: 2015-06-27 17:56:00
 ---
 
@@ -14,7 +14,8 @@ date: 2015-06-27 17:56:00
 
 ## 代码
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -106,4 +107,5 @@ int main()
 
 	}
 
-}`
+}
+```

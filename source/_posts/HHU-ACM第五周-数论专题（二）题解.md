@@ -1,6 +1,6 @@
 title: HHU ACM第五周 数论专题（二）题解
-tags: []
-categories: '算法'
+tags: [数论,威尔逊定理,拓展欧几里得,矩阵快速幂]
+categories: 算法题解
 date: 2015-09-08 13:17:00
 ---
 
@@ -15,11 +15,7 @@ Z-ball在第n天会变为前一天的n倍，求最后的大小mod n，即求(n-1
 
 根据威尔逊定理(自行百度），
 
-``` latex
-    f(x)=
-    \begin{cases}
-    n-1, &x\in prime\cr 0, &x\not \in prime \end{cases}
-```
+$f(x)=\begin{cases}n-1, &x\in prime\cr 0, &x\not \in prime \end{cases}$
 
 此外有一个trick，即f(4)=2.
 没看过威尔逊定理也没事，暴力求前几项打个表就能发现规律了

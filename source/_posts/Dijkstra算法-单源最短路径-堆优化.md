@@ -1,6 +1,6 @@
 title: Dijkstra算法 单源最短路径 堆优化
 tags: [图论,最短路径,dijkstra]
-categories: 算法
+categories: 算法分析
 date: 2015-09-05 10:46:00
 ---
 

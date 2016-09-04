@@ -1,6 +1,6 @@
 title: hdu 5245 Joyful ACM上海大都会邀请赛 J题 概率
-tags: [hdu,邀请赛,概率,期望]
-categories: 算法
+tags: [邀请赛,概率,期望]
+categories: 算法题解
 date: 2015-06-06 23:47:43
 ---
 
@@ -34,7 +34,8 @@ date: 2015-06-06 23:47:43
 
 **代码：**
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -114,4 +115,5 @@ int main()
 
     }
 
-}`
+}
+```

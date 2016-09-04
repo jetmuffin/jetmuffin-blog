@@ -1,6 +1,6 @@
 title: hdu 5328 Problem Killer 2015多校联训第四场 等差数列等比数列
 tags: [多校联训,等差数列,等比数列]
-categories: 算法
+categories: 算法题解
 date: 2015-08-01 10:16:04
 ---
 
@@ -23,7 +23,7 @@ date: 2015-08-01 10:16:04
 *   坑五：精度过高同样会TLE
 
 ## 代码
-
+```cpp
     #include <iostream>
     #include <cstdio>
     #include <cmath>
@@ -99,4 +99,4 @@ date: 2015-08-01 10:16:04
                 printf("%d\n", max_ngp);
         }
     }
-    
+```

@@ -1,7 +1,7 @@
 title: Mesos 调度机制及调度算法初探
 date: 2015-11-23 20:59:17
 tags: [mesos,资源调度,分布式系统]
-categories: 云计算
+categories: 基础架构
 ---
 再次分析Mesos的工作原理，将Mesos中出现的各个名词串联到一起。
 

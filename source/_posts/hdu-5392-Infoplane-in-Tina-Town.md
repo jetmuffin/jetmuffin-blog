@@ -1,6 +1,6 @@
 title: hdu 5392 Infoplane in Tina Town
 tags: [数论,最小公倍数,群论,循环节]
-categories: 算法
+categories: 算法题解
 date: 2015-09-04 11:01:28
 ---
 

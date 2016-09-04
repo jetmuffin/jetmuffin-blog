@@ -1,6 +1,6 @@
 title: 'Codeforces #279 A Team Olympiad 瞎搞'
 tags: [CodeForces,水题]
-categories:  算法
+categories: 算法题解
 date: 2014-11-25 00:30:27
 ---
 
@@ -12,9 +12,10 @@ date: 2014-11-25 00:30:27
 
 <!--more-->
 
-<span style="white-space:pre"></span>代码：
+代码：
 
-<span style="white-space:pre"></span>`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <algorithm>
 
@@ -92,4 +93,5 @@ int main()
 
     }
 
-}`
+}
+```

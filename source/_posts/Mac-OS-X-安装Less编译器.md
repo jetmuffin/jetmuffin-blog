@@ -1,7 +1,7 @@
 title: Mac OS X 安装Less编译器
 date: 2015-11-18 19:46:37
-tags: [less]
-categories: 前端开发
+tags: [less,macos]
+categories: 设计开发
 ---
 Less是动态的CSS预处理语言，包含了很多动态语言的特性，之前在ubuntu下装过lessc来编译Less,换了Mac后发现找不到方法安装了，事实上用nodejs来安装，这里记录一下。
 

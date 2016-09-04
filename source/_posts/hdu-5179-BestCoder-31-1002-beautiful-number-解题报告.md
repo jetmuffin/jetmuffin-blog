@@ -1,6 +1,6 @@
 title: 'hdu 5179 BestCoder #31 1002 beautiful number 解题报告'
-tags: [BestCoder,hdu,二分答案,离线查询]
-categories: 算法
+tags: [二分答案,离线查询]
+categories: 算法题解
 date: 2015-03-07 10:05:51
 ---
 
@@ -14,7 +14,8 @@ date: 2015-03-07 10:05:51
 
 离线代码：
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <algorithm>
 
@@ -150,4 +151,5 @@ int main()
 
   }
 
-}`
+}
+```

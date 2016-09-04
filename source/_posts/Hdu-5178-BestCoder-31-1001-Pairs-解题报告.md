@@ -1,6 +1,6 @@
 title: 'Hdu 5178 BestCoder #31 1001 Pairs 解题报告'
-tags: [BestCoder,hdu,二分]
-categories: 算法
+tags: [二分]
+categories: 算法题解
 date: 2015-03-06 12:36:36
 ---
 
@@ -14,7 +14,8 @@ date: 2015-03-06 12:36:36
 
 代码：
 
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <algorithm>
 
@@ -74,4 +75,5 @@ int main()
 
   }
 
-}`
+}
+```

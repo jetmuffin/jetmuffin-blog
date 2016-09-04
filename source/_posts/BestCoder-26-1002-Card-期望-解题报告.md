@@ -1,6 +1,7 @@
 title: 'BestCoder #26 1002 Card  期望 解题报告'
-tags: []
+tags: [期望]
 date: 2015-01-27 20:12:10
+categories: 算法题解
 ---
 
 题目的意思是，从x张牌里抽1张牌，然后放回重复b次，Sj为每次抽出牌的积分之和，问Sj的期望。
@@ -19,44 +20,24 @@ date: 2015-01-27 20:12:10
 
 代码：
 
-`#include <iostream>  
-
+```cpp
+#include <iostream>  
 #include <cstdio> 
-
 using namespace std;  
-
 int cnt = 0;  
-
-int main()  
-
-{  
-
+int main() {  
     int T;  
-
     cin>>T;  
-
-    while(T--)  
-
-    {  
-
+    while(T--) {  
         cnt++;  
-
         double x;  
-
         int b;  
-
         scanf("%lf%d",&x,&b);  
-
         double p = 1.0;  
-
         for(int i = 0; i < b; i++)  
-
             p *= (1 - 1/x);  
-
         double ans = (1 - p) * (x + 1) * x / 2;  
-
         printf("Case #%d: %.3f\n",cnt,ans);  
-
     }  
-
-}`
+}
+```

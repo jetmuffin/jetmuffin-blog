@@ -1,6 +1,6 @@
 title: Hadoop java api ，HDFS文件操作，便于Web开发的集合
 tags: [Hadoop,HDFS,云计算]
-categories: 云计算
+categories: 分布式计算
 date: 2014-11-06 04:58:45
 ---
 
@@ -12,7 +12,8 @@ date: 2014-11-06 04:58:45
 
 <span style="white-space:pre"></span>代码如下：
 
-<span style="white-space:pre"></span>`import java.io.BufferedInputStream;
+```java
+import java.io.BufferedInputStream;
 
 import java.io.File;
 
@@ -364,6 +365,5 @@ public class HadoopFileUtil {
 
 	       }
 
-	}`
-
-<span style="white-space:pre"></span>
+	}
+```

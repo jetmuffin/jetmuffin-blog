@@ -2,7 +2,7 @@ layout: blog
 title: DCOS上的cron 分布式作业调度器 Chronos
 date: 2015-12-28 21:34:27
 tags: [mesos,chronos,批处理,脚本]
-categories: 云计算
+categories: 基础架构
 ---
 Chronos是Aribnb公司开发的替代`cron`的Mesos框架。它是一个运行在`Apache Mesos`上的分布式的，高容错的任务编排、定时任务的框架。
 

@@ -1,7 +1,7 @@
 title: Ambari搭建Hadoop管理平台
 date: 2015-10-19 10:32:15
-tags: [云计算,hadoop]
-categories: 云计算
+tags: [ambari,hadoop]
+categories: 分布式计算
 ---
 
 ## 介绍

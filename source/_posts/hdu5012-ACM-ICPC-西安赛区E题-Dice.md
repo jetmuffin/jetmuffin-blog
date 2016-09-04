@@ -1,6 +1,6 @@
 title: hdu5012 ACM-ICPC 西安赛区E题 Dice
-tags: [hdu,bfs,ACM网络赛]
-categories: 算法
+tags: [bfs,ACM网络赛]
+categories: 算法题解
 date: 2014-09-14 22:04:22
 ---
 
@@ -15,7 +15,8 @@ date: 2014-09-14 22:04:22
 <!--more-->
 
 代码：
-`#include <iostream>
+```cpp
+#include <iostream>
 
 #include <cstdio>
 
@@ -315,4 +316,5 @@ int main()
 
 	}
 
-}`
+}
+```

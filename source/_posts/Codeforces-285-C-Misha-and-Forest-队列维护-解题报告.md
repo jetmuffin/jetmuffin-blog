@@ -1,6 +1,6 @@
 title: 'Codeforces #285 C Misha and Forest 队列维护 解题报告'
-tags: [CodeForces,队列,森林]
-categories: 算法
+tags: [队列,森林]
+categories: 算法题解
 date: 2015-01-14 23:04:10
 ---
 
@@ -18,7 +18,8 @@ date: 2015-01-14 23:04:10
 
 代码：
 
-`#include <iostream>  
+```cpp
+#include <iostream>  
 
 #include <cstdio>  
 
@@ -120,4 +121,5 @@ int main()
 
     }   
 
-}`
+}
+```
