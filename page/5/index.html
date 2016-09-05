@@ -266,7 +266,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/07/26/hdu-5311-Hidden-String-BestCoder-1st-Anniversary-B-暴搜/" data-id="cispbjq7v006cps6culquc6uy" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/07/26/hdu-5311-Hidden-String-BestCoder-1st-Anniversary-B-暴搜/" data-id="cisph8jwk006c716chtc14qtg" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -501,7 +501,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/07/26/hdu-5305-Friends-2015多校联训第二场-搜索/" data-id="cispbjq7x006gps6ckynrvit0" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/07/26/hdu-5305-Friends-2015多校联训第二场-搜索/" data-id="cisph8jwq006g716c6bygb80z" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -635,7 +635,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/07/21/hdu-5088-2015多校联训第一场-1001-因数分解/" data-id="cispbjq8g007cps6cvfawl0px" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/07/21/hdu-5088-2015多校联训第一场-1001-因数分解/" data-id="cisph8jxk007c716c1zil33v6" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -820,7 +820,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/07/12/基础算法训练-排序专题/" data-id="cispbjq6d003lps6c1str1kpk" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/07/12/基础算法训练-排序专题/" data-id="cisph8jtp003l716cvuw4hwlb" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -954,7 +954,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/27/hdu-1176-免费馅饼-变型数塔-dp/" data-id="cispbjq8w0083ps6cngcak0l1" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/27/hdu-1176-免费馅饼-变型数塔-dp/" data-id="cisph8jyd0083716cuk5afhev" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1077,43 +1077,29 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
             
             <h2 id="背景">背景</h2><p>继续上文<a href="http://www.jetmuffin.com/archives/225">文本中文分词</a>的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。</p>
 <h2 id="语料库">语料库</h2><p>本文采用Sougou实验室的语料库，下载地址为：<a href="http://www.sogou.com/labs/dl/c.html" target="_blank" rel="external">搜狗实验室文本分类资料</a>。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:</p>
-<p><strong>文档结构：</strong>C000007 汽车   C000008 财经   C000010  IT   C000013 健康   C000014 体育  C000016 旅游 C000020 教育   C000022 招聘   C000023 文学   C000024 军事</p>
+<p><strong>文档结构：</strong></p>
+<ul>
+<li>C000007 汽车</li>
+<li>C000008 财经</li>
+<li>C000010  IT</li>
+<li>C000013 健康</li>
+<li>C000014 体育</li>
+<li>C000016 旅游</li>
+<li>C000020 教育</li>
+<li>C000022 招聘</li>
+<li>C000023 文学</li>
+<li>C000024 军事</li>
+</ul>
 <p><strong>注意：</strong>搜狗的语料库均为GBK编码，若在Linux环境下会出现乱码影响处理，建议修改文件编码为utf-8</p>
 <h2 id="词袋模型">词袋模型</h2><p>利用中文分词工具，我们对每篇文章进行分词，去停用词后，用一个Map存储每个词的相关信息，保存形式为单词 &lt;词的文本字符串, 词的相关属性&gt;，其中单词(Term)的相关属性有(词性、tf、df、tfidf、chi等)。这样，遍历数据集目录和文件，就能去将全部的文档分词，最终就能构建词袋模型。</p>
 <p>其中词(Term)的类如下：</p>
-<pre><code>    package com<span class="built_in">.</span>jetmuffin<span class="built_in">.</span>TextClassifier<span class="built_in">.</span>common;
-
-    <span class="keyword">public</span> class Term {
-        <span class="keyword">private</span> int id;
-        <span class="keyword">private</span> <span class="built_in">String</span> word;
-        <span class="keyword">private</span> <span class="built_in">String</span> lexicalCategory = <span class="string">"unknown"</span>;
-        <span class="keyword">private</span> int freq = <span class="number">0</span>;
-        <span class="keyword">private</span> double tf;
-        <span class="keyword">private</span> double idf;
-        <span class="keyword">private</span> double tfidf = <span class="number">0</span>;
-        <span class="keyword">private</span> double chi = <span class="number">0</span>;
-
-    <span class="keyword">public</span> <span class="literal">void</span> setId(int id){
-        <span class="attribute">...</span><span class="built_in">.
-    </span>}
-    <span class="attribute">...</span><span class="attribute">...</span>
-<span class="string">`&lt;/pre&gt;
-
-而词袋的存储Map格式如下:
-
-&lt;pre&gt;`</span>    <span class="keyword">private</span> int totalDocCount;
-    <span class="keyword">private</span> final <span class="built_in">List</span> labels = <span class="literal">new</span> ArrayList();
-    <span class="comment">// Map&lt;类别, 文档数量&gt;</span>
-    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt; labelledTotalDocCountMap = <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt;();
-    <span class="comment">// Map&lt;类别, Map&lt;文档 ,Map&lt;词, 词信息&gt;&gt;&gt;</span>
-    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Term&gt;&gt;&gt; termTable =
-        <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Term&gt;&gt;&gt;();
-    <span class="comment">// Map&lt;词 ,Map&lt;类别, Set&lt;文档&gt;&gt;&gt;</span>
-    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&gt;&gt; invertedTable =
-    <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&gt;&gt;();
-</code></pre><h2 id="特征值(TFIDF)计算">特征值(TFIDF)计算</h2><p>tfidf是文本分类中最常使用的特征权值，其中tf(Term Frequency)为词频，idf为(Inverse Document Frequency)，tf反映了该词在该类文本中的热门程度，而idf则反映了该词对于其他文本更好的区别能力。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.TextClassifier.common;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Term</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String word;</span><br><span class="line">    <span class="keyword">private</span> String lexicalCategory = <span class="string">"unknown"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> freq = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> tf;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> idf;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> tfidf = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> chi = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        ....</span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure>
+<p>而词袋的存储Map格式如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> totalDocCount;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> List labels = <span class="keyword">new</span> ArrayList();</span><br><span class="line"><span class="comment">// Map&lt;类别, 文档数量&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Integer&gt; labelledTotalDocCountMap = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</span><br><span class="line"><span class="comment">// Map&lt;类别, Map&lt;文档 ,Map&lt;词, 词信息&gt;&gt;&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Map&lt;String, Map&lt;String, Term&gt;&gt;&gt; termTable = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Map&lt;String, Term&gt;&gt;&gt;();</span><br><span class="line"><span class="comment">// Map&lt;词 ,Map&lt;类别, Set&lt;文档&gt;&gt;&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Map&lt;String, Set&gt;&gt; invertedTable = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Set&gt;&gt;();</span><br></pre></td></tr></table></figure>
+<h2 id="特征值(TFIDF)计算">特征值(TFIDF)计算</h2><p>tfidf是文本分类中最常使用的特征权值，其中tf(Term Frequency)为词频，idf为(Inverse Document Frequency)，tf反映了该词在该类文本中的热门程度，而idf则反映了该词对于其他文本更好的区别能力。</p>
 <p>tfidf的计算方式如下：</p>
-<h2 id="卡方拟合检验"><img src="http://i4.tietuku.com/218e13597b4ea3d8.png" alt="tf"><img src="http://i4.tietuku.com/c20eec142f06b175.png" alt=""><img src="http://i4.tietuku.com/a15b04b7d23c4837.png" alt="">卡方拟合检验</h2><p>经上一步计算出的tfidf值作为文章的特征值，但因为文章所包含的词往往非常多，特征向量的维数巨大，可能会达到上千维之多。因此需要对文章的特征向量进行降维。</p>
+<p><img src="http://i4.tietuku.com/218e13597b4ea3d8.png" alt="tf"><img src="http://i4.tietuku.com/c20eec142f06b175.png" alt=""><img src="http://i4.tietuku.com/a15b04b7d23c4837.png" alt=""></p>
+<h2 id="卡方拟合检验">卡方拟合检验</h2><p>经上一步计算出的tfidf值作为文章的特征值，但因为文章所包含的词往往非常多，特征向量的维数巨大，可能会达到上千维之多。因此需要对文章的特征向量进行降维。</p>
 <p>进行降维，可以达到以下效果：</p>
 <ul>
 <li>避免过拟合（over fitting），提高分类准确度</li>
@@ -1150,7 +1136,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/26/文本挖掘初步-文本特征值提取/" data-id="cispbjq5t002jps6c8s9ipwhq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/26/文本挖掘初步-文本特征值提取/" data-id="cisph8jst002j716cjqt5wh41" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1283,7 +1269,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/06/hdu-5245-Joyful-ACM上海大都会邀请赛-J题-概率/" data-id="cispbjq81006kps6cqu5l6a55" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/06/hdu-5245-Joyful-ACM上海大都会邀请赛-J题-概率/" data-id="cisph8jwx006k716c4yiimfoo" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1416,7 +1402,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/06/hdu-5241-Friends-ACM上海大都会邀请赛-F题/" data-id="cispbjq84006sps6c32xo5s0i" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/06/hdu-5241-Friends-ACM上海大都会邀请赛-F题/" data-id="cisph8jx4006s716cey9g9npo" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1546,136 +1532,40 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 <ul>
 <li>正向最大匹配法（由左到右的方向）</li>
 <li>逆向最大匹配法（由右到左的方向）</li>
-<li>最少切分（使每一句中切出的词数最小）<br><strong>2.基于词频度统计的分词方法</strong></li>
+<li>最少切分（使每一句中切出的词数最小）</li>
 </ul>
+<p>2.<strong>基于词频度统计的分词方法</strong></p>
 <p>这是一种全切分方法。它不依靠词典,而是将文章中任意两个字同时出现的频率进行统计,次数越高的就可能是一个词。它首先切分出与词表匹配的所有可能的词,运用统计语言模型和决策算法决定最优的切分结果。它的优点在于可以发现所有的切分歧义并且容易将新词提取出来。</p>
-<p><strong>3.基于知识理解的分词</strong></p>
+<p>3.<strong>基于知识理解的分词</strong></p>
 <p>该方法主要基于句法、语法分析，并结合语义分析，通过对上下文内容所提供信息的分析对词进行定界，它通常包括三个部分：分词子系统、句法语义子系统、总控部分。在总控部分的协调下，分词子系统可以获得有关词、句子等的句法和语义信息来对分词歧义进行判断。这类方法试图让机器具有人类的理解能力，需要使用大量的语言知识和信息。由于汉语语言知识的笼统、复杂性，难以将各种语言信息组织成机器可直接读取的形式。因此目前基于知识的分词系统还处在试验阶段。</p>
 <h2 id="工具">工具</h2><p>在中文分词领域,有很多已经非常成熟的分词工具可以被使用,以下对各工具的算法和效率(根据网上情报)进行总结.</p>
-<p><strong>1.ICTCLAS(NLPIR)</strong></p>
+<p>1.<strong>ICTCLAS(NLPIR)</strong></p>
 <p><a href="http://ictclas.nlpir.org/" target="_blank" rel="external">http://ictclas.nlpir.org/</a></p>
 <p>ICTCLAS是中国科学院计算技术研究所在多年研究基础上，耗时一年研制出了基于多层隐马模型(HMM)的汉语词法分析系统 ，功能有：中文分词；词性标注；自定义词典等。分词正确率高,分词速度快.源代码数以C++编写的,并提供JAVA接口.</p>
 <p>速度: 单机 (996KB/s)</p>
-<p><strong>2.Stanford Word Segmenter || CRF++</strong></p>
+<p>2.<strong>Stanford Word Segmenter || CRF++</strong></p>
 <p><a href="http://nlp.stanford.edu/software/segmenter.shtml" target="_blank" rel="external">http://nlp.stanford.edu/software/segmenter.shtml</a></p>
 <p>这两个中文分词工具都是基于条件随机场CRF(<span lang="EN-US">C</span><span lang="EN-US">onditional<span class="Apple-converted-space"> </span></span><span lang="EN-US">R</span><span lang="EN-US">andom</span><span lang="EN-US"><span class="Apple-converted-space"> </span>F</span><span lang="EN-US">ield)模型实现的,<span lang="ZH-CN">其基本思路是对汉字进行标注即由字构词</span><span lang="EN-US">(</span><span lang="ZH-CN">组词</span><span lang="EN-US">)</span><span lang="ZH-CN">，不仅考虑了文字词语出现的频率信息，同时考虑上下文语境，具备较好的学习能力，因此其对歧义词和未登录词的识别都具有良好的效果；其不足之处是训练周期较长，运营时计算量较大.</span></span></p>
 <p>速度: (暂未获得)</p>
-<p><strong>3.Mmseg </strong></p>
+<p>3.<strong>Mmseg </strong></p>
 <p><a href="http://technology.chtsai.org/mmseg/" target="_blank" rel="external">http://technology.chtsai.org/mmseg/</a></p>
 <p>Mmseg是典型的基于字典的中文分词工具,其主要实现原理是基于最大匹配算法.它提供Simple和Complex两种最大匹配算法,即简单的和复杂的.简单的最大匹配算法从字符串开头开始,获取最长的匹配串;而复杂的最大匹配算法则针对存在歧义的单词,向前再看两个单词再进行判断.</p>
 <p>Mmseg支持在lucene和solr中使用,在该二者中配置Mmseg,即可对中文文本进行分词索引.这也是Mmseg被使用广泛的一个原因.同时因为其实现原理简单,效果也很不错,且提供Java支持(Mmseg4j),也是很受欢迎的一款分词工具.</p>
 <p>速度: complex 60W字/s (1200 KB/s)  ；simple 100W字/s (1900 KB/s)</p>
-<p><strong>4.IKAnalyzer</strong></p>
+<p>4.<strong>IKAnalyzer</strong></p>
 <p><a href="http://code.google.com/p/ik-analyzer/downloads/list" target="_blank" rel="external">http://code.google.com/p/ik-analyzer/downloads/list</a></p>
 <p>IKAnalyzer是一个开源的，基于java语言开发的轻量级的中文分词工具包。采用了特有的”正向迭代最细粒度切分算法”(我还没取研究这个算法),支持细粒度和智能分词两种切分模式.同样,IKAnalyzer也提供了对Solr和Lucene的支持.</p>
 <p>速度: IK2012 160W字/s (3000KB/s)</p>
 <h2 id="代码">代码</h2><p>根据分词的成功率,速率以及使用接口简单,在之后的所有后续挖掘过程中将采用ICTCLAS2015作为分词器,所以需要对其进行简单的封装.</p>
 <p>JNA实现接口CLibrary:</p>
-<pre><code>    <span class="keyword">package</span> com.jetmuffin.analyzer;
-    <span class="keyword">import</span> com.sun.jna.Library;
-    <span class="keyword">public</span> interface CLibrary extends Library{
-
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_Init(<span class="keyword">String</span> sDataPath, <span class="built_in">int</span> encoding,
-        <span class="keyword">String</span> sLicenceCode);
-
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_ParagraphProcess(<span class="keyword">String</span> sSrc, <span class="built_in">int</span> bPOSTagged);
-
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
-        <span class="built_in">boolean</span> bWeightOut);
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetFileKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
-        <span class="built_in">boolean</span> bWeightOut);
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_AddUserWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_DelUsrWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_ImportUserDict(<span class="keyword">String</span> sWord,<span class="built_in">boolean</span> bOverWrite);
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_WordFreqStat(<span class="keyword">String</span> sWord);
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetLastErrorMsg();
-        <span class="keyword">public</span> <span class="keyword">void</span> NLPIR_Exit();
-    }
-`&lt;/pre&gt;
-
-接口实现类Nlpir:
-
-&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.analyzer;
-    <span class="keyword">import</span> com.sun.jna.Native;
-
-    <span class="keyword">public</span> class NLPIR {
-    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary Instance;
-    <span class="keyword">private</span> <span class="keyword">String</span> systemCharset;
-    <span class="keyword">private</span> <span class="keyword">String</span> systemFolder;
-    <span class="built_in">int</span> charsetType;
-
-    <span class="keyword">public</span> NLPIR(){
-        systemFolder = <span class="string">"/home/jeff/src/ICTCLAS2015"</span>;  <span class="comment">//ICTCLAS的目录,包括字典文件等</span>
-        systemCharset = <span class="string">"UTF-8"</span>;  <span class="comment">//默认字符集</span>
-        charsetType = <span class="number">1</span>;
-
-        Instance = (CLibrary) Native.loadLibrary(
-                <span class="string">"/home/jeff/src/ICTCLAS2015/lib/linux32/libNLPIR.so"</span>, CLibrary.class);  <span class="comment">//ICTCLAS的so文件地址</span>
-        }
-
-    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary getInstance() {
-        <span class="keyword">return</span> Instance;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> setInstance(CLibrary instance) {
-        Instance = instance;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">String</span> getSystemCharset() {
-        <span class="keyword">return</span> systemCharset;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setSystemCharset(<span class="keyword">String</span> systemCharset) {
-        <span class="keyword">this</span>.systemCharset = systemCharset;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">String</span> getSystemFolder() {
-        <span class="keyword">return</span> systemFolder;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setSystemFolder(<span class="keyword">String</span> systemFolder) {
-        <span class="keyword">this</span>.systemFolder = systemFolder;
-    }
-
-    <span class="keyword">public</span> <span class="built_in">int</span> getCharsetType() {
-        <span class="keyword">return</span> charsetType;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setCharsetType(<span class="built_in">int</span> charsetType) {
-        <span class="keyword">this</span>.charsetType = charsetType;
-    }
-    }
-`&lt;/pre&gt;
-
-测试类:
-
-&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.test;
-
-    <span class="keyword">import</span> org.junit.Test;
-    <span class="keyword">import</span> com.jetmuffin.NLPIR;
-    <span class="keyword">public</span> class TestNlpir {
-
-    @Test
-    <span class="keyword">public</span> <span class="keyword">void</span> test(){
-        NLPIR nlpir = <span class="keyword">new</span> NLPIR();
-        nlpir.Instance.NLPIR_Init(nlpir.getSystemFolder(),nlpir.getCharsetType() ,nlpir.getSystemCharset());
-        <span class="keyword">String</span> nativeBytes = <span class="keyword">null</span>;
-
-        <span class="keyword">String</span> sInput = <span class="string">"什么是机器学习"</span>;
-        nlpir.Instance.NLPIR_ImportUserDict(<span class="string">"/home/jeff/workspace/data/dict"</span>, <span class="keyword">false</span>);  <span class="comment">//加载用户自定义词典</span>
-        nativeBytes = nlpir.Instance.NLPIR_ParagraphProcess(sInput, <span class="number">0</span>); <span class="comment">//分词</span>
-        <span class="keyword">String</span>[] words = nativeBytes.<span class="built_in">split</span>(<span class="string">" "</span>);  <span class="comment">//分词结果以空格进行分割</span>
-        System.out.<span class="built_in">println</span>(words.length); <span class="comment">//输出分词词数</span>
-        System.out.<span class="built_in">println</span>(nativeBytes);  <span class="comment">//输出分词结果</span>
-    }
-    }
-`&lt;/pre&gt;
-
-结果:
-
-&lt;pre&gt;`<span class="number">3</span>
-什么 是 机器学习 
-</code></pre><h2 id="结语">结语</h2><p>进行分类器的封装以后,可以继续进行之后的文本挖掘内容.以上均为本人拙见,且本人为NLP菜鸟,望大牛予以指正! :)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.analyzer;</span><br><span class="line"><span class="keyword">import</span> com.sun.jna.Library;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CLibrary</span> <span class="keyword">extends</span> <span class="title">Library</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_Init</span><span class="params">(String sDataPath, <span class="keyword">int</span> encoding, String sLicenceCode)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_ParagraphProcess</span><span class="params">(String sSrc, <span class="keyword">int</span> bPOSTagged)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_GetKeyWords</span><span class="params">(String sLine, <span class="keyword">int</span> nMaxKeyLimit, <span class="keyword">boolean</span> bWeightOut)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_GetFileKeyWords</span><span class="params">(String sLine, <span class="keyword">int</span> nMaxKeyLimit, <span class="keyword">boolean</span> bWeightOut)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_AddUserWord</span><span class="params">(String sWord)</span></span>;<span class="comment">//add by qp 2008.11.10</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_DelUsrWord</span><span class="params">(String sWord)</span></span>;<span class="comment">//add by qp 2008.11.10</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_ImportUserDict</span><span class="params">(String sWord,<span class="keyword">boolean</span> bOverWrite)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_WordFreqStat</span><span class="params">(String sWord)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_GetLastErrorMsg</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">NLPIR_Exit</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>接口实现类<span class="rule"><span class="attribute">Nlpir</span>:<span class="value"></span></span>
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.analyzer;</span><br><span class="line"><span class="keyword">import</span> com.sun.jna.Native;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NLPIR</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary Instance;</span><br><span class="line">    <span class="keyword">private</span> String systemCharset;</span><br><span class="line">    <span class="keyword">private</span> String systemFolder;</span><br><span class="line">    <span class="keyword">int</span> charsetType;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NLPIR</span><span class="params">()</span></span>&#123;</span><br><span class="line">        systemFolder = <span class="string">"/home/jeff/src/ICTCLAS2015"</span>;  <span class="comment">//ICTCLAS的目录,包括字典文件等</span></span><br><span class="line">        systemCharset = <span class="string">"UTF-8"</span>;  <span class="comment">//默认字符集</span></span><br><span class="line">        charsetType = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        Instance = (CLibrary) Native.loadLibrary(</span><br><span class="line">                <span class="string">"/home/jeff/src/ICTCLAS2015/lib/linux32/libNLPIR.so"</span>, CLibrary.class);  <span class="comment">//ICTCLAS的so文件地址</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CLibrary <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> Instance;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setInstance</span><span class="params">(CLibrary instance)</span> </span>&#123;</span><br><span class="line">            Instance = instance;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getSystemCharset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> systemCharset;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSystemCharset</span><span class="params">(String systemCharset)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.systemCharset = systemCharset;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getSystemFolder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> systemFolder;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSystemFolder</span><span class="params">(String systemFolder)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.systemFolder = systemFolder;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCharsetType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> charsetType;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCharsetType</span><span class="params">(<span class="keyword">int</span> charsetType)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.charsetType = charsetType;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> com.jetmuffin.NLPIR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestNlpir</span> </span>&#123;</span><br><span class="line">        <span class="annotation">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        NLPIR nlpir = <span class="keyword">new</span> NLPIR();</span><br><span class="line">        nlpir.Instance.NLPIR_Init(nlpir.getSystemFolder(),nlpir.getCharsetType() ,nlpir.getSystemCharset());</span><br><span class="line">        String nativeBytes = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        String sInput = <span class="string">"什么是机器学习"</span>;</span><br><span class="line">        nlpir.Instance.NLPIR_ImportUserDict(<span class="string">"/home/jeff/workspace/data/dict"</span>, <span class="keyword">false</span>);  <span class="comment">//加载用户自定义词典</span></span><br><span class="line">        nativeBytes = nlpir.Instance.NLPIR_ParagraphProcess(sInput, <span class="number">0</span>); <span class="comment">//分词</span></span><br><span class="line">        String[] words = nativeBytes.split(<span class="string">" "</span>);  <span class="comment">//分词结果以空格进行分割</span></span><br><span class="line">        System.out.println(words.length); <span class="comment">//输出分词词数</span></span><br><span class="line">        System.out.println(nativeBytes);  <span class="comment">//输出分词结果</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3    &#10;&#20160;&#20040; &#26159; &#26426;&#22120;&#23398;&#20064;</span><br></pre></td></tr></table></figure>
+<h2 id="结语">结语</h2><p>进行分类器的封装以后,可以继续进行之后的文本挖掘内容.以上均为本人拙见,且本人为NLP菜鸟,望大牛予以指正! :)</p>
 
         
         </div>
@@ -1686,7 +1576,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="cispbjq5w002rps6co3o32g8w" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="cisph8jsy002r716c149lbphm" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1820,7 +1710,7 @@ quicksort<span class="list">(<span class="keyword">q+1</span>,r)</span><span cla
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" data-id="cispbjq600031ps6chqpswj81" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/05/10/文本挖掘初步-对自由文本进行信息抽取/" data-id="cisph8jt60031716chizrgxch" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding

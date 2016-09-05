@@ -15,7 +15,7 @@
 <meta property="og:description" content="介绍中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。
 如同编译原理中的词法分析的重要性,中文分词是文本挖掘的基础,需要通过机器自动将输入的句子切分成一个个的词语,才能进行更多的处理.
 中文分词和英文分词最大的区别在于,英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记,因此中文分词的难度比英文分词">
-<meta property="og:updated_time" content="2016-08-27T11:26:08.000Z">
+<meta property="og:updated_time" content="2016-09-05T03:14:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="文本挖掘初步 - 文本中文分词">
 <meta name="twitter:description" content="介绍中文分词(Chinese Word Segmentation)指的是将一个汉字序列切分成一个一个单独的词。
@@ -268,136 +268,40 @@ var _hmt = _hmt || [];
 <ul>
 <li>正向最大匹配法（由左到右的方向）</li>
 <li>逆向最大匹配法（由右到左的方向）</li>
-<li>最少切分（使每一句中切出的词数最小）<br><strong>2.基于词频度统计的分词方法</strong></li>
+<li>最少切分（使每一句中切出的词数最小）</li>
 </ul>
+<p>2.<strong>基于词频度统计的分词方法</strong></p>
 <p>这是一种全切分方法。它不依靠词典,而是将文章中任意两个字同时出现的频率进行统计,次数越高的就可能是一个词。它首先切分出与词表匹配的所有可能的词,运用统计语言模型和决策算法决定最优的切分结果。它的优点在于可以发现所有的切分歧义并且容易将新词提取出来。</p>
-<p><strong>3.基于知识理解的分词</strong></p>
+<p>3.<strong>基于知识理解的分词</strong></p>
 <p>该方法主要基于句法、语法分析，并结合语义分析，通过对上下文内容所提供信息的分析对词进行定界，它通常包括三个部分：分词子系统、句法语义子系统、总控部分。在总控部分的协调下，分词子系统可以获得有关词、句子等的句法和语义信息来对分词歧义进行判断。这类方法试图让机器具有人类的理解能力，需要使用大量的语言知识和信息。由于汉语语言知识的笼统、复杂性，难以将各种语言信息组织成机器可直接读取的形式。因此目前基于知识的分词系统还处在试验阶段。</p>
 <h2 id="工具">工具</h2><p>在中文分词领域,有很多已经非常成熟的分词工具可以被使用,以下对各工具的算法和效率(根据网上情报)进行总结.</p>
-<p><strong>1.ICTCLAS(NLPIR)</strong></p>
+<p>1.<strong>ICTCLAS(NLPIR)</strong></p>
 <p><a href="http://ictclas.nlpir.org/" target="_blank" rel="external">http://ictclas.nlpir.org/</a></p>
 <p>ICTCLAS是中国科学院计算技术研究所在多年研究基础上，耗时一年研制出了基于多层隐马模型(HMM)的汉语词法分析系统 ，功能有：中文分词；词性标注；自定义词典等。分词正确率高,分词速度快.源代码数以C++编写的,并提供JAVA接口.</p>
 <p>速度: 单机 (996KB/s)</p>
-<p><strong>2.Stanford Word Segmenter || CRF++</strong></p>
+<p>2.<strong>Stanford Word Segmenter || CRF++</strong></p>
 <p><a href="http://nlp.stanford.edu/software/segmenter.shtml" target="_blank" rel="external">http://nlp.stanford.edu/software/segmenter.shtml</a></p>
 <p>这两个中文分词工具都是基于条件随机场CRF(<span lang="EN-US">C</span><span lang="EN-US">onditional<span class="Apple-converted-space"> </span></span><span lang="EN-US">R</span><span lang="EN-US">andom</span><span lang="EN-US"><span class="Apple-converted-space"> </span>F</span><span lang="EN-US">ield)模型实现的,<span lang="ZH-CN">其基本思路是对汉字进行标注即由字构词</span><span lang="EN-US">(</span><span lang="ZH-CN">组词</span><span lang="EN-US">)</span><span lang="ZH-CN">，不仅考虑了文字词语出现的频率信息，同时考虑上下文语境，具备较好的学习能力，因此其对歧义词和未登录词的识别都具有良好的效果；其不足之处是训练周期较长，运营时计算量较大.</span></span></p>
 <p>速度: (暂未获得)</p>
-<p><strong>3.Mmseg </strong></p>
+<p>3.<strong>Mmseg </strong></p>
 <p><a href="http://technology.chtsai.org/mmseg/" target="_blank" rel="external">http://technology.chtsai.org/mmseg/</a></p>
 <p>Mmseg是典型的基于字典的中文分词工具,其主要实现原理是基于最大匹配算法.它提供Simple和Complex两种最大匹配算法,即简单的和复杂的.简单的最大匹配算法从字符串开头开始,获取最长的匹配串;而复杂的最大匹配算法则针对存在歧义的单词,向前再看两个单词再进行判断.</p>
 <p>Mmseg支持在lucene和solr中使用,在该二者中配置Mmseg,即可对中文文本进行分词索引.这也是Mmseg被使用广泛的一个原因.同时因为其实现原理简单,效果也很不错,且提供Java支持(Mmseg4j),也是很受欢迎的一款分词工具.</p>
 <p>速度: complex 60W字/s (1200 KB/s)  ；simple 100W字/s (1900 KB/s)</p>
-<p><strong>4.IKAnalyzer</strong></p>
+<p>4.<strong>IKAnalyzer</strong></p>
 <p><a href="http://code.google.com/p/ik-analyzer/downloads/list" target="_blank" rel="external">http://code.google.com/p/ik-analyzer/downloads/list</a></p>
 <p>IKAnalyzer是一个开源的，基于java语言开发的轻量级的中文分词工具包。采用了特有的”正向迭代最细粒度切分算法”(我还没取研究这个算法),支持细粒度和智能分词两种切分模式.同样,IKAnalyzer也提供了对Solr和Lucene的支持.</p>
 <p>速度: IK2012 160W字/s (3000KB/s)</p>
 <h2 id="代码">代码</h2><p>根据分词的成功率,速率以及使用接口简单,在之后的所有后续挖掘过程中将采用ICTCLAS2015作为分词器,所以需要对其进行简单的封装.</p>
 <p>JNA实现接口CLibrary:</p>
-<pre><code>    <span class="keyword">package</span> com.jetmuffin.analyzer;
-    <span class="keyword">import</span> com.sun.jna.Library;
-    <span class="keyword">public</span> interface CLibrary extends Library{
-
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_Init(<span class="keyword">String</span> sDataPath, <span class="built_in">int</span> encoding,
-        <span class="keyword">String</span> sLicenceCode);
-
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_ParagraphProcess(<span class="keyword">String</span> sSrc, <span class="built_in">int</span> bPOSTagged);
-
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
-        <span class="built_in">boolean</span> bWeightOut);
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetFileKeyWords(<span class="keyword">String</span> sLine, <span class="built_in">int</span> nMaxKeyLimit,
-        <span class="built_in">boolean</span> bWeightOut);
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_AddUserWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_DelUsrWord(<span class="keyword">String</span> sWord);<span class="comment">//add by qp 2008.11.10</span>
-        <span class="keyword">public</span> <span class="built_in">int</span> NLPIR_ImportUserDict(<span class="keyword">String</span> sWord,<span class="built_in">boolean</span> bOverWrite);
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_WordFreqStat(<span class="keyword">String</span> sWord);
-        <span class="keyword">public</span> <span class="keyword">String</span> NLPIR_GetLastErrorMsg();
-        <span class="keyword">public</span> <span class="keyword">void</span> NLPIR_Exit();
-    }
-`&lt;/pre&gt;
-
-接口实现类Nlpir:
-
-&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.analyzer;
-    <span class="keyword">import</span> com.sun.jna.Native;
-
-    <span class="keyword">public</span> class NLPIR {
-    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary Instance;
-    <span class="keyword">private</span> <span class="keyword">String</span> systemCharset;
-    <span class="keyword">private</span> <span class="keyword">String</span> systemFolder;
-    <span class="built_in">int</span> charsetType;
-
-    <span class="keyword">public</span> NLPIR(){
-        systemFolder = <span class="string">"/home/jeff/src/ICTCLAS2015"</span>;  <span class="comment">//ICTCLAS的目录,包括字典文件等</span>
-        systemCharset = <span class="string">"UTF-8"</span>;  <span class="comment">//默认字符集</span>
-        charsetType = <span class="number">1</span>;
-
-        Instance = (CLibrary) Native.loadLibrary(
-                <span class="string">"/home/jeff/src/ICTCLAS2015/lib/linux32/libNLPIR.so"</span>, CLibrary.class);  <span class="comment">//ICTCLAS的so文件地址</span>
-        }
-
-    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary getInstance() {
-        <span class="keyword">return</span> Instance;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> setInstance(CLibrary instance) {
-        Instance = instance;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">String</span> getSystemCharset() {
-        <span class="keyword">return</span> systemCharset;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setSystemCharset(<span class="keyword">String</span> systemCharset) {
-        <span class="keyword">this</span>.systemCharset = systemCharset;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">String</span> getSystemFolder() {
-        <span class="keyword">return</span> systemFolder;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setSystemFolder(<span class="keyword">String</span> systemFolder) {
-        <span class="keyword">this</span>.systemFolder = systemFolder;
-    }
-
-    <span class="keyword">public</span> <span class="built_in">int</span> getCharsetType() {
-        <span class="keyword">return</span> charsetType;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setCharsetType(<span class="built_in">int</span> charsetType) {
-        <span class="keyword">this</span>.charsetType = charsetType;
-    }
-    }
-`&lt;/pre&gt;
-
-测试类:
-
-&lt;pre&gt;`    <span class="keyword">package</span> com.jetmuffin.test;
-
-    <span class="keyword">import</span> org.junit.Test;
-    <span class="keyword">import</span> com.jetmuffin.NLPIR;
-    <span class="keyword">public</span> class TestNlpir {
-
-    @Test
-    <span class="keyword">public</span> <span class="keyword">void</span> test(){
-        NLPIR nlpir = <span class="keyword">new</span> NLPIR();
-        nlpir.Instance.NLPIR_Init(nlpir.getSystemFolder(),nlpir.getCharsetType() ,nlpir.getSystemCharset());
-        <span class="keyword">String</span> nativeBytes = <span class="keyword">null</span>;
-
-        <span class="keyword">String</span> sInput = <span class="string">"什么是机器学习"</span>;
-        nlpir.Instance.NLPIR_ImportUserDict(<span class="string">"/home/jeff/workspace/data/dict"</span>, <span class="keyword">false</span>);  <span class="comment">//加载用户自定义词典</span>
-        nativeBytes = nlpir.Instance.NLPIR_ParagraphProcess(sInput, <span class="number">0</span>); <span class="comment">//分词</span>
-        <span class="keyword">String</span>[] words = nativeBytes.<span class="built_in">split</span>(<span class="string">" "</span>);  <span class="comment">//分词结果以空格进行分割</span>
-        System.out.<span class="built_in">println</span>(words.length); <span class="comment">//输出分词词数</span>
-        System.out.<span class="built_in">println</span>(nativeBytes);  <span class="comment">//输出分词结果</span>
-    }
-    }
-`&lt;/pre&gt;
-
-结果:
-
-&lt;pre&gt;`<span class="number">3</span>
-什么 是 机器学习 
-</code></pre><h2 id="结语">结语</h2><p>进行分类器的封装以后,可以继续进行之后的文本挖掘内容.以上均为本人拙见,且本人为NLP菜鸟,望大牛予以指正! :)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.analyzer;</span><br><span class="line"><span class="keyword">import</span> com.sun.jna.Library;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CLibrary</span> <span class="keyword">extends</span> <span class="title">Library</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_Init</span><span class="params">(String sDataPath, <span class="keyword">int</span> encoding, String sLicenceCode)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_ParagraphProcess</span><span class="params">(String sSrc, <span class="keyword">int</span> bPOSTagged)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_GetKeyWords</span><span class="params">(String sLine, <span class="keyword">int</span> nMaxKeyLimit, <span class="keyword">boolean</span> bWeightOut)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_GetFileKeyWords</span><span class="params">(String sLine, <span class="keyword">int</span> nMaxKeyLimit, <span class="keyword">boolean</span> bWeightOut)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_AddUserWord</span><span class="params">(String sWord)</span></span>;<span class="comment">//add by qp 2008.11.10</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_DelUsrWord</span><span class="params">(String sWord)</span></span>;<span class="comment">//add by qp 2008.11.10</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">NLPIR_ImportUserDict</span><span class="params">(String sWord,<span class="keyword">boolean</span> bOverWrite)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_WordFreqStat</span><span class="params">(String sWord)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">NLPIR_GetLastErrorMsg</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">NLPIR_Exit</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>接口实现类<span class="rule"><span class="attribute">Nlpir</span>:<span class="value"></span></span>
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.analyzer;</span><br><span class="line"><span class="keyword">import</span> com.sun.jna.Native;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NLPIR</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> CLibrary Instance;</span><br><span class="line">    <span class="keyword">private</span> String systemCharset;</span><br><span class="line">    <span class="keyword">private</span> String systemFolder;</span><br><span class="line">    <span class="keyword">int</span> charsetType;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NLPIR</span><span class="params">()</span></span>&#123;</span><br><span class="line">        systemFolder = <span class="string">"/home/jeff/src/ICTCLAS2015"</span>;  <span class="comment">//ICTCLAS的目录,包括字典文件等</span></span><br><span class="line">        systemCharset = <span class="string">"UTF-8"</span>;  <span class="comment">//默认字符集</span></span><br><span class="line">        charsetType = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        Instance = (CLibrary) Native.loadLibrary(</span><br><span class="line">                <span class="string">"/home/jeff/src/ICTCLAS2015/lib/linux32/libNLPIR.so"</span>, CLibrary.class);  <span class="comment">//ICTCLAS的so文件地址</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CLibrary <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> Instance;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setInstance</span><span class="params">(CLibrary instance)</span> </span>&#123;</span><br><span class="line">            Instance = instance;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getSystemCharset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> systemCharset;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSystemCharset</span><span class="params">(String systemCharset)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.systemCharset = systemCharset;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getSystemFolder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> systemFolder;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSystemFolder</span><span class="params">(String systemFolder)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.systemFolder = systemFolder;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCharsetType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> charsetType;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCharsetType</span><span class="params">(<span class="keyword">int</span> charsetType)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.charsetType = charsetType;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> com.jetmuffin.NLPIR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestNlpir</span> </span>&#123;</span><br><span class="line">        <span class="annotation">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        NLPIR nlpir = <span class="keyword">new</span> NLPIR();</span><br><span class="line">        nlpir.Instance.NLPIR_Init(nlpir.getSystemFolder(),nlpir.getCharsetType() ,nlpir.getSystemCharset());</span><br><span class="line">        String nativeBytes = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        String sInput = <span class="string">"什么是机器学习"</span>;</span><br><span class="line">        nlpir.Instance.NLPIR_ImportUserDict(<span class="string">"/home/jeff/workspace/data/dict"</span>, <span class="keyword">false</span>);  <span class="comment">//加载用户自定义词典</span></span><br><span class="line">        nativeBytes = nlpir.Instance.NLPIR_ParagraphProcess(sInput, <span class="number">0</span>); <span class="comment">//分词</span></span><br><span class="line">        String[] words = nativeBytes.split(<span class="string">" "</span>);  <span class="comment">//分词结果以空格进行分割</span></span><br><span class="line">        System.out.println(words.length); <span class="comment">//输出分词词数</span></span><br><span class="line">        System.out.println(nativeBytes);  <span class="comment">//输出分词结果</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3    &#10;&#20160;&#20040; &#26159; &#26426;&#22120;&#23398;&#20064;</span><br></pre></td></tr></table></figure>
+<h2 id="结语">结语</h2><p>进行分类器的封装以后,可以继续进行之后的文本挖掘内容.以上均为本人拙见,且本人为NLP菜鸟,望大牛予以指正! :)</p>
 
         
         </div>
@@ -408,7 +312,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="cispbjq5w002rps6co3o32g8w" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/05/文本挖掘初步-文本中文分词/" data-id="cisph8jsy002r716c149lbphm" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding

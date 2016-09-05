@@ -7,25 +7,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="背景继续上文文本中文分词的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。
 语料库本文采用Sougou实验室的语料库，下载地址为：搜狗实验室文本分类资料。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:
-文档结构：C000007 汽车   C000008 财经   C000010  IT   C">
+文档结构：
+
+C000007 汽车
+C000008 财经
+C000010  IT
+C0000">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文本挖掘初步 - 文本特征值提取">
 <meta property="og:url" content="https://www.jetmuffin.com/2015/06/26/文本挖掘初步-文本特征值提取/index.html">
 <meta property="og:site_name" content="JetMuffin's Blog">
 <meta property="og:description" content="背景继续上文文本中文分词的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。
 语料库本文采用Sougou实验室的语料库，下载地址为：搜狗实验室文本分类资料。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:
-文档结构：C000007 汽车   C000008 财经   C000010  IT   C">
+文档结构：
+
+C000007 汽车
+C000008 财经
+C000010  IT
+C0000">
 <meta property="og:image" content="http://i4.tietuku.com/218e13597b4ea3d8.png">
 <meta property="og:image" content="http://i4.tietuku.com/c20eec142f06b175.png">
 <meta property="og:image" content="http://i4.tietuku.com/a15b04b7d23c4837.png">
 <meta property="og:image" content="http://i4.tietuku.com/2dce06a9ac95d718.jpg">
 <meta property="og:image" content="http://i4.tietuku.com/e665571f39dec3cb.png">
-<meta property="og:updated_time" content="2016-08-27T11:26:12.000Z">
+<meta property="og:updated_time" content="2016-09-05T03:17:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="文本挖掘初步 - 文本特征值提取">
 <meta name="twitter:description" content="背景继续上文文本中文分词的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。
 语料库本文采用Sougou实验室的语料库，下载地址为：搜狗实验室文本分类资料。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:
-文档结构：C000007 汽车   C000008 财经   C000010  IT   C">
+文档结构：
+
+C000007 汽车
+C000008 财经
+C000010  IT
+C0000">
     
 
     
@@ -266,43 +281,29 @@ var _hmt = _hmt || [];
             
             <h2 id="背景">背景</h2><p>继续上文<a href="http://www.jetmuffin.com/archives/225">文本中文分词</a>的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。</p>
 <h2 id="语料库">语料库</h2><p>本文采用Sougou实验室的语料库，下载地址为：<a href="http://www.sogou.com/labs/dl/c.html" target="_blank" rel="external">搜狗实验室文本分类资料</a>。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:</p>
-<p><strong>文档结构：</strong>C000007 汽车   C000008 财经   C000010  IT   C000013 健康   C000014 体育  C000016 旅游 C000020 教育   C000022 招聘   C000023 文学   C000024 军事</p>
+<p><strong>文档结构：</strong></p>
+<ul>
+<li>C000007 汽车</li>
+<li>C000008 财经</li>
+<li>C000010  IT</li>
+<li>C000013 健康</li>
+<li>C000014 体育</li>
+<li>C000016 旅游</li>
+<li>C000020 教育</li>
+<li>C000022 招聘</li>
+<li>C000023 文学</li>
+<li>C000024 军事</li>
+</ul>
 <p><strong>注意：</strong>搜狗的语料库均为GBK编码，若在Linux环境下会出现乱码影响处理，建议修改文件编码为utf-8</p>
 <h2 id="词袋模型">词袋模型</h2><p>利用中文分词工具，我们对每篇文章进行分词，去停用词后，用一个Map存储每个词的相关信息，保存形式为单词 &lt;词的文本字符串, 词的相关属性&gt;，其中单词(Term)的相关属性有(词性、tf、df、tfidf、chi等)。这样，遍历数据集目录和文件，就能去将全部的文档分词，最终就能构建词袋模型。</p>
 <p>其中词(Term)的类如下：</p>
-<pre><code>    package com<span class="built_in">.</span>jetmuffin<span class="built_in">.</span>TextClassifier<span class="built_in">.</span>common;
-
-    <span class="keyword">public</span> class Term {
-        <span class="keyword">private</span> int id;
-        <span class="keyword">private</span> <span class="built_in">String</span> word;
-        <span class="keyword">private</span> <span class="built_in">String</span> lexicalCategory = <span class="string">"unknown"</span>;
-        <span class="keyword">private</span> int freq = <span class="number">0</span>;
-        <span class="keyword">private</span> double tf;
-        <span class="keyword">private</span> double idf;
-        <span class="keyword">private</span> double tfidf = <span class="number">0</span>;
-        <span class="keyword">private</span> double chi = <span class="number">0</span>;
-
-    <span class="keyword">public</span> <span class="literal">void</span> setId(int id){
-        <span class="attribute">...</span><span class="built_in">.
-    </span>}
-    <span class="attribute">...</span><span class="attribute">...</span>
-<span class="string">`&lt;/pre&gt;
-
-而词袋的存储Map格式如下:
-
-&lt;pre&gt;`</span>    <span class="keyword">private</span> int totalDocCount;
-    <span class="keyword">private</span> final <span class="built_in">List</span> labels = <span class="literal">new</span> ArrayList();
-    <span class="comment">// Map&lt;类别, 文档数量&gt;</span>
-    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt; labelledTotalDocCountMap = <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Integer</span>&gt;();
-    <span class="comment">// Map&lt;类别, Map&lt;文档 ,Map&lt;词, 词信息&gt;&gt;&gt;</span>
-    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Term&gt;&gt;&gt; termTable =
-        <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, Term&gt;&gt;&gt;();
-    <span class="comment">// Map&lt;词 ,Map&lt;类别, Set&lt;文档&gt;&gt;&gt;</span>
-    <span class="keyword">private</span> final <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&gt;&gt; invertedTable =
-    <span class="literal">new</span> HashMap&lt;<span class="built_in">String</span>, <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Set</span>&gt;&gt;();
-</code></pre><h2 id="特征值(TFIDF)计算">特征值(TFIDF)计算</h2><p>tfidf是文本分类中最常使用的特征权值，其中tf(Term Frequency)为词频，idf为(Inverse Document Frequency)，tf反映了该词在该类文本中的热门程度，而idf则反映了该词对于其他文本更好的区别能力。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jetmuffin.TextClassifier.common;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Term</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String word;</span><br><span class="line">    <span class="keyword">private</span> String lexicalCategory = <span class="string">"unknown"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> freq = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> tf;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> idf;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> tfidf = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> chi = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        ....</span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure>
+<p>而词袋的存储Map格式如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> totalDocCount;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> List labels = <span class="keyword">new</span> ArrayList();</span><br><span class="line"><span class="comment">// Map&lt;类别, 文档数量&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Integer&gt; labelledTotalDocCountMap = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</span><br><span class="line"><span class="comment">// Map&lt;类别, Map&lt;文档 ,Map&lt;词, 词信息&gt;&gt;&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Map&lt;String, Map&lt;String, Term&gt;&gt;&gt; termTable = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Map&lt;String, Term&gt;&gt;&gt;();</span><br><span class="line"><span class="comment">// Map&lt;词 ,Map&lt;类别, Set&lt;文档&gt;&gt;&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Map&lt;String, Set&gt;&gt; invertedTable = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Set&gt;&gt;();</span><br></pre></td></tr></table></figure>
+<h2 id="特征值(TFIDF)计算">特征值(TFIDF)计算</h2><p>tfidf是文本分类中最常使用的特征权值，其中tf(Term Frequency)为词频，idf为(Inverse Document Frequency)，tf反映了该词在该类文本中的热门程度，而idf则反映了该词对于其他文本更好的区别能力。</p>
 <p>tfidf的计算方式如下：</p>
-<h2 id="卡方拟合检验"><img src="http://i4.tietuku.com/218e13597b4ea3d8.png" alt="tf"><img src="http://i4.tietuku.com/c20eec142f06b175.png" alt=""><img src="http://i4.tietuku.com/a15b04b7d23c4837.png" alt="">卡方拟合检验</h2><p>经上一步计算出的tfidf值作为文章的特征值，但因为文章所包含的词往往非常多，特征向量的维数巨大，可能会达到上千维之多。因此需要对文章的特征向量进行降维。</p>
+<p><img src="http://i4.tietuku.com/218e13597b4ea3d8.png" alt="tf"><img src="http://i4.tietuku.com/c20eec142f06b175.png" alt=""><img src="http://i4.tietuku.com/a15b04b7d23c4837.png" alt=""></p>
+<h2 id="卡方拟合检验">卡方拟合检验</h2><p>经上一步计算出的tfidf值作为文章的特征值，但因为文章所包含的词往往非常多，特征向量的维数巨大，可能会达到上千维之多。因此需要对文章的特征向量进行降维。</p>
 <p>进行降维，可以达到以下效果：</p>
 <ul>
 <li>避免过拟合（over fitting），提高分类准确度</li>
@@ -339,7 +340,7 @@ var _hmt = _hmt || [];
 
 </div>
 
-    <a data-url="https://www.jetmuffin.com/2015/06/26/文本挖掘初步-文本特征值提取/" data-id="cispbjq5t002jps6c8s9ipwhq" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="https://www.jetmuffin.com/2015/06/26/文本挖掘初步-文本特征值提取/" data-id="cisph8jst002j716cjqt5wh41" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
