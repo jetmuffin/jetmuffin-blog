@@ -6,13 +6,13 @@ date: 2015-10-14 09:23:39
 
 ```javascript
 {
-    "nickname": /JetMuffin/, 
+    "nickname": "/JetMuffin/", 
     "locality": "Nanjing",
-    "school": "HHU","@NJU"
-    "skills": ["Web", "Algorithm", "Data Mining", "Cloud Computing"],
-    "tags": ["ITman", "ACMer", "Eater"],
+    "school": "NJU",
+    "skills": ["Cloud Computing", "Web Development", "Algorithm",],
+    "tags": ["Geek?", "ACMer"],
     "contact": {
-        "email": "564936642@qq.com","jeffchen328@gmail.com"
+        "email": ["jeffchen328@gmail.com", "564936642@qq.com"]
         "weibo": "@JetMmmmmmuffin ",
     },
 }
@@ -22,7 +22,7 @@ date: 2015-10-14 09:23:39
 * [GitHub](https://github.com/JetMuffin/) 
 * [WeiBo](http://weibo.com/u/1922357801/) 
 * [NJU ICS](http://moon.nju.edu.cn)
-* [NAP Group](http://nap-group.herokuapp.com/)
+* [NAP Group](http://nap-blog.artemisprojects.org/)
 
 > 欢迎留言！
 
