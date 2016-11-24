@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Kubernetes源码阅读 - Scheduler | JetMuffin&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes源码阅读 - Scheduler">
+<meta property="og:url" content="https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。">
+<meta property="og:updated_time" content="2016-11-24T11:52:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kubernetes源码阅读 - Scheduler">
+<meta name="twitter:description" content="阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。">
+    
+
+    
+        <link rel="alternate" href="/" title="JetMuffin&#39;s Blog" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css" type="text/css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css" type="text/css">
+
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/fancybox/jquery.fancybox.css" type="text/css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?a468539e36e8af84fc0f6fdaa27aaa34";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">JetMuffin&#39;s Blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/uploads/avatar.jpg" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js" type="text/javascript"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/uploads/avatar.jpg" />
+            <h2 id="name">JetMuffin</h2>
+            <h3 id="title">Coder</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Nanjing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/JetMuffin/">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                95
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                135
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/JetMuffin" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://twitter.com/JeffChe97845794" target="_blank" title="twitter" class=tooltip>
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://www.facebook.com/profile.php?id=100005761332777" target="_blank" title="facebook" class=tooltip>
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class=tooltip>
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Kubernetes源码阅读-Scheduler" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Kubernetes源码阅读 - Scheduler
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/11/24/Kubernetes源码阅读-Scheduler/">
+            <time datetime="2016-11-24T11:50:52.000Z" itemprop="datePublished">2016-11-24</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/基础架构/">基础架构</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/kubernetes/">kubernetes</a>, <a class="tag-link" href="/tags/scheduler/">scheduler</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。</p>
+<a id="more"></a>
+<h2 id="Scheduler_入口">Scheduler 入口</h2><p>首先定位到 <code>plugin/cmd/scheduler.go</code> 这个文件。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/cmd/scheduler.go</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">    s := options.NewSchedulerServer()</span><br><span class="line">    s.AddFlags(pflag.CommandLine) <span class="comment">// 解析参数</span></span><br><span class="line"></span><br><span class="line">    flag.InitFlags()</span><br><span class="line">    logs.InitLogs()</span><br><span class="line">    <span class="keyword">defer</span> logs.FlushLogs()</span><br><span class="line"></span><br><span class="line">    verflag.PrintAndExitIfRequested()</span><br><span class="line"></span><br><span class="line">    app.Run(s) <span class="comment">// 启动调度器</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面这段代码可以看出这是从 command 启动 scheduler 的入口，它解析了 scheduler 的参数，同时调用了 <code>app.Run(s)</code>来启动 scheduler。</p>
+<p>按着这个走向找到 <code>app.Run(s)</code> 的具体实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/cmd/kube-scheduler/app/server.go</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Run runs the specified SchedulerServer.  This should never exit.</span></span><br><span class="line"><span class="keyword">func</span> Run(s *options.SchedulerServer) error &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    sched := scheduler.New(config) <span class="comment">// 新建调度器</span></span><br><span class="line"></span><br><span class="line">    run := <span class="keyword">func</span>(_ &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;) &#123;</span><br><span class="line">        sched.Run() <span class="comment">// 正式启动调度器入口</span></span><br><span class="line">        <span class="keyword">select</span> &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到在这段代码片段中，通过 <code>sched := scheduler.New(config)</code> 新建了一个 scheduler 对象，并且调用它的 <code>Run()</code> 成员方法，同时需要特意留意 <code>config</code>。继续追踪到 scheduler 类的定义中取：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/scheduler.go</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Run begins watching and scheduling. It starts a goroutine and returns immediately.</span></span><br><span class="line"><span class="keyword">func</span> (s *Scheduler) Run() &#123;</span><br><span class="line">    <span class="keyword">go</span> wait.Until(s.scheduleOne, <span class="number">0</span>, s.config.StopEverything)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>Scheduler.Run()</code> 方法中，Scheduler 通过 <code>wait.Until()</code> 工具，不停得调用 <code>Scheduler.scheduleOne()</code> 方法直到收到停止信号。我们接着看 <code>scheduleOne()</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/scheduler.go</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (s *Scheduler) scheduleOne() &#123;</span><br><span class="line">    pod := s.config.NextPod() <span class="comment">// 获取下一个待调度的pod</span></span><br><span class="line"></span><br><span class="line">    glog.V(<span class="number">3</span>).Infof(<span class="string">"Attempting to schedule pod: %v/%v"</span>, pod.Namespace, pod.Name)</span><br><span class="line">    start := time.Now()</span><br><span class="line">    dest, err := s.config.Algorithm.Schedule(pod, s.config.NodeLister) <span class="comment">// 调用算法进行调度</span></span><br><span class="line">    <span class="keyword">if</span> err != <span class="constant">nil</span> &#123;</span><br><span class="line">        glog.V(<span class="number">1</span>).Infof(<span class="string">"Failed to schedule pod: %v/%v"</span>, pod.Namespace, pod.Name)</span><br><span class="line">        s.config.Error(pod, err)</span><br><span class="line">        s.config.Recorder.Eventf(pod, api.EventTypeWarning, <span class="string">"FailedScheduling"</span>, <span class="string">"%v"</span>, err)</span><br><span class="line">        s.config.PodConditionUpdater.Update(pod, &amp;api.PodCondition&#123;</span><br><span class="line">            Type:   api.PodScheduled,</span><br><span class="line">            Status: api.ConditionFalse,</span><br><span class="line">            Reason: api.PodReasonUnschedulable,</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    metrics.SchedulingAlgorithmLatency.Observe(metrics.SinceInMicroseconds(start))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Scheduler 首先通过 <code>config.NextPod()</code> 来获取到当前要进行调度的一个 pod，然后调用 <code>config.Algorithm.Schedule()</code> 方法来对这个 pod 实际进行调度。从这种写法上我们可以猜测到 Algorithm 这儿用的是工厂模式。若根据该算法调度成功，那么将这个时间进行记录。否则调用 <code>config.Error()</code> 来进行错误处理。</p>
+<p>这里有三个比较重点的内容：</p>
+<ul>
+<li>config.NextPod()</li>
+<li>config.Algorithm.schedule()</li>
+<li>config.Error()</li>
+</ul>
+<p>它们均来自 <code>Config</code> 类，那么我们先看这个类，再接下去探索这两个方法。<code>Config</code> 类的定义也在这个文件中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/scheduler.go</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Config <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// It is expected that changes made via SchedulerCache will be observed</span></span><br><span class="line">    <span class="comment">// by NodeLister and Algorithm.</span></span><br><span class="line">    SchedulerCache schedulercache.Cache</span><br><span class="line">    NodeLister     algorithm.NodeLister</span><br><span class="line">    Algorithm      algorithm.ScheduleAlgorithm <span class="comment">// 调度算法</span></span><br><span class="line">    Binder         Binder</span><br><span class="line">    <span class="comment">// PodConditionUpdater is used only in case of scheduling errors. If we succeed</span></span><br><span class="line">    <span class="comment">// with scheduling, PodScheduled condition will be updated in apiserver in /bind</span></span><br><span class="line">    <span class="comment">// handler so that binding and setting PodCondition it is atomic.</span></span><br><span class="line">    PodConditionUpdater PodConditionUpdater</span><br><span class="line"></span><br><span class="line">    <span class="comment">// NextPod should be a function that blocks until the next pod</span></span><br><span class="line">    <span class="comment">// is available. We don't use a channel for this, because scheduling</span></span><br><span class="line">    <span class="comment">// a pod may take some amount of time and we don't want pods to get</span></span><br><span class="line">    <span class="comment">// stale while they sit in a channel.</span></span><br><span class="line">    NextPod <span class="keyword">func</span>() *api.Pod <span class="comment">// 获取下一个pod的抽象方法</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Error is called if there is an error. It is passed the pod in</span></span><br><span class="line">    <span class="comment">// question, and the error</span></span><br><span class="line">    Error <span class="keyword">func</span>(*api.Pod, error) <span class="comment">// 处理调度出现的错误</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Recorder is the EventRecorder to use</span></span><br><span class="line">    Recorder record.EventRecorder</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Close this to shut down the scheduler.</span></span><br><span class="line">    StopEverything <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125; <span class="comment">// 停止信号</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Config</code> 类传入了 scheduler 必要的各种参数，相当于原来隶属于 scheduler 的成员变量通过它传入。<code>Config</code> 类在 <code>plugin/pkg/scheduler/factory</code> 中被实例化，相应的抽象方法也被传入实际的引用方法。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/factory</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">algo := scheduler.NewGenericScheduler(f.schedulerCache, predicateFuncs, predicateMetaProducer, priorityConfigs, priorityMetaProducer, extenders)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &amp;scheduler.Config&#123;</span><br><span class="line">      SchedulerCache: f.schedulerCache,</span><br><span class="line">      <span class="comment">// The scheduler only needs to consider schedulable nodes.</span></span><br><span class="line">      NodeLister:          f.NodeLister.NodeCondition(getNodeConditionPredicate()),</span><br><span class="line">      Algorithm:           algo,</span><br><span class="line">      Binder:              &amp;binder&#123;f.Client&#125;,</span><br><span class="line">      PodConditionUpdater: &amp;podConditionUpdater&#123;f.Client&#125;,</span><br><span class="line">      NextPod: <span class="keyword">func</span>() *api.Pod &#123;</span><br><span class="line">          <span class="keyword">return</span> f.getNextPod()</span><br><span class="line">      &#125;,</span><br><span class="line">      Error:          f.makeDefaultErrorFunc(&amp;podBackoff, f.PodQueue),</span><br><span class="line">      StopEverything: f.StopEverything,</span><br><span class="line">  &#125;, <span class="constant">nil</span></span><br></pre></td></tr></table></figure>
+<h2 id="获取待调度的_Pod">获取待调度的 Pod</h2><p>首先看 <code>NextPod</code> 参数，从类 <code>Config</code> 的定义中的注释可以看到，这个参数是一个获取下一个 pod，并且阻塞该方法直到下一个 pod 可用为止。并且它的实现没有用 chanel，原因是一旦放到 chanel 里，这个 pod 便无法修改。这个 参数是在实例化时传入的获取下一个 pod 的方法。传入的代码也在这个文件中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/factory</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (f *ConfigFactory) getNextPod() *api.Pod &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        pod := cache.Pop(f.PodQueue).(*api.Pod)</span><br><span class="line">        <span class="keyword">if</span> f.responsibleForPod(pod) &#123;</span><br><span class="line">            glog.V(<span class="number">4</span>).Infof(<span class="string">"About to try and schedule pod %v"</span>, pod.Name)</span><br><span class="line">            <span class="keyword">return</span> pod</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这段代码可以看出，获取下一个待调度的 pod 似乎是从一个队列中 pop 出一个 pod 来实现的。使用的来源是 <code>pkg/client/cache</code>，继续追踪：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pkg/client/cache</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Pop(queue Queue) <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">    <span class="keyword">var</span> result <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">    queue.Pop(<span class="keyword">func</span>(obj <span class="keyword">interface</span>&#123;&#125;) error &#123;</span><br><span class="line">        result = obj</span><br><span class="line">        <span class="keyword">return</span> <span class="constant">nil</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法是个代理方法，是对 <code>Queue</code> 类中的 <code>Pop()</code> 方法进行了一层封装，于是自然看到对应的 <code>Queue.Pop()</code>，它是在类 <code>FIFO</code> 中的，那么这块儿也逐渐明了了:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pkg/client/cache/fifo.go</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Pop waits until an item is ready and processes it. If multiple items are</span></span><br><span class="line"><span class="comment">// ready, they are returned in the order in which they were added/updated.</span></span><br><span class="line"><span class="comment">// The item is removed from the queue (and the store) before it is processed,</span></span><br><span class="line"><span class="comment">// so if you don't successfully process it, it should be added back with</span></span><br><span class="line"><span class="comment">// AddIfNotPresent(). process function is called under lock, so it is safe</span></span><br><span class="line"><span class="comment">// update data structures in it that need to be in sync with the queue.</span></span><br><span class="line"><span class="keyword">func</span> (f *FIFO) Pop(process PopProcessFunc) (<span class="keyword">interface</span>&#123;&#125;, error) &#123;</span><br><span class="line">    f.lock.Lock()</span><br><span class="line">    <span class="keyword">defer</span> f.lock.Unlock()</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">len</span>(f.queue) == <span class="number">0</span> &#123;</span><br><span class="line">            f.cond.Wait()</span><br><span class="line">        &#125;</span><br><span class="line">        id := f.queue[<span class="number">0</span>]</span><br><span class="line">        f.queue = f.queue[<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">if</span> f.initialPopulationCount &gt; <span class="number">0</span> &#123;</span><br><span class="line">            f.initialPopulationCount--</span><br><span class="line">        &#125;</span><br><span class="line">        item, ok := f.items[id]</span><br><span class="line">        <span class="keyword">if</span> !ok &#123;</span><br><span class="line">            <span class="comment">// Item may have been deleted subsequently.</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">delete</span>(f.items, id)</span><br><span class="line">        err := process(item)</span><br><span class="line">        <span class="keyword">if</span> e, ok := err.(ErrRequeue); ok &#123;</span><br><span class="line">            f.addIfNotPresent(id, item)</span><br><span class="line">            err = e.Err</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> item, err</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法算是这条路径的最后一个追踪的节点了。总结一下这条路径：</p>
+<ol>
+<li>kubernetes 的 cache 中维护了一个先进先出的队列 <code>FIFO</code>，它不同于 golang 中的 chanel，它支持对队列中的元素进行更新、删除等操作。</li>
+<li>这个队列的 <code>FIFO.Pop()</code> 方法会队首元素（一个 pod）到达 ready 状态，然后将它弹出，否则阻塞该方法。</li>
+<li><code>Scheduler</code> 类初始化时使用参数 <code>Config</code>，<code>Config</code> 中的 <code>NextPod()</code> 默认使用 <code>FIFO.Pop()</code>，当 <code>Scheduler</code> 需要进行调度时使用该方法得到下一个待调度的 pod。</li>
+</ol>
+<h2 id="使用调度算法进行实时调度">使用调度算法进行实时调度</h2><p>回到 <code>Config</code> 类的第二个重要参数 <code>Algorithm</code>,它是对 pod 进行调度的实体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/factory/factory.go</span></span><br><span class="line"></span><br><span class="line">algo := scheduler.NewGenericScheduler(f.schedulerCache, predicateFuncs, predicateMetaProducer, priorityConfigs, priorityMetaProducer, extenders)</span><br></pre></td></tr></table></figure>
+<p>可以看到默认情况下，<code>Algorithm</code> 是用的通用调度器，接着看这个 <code>GenericScheduler</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// plugin/pkg/scheduler/generic_scheduler.go&#10;&#10;// Schedule tries to schedule the given pod to one of node in the node list.&#10;// If it succeeds, it will return the name of the node.&#10;// If it fails, it will return a Fiterror error with reasons.&#10;func (g *genericScheduler) Schedule(pod *api.Pod, nodeLister algorithm.NodeLister) (string, error) &#123;&#10;    var trace *util.Trace&#10;    if pod != nil &#123;&#10;        trace = util.NewTrace(fmt.Sprintf(&#34;Scheduling %s/%s&#34;, pod.Namespace, pod.Name))&#10;    &#125; else &#123;&#10;        trace = util.NewTrace(&#34;Scheduling &#60;nil&#62; pod&#34;)&#10;    &#125;&#10;    defer trace.LogIfLong(100 * time.Millisecond)&#10;&#10;    nodes, err := nodeLister.List() // &#33719;&#21462;&#25152;&#26377;&#33410;&#28857;&#10;    if err != nil &#123;&#10;        return &#34;&#34;, err&#10;    &#125;&#10;    if len(nodes) == 0 &#123;&#10;        return &#34;&#34;, ErrNoNodesAvailable&#10;    &#125;&#10;&#10;    // Used for all fit and priority funcs.&#10;    err = g.cache.UpdateNodeNameToInfoMap(g.cachedNodeInfoMap)&#10;    if err != nil &#123;&#10;        return &#34;&#34;, err&#10;    &#125;&#10;&#10;    // TODO(harryz) Check if equivalenceCache is enabled and call scheduleWithEquivalenceClass here&#10;&#10;    trace.Step(&#34;Computing predicates&#34;)&#10;    filteredNodes, failedPredicateMap, err := findNodesThatFit(pod, g.cachedNodeInfoMap, nodes, g.predicates, g.extenders, g.predicateMetaProducer)&#10;    if err != nil &#123;&#10;        return &#34;&#34;, err&#10;    &#125;&#10;&#10;    if len(filteredNodes) == 0 &#123;&#10;        return &#34;&#34;, &#38;FitError&#123;&#10;            Pod:              pod,&#10;            FailedPredicates: failedPredicateMap,&#10;        &#125;&#10;    &#125;&#10;&#10;    trace.Step(&#34;Prioritizing&#34;)&#10;    metaPrioritiesInterface := g.priorityMetaProducer(pod, g.cachedNodeInfoMap)&#10;    priorityList, err := PrioritizeNodes(pod, g.cachedNodeInfoMap, metaPrioritiesInterface, g.prioritizers, filteredNodes, g.extenders)&#10;    if err != nil &#123;&#10;        return &#34;&#34;, err&#10;    &#125;&#10;&#10;    trace.Step(&#34;Selecting host&#34;)&#10;    return g.selectHost(priorityList)&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，GenericScheduler 进行调度为以下过程：</p>
+<ol>
+<li>从 <code>NodeList</code> 获取所有的节点</li>
+<li>通过所给的断言函数（<code>predicates</code>）对所有节点进行过滤，选出符合的节点（<code>findNodesThatFit()</code>）</li>
+<li>根据所给的打分函数（<code>prioritizers</code>）对过滤后的节点进行排序（<code>PrioritizeNodes()</code>）</li>
+<li>通过 round-robin 方式依次获取分数最高的节点来运行 pod。</li>
+</ol>
+<h2 id="调度失败">调度失败</h2><p>在 <code>Config</code> 类的 <code>Error</code> 参数中传入了调度失败的处理方法 <code>makeDefaultErrorFunc()</code> 对调度失败的 pod 进行重调度处理。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// plugin/pkg/scheduler/factory/factory.go</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (factory *ConfigFactory) makeDefaultErrorFunc(backoff *podBackoff, podQueue *cache.FIFO) <span class="keyword">func</span>(pod *api.Pod, err error) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">func</span>(pod *api.Pod, err error) &#123;</span><br><span class="line">        <span class="keyword">if</span> err == scheduler.ErrNoNodesAvailable &#123;</span><br><span class="line">            glog.V(<span class="number">4</span>).Infof(<span class="string">"Unable to schedule %v %v: no nodes are registered to the cluster; waiting"</span>, pod.Namespace, pod.Name)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            glog.Errorf(<span class="string">"Error scheduling %v %v: %v; retrying"</span>, pod.Namespace, pod.Name, err)</span><br><span class="line">        &#125;</span><br><span class="line">        backoff.gc() <span class="comment">// 清空backoff列表</span></span><br><span class="line">        <span class="comment">// Retry asynchronously.</span></span><br><span class="line">        <span class="comment">// Note that this is extremely rudimentary and we need a more real error handling path.</span></span><br><span class="line">        <span class="keyword">go</span> <span class="keyword">func</span>() &#123;</span><br><span class="line">            <span class="keyword">defer</span> runtime.HandleCrash()</span><br><span class="line">            podID := types.NamespacedName&#123;</span><br><span class="line">                Namespace: pod.Namespace,</span><br><span class="line">                Name:      pod.Name,</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            entry := backoff.getEntry(podID)</span><br><span class="line">            <span class="keyword">if</span> !entry.TryWait(backoff.maxDuration) &#123;</span><br><span class="line">                glog.Warningf(<span class="string">"Request for pod %v already in flight, abandoning"</span>, podID)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Get the pod again; it may have changed/been scheduled already.</span></span><br><span class="line">            getBackoff := initialGetBackoff</span><br><span class="line">            <span class="keyword">for</span> &#123;</span><br><span class="line">                pod, err := factory.Client.Core().Pods(podID.Namespace).Get(podID.Name)</span><br><span class="line">                <span class="keyword">if</span> err == <span class="constant">nil</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(pod.Spec.NodeName) == <span class="number">0</span> &#123;</span><br><span class="line">                        podQueue.AddIfNotPresent(pod) <span class="comment">// 重新将pod加入调度队列</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> errors.IsNotFound(err) &#123;</span><br><span class="line">                    glog.Warningf(<span class="string">"A pod %v no longer exists"</span>, podID)</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">                glog.Errorf(<span class="string">"Error getting pod %v for retry: %v; retrying..."</span>, podID, err)</span><br><span class="line">                <span class="keyword">if</span> getBackoff = getBackoff * <span class="number">2</span>; getBackoff &gt; maximalGetBackoff &#123;</span><br><span class="line">                    getBackoff = maximalGetBackoff</span><br><span class="line">                &#125;</span><br><span class="line">                time.Sleep(getBackoff)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从该处理方法看出，一旦出现调度失败，k8s 并不会阻塞调度过程，而是将调度失败的 pod 扔到这个失败处理方法里，而这个方法是通过异步的方式进行重试。k8s 从 backoff 这个列表中拿出指定的 pod，然后将它再次放到 <code>FIFO</code> 队列里，期间如果继续失败，再扔进 backoff 里异步等待处理。</p>
+<h2 id="总结">总结</h2><p>k8s 的代码量非常庞大，需要快速定位源码比较困难，而采用这种根据从入口不断深入的阅读方式会减少很多工作量，只关心一部分的代码。当然这也无法从一个宏观的角度去看整个代码的设计，但是对于当前的工作已经足够。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/" data-id="civwatxsp00abfa6cjimk2g7y" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/#comments" class="article-comment-link ds-thread-count" data-thread-key="https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">How to fix &#39;/bin/rm: Argument list too long</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div class="ds-thread" data-thread-key="2016/11/24/Kubernetes源码阅读-Scheduler/" data-title="Kubernetes源码阅读 - Scheduler" data-url="https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/"></div>
+    <style>
+        #ds-thread #ds-reset .ds-textarea-wrapper {
+            background: none;
+        }
+        #ds-reset .ds-avatar img {
+            box-shadow: none;
+        }
+        #ds-reset .ds-gradient-bg {
+            background: #f7f7f7;
+        }
+        #ds-thread #ds-reset li.ds-tab a {
+            border-radius: 3px;
+        }
+        #ds-thread #ds-reset .ds-post-button {
+            color: white;
+            border: none;
+            box-shadow: none;
+            background: #d32;
+            text-shadow: none;
+            font-weight: normal;
+            font-family: 'Microsoft Yahei';
+        }
+        #ds-thread #ds-reset .ds-post-button:hover {
+            color: white;
+            background: #DE594C;
+        }
+        #ds-thread #ds-reset .ds-post-button:active {
+            background: #d32;
+        }
+        #ds-smilies-tooltip ul.ds-smilies-tabs li a.ds-current {
+            color: white;
+            background: #d32;
+            box-shadow: none;
+            text-shadow: none;
+            font-weight: normal;
+        }
+    </style>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/11/24/Kubernetes源码阅读-Scheduler/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/基础架构/">基础架构</a></p>
+                            <p class="item-title"><a href="/2016/11/24/Kubernetes源码阅读-Scheduler/" class="title">Kubernetes源码阅读 - Scheduler</a></p>
+                            <p class="item-date"><time datetime="2016-11-24T11:50:52.000Z" itemprop="datePublished">2016-11-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/系统运维/">系统运维</a></p>
+                            <p class="item-title"><a href="/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/" class="title">How to fix &#39;/bin/rm: Argument list too long</a></p>
+                            <p class="item-date"><time datetime="2016-11-13T08:09:57.000Z" itemprop="datePublished">2016-11-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/10/24/Difference-between-Mesos-and-Kubernetes/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/基础架构/">基础架构</a></p>
+                            <p class="item-title"><a href="/2016/10/24/Difference-between-Mesos-and-Kubernetes/" class="title">Difference between Mesos and Kubernetes</a></p>
+                            <p class="item-date"><time datetime="2016-10-24T03:09:27.000Z" itemprop="datePublished">2016-10-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/10/18/Debian下编译shadowsocks-qt5/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/设计开发/">设计开发</a></p>
+                            <p class="item-title"><a href="/2016/10/18/Debian下编译shadowsocks-qt5/" class="title">Debian下编译shadowsocks-qt5</a></p>
+                            <p class="item-date"><time datetime="2016-10-18T05:53:08.000Z" itemprop="datePublished">2016-10-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/09/13/使用-gh-md-doc-生成-markdown-文章结构/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/设计开发/">设计开发</a></p>
+                            <p class="item-title"><a href="/2016/09/13/使用-gh-md-doc-生成-markdown-文章结构/" class="title">使用 gh-md-doc 生成 markdown 文章结构</a></p>
+                            <p class="item-date"><time datetime="2016-09-13T12:23:11.000Z" itemprop="datePublished">2016-09-13</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/分布式计算/">分布式计算</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础架构/">基础架构</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/竞赛历程/">竞赛历程</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法分析/">算法分析</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法题解/">算法题解</a><span class="category-list-count">50</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统运维/">系统运维</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程语言/">编程语言</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计开发/">设计开发</a><span class="category-list-count">10</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/ACM/" style="font-size: 10px;">ACM</a> <a href="/tags/ACM现场赛/" style="font-size: 10px;">ACM现场赛</a> <a href="/tags/ACM网络赛/" style="font-size: 12.5px;">ACM网络赛</a> <a href="/tags/BestCoder/" style="font-size: 10px;">BestCoder</a> <a href="/tags/CodeForces/" style="font-size: 12.5px;">CodeForces</a> <a href="/tags/FaceBook-Hacker-Cup/" style="font-size: 10px;">FaceBook Hacker Cup</a> <a href="/tags/HDFS/" style="font-size: 10px;">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/ICTCLAS/" style="font-size: 10px;">ICTCLAS</a> <a href="/tags/InfiniBand/" style="font-size: 10px;">InfiniBand</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/Mesos/" style="font-size: 10px;">Mesos</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/ambari/" style="font-size: 10px;">ambari</a> <a href="/tags/ambari-hadoop/" style="font-size: 10px;">ambari,hadoop</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/bellman-ford/" style="font-size: 10px;">bellman-ford</a> <a href="/tags/bfs/" style="font-size: 12.5px;">bfs</a> <a href="/tags/bugfix/" style="font-size: 10px;">bugfix</a> <a href="/tags/chronos/" style="font-size: 10px;">chronos</a> <a href="/tags/cpu/" style="font-size: 10px;">cpu</a> <a href="/tags/debian/" style="font-size: 10px;">debian</a> <a href="/tags/dfs/" style="font-size: 17.5px;">dfs</a> <a href="/tags/dijkstra/" style="font-size: 10px;">dijkstra</a> <a href="/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/tags/dp/" style="font-size: 12.5px;">dp</a> <a href="/tags/extjs/" style="font-size: 10px;">extjs</a> <a href="/tags/fibonacci/" style="font-size: 10px;">fibonacci</a> <a href="/tags/floyd/" style="font-size: 10px;">floyd</a> <a href="/tags/gh-md-doc/" style="font-size: 10px;">gh-md-doc</a> <a href="/tags/golang/" style="font-size: 11.25px;">golang</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdu/" style="font-size: 11.25px;">hdu</a> <a href="/tags/hello-world/" style="font-size: 10px;">hello world</a> <a href="/tags/hpc/" style="font-size: 10px;">hpc</a> <a href="/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/tags/kubernetes/" style="font-size: 11.25px;">kubernetes</a> <a href="/tags/less/" style="font-size: 10px;">less</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lm-sensors/" style="font-size: 10px;">lm_sensors</a> <a href="/tags/lucas定理/" style="font-size: 10px;">lucas定理</a> <a href="/tags/macos/" style="font-size: 10px;">macos</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/marathon/" style="font-size: 11.25px;">marathon</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mesos/" style="font-size: 18.75px;">mesos</a> <a href="/tags/moore-vote-algorithm/" style="font-size: 10px;">moore vote algorithm</a> <a href="/tags/poj/" style="font-size: 10px;">poj</a> <a href="/tags/popover/" style="font-size: 10px;">popover</a> <a href="/tags/scheduler/" style="font-size: 10px;">scheduler</a> <a href="/tags/shadowsocks/" style="font-size: 10px;">shadowsocks</a> <a href="/tags/spfa/" style="font-size: 10px;">spfa</a> <a href="/tags/stl/" style="font-size: 10px;">stl</a> <a href="/tags/tfidf/" style="font-size: 10px;">tfidf</a> <a href="/tags/webui/" style="font-size: 10px;">webui</a> <a href="/tags/web前端/" style="font-size: 10px;">web前端</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/中文分词/" style="font-size: 10px;">中文分词</a> <a href="/tags/二分/" style="font-size: 10px;">二分</a> <a href="/tags/二分图-图论-匈牙利算法/" style="font-size: 10px;">二分图,图论,匈牙利算法</a> <a href="/tags/二分答案/" style="font-size: 10px;">二分答案</a> <a href="/tags/二进制/" style="font-size: 10px;">二进制</a> <a href="/tags/云计算/" style="font-size: 10px;">云计算</a> <a href="/tags/优先队列/" style="font-size: 10px;">优先队列</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/剪枝/" style="font-size: 10px;">剪枝</a> <a href="/tags/加法链/" style="font-size: 10px;">加法链</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/单色三角/" style="font-size: 10px;">单色三角</a> <a href="/tags/博弈论/" style="font-size: 10px;">博弈论</a> <a href="/tags/卡方校验/" style="font-size: 10px;">卡方校验</a> <a href="/tags/后缀数组/" style="font-size: 10px;">后缀数组</a> <a href="/tags/因数分解/" style="font-size: 11.25px;">因数分解</a> <a href="/tags/图论/" style="font-size: 15px;">图论</a> <a href="/tags/基础算法/" style="font-size: 10px;">基础算法</a> <a href="/tags/多校联训/" style="font-size: 16.25px;">多校联训</a> <a href="/tags/威尔逊定理/" style="font-size: 10px;">威尔逊定理</a> <a href="/tags/容斥原理/" style="font-size: 11.25px;">容斥原理</a> <a href="/tags/并查集/" style="font-size: 12.5px;">并查集</a> <a href="/tags/归并排序/" style="font-size: 10px;">归并排序</a> <a href="/tags/循环节/" style="font-size: 12.5px;">循环节</a> <a href="/tags/批处理/" style="font-size: 10px;">批处理</a> <a href="/tags/拓展欧几里得/" style="font-size: 10px;">拓展欧几里得</a> <a href="/tags/排序/" style="font-size: 10px;">排序</a> <a href="/tags/搜索/" style="font-size: 13.75px;">搜索</a> <a href="/tags/数塔/" style="font-size: 10px;">数塔</a> <a href="/tags/数学/" style="font-size: 10px;">数学</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/数论/" style="font-size: 20px;">数论</a> <a href="/tags/文本分类/" style="font-size: 10px;">文本分类</a> <a href="/tags/文本挖掘/" style="font-size: 11.25px;">文本挖掘</a> <a href="/tags/文本特征值/" style="font-size: 10px;">文本特征值</a> <a href="/tags/斐波那契/" style="font-size: 10px;">斐波那契</a> <a href="/tags/暴力/" style="font-size: 11.25px;">暴力</a> <a href="/tags/最小公倍数/" style="font-size: 11.25px;">最小公倍数</a> <a href="/tags/最短路径/" style="font-size: 11.25px;">最短路径</a> <a href="/tags/期望/" style="font-size: 11.25px;">期望</a> <a href="/tags/标记法/" style="font-size: 10px;">标记法</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/森林/" style="font-size: 10px;">森林</a> <a href="/tags/概率/" style="font-size: 10px;">概率</a> <a href="/tags/概率dp/" style="font-size: 11.25px;">概率dp</a> <a href="/tags/模拟/" style="font-size: 11.25px;">模拟</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/水题/" style="font-size: 13.75px;">水题</a> <a href="/tags/百度之星/" style="font-size: 10px;">百度之星</a> <a href="/tags/监控/" style="font-size: 10px;">监控</a> <a href="/tags/矩阵快速幂/" style="font-size: 12.5px;">矩阵快速幂</a> <a href="/tags/离线查询/" style="font-size: 10px;">离线查询</a> <a href="/tags/等差数列/" style="font-size: 10px;">等差数列</a> <a href="/tags/等比数列/" style="font-size: 10px;">等比数列</a> <a href="/tags/系统运维/" style="font-size: 10px;">系统运维</a> <a href="/tags/素数/" style="font-size: 10px;">素数</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/结论题/" style="font-size: 10px;">结论题</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a> <a href="/tags/编程之美/" style="font-size: 10px;">编程之美</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/群论/" style="font-size: 10px;">群论</a> <a href="/tags/脚本/" style="font-size: 10px;">脚本</a> <a href="/tags/蓝桥杯/" style="font-size: 12.5px;">蓝桥杯</a> <a href="/tags/记忆化搜索/" style="font-size: 10px;">记忆化搜索</a> <a href="/tags/质数/" style="font-size: 10px;">质数</a> <a href="/tags/贪心/" style="font-size: 10px;">贪心</a> <a href="/tags/费马小定理/" style="font-size: 10px;">费马小定理</a> <a href="/tags/资源管理/" style="font-size: 10px;">资源管理</a> <a href="/tags/资源调度/" style="font-size: 10px;">资源调度</a> <a href="/tags/逆序对/" style="font-size: 10px;">逆序对</a> <a href="/tags/遗传算法/" style="font-size: 10px;">遗传算法</a> <a href="/tags/邀请赛/" style="font-size: 11.25px;">邀请赛</a> <a href="/tags/队列/" style="font-size: 11.25px;">队列</a> <a href="/tags/集群/" style="font-size: 10px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://nap-blog.artemisprojects.org">NAP-Group</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://innerac.github.io/">InnerAc</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.sunzequn.com">Sloriac</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://legend4917.github.io/">Legend4917</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://blkstone.github.io">blkstone</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2016 JetMuffin<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'jetmuffin'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js" type="text/javascript"></script>
+
+    </div>
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
