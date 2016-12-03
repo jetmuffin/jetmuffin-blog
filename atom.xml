@@ -94,7 +94,7 @@
     <link href="https://www.jetmuffin.com/2016/11/24/Kubernetes%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Scheduler/"/>
     <id>https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/</id>
     <published>2016-11-24T11:50:52.000Z</published>
-    <updated>2016-12-03T10:37:45.000Z</updated>
+    <updated>2016-12-03T12:08:36.000Z</updated>
     
     <content type="html"><![CDATA[<p>阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。</p>
 <a id="more"></a>
