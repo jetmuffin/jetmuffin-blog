@@ -462,7 +462,7 @@
     <link href="https://www.jetmuffin.com/2016/09/03/Golang-%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>https://www.jetmuffin.com/2016/09/03/Golang-基础学习（一）/</id>
     <published>2016-09-03T12:09:56.000Z</published>
-    <updated>2016-12-02T07:03:36.000Z</updated>
+    <updated>2016-12-03T12:30:07.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>最初接触 go 是在 15 年，最开始对 go 的理解是写多线程的程序非常方便，于是学习了 go 的基本语法，并尝试写了一些 go 的简单应用，包括我的本科毕业设计也是使用 go 写的（<a href="https://github.com/icsnju/apt-mesos" target="_blank" rel="external">apt-mesos</a>）。但是对 go 也是停留在最基本的语法认识，有很多特性并未了解。所以想要从头再屡一遍 go 的所有内容。对每一块儿内容，以重学的角度深入学习。</p>
 <a id="more"></a>
