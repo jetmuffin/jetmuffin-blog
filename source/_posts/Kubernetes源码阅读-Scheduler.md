@@ -1,4 +1,4 @@
-title: Kubernetes源码阅读 - Scheduler
+title: kubernetes源码阅读 - scheduler
 date: 2016-11-24 19:50:52
 tags: [kubernetes, scheduler]
 categories: 基础架构
