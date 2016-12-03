@@ -1,8 +1,8 @@
-title: about
+title: About Me
 date: 2015-10-14 09:23:39
 ---
 
-### Information
+### [jetmuffin.com](www.jetmuffin.com)
 
 ```javascript
 {
