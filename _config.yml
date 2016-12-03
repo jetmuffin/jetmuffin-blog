@@ -11,7 +11,7 @@ author_title: 'ACMer & ITman'
 avatar: uploads/avatar.jpg
 location: 'Nanjing, China'
 follow: https://github.com/jetmuffin/
-language: en
+language: zh-CN
 timezone:
 since: 2015 # The start year showing in your copyright section.
 
@@ -67,7 +67,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: icarus
+theme: material
 
 # Disqus
 # disqus_shortname: hexo-theme-icarus
