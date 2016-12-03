@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!-- Title -->
+    
+    <title>
+        Dijkstra算法 单源最短路径 堆优化 | JetMuffin&#39;s Blog
+    </title>
+    
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+    
+    <!-- Meta & INfo -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#607D8B">
+    <meta name="author" content="JetMuffin">
+    <meta name="description" content="JetMuffin&#39;s Blog">
+    <meta name="keywords" content="null">
+    
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+    
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="JetMuffin&#39;s Blog">
+    
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://www.jetmuffin.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Dijkstra算法 单源最短路径 堆优化 | JetMuffin&#39;s Blog">
+    <meta property="og:description" content="JetMuffin&#39;s Blog">
+    
+     <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+        
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+    
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="/css/material.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+    <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+	body, html{
+		font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+	}
+	
+    a{
+        color: #00838F
+    }
+    
+    .mdl-card__media,
+    #search-label,
+    #search-form-label:after,
+    #scheme-Paradox .hot_tags-count,
+    #scheme-Paradox .sidebar_archives-count,
+    #scheme-Paradox .sidebar-colored .sidebar-header,
+    #scheme-Paradox .sidebar-colored .sidebar-badge{
+        background-color: #607D8B !important
+    }
+    
+	/* Sidebar User Drop Down Menu Text Color */
+	#scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+    #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus{
+        color: #607D8B !important
+    }
+    
+    #post_entry-right-info,
+    .sidebar-colored .sidebar-nav li:hover > a,
+    .sidebar-colored .sidebar-nav li:hover > a i,
+    .sidebar-colored .sidebar-nav li > a:hover,
+    .sidebar-colored .sidebar-nav li > a:hover i,
+    .sidebar-colored .sidebar-nav li > a:focus i,
+    .sidebar-colored .sidebar-nav > .open > a,
+    .sidebar-colored .sidebar-nav > .open > a:hover,
+    .sidebar-colored .sidebar-nav > .open > a:focus,
+    #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a{
+        color: #607D8B !important
+    }
+    
+    .toTop{
+        background: #757575 !important
+    }
+		
+	.material-layout .material-post>.material-nav,
+	.material-layout .material-index>.material-nav,
+	.material-nav a{
+		color: #757575;
+	}
+		
+	#scheme-Paradox .MD-burger-layer {
+		background-color: #757575;
+	}
+
+	#scheme-Paradox #post-toc-trigger-btn{
+		color: #757575;
+	}
+	
+	.post-toc a:hover{
+		color: #00838F;
+		text-decoration: underline;
+	}
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+        body{
+            background-color: #F5F5F5
+        }
+		
+		/* blog_info bottom background */
+        #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+            background-color: #fff;
+        }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+        .fade {
+            transition: all 800ms linear;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            -ms-transform: translate3d(0,0,0);
+            -o-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            opacity: 1;
+        }
+
+        .fade.out{
+            opacity: 0;
+        }
+    </style>
+
+	<script src="/js/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="/css/highlight/solarized-white.css">
+	
+	<!-- UC Browser Compatible-->
+	<script>
+		var agent = navigator.userAgent.toLowerCase();
+		if(agent.indexOf('ucbrowser')>0) {
+			document.write('<link rel="stylesheet" href="/css/uc.css">');
+		   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+		}
+	</script>
+    
+    <!-- Custom Head -->
+    
+</head>
+	
+	
+
+    <body id="scheme-Paradox">
+
+		
+        <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+				
+			
+			
+            <!-- Main Container -->
+            <main class="material-layout__content" id="main">
+				
+                <!-- Top Anchor -->
+                <div id="top"></div>
+				
+				
+                <!-- Hamburger Button -->
+                <button class="MD-burger-icon sidebar-toggle">
+                    <span class="MD-burger-layer"></span>
+                </button>
+				
+				
+                
+	<!-- Back Button -->
+<!--
+	<div class="material-back" id="backhome-div" tabindex="0">
+		<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#" onclick="window.history.back();return false;" target="_self" role="button" data-upgraded=",MaterialButton,MaterialRipple">
+			<i class="material-icons" role="presentation">arrow_back</i>
+			<span class="mdl-button__ripple-container">
+				<span class="mdl-ripple"></span>
+			</span>
+		</a>
+	</div>			
+-->
+	<!-- Left aligned menu below button -->
+	<button id="post-toc-trigger-btn"
+			class="mdl-button mdl-js-button mdl-button--icon">
+	  <i class="material-icons">format_list_numbered</i>
+	</button>
+
+	<ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+		for="post-toc-trigger-btn">
+			
+			<ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">概念</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#算法"><span class="post-toc-number">2.</span> <span class="post-toc-text">算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#优化"><span class="post-toc-number">3.</span> <span class="post-toc-text">优化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#最小堆模板"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">最小堆模板</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#应用"><span class="post-toc-number">4.</span> <span class="post-toc-text">应用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hdu-2544"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">hdu 2544</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hdu-2544-堆优化版本"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">hdu 2544 堆优化版本</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#poj-1502"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">poj 1502</span></a></li></ol></li></ol>
+		
+<!--			<li class="mdl-menu__item">Some Action</li>-->
+	</ul>
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+		
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+	<!-- Paradox Post Header -->
+	
+		
+			<!-- Random Thumbnail -->
+			<div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+				<script>
+    
+    var randomNum;
+    randomNum = Math.floor(Math.random() * 5 + 1);
+    
+    $(".post_thumbnail-random").css('background-image', 'url(' + '/img/random/' + randomNum + '.png' + ')');
+    
+</script>
+
+		
+	
+        <p class="article-headline-p">
+            Dijkstra算法 单源最短路径 堆优化
+        </p>
+    </div>
+
+	
+
+				
+				
+					<!-- Paradox Post Info -->
+					<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+    
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.jpg" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>JetMuffin</strong>
+        <span>9月 05, 2015</span>
+    </div>
+    
+    <div class="section-spacer"></div>
+	
+    <!-- Favorite -->
+<!--
+    <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+        <i class="material-icons" role="presentation">favorite</i>
+        <span class="visuallyhidden">favorites</span>
+    </button>
+-->
+    
+    <!-- Tags (bookmark) -->
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/dijkstra/">dijkstra</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/图论/">图论</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/最短路径/">最短路径</a>
+    </ul>
+    
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+    
+    
+    
+    <!-- Busuanzi Views -->
+    <a class="post_share-link" href="#">
+        <li class="mdl-menu__item">
+            <span id="busuanzi_container_page_pv">
+                <span id="busuanzi_value_page_pv"></span>&nbsp;浏览量
+            </span>
+        </li>
+    </a>
+    
+    
+    <!-- Share Twitter -->
+    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Dijkstra算法 单源最短路径 堆优化&url=https://www.jetmuffin.com//2015/09/05/Dijkstra算法-单源最短路径-堆优化/index.html&via=JetMuffin" target="_blank">
+        <li class="mdl-menu__item">
+            分享到 Twitter
+        </li>
+    </a>
+    
+    <!-- Share Google+ -->
+    <a class="post_share-link" href="https://plus.google.com/share?url=https://www.jetmuffin.com//2015/09/05/Dijkstra算法-单源最短路径-堆优化/index.html" target="_blank">
+        <li class="mdl-menu__item">
+            分享到 Google+
+        </li>
+    </a>
+    
+    <!-- Share Weibo -->
+    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Dijkstra算法 单源最短路径 堆优化&url=https://www.jetmuffin.com//2015/09/05/Dijkstra算法-单源最短路径-堆优化/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <li class="mdl-menu__item">
+            分享到微博
+        </li>
+    </a>
+</ul>
+</div>
+				
+
+                <!-- Post Content -->
+                <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+	
+		<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Dijkstra是用来解决只含有非负边权的单源最短路径问题。给定一个起始点s，算法可以求出s到其他所有点的最短路径距离。算法结束后会生成一棵最短路径树。<br><a id="more"></a></p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul>
+<li>输入：图G（邻接矩阵或者邻接表）</li>
+<li>输出：s到每一个点的最短路径</li>
+<li><p>具体流程：</p>
+<ol>
+<li>初始化距离数组为INF</li>
+<li>设置所有点都未访问过</li>
+<li>找到所有未访问过的点中最小的一个，标记为访问过</li>
+<li>对3中找到的点的所有相邻点进行松弛操作</li>
+<li>重复3和4直到所有点都被访问过</li>
+</ol>
+</li>
+<li>复杂度：朴素方法<code>O(|V|^2+|E|)</code>，最大堆维护距离<code>O(|E|+|V|log|V|)</code></li>
+<li><p>算法动图</p>
+<p><img src="http://pic002.cnblogs.com/images/2012/426620/2012073019540660.gif" alt="dijkstra"></p>
+</li>
+</ul>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>朴素的dijkstra相对于spfa没有任何优势，复杂度达到了<code>O(n^2)</code>的级别，但是只要加入了堆优化，复杂度可以降到<code>O(nlog(n))</code>,则体现出它的优势了。最小堆查询最小值的复杂度为`O(logn)</p>
+<h3 id="最小堆模板"><a href="#最小堆模板" class="headerlink" title="最小堆模板"></a>最小堆模板</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>struct HeapElement {<br>    // key存储顶点序号，value存储到该顶点的最短距离<br>    int key, value;<br>};<br>struct MinHeap {<br>    HeapElement heap[MAXN];<br>    int position[MAXN];<br>    int size; // 顶点数<br>    void init() {<br>        heap[size=0].value = -INF;<br>        memset(position, 0, sizeof(position));<br>    }<br>    void insert(int key, int value) {<br>        heap[++size].key = key;<br>        heap[size].value = value;<br>        position[key] = size;<br>        siftUp(size);<br>    }<br>    void decrease(int index) {<br>        int x = heap[index].value;<br>        int y = heap[size].value;<br>        – size;<br>        if (index == size+1)<br>            return;  </p>
+<pre><code>    swap(heap[index], heap[size+1]);  
+    if (y &gt;= x) {  
+        siftDown(index);      
+    } else {  
+        siftUp(index);    
+    }  
+}  
+int delmin() {  
+    int x = heap[1].key;  
+    decrease(1);  
+    return x;  
+}  
+void siftUp(int index) {  
+    while (index &gt; 1) {  
+        if (heap[index].value &lt; heap[index/2].value) {  
+            swap(heap[index],heap[index/2]);      
+        } else {  
+            break;  
+        }  
+        index /= 2;  
+    }  
+}  
+void siftDown(int index) {  
+    while (index*2 &lt;= size) {  
+        index *= 2;  
+        if (index &lt; size &amp;&amp; heap[index].value &gt; heap[index+1].value) {  
+            ++ index;  
+        }  
+        if (heap[index].value &lt; heap[index/2].value) {  
+            swap(heap[index],heap[index/2]);  
+        } else {  
+            break;  
+        }  
+    }  
+}  
+void makeHeap() {  
+    for (int i = size/2; i &gt; 0; -- i)   
+        siftDown(i);  
+}  
+void swap(HeapElement &amp;a, HeapElement &amp;b) {  
+    HeapElement temp = a;  
+    a = b;  
+    b = temp;  
+    int tmp = position[a.key];  
+    position[a.key] = position[b.key];  
+    position[b.key] = tmp;  
+}  
+</code></pre><p>}H;  </p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="hdu-2544"><a href="#hdu-2544" class="headerlink" title="hdu 2544"></a>hdu 2544</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> INF 0x3f3f3f3f  </span></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1010</span>;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> edge&#123;</div><div class="line">    <span class="keyword">int</span> i,w;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">vector</span>&lt;edge&gt; g[maxn];</div><div class="line"><span class="keyword">int</span> dis[maxn];</div><div class="line"><span class="keyword">int</span> vis[maxn];</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">min</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;  </div><div class="line">    <span class="keyword">return</span> a&lt;b?a:b;  </div><div class="line">&#125; </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n ; i++)</div><div class="line">        dis[i] = INF;</div><div class="line">    dis[<span class="number">1</span>] = <span class="number">0</span>;</div><div class="line">    <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</div><div class="line">        <span class="keyword">int</span> mark = <span class="number">-1</span>;</div><div class="line">        <span class="keyword">int</span> mindis = INF;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)&#123;</div><div class="line">            <span class="keyword">if</span>(!vis[j] &amp;&amp; dis[j] &lt; mindis)&#123;</div><div class="line">                mindis = dis[j];</div><div class="line">                mark = j;</div><div class="line">            &#125;</div><div class="line">        &#125;<span class="comment">//find vertex of minimal distance</span></div><div class="line">        vis[mark] = <span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; g[mark].size(); j++)&#123;</div><div class="line">            <span class="keyword">int</span> v = g[mark][j].i;</div><div class="line">            <span class="keyword">int</span> w = g[mark][j].w;</div><div class="line">            <span class="keyword">if</span>(!vis[v])&#123;</div><div class="line">                dis[v] = min(dis[v],dis[mark]+w);</div><div class="line">            &#125;       </div><div class="line">        &#125;<span class="comment">//relax the adjacent edges of minimal vertex</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n,m;</div><div class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m),m+n)&#123;</div><div class="line">        <span class="built_in">memset</span>(g, <span class="number">0</span>, <span class="keyword">sizeof</span>(g));</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++)&#123;</div><div class="line">            <span class="keyword">int</span> u,v,w;</div><div class="line">            <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;u,&amp;v,&amp;w);</div><div class="line">            edge e;</div><div class="line">            e.i = v;</div><div class="line">            e.w = w;</div><div class="line">            g[u].push_back(e);</div><div class="line">            e.i = u;</div><div class="line">            g[v].push_back(e);</div><div class="line">        &#125;</div><div class="line">        dijkstra(n);</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,dis[n]);</div><div class="line">    &#125;   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="hdu-2544-堆优化版本"><a href="#hdu-2544-堆优化版本" class="headerlink" title="hdu 2544 堆优化版本"></a>hdu 2544 堆优化版本</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span>  </span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> INF 0x7FFFFFFF  </span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;  </div><div class="line">  </div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> SIZE = <span class="number">105</span>;  </div><div class="line"><span class="keyword">int</span> dist[SIZE];  </div><div class="line"><span class="keyword">int</span> G[SIZE][SIZE];  </div><div class="line"><span class="keyword">bool</span> vis[SIZE];  </div><div class="line"><span class="keyword">struct</span> HeapElement &#123;  </div><div class="line">    <span class="keyword">int</span> key, value;      </div><div class="line">&#125;;  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(HeapElement &amp;ha, HeapElement &amp;hb)</span> </span>&#123;  </div><div class="line">    <span class="keyword">int</span> key = ha.key;  </div><div class="line">    <span class="keyword">int</span> value = ha.value;  </div><div class="line">    ha.key = hb.key;  </div><div class="line">    ha.value = hb.value;  </div><div class="line">    hb.key = key;  </div><div class="line">    hb.value = value;  </div><div class="line">&#125;;  </div><div class="line"><span class="comment">// 使用邻接表储存图，线性表储存堆   </span></div><div class="line"><span class="keyword">struct</span> MinHeap &#123;  </div><div class="line">    HeapElement heap[SIZE];  </div><div class="line">    <span class="keyword">int</span> n;    <span class="comment">// 顶点数      </span></div><div class="line">          </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">makeheap</span><span class="params">()</span> </span>&#123;  </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n/<span class="number">2</span>; i &gt; <span class="number">0</span>; -- i)  </div><div class="line">            siftDown(i);  </div><div class="line">    &#125;;  </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">siftUp</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;  </div><div class="line">        <span class="keyword">int</span> k = index;  </div><div class="line">        <span class="keyword">while</span> (k &gt; <span class="number">1</span>) &#123;  </div><div class="line">            <span class="keyword">if</span> (heap[k].value &lt; heap[k/<span class="number">2</span>].value) &#123;  </div><div class="line">                swap(heap[k],heap[k/<span class="number">2</span>]);      </div><div class="line">            &#125; <span class="keyword">else</span> &#123;  </div><div class="line">                <span class="keyword">break</span>;      </div><div class="line">            &#125;  </div><div class="line">            k /= <span class="number">2</span>;      </div><div class="line">        &#125;  </div><div class="line">    &#125;;  </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">siftDown</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;  </div><div class="line">        <span class="keyword">int</span> k = index;  </div><div class="line">        <span class="keyword">while</span> (k*<span class="number">2</span> &lt;= n) &#123;  </div><div class="line">            k *= <span class="number">2</span>;  </div><div class="line">            <span class="keyword">if</span> (k &lt; n &amp;&amp; heap[k].value &gt; heap[k+<span class="number">1</span>].value) &#123;  </div><div class="line">                ++ k;      </div><div class="line">            &#125;  </div><div class="line">            <span class="keyword">if</span> (heap[k].value &lt; heap[k/<span class="number">2</span>].value) &#123;  </div><div class="line">                swap(heap[k],heap[k/<span class="number">2</span>]);  </div><div class="line">            &#125; <span class="keyword">else</span> &#123;  </div><div class="line">                <span class="keyword">break</span>;      </div><div class="line">            &#125;      </div><div class="line">        &#125;  </div><div class="line">    &#125;;  </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(HeapElement element)</span> </span>&#123;  </div><div class="line">        heap[++n] = element;  </div><div class="line">        siftUp(n);      </div><div class="line">    &#125;;  </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">decrease</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;  </div><div class="line">        <span class="keyword">int</span> x = heap[index].value;  </div><div class="line">        <span class="keyword">int</span> y = heap[n].value;  </div><div class="line">        n -= <span class="number">1</span>;  </div><div class="line">          </div><div class="line">        <span class="comment">// 若删除节点位于最末位置，则删除成功，无需其他操作。   </span></div><div class="line">        <span class="keyword">if</span> (index == n+<span class="number">1</span>)   </div><div class="line">            <span class="keyword">return</span>;  </div><div class="line">          </div><div class="line">        heap[index] = heap[n+<span class="number">1</span>];  </div><div class="line">        <span class="keyword">if</span> (y &gt;= x) &#123;  </div><div class="line">            siftDown(index);      </div><div class="line">        &#125; <span class="keyword">else</span> &#123;  </div><div class="line">            siftUp(index);      </div><div class="line">        &#125;  </div><div class="line">    &#125;;  </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">decreaseMin</span><span class="params">()</span> </span>&#123;  </div><div class="line">        <span class="keyword">int</span> x = heap[<span class="number">1</span>].key;  </div><div class="line">        decrease(<span class="number">1</span>);  </div><div class="line">        <span class="keyword">return</span> x;  </div><div class="line">    &#125;;  </div><div class="line">&#125;H;  </div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> src, <span class="keyword">int</span> n)</span> </span>&#123;  </div><div class="line">    <span class="keyword">int</span> i, j, w;  </div><div class="line">    <span class="keyword">bool</span> flag;  </div><div class="line">      </div><div class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;  </div><div class="line">        <span class="keyword">if</span> (G[i][src] != INF) &#123;  </div><div class="line">            dist[i] = G[src][i];  </div><div class="line">            HeapElement h = &#123;i, dist[i]&#125;;  </div><div class="line">            H.insert(h);      </div><div class="line">        &#125; <span class="keyword">else</span> &#123;  </div><div class="line">            dist[i] = INF;      </div><div class="line">        &#125;      </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    <span class="built_in">memset</span>(vis, <span class="literal">false</span>, <span class="keyword">sizeof</span>(vis));  </div><div class="line">    vis[src] = <span class="literal">true</span>;  </div><div class="line">    dist[src] = <span class="number">0</span>;  </div><div class="line">      </div><div class="line">  </div><div class="line">      </div><div class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; n; ++ i) &#123;  </div><div class="line">  </div><div class="line">        <span class="keyword">int</span> node = H.decreaseMin();  <span class="comment">//get the vertex of minimal distance</span></div><div class="line">        vis[node] = <span class="literal">true</span>;  </div><div class="line">  </div><div class="line">        <span class="keyword">for</span> (w = <span class="number">1</span>; w &lt;= n; ++ w) &#123;  </div><div class="line">            flag = <span class="literal">false</span>;  </div><div class="line">            <span class="keyword">if</span> (!vis[w] &amp;&amp; G[node][w] != INF) &#123;  </div><div class="line">                <span class="keyword">if</span> (dist[node] &lt; dist[w] - G[node][w]) &#123;  </div><div class="line">                    dist[w] = dist[node] + G[node][w];   <span class="comment">//relax all adjacent of this vertex</span></div><div class="line">                          </div><div class="line">                &#125;   </div><div class="line">                <span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= H.n; ++ j) &#123;       <span class="comment">//update minimal heap</span></div><div class="line">                        <span class="keyword">if</span> (H.heap[j].key == w) &#123;  </div><div class="line">                            H.heap[j].value = dist[w];  </div><div class="line">                            flag = <span class="literal">true</span>;  </div><div class="line">                            <span class="keyword">break</span>;      </div><div class="line">                        &#125;      </div><div class="line">                    &#125;      </div><div class="line">                  </div><div class="line">                <span class="keyword">if</span> (!flag) &#123;  </div><div class="line">                    HeapElement h = &#123;w, dist[w]&#125;;  </div><div class="line">                    H.insert(h);  </div><div class="line">                &#125; <span class="keyword">else</span> &#123;  </div><div class="line">                    H.siftUp(j);  </div><div class="line">                &#125;  </div><div class="line">            &#125;  </div><div class="line">        &#125;      </div><div class="line">    &#125;  </div><div class="line">&#125;;  </div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;  </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)  </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j)  </div><div class="line">            G[i][j] = INF;  </div><div class="line">    H.n = <span class="number">0</span>;  </div><div class="line">&#125;;  </div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></div><div class="line">&#123;  </div><div class="line">    <span class="keyword">int</span> N, M, a, b, c;  </div><div class="line">      </div><div class="line">      </div><div class="line">    <span class="keyword">while</span> (<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;N,&amp;M)!=EOF, N&amp;&amp;M) &#123;  </div><div class="line">        init(N);  </div><div class="line">          </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; M; ++ i) &#123;  </div><div class="line">            <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;a,&amp;b,&amp;c);  </div><div class="line">            <span class="keyword">if</span> (G[a][b] &gt; c) &#123;  </div><div class="line">                G[a][b] = c;  </div><div class="line">                G[b][a] = c;  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">          </div><div class="line">        dijkstra(<span class="number">1</span>, N);  </div><div class="line">          </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,dist[N]);      </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="poj-1502"><a href="#poj-1502" class="headerlink" title="poj 1502"></a>poj 1502</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> INF 0x3f3f3f3f  </span></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1010</span>;</div><div class="line"><span class="keyword">int</span> dis[maxn],g[maxn][maxn];</div><div class="line"><span class="keyword">int</span> vis[maxn];</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">min</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> a&lt;b?a:b;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</div><div class="line">        dis[i] = INF;</div><div class="line">    dis[<span class="number">1</span>] = <span class="number">0</span>;</div><div class="line">    <span class="built_in">memset</span>(vis, <span class="number">0</span> , <span class="keyword">sizeof</span>(vis));</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</div><div class="line">        <span class="keyword">int</span> mark = <span class="number">-1</span>;</div><div class="line">        <span class="keyword">int</span> mindis = INF;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)&#123;</div><div class="line">            <span class="keyword">if</span>(!vis[j] &amp;&amp; dis[j] &lt; mindis)&#123;</div><div class="line">                mindis = dis[j];</div><div class="line">                mark = j;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        vis[mark] = <span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)&#123;</div><div class="line">            <span class="keyword">if</span>(!vis[j])&#123;</div><div class="line">                dis[j] = min(dis[j], g[mark][j] + dis[mark]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n))&#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</div><div class="line">                g[i][j] = INF;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++)</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++)&#123;</div><div class="line">                <span class="keyword">int</span> x;</div><div class="line">                <span class="keyword">if</span>(<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;x))  g[i][j] = g[j][i] = x;</div><div class="line">                <span class="keyword">else</span> <span class="built_in">scanf</span>(<span class="string">"x"</span>); <span class="comment">//input handle</span></div><div class="line">            &#125;</div><div class="line">        dijkstra(n);</div><div class="line">        <span class="keyword">int</span> ans = <span class="number">-1</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</div><div class="line">            <span class="keyword">if</span>(dis[i] &gt; ans)</div><div class="line">                ans = dis[i];</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+	
+	
+	
+	
+</div>
+				
+				
+
+                <!-- Post Comments -->
+                
+    <!-- 使用多说评论 -->
+    <link rel="stylesheet" href="/css/duoshuo.min.css">
+<style>
+    #ds-thread #ds-reset .ds-post-button{
+        background-color: #607D8B !important;
+    }
+    #ds-wrapper #ds-reset .ds-icons-32{
+        background-color: #607D8B !important;
+    }
+    #ds-reset .ds-highlight {
+        color: #607D8B !important;
+    }
+</style>
+<div id="comments">
+    <!-- 多说评论框 start -->
+        <div class="ds-thread" 
+            data-thread-key="2015/09/05/Dijkstra算法-单源最短路径-堆优化/" 
+            data-url="https://www.jetmuffin.com/2015/09/05/Dijkstra算法-单源最短路径-堆优化/"
+            data-title="Dijkstra算法 单源最短路径 堆优化"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+
+
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    
+    <!-- Prev Nav -->
+    
+        <a href="/2015/09/05/Floyd-Warshall算法-多源最短路径/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2015/09/04/SPFA-单源最短路径-队列优化版Bellman-ford/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+        </div>
+    </div>
+
+				
+				
+					<!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay "></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored  sidebar-fixed-left" role="navigation">
+	<div id="sidebar-main">
+	    <!-- Sidebar Header -->
+		<div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+    <i class="material-icons">clear_all</i>
+    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.jpg" alt="JetMuffin's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        jeffchen328@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+		<!-- Sidebar Navigation  -->
+		<ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+			
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+						<i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    <li id="sidebar-first-li">
+        <a href="/" target="_self">
+            <i class="material-icons sidebar-material-icons">home</i>
+             主页
+        </a>
+    </li>
+
+    <!-- I'm Feeling Lucky -->
+<!--
+    <li class="dropdown">
+        <a href="" target="_self">
+            <i class="material-icons sidebar-material-icons">explore</i>
+             sidebar.imlucky
+        </a>
+    </li>
+-->
+
+	
+    <!-- Archives  -->
+    <li class="dropdown">
+        <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+            <i class="material-icons sidebar-material-icons">inbox</i>
+             归档
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+            <a class="sidebar_archives-link" href="/archives/2016/12/">十二月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">十一月 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">十月 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">九月 2016<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">五月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/03/">三月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/01/">一月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/12/">十二月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/11/">十一月 2015<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/10/">十月 2015<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/09/">九月 2015<span class="sidebar_archives-count">10</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/08/">八月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/07/">七月 2015<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/06/">六月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/05/">五月 2015<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/04/">四月 2015<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/03/">三月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/02/">二月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/01/">一月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/11/">十一月 2014<span class="sidebar_archives-count">8</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/10/">十月 2014<span class="sidebar_archives-count">12</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/09/">九月 2014<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/07/">七月 2014<span class="sidebar_archives-count">2</span></a>
+        </ul>
+    </li>
+
+    <!-- Divider -->
+    <li class="divider"></li>
+
+
+    <!-- Pages  -->
+	
+		<li>
+			<a href="/about" title="关于我">
+				关于我
+			</a>
+		</li>
+	
+		<li>
+			<a href="/tags" title="标签云">
+				标签云
+			</a>
+		</li>
+	
+
+    <!-- Article Numebr  -->
+    <li>
+        <a href="/archives">
+             文章总数
+             <span class="sidebar-badge">95</span>
+        </a>
+    </li>
+</ul>
+
+		<!-- Sidebar Divider -->
+		<div class="sidebar-divider"></div>
+
+		<!-- Sidebar Footer -->
+		<!-- 
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持。 :) 
+-->
+
+<!-- Theme Material -->
+<a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+	<div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+		主题 - Material
+		<span class="sidebar-badge badge-circle">i</span>
+	</div>
+</a>
+
+<!-- Help & Support -->
+<!--
+<a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+		sidebar.help
+		<span class="mdl-button__ripple-container">
+			<span class="mdl-ripple"></span>
+		</span>
+	</div>
+</a>
+-->
+
+<!-- Feedback -->
+<!--
+<a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.feedback
+                    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>
+-->
+
+<!-- Abount Theme -->
+<!--
+<a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.about_theme
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>-->
+
+	</div>
+    
+    <!-- Sidebar Sponsor -->
+    
+
+
+</aside>
+
+				
+				
+				
+					<!-- Footer Top Button -->
+					<div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+				
+				
+				<!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+	
+	
+		<!-- Paradox Footer Left Section -->
+		<div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+    <a href="https://twitter.com/JeffChe97845794" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-twitter.png);">
+        <span class="visuallyhidden">Twitter</span>
+    </button></a>
+    
+    
+    <!-- Facebook -->
+    
+    
+    
+    <!-- Google + -->
+    
+    
+    
+    <!-- Weibo -->
+    
+    <a href="http://weibo.com/1922357801" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-weibo.png);">
+        <span class="visuallyhidden">Weibo</span>
+    </button></a>
+    
+    
+    <!-- Instagram -->
+    
+    
+    
+    <!-- Tumblr -->
+    
+    
+    
+    <!-- Github -->
+    
+    <a href="https://github.com/JetMuffin" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.png);">
+        <span class="visuallyhidden">Github</span>
+    </button></a>
+    
+</div>
+
+
+		<!--Copyright-->
+		<div id="copyright">Copyright&nbsp;©&nbsp;<script type="text/javascript">var fd = new Date();document.write(fd.getFullYear());</script>&nbsp;JetMuffin's Blog</div>
+
+		<!-- Paradox Footer Right Section -->
+
+		<!-- 
+		I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+		It will not impact the appearance and can give developers a lot of support :)
+
+		很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+		它不会影响美观并可以给开发者很大的支持。 :) 
+		-->
+
+		<div class="mdl-mini-footer--right-section">
+			<div>
+				<div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+				<div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+			</div>
+		</div>
+	
+    
+</footer>
+                
+				<!-- Import File -->
+<script src="/js/highlight.min.js"></script>
+<script src="/js/js.min.js"></script>
+<script src="/js/nprogress.js"></script>
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    
+    $('#nprogress .bar').css({
+        'background': '#FF4081'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #FF4081, 0 0 15px #FF4081'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#FF4081',
+        'border-left-color': '#FF4081'
+    });
+    
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    <!-- 多说公共 js 代码 start -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = 'https://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共 js 代码 end -->
+
+
+
+
+<!-- Swiftye -->
+
+
+<!-- Local Search-->
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $(".post-toc-wrap").parent(".mdl-menu__container").css("position", "fixed");
+    });
+</script>
+
+<!-- MathJax Load-->
+
+            </main>
+        </div>
+		
+    </body>
+		
+	
+</html>

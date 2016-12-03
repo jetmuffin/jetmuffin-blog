@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!-- Title -->
+    
+    <title>
+        kubernetes源码阅读 - scheduler | JetMuffin&#39;s Blog
+    </title>
+    
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+    
+    <!-- Meta & INfo -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#607D8B">
+    <meta name="author" content="JetMuffin">
+    <meta name="description" content="JetMuffin&#39;s Blog">
+    <meta name="keywords" content="null">
+    
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+    
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="JetMuffin&#39;s Blog">
+    
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://www.jetmuffin.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="kubernetes源码阅读 - scheduler | JetMuffin&#39;s Blog">
+    <meta property="og:description" content="JetMuffin&#39;s Blog">
+    
+     <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+        
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+    
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="/css/material.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+    <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+	body, html{
+		font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+	}
+	
+    a{
+        color: #00838F
+    }
+    
+    .mdl-card__media,
+    #search-label,
+    #search-form-label:after,
+    #scheme-Paradox .hot_tags-count,
+    #scheme-Paradox .sidebar_archives-count,
+    #scheme-Paradox .sidebar-colored .sidebar-header,
+    #scheme-Paradox .sidebar-colored .sidebar-badge{
+        background-color: #607D8B !important
+    }
+    
+	/* Sidebar User Drop Down Menu Text Color */
+	#scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+    #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus{
+        color: #607D8B !important
+    }
+    
+    #post_entry-right-info,
+    .sidebar-colored .sidebar-nav li:hover > a,
+    .sidebar-colored .sidebar-nav li:hover > a i,
+    .sidebar-colored .sidebar-nav li > a:hover,
+    .sidebar-colored .sidebar-nav li > a:hover i,
+    .sidebar-colored .sidebar-nav li > a:focus i,
+    .sidebar-colored .sidebar-nav > .open > a,
+    .sidebar-colored .sidebar-nav > .open > a:hover,
+    .sidebar-colored .sidebar-nav > .open > a:focus,
+    #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a{
+        color: #607D8B !important
+    }
+    
+    .toTop{
+        background: #757575 !important
+    }
+		
+	.material-layout .material-post>.material-nav,
+	.material-layout .material-index>.material-nav,
+	.material-nav a{
+		color: #757575;
+	}
+		
+	#scheme-Paradox .MD-burger-layer {
+		background-color: #757575;
+	}
+
+	#scheme-Paradox #post-toc-trigger-btn{
+		color: #757575;
+	}
+	
+	.post-toc a:hover{
+		color: #00838F;
+		text-decoration: underline;
+	}
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+        body{
+            background-color: #F5F5F5
+        }
+		
+		/* blog_info bottom background */
+        #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+            background-color: #fff;
+        }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+        .fade {
+            transition: all 800ms linear;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            -ms-transform: translate3d(0,0,0);
+            -o-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            opacity: 1;
+        }
+
+        .fade.out{
+            opacity: 0;
+        }
+    </style>
+
+	<script src="/js/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="/css/highlight/solarized-white.css">
+	
+	<!-- UC Browser Compatible-->
+	<script>
+		var agent = navigator.userAgent.toLowerCase();
+		if(agent.indexOf('ucbrowser')>0) {
+			document.write('<link rel="stylesheet" href="/css/uc.css">');
+		   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+		}
+	</script>
+    
+    <!-- Custom Head -->
+    
+</head>
+	
+	
+
+    <body id="scheme-Paradox">
+
+		
+        <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+				
+			
+			
+            <!-- Main Container -->
+            <main class="material-layout__content" id="main">
+				
+                <!-- Top Anchor -->
+                <div id="top"></div>
+				
+				
+                <!-- Hamburger Button -->
+                <button class="MD-burger-icon sidebar-toggle">
+                    <span class="MD-burger-layer"></span>
+                </button>
+				
+				
+                
+	<!-- Back Button -->
+<!--
+	<div class="material-back" id="backhome-div" tabindex="0">
+		<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#" onclick="window.history.back();return false;" target="_self" role="button" data-upgraded=",MaterialButton,MaterialRipple">
+			<i class="material-icons" role="presentation">arrow_back</i>
+			<span class="mdl-button__ripple-container">
+				<span class="mdl-ripple"></span>
+			</span>
+		</a>
+	</div>			
+-->
+	<!-- Left aligned menu below button -->
+	<button id="post-toc-trigger-btn"
+			class="mdl-button mdl-js-button mdl-button--icon">
+	  <i class="material-icons">format_list_numbered</i>
+	</button>
+
+	<ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+		for="post-toc-trigger-btn">
+			
+			<ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Scheduler-入口"><span class="post-toc-number">1.</span> <span class="post-toc-text">Scheduler 入口</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获取待调度的-Pod"><span class="post-toc-number">2.</span> <span class="post-toc-text">获取待调度的 Pod</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用调度算法进行实时调度"><span class="post-toc-number">3.</span> <span class="post-toc-text">使用调度算法进行实时调度</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#调度失败"><span class="post-toc-number">4.</span> <span class="post-toc-text">调度失败</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">5.</span> <span class="post-toc-text">总结</span></a></li></ol>
+		
+<!--			<li class="mdl-menu__item">Some Action</li>-->
+	</ul>
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+		
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+	<!-- Paradox Post Header -->
+	
+		
+			<!-- Random Thumbnail -->
+			<div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+				<script>
+    
+    var randomNum;
+    randomNum = Math.floor(Math.random() * 5 + 1);
+    
+    $(".post_thumbnail-random").css('background-image', 'url(' + '/img/random/' + randomNum + '.png' + ')');
+    
+</script>
+
+		
+	
+        <p class="article-headline-p">
+            kubernetes源码阅读 - scheduler
+        </p>
+    </div>
+
+	
+
+				
+				
+					<!-- Paradox Post Info -->
+					<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+    
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.jpg" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>JetMuffin</strong>
+        <span>11月 24, 2016</span>
+    </div>
+    
+    <div class="section-spacer"></div>
+	
+    <!-- Favorite -->
+<!--
+    <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+        <i class="material-icons" role="presentation">favorite</i>
+        <span class="visuallyhidden">favorites</span>
+    </button>
+-->
+    
+    <!-- Tags (bookmark) -->
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/kubernetes/">kubernetes</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/scheduler/">scheduler</a>
+    </ul>
+    
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+    
+    
+    
+    <!-- Busuanzi Views -->
+    <a class="post_share-link" href="#">
+        <li class="mdl-menu__item">
+            <span id="busuanzi_container_page_pv">
+                <span id="busuanzi_value_page_pv"></span>&nbsp;浏览量
+            </span>
+        </li>
+    </a>
+    
+    
+    <!-- Share Twitter -->
+    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=kubernetes源码阅读 - scheduler&url=https://www.jetmuffin.com//2016/11/24/Kubernetes源码阅读-Scheduler/index.html&via=JetMuffin" target="_blank">
+        <li class="mdl-menu__item">
+            分享到 Twitter
+        </li>
+    </a>
+    
+    <!-- Share Google+ -->
+    <a class="post_share-link" href="https://plus.google.com/share?url=https://www.jetmuffin.com//2016/11/24/Kubernetes源码阅读-Scheduler/index.html" target="_blank">
+        <li class="mdl-menu__item">
+            分享到 Google+
+        </li>
+    </a>
+    
+    <!-- Share Weibo -->
+    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=kubernetes源码阅读 - scheduler&url=https://www.jetmuffin.com//2016/11/24/Kubernetes源码阅读-Scheduler/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <li class="mdl-menu__item">
+            分享到微博
+        </li>
+    </a>
+</ul>
+</div>
+				
+
+                <!-- Post Content -->
+                <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+	
+		<p>阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。</p>
+<a id="more"></a>
+<h2 id="Scheduler-入口"><a href="#Scheduler-入口" class="headerlink" title="Scheduler 入口"></a>Scheduler 入口</h2><p>首先定位到 <code>plugin/cmd/scheduler.go</code> 这个文件。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/cmd/scheduler.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    s := options.NewSchedulerServer()</div><div class="line">    s.AddFlags(pflag.CommandLine) <span class="comment">// 解析参数</span></div><div class="line"></div><div class="line">    flag.InitFlags()</div><div class="line">    logs.InitLogs()</div><div class="line">    <span class="keyword">defer</span> logs.FlushLogs()</div><div class="line"></div><div class="line">    verflag.PrintAndExitIfRequested()</div><div class="line"></div><div class="line">    app.Run(s) <span class="comment">// 启动调度器</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从上面这段代码可以看出这是从 command 启动 scheduler 的入口，它解析了 scheduler 的参数，同时调用了 <code>app.Run(s)</code>来启动 scheduler。</p>
+<p>按着这个走向找到 <code>app.Run(s)</code> 的具体实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/cmd/kube-scheduler/app/server.go</span></div><div class="line"></div><div class="line"><span class="comment">// Run runs the specified SchedulerServer.  This should never exit.</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">Run</span><span class="params">(s *options.SchedulerServer)</span> <span class="title">error</span></span> &#123;</div><div class="line">  <span class="comment">//...</span></div><div class="line"></div><div class="line">    sched := scheduler.New(config) <span class="comment">// 新建调度器</span></div><div class="line"></div><div class="line">    run := <span class="function"><span class="keyword">func</span><span class="params">(_ &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span></span> &#123;</div><div class="line">        sched.Run() <span class="comment">// 正式启动调度器入口</span></div><div class="line">        <span class="keyword">select</span> &#123;&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到在这段代码片段中，通过 <code>sched := scheduler.New(config)</code> 新建了一个 scheduler 对象，并且调用它的 <code>Run()</code> 成员方法，同时需要特意留意 <code>config</code>。继续追踪到 scheduler 类的定义中取：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/scheduler.go</span></div><div class="line"></div><div class="line"><span class="comment">// Run begins watching and scheduling. It starts a goroutine and returns immediately.</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Scheduler)</span> <span class="title">Run</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">go</span> wait.Until(s.scheduleOne, <span class="number">0</span>, s.config.StopEverything)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 <code>Scheduler.Run()</code> 方法中，Scheduler 通过 <code>wait.Until()</code> 工具，不停得调用 <code>Scheduler.scheduleOne()</code> 方法直到收到停止信号。我们接着看 <code>scheduleOne()</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/scheduler.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Scheduler)</span> <span class="title">scheduleOne</span><span class="params">()</span></span> &#123;</div><div class="line">    pod := s.config.NextPod() <span class="comment">// 获取下一个待调度的pod</span></div><div class="line"></div><div class="line">    glog.V(<span class="number">3</span>).Infof(<span class="string">"Attempting to schedule pod: %v/%v"</span>, pod.Namespace, pod.Name)</div><div class="line">    start := time.Now()</div><div class="line">    dest, err := s.config.Algorithm.Schedule(pod, s.config.NodeLister) <span class="comment">// 调用算法进行调度</span></div><div class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">        glog.V(<span class="number">1</span>).Infof(<span class="string">"Failed to schedule pod: %v/%v"</span>, pod.Namespace, pod.Name)</div><div class="line">        s.config.Error(pod, err)</div><div class="line">        s.config.Recorder.Eventf(pod, api.EventTypeWarning, <span class="string">"FailedScheduling"</span>, <span class="string">"%v"</span>, err)</div><div class="line">        s.config.PodConditionUpdater.Update(pod, &amp;api.PodCondition&#123;</div><div class="line">            Type:   api.PodScheduled,</div><div class="line">            Status: api.ConditionFalse,</div><div class="line">            Reason: api.PodReasonUnschedulable,</div><div class="line">        &#125;)</div><div class="line">        <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    metrics.SchedulingAlgorithmLatency.Observe(metrics.SinceInMicroseconds(start))</div><div class="line"></div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Scheduler 首先通过 <code>config.NextPod()</code> 来获取到当前要进行调度的一个 pod，然后调用 <code>config.Algorithm.Schedule()</code> 方法来对这个 pod 实际进行调度。从这种写法上我们可以猜测到 Algorithm 这儿用的是工厂模式。若根据该算法调度成功，那么将这个时间进行记录。否则调用 <code>config.Error()</code> 来进行错误处理。</p>
+<p>这里有三个比较重点的内容：</p>
+<ul>
+<li>config.NextPod()</li>
+<li>config.Algorithm.schedule()</li>
+<li>config.Error()</li>
+</ul>
+<p>它们均来自 <code>Config</code> 类，那么我们先看这个类，再接下去探索这两个方法。<code>Config</code> 类的定义也在这个文件中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/scheduler.go</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> Config <span class="keyword">struct</span> &#123;</div><div class="line">    <span class="comment">// It is expected that changes made via SchedulerCache will be observed</span></div><div class="line">    <span class="comment">// by NodeLister and Algorithm.</span></div><div class="line">    SchedulerCache schedulercache.Cache</div><div class="line">    NodeLister     algorithm.NodeLister</div><div class="line">    Algorithm      algorithm.ScheduleAlgorithm <span class="comment">// 调度算法</span></div><div class="line">    Binder         Binder</div><div class="line">    <span class="comment">// PodConditionUpdater is used only in case of scheduling errors. If we succeed</span></div><div class="line">    <span class="comment">// with scheduling, PodScheduled condition will be updated in apiserver in /bind</span></div><div class="line">    <span class="comment">// handler so that binding and setting PodCondition it is atomic.</span></div><div class="line">    PodConditionUpdater PodConditionUpdater</div><div class="line"></div><div class="line">    <span class="comment">// NextPod should be a function that blocks until the next pod</span></div><div class="line">    <span class="comment">// is available. We don't use a channel for this, because scheduling</span></div><div class="line">    <span class="comment">// a pod may take some amount of time and we don't want pods to get</span></div><div class="line">    <span class="comment">// stale while they sit in a channel.</span></div><div class="line">    NextPod <span class="function"><span class="keyword">func</span><span class="params">()</span> *<span class="title">api</span>.<span class="title">Pod</span> // 获取下一个<span class="title">pod</span>的抽象方法</span></div><div class="line"></div><div class="line">    // <span class="title">Error</span> <span class="title">is</span> <span class="title">called</span> <span class="title">if</span> <span class="title">there</span> <span class="title">is</span> <span class="title">an</span> <span class="title">error</span>. <span class="title">It</span> <span class="title">is</span> <span class="title">passed</span> <span class="title">the</span> <span class="title">pod</span> <span class="title">in</span></div><div class="line">    // <span class="title">question</span>, <span class="title">and</span> <span class="title">the</span> <span class="title">error</span></div><div class="line">    <span class="title">Error</span> <span class="title">func</span><span class="params">(*api.Pod, error)</span> // 处理调度出现的错误</div><div class="line"></div><div class="line">    // <span class="title">Recorder</span> <span class="title">is</span> <span class="title">the</span> <span class="title">EventRecorder</span> <span class="title">to</span> <span class="title">use</span></div><div class="line">    <span class="title">Recorder</span> <span class="title">record</span>.<span class="title">EventRecorder</span></div><div class="line"></div><div class="line">    // <span class="title">Close</span> <span class="title">this</span> <span class="title">to</span> <span class="title">shut</span> <span class="title">down</span> <span class="title">the</span> <span class="title">scheduler</span>.</div><div class="line">    <span class="title">StopEverything</span> <span class="title">chan</span> <span class="title">struct</span>&#123;&#125; <span class="comment">// 停止信号</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Config</code> 类传入了 scheduler 必要的各种参数，相当于原来隶属于 scheduler 的成员变量通过它传入。<code>Config</code> 类在 <code>plugin/pkg/scheduler/factory</code> 中被实例化，相应的抽象方法也被传入实际的引用方法。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/factory</span></div><div class="line"></div><div class="line"><span class="comment">// ...</span></div><div class="line">algo := scheduler.NewGenericScheduler(f.schedulerCache, predicateFuncs, predicateMetaProducer, priorityConfigs, priorityMetaProducer, extenders)</div><div class="line"><span class="comment">// ...</span></div><div class="line"></div><div class="line">  <span class="keyword">return</span> &amp;scheduler.Config&#123;</div><div class="line">      SchedulerCache: f.schedulerCache,</div><div class="line">      <span class="comment">// The scheduler only needs to consider schedulable nodes.</span></div><div class="line">      NodeLister:          f.NodeLister.NodeCondition(getNodeConditionPredicate()),</div><div class="line">      Algorithm:           algo,</div><div class="line">      Binder:              &amp;binder&#123;f.Client&#125;,</div><div class="line">      PodConditionUpdater: &amp;podConditionUpdater&#123;f.Client&#125;,</div><div class="line">      NextPod: <span class="function"><span class="keyword">func</span><span class="params">()</span> *<span class="title">api</span>.<span class="title">Pod</span></span> &#123;</div><div class="line">          <span class="keyword">return</span> f.getNextPod()</div><div class="line">      &#125;,</div><div class="line">      Error:          f.makeDefaultErrorFunc(&amp;podBackoff, f.PodQueue),</div><div class="line">      StopEverything: f.StopEverything,</div><div class="line">  &#125;, <span class="literal">nil</span></div></pre></td></tr></table></figure>
+<h2 id="获取待调度的-Pod"><a href="#获取待调度的-Pod" class="headerlink" title="获取待调度的 Pod"></a>获取待调度的 Pod</h2><p>首先看 <code>NextPod</code> 参数，从类 <code>Config</code> 的定义中的注释可以看到，这个参数是一个获取下一个 pod，并且阻塞该方法直到下一个 pod 可用为止。并且它的实现没有用 chanel，原因是一旦放到 chanel 里，这个 pod 便无法修改。这个 参数是在实例化时传入的获取下一个 pod 的方法。传入的代码也在这个文件中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/factory</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f *ConfigFactory)</span> <span class="title">getNextPod</span><span class="params">()</span> *<span class="title">api</span>.<span class="title">Pod</span></span> &#123;</div><div class="line">    <span class="keyword">for</span> &#123;</div><div class="line">        pod := cache.Pop(f.PodQueue).(*api.Pod)</div><div class="line">        <span class="keyword">if</span> f.responsibleForPod(pod) &#123;</div><div class="line">            glog.V(<span class="number">4</span>).Infof(<span class="string">"About to try and schedule pod %v"</span>, pod.Name)</div><div class="line">            <span class="keyword">return</span> pod</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从这段代码可以看出，获取下一个待调度的 pod 似乎是从一个队列中 pop 出一个 pod 来实现的。使用的来源是 <code>pkg/client/cache</code>，继续追踪：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">Pop</span><span class="params">(queue Queue)</span> <span class="title">interface</span></span>&#123;&#125; &#123;</div><div class="line">    <span class="keyword">var</span> result <span class="keyword">interface</span>&#123;&#125;</div><div class="line">    queue.Pop(<span class="function"><span class="keyword">func</span><span class="params">(obj <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</div><div class="line">        result = obj</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span></div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法是个代理方法，是对 <code>Queue</code> 类中的 <code>Pop()</code> 方法进行了一层封装，于是自然看到对应的 <code>Queue.Pop()</code>，它是在类 <code>FIFO</code> 中的，那么这块儿也逐渐明了了:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/fifo.go</span></div><div class="line"></div><div class="line"><span class="comment">// Pop waits until an item is ready and processes it. If multiple items are</span></div><div class="line"><span class="comment">// ready, they are returned in the order in which they were added/updated.</span></div><div class="line"><span class="comment">// The item is removed from the queue (and the store) before it is processed,</span></div><div class="line"><span class="comment">// so if you don't successfully process it, it should be added back with</span></div><div class="line"><span class="comment">// AddIfNotPresent(). process function is called under lock, so it is safe</span></div><div class="line"><span class="comment">// update data structures in it that need to be in sync with the queue.</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f *FIFO)</span> <span class="title">Pop</span><span class="params">(process PopProcessFunc)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</div><div class="line">    f.lock.Lock()</div><div class="line">    <span class="keyword">defer</span> f.lock.Unlock()</div><div class="line">    <span class="keyword">for</span> &#123;</div><div class="line">        <span class="keyword">for</span> <span class="built_in">len</span>(f.queue) == <span class="number">0</span> &#123;</div><div class="line">            f.cond.Wait()</div><div class="line">        &#125;</div><div class="line">        id := f.queue[<span class="number">0</span>]</div><div class="line">        f.queue = f.queue[<span class="number">1</span>:]</div><div class="line">        <span class="keyword">if</span> f.initialPopulationCount &gt; <span class="number">0</span> &#123;</div><div class="line">            f.initialPopulationCount--</div><div class="line">        &#125;</div><div class="line">        item, ok := f.items[id]</div><div class="line">        <span class="keyword">if</span> !ok &#123;</div><div class="line">            <span class="comment">// Item may have been deleted subsequently.</span></div><div class="line">            <span class="keyword">continue</span></div><div class="line">        &#125;</div><div class="line">        <span class="built_in">delete</span>(f.items, id)</div><div class="line">        err := process(item)</div><div class="line">        <span class="keyword">if</span> e, ok := err.(ErrRequeue); ok &#123;</div><div class="line">            f.addIfNotPresent(id, item)</div><div class="line">            err = e.Err</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> item, err</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法算是这条路径的最后一个追踪的节点了。总结一下这条路径：</p>
+<ol>
+<li>kubernetes 的 cache 中维护了一个先进先出的队列 <code>FIFO</code>，它不同于 golang 中的 chanel，它支持对队列中的元素进行更新、删除等操作。</li>
+<li>这个队列的 <code>FIFO.Pop()</code> 方法会队首元素（一个 pod）到达 ready 状态，然后将它弹出，否则阻塞该方法。</li>
+<li><code>Scheduler</code> 类初始化时使用参数 <code>Config</code>，<code>Config</code> 中的 <code>NextPod()</code> 默认使用 <code>FIFO.Pop()</code>，当 <code>Scheduler</code> 需要进行调度时使用该方法得到下一个待调度的 pod。</li>
+</ol>
+<h2 id="使用调度算法进行实时调度"><a href="#使用调度算法进行实时调度" class="headerlink" title="使用调度算法进行实时调度"></a>使用调度算法进行实时调度</h2><p>回到 <code>Config</code> 类的第二个重要参数 <code>Algorithm</code>,它是对 pod 进行调度的实体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/factory/factory.go</span></div><div class="line"></div><div class="line">algo := scheduler.NewGenericScheduler(f.schedulerCache, predicateFuncs, predicateMetaProducer, priorityConfigs, priorityMetaProducer, extenders)</div></pre></td></tr></table></figure>
+<p>可以看到默认情况下，<code>Algorithm</code> 是用的通用调度器，接着看这个 <code>GenericScheduler</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/generic_scheduler.go</span></div><div class="line"></div><div class="line"><span class="comment">// Schedule tries to schedule the given pod to one of node in the node list.</span></div><div class="line"><span class="comment">// If it succeeds, it will return the name of the node.</span></div><div class="line"><span class="comment">// If it fails, it will return a Fiterror error with reasons.</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(g *genericScheduler)</span> <span class="title">Schedule</span><span class="params">(pod *api.Pod, nodeLister algorithm.NodeLister)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</div><div class="line">    <span class="keyword">var</span> trace *util.Trace</div><div class="line">    <span class="keyword">if</span> pod != <span class="literal">nil</span> &#123;</div><div class="line">        trace = util.NewTrace(fmt.Sprintf(<span class="string">"Scheduling %s/%s"</span>, pod.Namespace, pod.Name))</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        trace = util.NewTrace(<span class="string">"Scheduling &lt;nil&gt; pod"</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">defer</span> trace.LogIfLong(<span class="number">100</span> * time.Millisecond)</div><div class="line"></div><div class="line">    nodes, err := nodeLister.List() <span class="comment">// 获取所有节点</span></div><div class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>, err</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(nodes) == <span class="number">0</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>, ErrNoNodesAvailable</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Used for all fit and priority funcs.</span></div><div class="line">    err = g.cache.UpdateNodeNameToInfoMap(g.cachedNodeInfoMap)</div><div class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>, err</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// TODO(harryz) Check if equivalenceCache is enabled and call scheduleWithEquivalenceClass here</span></div><div class="line"></div><div class="line">    trace.Step(<span class="string">"Computing predicates"</span>)</div><div class="line">    filteredNodes, failedPredicateMap, err := findNodesThatFit(pod, g.cachedNodeInfoMap, nodes, g.predicates, g.extenders, g.predicateMetaProducer)</div><div class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>, err</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(filteredNodes) == <span class="number">0</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>, &amp;FitError&#123;</div><div class="line">            Pod:              pod,</div><div class="line">            FailedPredicates: failedPredicateMap,</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    trace.Step(<span class="string">"Prioritizing"</span>)</div><div class="line">    metaPrioritiesInterface := g.priorityMetaProducer(pod, g.cachedNodeInfoMap)</div><div class="line">    priorityList, err := PrioritizeNodes(pod, g.cachedNodeInfoMap, metaPrioritiesInterface, g.prioritizers, filteredNodes, g.extenders)</div><div class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>, err</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    trace.Step(<span class="string">"Selecting host"</span>)</div><div class="line">    <span class="keyword">return</span> g.selectHost(priorityList)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，GenericScheduler 进行调度为以下过程：</p>
+<ol>
+<li>从 <code>NodeList</code> 获取所有的节点</li>
+<li>通过所给的断言函数（<code>predicates</code>）对所有节点进行过滤，选出符合的节点（<code>findNodesThatFit()</code>）</li>
+<li>根据所给的打分函数（<code>prioritizers</code>）对过滤后的节点进行排序（<code>PrioritizeNodes()</code>）</li>
+<li>通过 round-robin 方式依次获取分数最高的节点来运行 pod。</li>
+</ol>
+<h2 id="调度失败"><a href="#调度失败" class="headerlink" title="调度失败"></a>调度失败</h2><p>在 <code>Config</code> 类的 <code>Error</code> 参数中传入了调度失败的处理方法 <code>makeDefaultErrorFunc()</code> 对调度失败的 pod 进行重调度处理。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/factory/factory.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(factory *ConfigFactory)</span> <span class="title">makeDefaultErrorFunc</span><span class="params">(backoff *podBackoff, podQueue *cache.FIFO)</span> <span class="title">func</span><span class="params">(pod *api.Pod, err error)</span></span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(pod *api.Pod, err error)</span></span> &#123;</div><div class="line">        <span class="keyword">if</span> err == scheduler.ErrNoNodesAvailable &#123;</div><div class="line">            glog.V(<span class="number">4</span>).Infof(<span class="string">"Unable to schedule %v %v: no nodes are registered to the cluster; waiting"</span>, pod.Namespace, pod.Name)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            glog.Errorf(<span class="string">"Error scheduling %v %v: %v; retrying"</span>, pod.Namespace, pod.Name, err)</div><div class="line">        &#125;</div><div class="line">        backoff.gc() <span class="comment">// 清空backoff列表</span></div><div class="line">        <span class="comment">// Retry asynchronously.</span></div><div class="line">        <span class="comment">// Note that this is extremely rudimentary and we need a more real error handling path.</span></div><div class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">            <span class="keyword">defer</span> runtime.HandleCrash()</div><div class="line">            podID := types.NamespacedName&#123;</div><div class="line">                Namespace: pod.Namespace,</div><div class="line">                Name:      pod.Name,</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            entry := backoff.getEntry(podID)</div><div class="line">            <span class="keyword">if</span> !entry.TryWait(backoff.maxDuration) &#123;</div><div class="line">                glog.Warningf(<span class="string">"Request for pod %v already in flight, abandoning"</span>, podID)</div><div class="line">                <span class="keyword">return</span></div><div class="line">            &#125;</div><div class="line">            <span class="comment">// Get the pod again; it may have changed/been scheduled already.</span></div><div class="line">            getBackoff := initialGetBackoff</div><div class="line">            <span class="keyword">for</span> &#123;</div><div class="line">                pod, err := factory.Client.Core().Pods(podID.Namespace).Get(podID.Name)</div><div class="line">                <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</div><div class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(pod.Spec.NodeName) == <span class="number">0</span> &#123;</div><div class="line">                        podQueue.AddIfNotPresent(pod) <span class="comment">// 重新将pod加入调度队列</span></div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">break</span></div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> errors.IsNotFound(err) &#123;</div><div class="line">                    glog.Warningf(<span class="string">"A pod %v no longer exists"</span>, podID)</div><div class="line">                    <span class="keyword">return</span></div><div class="line">                &#125;</div><div class="line">                glog.Errorf(<span class="string">"Error getting pod %v for retry: %v; retrying..."</span>, podID, err)</div><div class="line">                <span class="keyword">if</span> getBackoff = getBackoff * <span class="number">2</span>; getBackoff &gt; maximalGetBackoff &#123;</div><div class="line">                    getBackoff = maximalGetBackoff</div><div class="line">                &#125;</div><div class="line">                time.Sleep(getBackoff)</div><div class="line">            &#125;</div><div class="line">        &#125;()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从该处理方法看出，一旦出现调度失败，k8s 并不会阻塞调度过程，而是将调度失败的 pod 扔到这个失败处理方法里，而这个方法是通过异步的方式进行重试。k8s 从 backoff 这个列表中拿出指定的 pod，然后将它再次放到 <code>FIFO</code> 队列里，期间如果继续失败，再扔进 backoff 里异步等待处理。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>k8s 的代码量非常庞大，需要快速定位源码比较困难，而采用这种根据从入口不断深入的阅读方式会减少很多工作量，只关心一部分的代码。当然这也无法从一个宏观的角度去看整个代码的设计，但是对于当前的工作已经足够。</p>
+
+	
+	
+	
+	
+</div>
+				
+				
+
+                <!-- Post Comments -->
+                
+    <!-- 使用多说评论 -->
+    <link rel="stylesheet" href="/css/duoshuo.min.css">
+<style>
+    #ds-thread #ds-reset .ds-post-button{
+        background-color: #607D8B !important;
+    }
+    #ds-wrapper #ds-reset .ds-icons-32{
+        background-color: #607D8B !important;
+    }
+    #ds-reset .ds-highlight {
+        color: #607D8B !important;
+    }
+</style>
+<div id="comments">
+    <!-- 多说评论框 start -->
+        <div class="ds-thread" 
+            data-thread-key="2016/11/24/Kubernetes源码阅读-Scheduler/" 
+            data-url="https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/"
+            data-title="kubernetes源码阅读 - scheduler"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+
+
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    
+    <!-- Prev Nav -->
+    
+        <a href="/2016/12/03/kubernetes源码阅读-queue/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+        </div>
+    </div>
+
+				
+				
+					<!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay "></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored  sidebar-fixed-left" role="navigation">
+	<div id="sidebar-main">
+	    <!-- Sidebar Header -->
+		<div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+    <i class="material-icons">clear_all</i>
+    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.jpg" alt="JetMuffin's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        jeffchen328@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+		<!-- Sidebar Navigation  -->
+		<ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+			
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+						<i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    <li id="sidebar-first-li">
+        <a href="/" target="_self">
+            <i class="material-icons sidebar-material-icons">home</i>
+             主页
+        </a>
+    </li>
+
+    <!-- I'm Feeling Lucky -->
+<!--
+    <li class="dropdown">
+        <a href="" target="_self">
+            <i class="material-icons sidebar-material-icons">explore</i>
+             sidebar.imlucky
+        </a>
+    </li>
+-->
+
+	
+    <!-- Archives  -->
+    <li class="dropdown">
+        <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+            <i class="material-icons sidebar-material-icons">inbox</i>
+             归档
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+            <a class="sidebar_archives-link" href="/archives/2016/12/">十二月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">十一月 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">十月 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">九月 2016<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">五月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/03/">三月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/01/">一月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/12/">十二月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/11/">十一月 2015<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/10/">十月 2015<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/09/">九月 2015<span class="sidebar_archives-count">10</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/08/">八月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/07/">七月 2015<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/06/">六月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/05/">五月 2015<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/04/">四月 2015<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/03/">三月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/02/">二月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/01/">一月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/11/">十一月 2014<span class="sidebar_archives-count">8</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/10/">十月 2014<span class="sidebar_archives-count">12</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/09/">九月 2014<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/07/">七月 2014<span class="sidebar_archives-count">2</span></a>
+        </ul>
+    </li>
+
+    <!-- Divider -->
+    <li class="divider"></li>
+
+
+    <!-- Pages  -->
+	
+		<li>
+			<a href="/about" title="关于我">
+				关于我
+			</a>
+		</li>
+	
+		<li>
+			<a href="/tags" title="标签云">
+				标签云
+			</a>
+		</li>
+	
+
+    <!-- Article Numebr  -->
+    <li>
+        <a href="/archives">
+             文章总数
+             <span class="sidebar-badge">95</span>
+        </a>
+    </li>
+</ul>
+
+		<!-- Sidebar Divider -->
+		<div class="sidebar-divider"></div>
+
+		<!-- Sidebar Footer -->
+		<!-- 
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持。 :) 
+-->
+
+<!-- Theme Material -->
+<a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+	<div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+		主题 - Material
+		<span class="sidebar-badge badge-circle">i</span>
+	</div>
+</a>
+
+<!-- Help & Support -->
+<!--
+<a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+		sidebar.help
+		<span class="mdl-button__ripple-container">
+			<span class="mdl-ripple"></span>
+		</span>
+	</div>
+</a>
+-->
+
+<!-- Feedback -->
+<!--
+<a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.feedback
+                    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>
+-->
+
+<!-- Abount Theme -->
+<!--
+<a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.about_theme
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>-->
+
+	</div>
+    
+    <!-- Sidebar Sponsor -->
+    
+
+
+</aside>
+
+				
+				
+				
+					<!-- Footer Top Button -->
+					<div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+				
+				
+				<!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+	
+	
+		<!-- Paradox Footer Left Section -->
+		<div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+    <a href="https://twitter.com/JeffChe97845794" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-twitter.png);">
+        <span class="visuallyhidden">Twitter</span>
+    </button></a>
+    
+    
+    <!-- Facebook -->
+    
+    
+    
+    <!-- Google + -->
+    
+    
+    
+    <!-- Weibo -->
+    
+    <a href="http://weibo.com/1922357801" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-weibo.png);">
+        <span class="visuallyhidden">Weibo</span>
+    </button></a>
+    
+    
+    <!-- Instagram -->
+    
+    
+    
+    <!-- Tumblr -->
+    
+    
+    
+    <!-- Github -->
+    
+    <a href="https://github.com/JetMuffin" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.png);">
+        <span class="visuallyhidden">Github</span>
+    </button></a>
+    
+</div>
+
+
+		<!--Copyright-->
+		<div id="copyright">Copyright&nbsp;©&nbsp;<script type="text/javascript">var fd = new Date();document.write(fd.getFullYear());</script>&nbsp;JetMuffin's Blog</div>
+
+		<!-- Paradox Footer Right Section -->
+
+		<!-- 
+		I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+		It will not impact the appearance and can give developers a lot of support :)
+
+		很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+		它不会影响美观并可以给开发者很大的支持。 :) 
+		-->
+
+		<div class="mdl-mini-footer--right-section">
+			<div>
+				<div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+				<div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+			</div>
+		</div>
+	
+    
+</footer>
+                
+				<!-- Import File -->
+<script src="/js/highlight.min.js"></script>
+<script src="/js/js.min.js"></script>
+<script src="/js/nprogress.js"></script>
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    
+    $('#nprogress .bar').css({
+        'background': '#FF4081'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #FF4081, 0 0 15px #FF4081'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#FF4081',
+        'border-left-color': '#FF4081'
+    });
+    
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    <!-- 多说公共 js 代码 start -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = 'https://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共 js 代码 end -->
+
+
+
+
+<!-- Swiftye -->
+
+
+<!-- Local Search-->
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $(".post-toc-wrap").parent(".mdl-menu__container").css("position", "fixed");
+    });
+</script>
+
+<!-- MathJax Load-->
+
+            </main>
+        </div>
+		
+    </body>
+		
+	
+</html>

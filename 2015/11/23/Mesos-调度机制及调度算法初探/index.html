@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!-- Title -->
+    
+    <title>
+        Mesos 调度机制及调度算法初探 | JetMuffin&#39;s Blog
+    </title>
+    
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+    
+    <!-- Meta & INfo -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#607D8B">
+    <meta name="author" content="JetMuffin">
+    <meta name="description" content="JetMuffin&#39;s Blog">
+    <meta name="keywords" content="null">
+    
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+    
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="JetMuffin&#39;s Blog">
+    
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://www.jetmuffin.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Mesos 调度机制及调度算法初探 | JetMuffin&#39;s Blog">
+    <meta property="og:description" content="JetMuffin&#39;s Blog">
+    
+     <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+        
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+    
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="/css/material.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+    <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+	body, html{
+		font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+	}
+	
+    a{
+        color: #00838F
+    }
+    
+    .mdl-card__media,
+    #search-label,
+    #search-form-label:after,
+    #scheme-Paradox .hot_tags-count,
+    #scheme-Paradox .sidebar_archives-count,
+    #scheme-Paradox .sidebar-colored .sidebar-header,
+    #scheme-Paradox .sidebar-colored .sidebar-badge{
+        background-color: #607D8B !important
+    }
+    
+	/* Sidebar User Drop Down Menu Text Color */
+	#scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+    #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus{
+        color: #607D8B !important
+    }
+    
+    #post_entry-right-info,
+    .sidebar-colored .sidebar-nav li:hover > a,
+    .sidebar-colored .sidebar-nav li:hover > a i,
+    .sidebar-colored .sidebar-nav li > a:hover,
+    .sidebar-colored .sidebar-nav li > a:hover i,
+    .sidebar-colored .sidebar-nav li > a:focus i,
+    .sidebar-colored .sidebar-nav > .open > a,
+    .sidebar-colored .sidebar-nav > .open > a:hover,
+    .sidebar-colored .sidebar-nav > .open > a:focus,
+    #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a{
+        color: #607D8B !important
+    }
+    
+    .toTop{
+        background: #757575 !important
+    }
+		
+	.material-layout .material-post>.material-nav,
+	.material-layout .material-index>.material-nav,
+	.material-nav a{
+		color: #757575;
+	}
+		
+	#scheme-Paradox .MD-burger-layer {
+		background-color: #757575;
+	}
+
+	#scheme-Paradox #post-toc-trigger-btn{
+		color: #757575;
+	}
+	
+	.post-toc a:hover{
+		color: #00838F;
+		text-decoration: underline;
+	}
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+        body{
+            background-color: #F5F5F5
+        }
+		
+		/* blog_info bottom background */
+        #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+            background-color: #fff;
+        }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+        .fade {
+            transition: all 800ms linear;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            -ms-transform: translate3d(0,0,0);
+            -o-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            opacity: 1;
+        }
+
+        .fade.out{
+            opacity: 0;
+        }
+    </style>
+
+	<script src="/js/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="/css/highlight/solarized-white.css">
+	
+	<!-- UC Browser Compatible-->
+	<script>
+		var agent = navigator.userAgent.toLowerCase();
+		if(agent.indexOf('ucbrowser')>0) {
+			document.write('<link rel="stylesheet" href="/css/uc.css">');
+		   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+		}
+	</script>
+    
+    <!-- Custom Head -->
+    
+</head>
+	
+	
+
+    <body id="scheme-Paradox">
+
+		
+        <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+				
+			
+			
+            <!-- Main Container -->
+            <main class="material-layout__content" id="main">
+				
+                <!-- Top Anchor -->
+                <div id="top"></div>
+				
+				
+                <!-- Hamburger Button -->
+                <button class="MD-burger-icon sidebar-toggle">
+                    <span class="MD-burger-layer"></span>
+                </button>
+				
+				
+                
+	<!-- Back Button -->
+<!--
+	<div class="material-back" id="backhome-div" tabindex="0">
+		<a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#" onclick="window.history.back();return false;" target="_self" role="button" data-upgraded=",MaterialButton,MaterialRipple">
+			<i class="material-icons" role="presentation">arrow_back</i>
+			<span class="mdl-button__ripple-container">
+				<span class="mdl-ripple"></span>
+			</span>
+		</a>
+	</div>			
+-->
+	<!-- Left aligned menu below button -->
+	<button id="post-toc-trigger-btn"
+			class="mdl-button mdl-js-button mdl-button--icon">
+	  <i class="material-icons">format_list_numbered</i>
+	</button>
+
+	<ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+		for="post-toc-trigger-btn">
+			
+			<ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#调度架构"><span class="post-toc-number">2.</span> <span class="post-toc-text">调度架构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-两层架构"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">1. 两层架构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-Resource-Offer"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">2. Resource Offer</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#调度工作流程"><span class="post-toc-number">3.</span> <span class="post-toc-text">调度工作流程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DRF算法"><span class="post-toc-number">4.</span> <span class="post-toc-text">DRF算法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一个说明性的例子"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">一个说明性的例子</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#DRF在Mesos中的一个例子"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">DRF在Mesos中的一个例子</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#效率"><span class="post-toc-number">5.</span> <span class="post-toc-text">效率</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缺陷"><span class="post-toc-number">6.</span> <span class="post-toc-text">缺陷</span></a></li></ol>
+		
+<!--			<li class="mdl-menu__item">Some Action</li>-->
+	</ul>
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+		
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+	<!-- Paradox Post Header -->
+	
+		
+			<!-- Random Thumbnail -->
+			<div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+				<script>
+    
+    var randomNum;
+    randomNum = Math.floor(Math.random() * 5 + 1);
+    
+    $(".post_thumbnail-random").css('background-image', 'url(' + '/img/random/' + randomNum + '.png' + ')');
+    
+</script>
+
+		
+	
+        <p class="article-headline-p">
+            Mesos 调度机制及调度算法初探
+        </p>
+    </div>
+
+	
+
+				
+				
+					<!-- Paradox Post Info -->
+					<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+    
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.jpg" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>JetMuffin</strong>
+        <span>11月 23, 2015</span>
+    </div>
+    
+    <div class="section-spacer"></div>
+	
+    <!-- Favorite -->
+<!--
+    <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+        <i class="material-icons" role="presentation">favorite</i>
+        <span class="visuallyhidden">favorites</span>
+    </button>
+-->
+    
+    <!-- Tags (bookmark) -->
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/mesos/">mesos</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/分布式系统/">分布式系统</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/资源调度/">资源调度</a>
+    </ul>
+    
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+    
+    
+    
+    <!-- Busuanzi Views -->
+    <a class="post_share-link" href="#">
+        <li class="mdl-menu__item">
+            <span id="busuanzi_container_page_pv">
+                <span id="busuanzi_value_page_pv"></span>&nbsp;浏览量
+            </span>
+        </li>
+    </a>
+    
+    
+    <!-- Share Twitter -->
+    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Mesos 调度机制及调度算法初探&url=https://www.jetmuffin.com//2015/11/23/Mesos-调度机制及调度算法初探/index.html&via=JetMuffin" target="_blank">
+        <li class="mdl-menu__item">
+            分享到 Twitter
+        </li>
+    </a>
+    
+    <!-- Share Google+ -->
+    <a class="post_share-link" href="https://plus.google.com/share?url=https://www.jetmuffin.com//2015/11/23/Mesos-调度机制及调度算法初探/index.html" target="_blank">
+        <li class="mdl-menu__item">
+            分享到 Google+
+        </li>
+    </a>
+    
+    <!-- Share Weibo -->
+    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Mesos 调度机制及调度算法初探&url=https://www.jetmuffin.com//2015/11/23/Mesos-调度机制及调度算法初探/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <li class="mdl-menu__item">
+            分享到微博
+        </li>
+    </a>
+</ul>
+</div>
+				
+
+                <!-- Post Content -->
+                <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+	
+		<p>再次分析Mesos的工作原理，将Mesos中出现的各个名词串联到一起。</p>
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Mesos是Apache下的开源分布式资源管理框架，它被称为是分布式系统的内核,Mesos将集群的所有节点的数据统一进行管理，打造一个DCOS(Data Center Operation System)的概念。调度算法是Mesos最核心也是灵魂部分。</p>
+<h2 id="调度架构"><a href="#调度架构" class="headerlink" title="调度架构"></a>调度架构</h2><h3 id="1-两层架构"><a href="#1-两层架构" class="headerlink" title="1. 两层架构"></a>1. 两层架构</h3><p><strong>第一层，由Mesos将资源分配给框架；第二层，框架自己的调度器将资源分配给自己内部的任务。</strong>两层框架可以使得Mesos不需要知道任务的资源需求量，不需要知道任务的类型和数据存储，只需要和框架进行交互就行了。</p>
+<h3 id="2-Resource-Offer"><a href="#2-Resource-Offer" class="headerlink" title="2. Resource Offer"></a>2. Resource Offer</h3><p>Mesos中的调度机制被称为<strong>“Resource Offer”</strong>，采用了基于资源量的调度机制。在Mesos中，Slave直接将资源量（CPU和内存）汇报给Master，由master将资源量按照某种机制分配给Framework，其中，“某种机制”是<code>“Dominant Resource Fairness（DRF）”</code>，在后面会提到该内容。</p>
+<p>Framework可以根据是否符合任务对资源的约束，选择接受或拒绝<code>offer</code>。一旦<code>offer</code>被接受，Framework将与Master协作调度任务，并在数据中心的相应Slave节点上运行任务。</p>
+<p>两个使<code>Resource Offer</code>高效且具有鲁棒性的附加机制：</p>
+<ol>
+<li><p><strong>filters机制：</strong> 每次调度，<code>mesos-master</code>和<code>framework-scheduler</code>需要进行通信，如果过多的拒绝<code>offer</code>会带来额外的通信开销，因此mesos提供了<code>filters</code>机制，允许Framework只接收<strong>资源量大于L的offer</strong>（换句话说被过滤的offer不会发送到Framework)</p>
+</li>
+<li><p><strong>rescinds机制：</strong> 如果某个Framework接受了某个<code>offer</code>，然而长时间没有为该<code>offer</code>分配任务，而占有该<code>offer</code>（占着xx不xx），Mesos会回收其<code>offer</code>，并将其分配给其他Framework</p>
+</li>
+</ol>
+<h2 id="调度工作流程"><a href="#调度工作流程" class="headerlink" title="调度工作流程"></a>调度工作流程</h2><p><img src="/uploads/images/2015/11/23/mesos-workflow.png" alt="mesos-workflow"></p>
+<p>如上图所示，整个资源调度的工作过程为：</p>
+<ol>
+<li><p><code>Slave</code>定期向<code>Master</code>汇报其机器上的资源情况（包括cpu,mem,disk,port等）。</p>
+</li>
+<li><p><code>Master</code>上的模块<code>Allocator</code>根据<code>DRF</code>算法决定要讲资源分配给哪个<code>Framework</code>，并将资源以<code>offer</code>形式发送给分配的<code>Framework</code>。（一层调度）</p>
+</li>
+<li><p><code>Framework</code>编写时约束了每个<code>Task</code>执行需要的资源（cpu,mem,disk等），Framework根据约束筛选分配到的<code>offer</code>，可以选择接受<code>offer</code>，或者拒绝<code>offer</code>。若拒绝，<code>offer</code>随即可以被给其他<code>Framework</code>。（二层调度）</p>
+</li>
+<li><p>每个<code>Task</code>对应一个<code>offer</code>，也对应一个<code>Slave</code>，则该<code>Task</code>会被该<code>Slave</code>上的守护进程<code>Executor</code>执行。同时，为了<strong>资源隔离</strong>，Mesos为任务的执行提供了<code>Isolator</code>隔离器，为了保证资源不会被其他<code>Task</code>访问，可用的Isolator有<code>Linux Container</code>，<code>Docker</code>等。</p>
+</li>
+<li><p>由于<code>Master</code>很有可能出现单点故障，因此需要设立多<code>Master</code>，利用<code>Zookeeper</code>容错，保证集群运行的一致性。</p>
+</li>
+</ol>
+<p><strong>补充：</strong>Mesos提供了拓展模块，使得我们如果要修改Mesos的部分内容，可以不用修改源码重新编译，而在以上流程中的<code>Allocator（重写调度方法）</code>、<code>Isolator（重写资源隔离方法）</code>均可以进行拓展，此外我还发现了Slave上的<code>Estimator</code>也能进行重写拓展，具体内容之后补充。</p>
+<h2 id="DRF算法"><a href="#DRF算法" class="headerlink" title="DRF算法"></a>DRF算法</h2><p>如何作出offer分配的决定是由资源分配模块<code>Allocator</code>实现的，该模块存在于Master之中。资源分配模块确定Framework接受offer的顺序，与此同时，确保在资源利用最大化的条件下公平地共享资源。</p>
+<p>由于Mesos为跨数据中心调度资源并且是异构的资源需求时，资源分配相比普通调度将会更加困难。因此Mesos采用了<code>DRF（主导资源公平算法 Dominant Resource Fairness）</code>,该算法同样出自于UC Berkeley。DRF的目标是确保每一个用户，即Mesos中的Framework，在异质环境中能够接收到其最需资源的公平份额。</p>
+<p>Framework拥有的全部资源类型份额中占最高百分比的就是Framework的<code>主导份额</code>。DRF算法会使用所有已注册的Framework来计算<code>主导份额</code>，以确保每个Framework能接收到其<code>主导资源</code>的<code>公平份额</code>。</p>
+<p>Mesos源码中默认的Allocator，即<code>HierarchicalDRFAllocator</code>的位置在<code>$MESOS_HOME/src/master/allocator/mesos/hierarchical.hpp</code>，而DRF中对每个Framework排序的<code>Sorter</code>位于<code>$MESOS_HOME/src/master/allocator/sorter/drf/sorter.cpp</code>，可以查看其源码了解它的工作原理。</p>
+<h3 id="一个说明性的例子"><a href="#一个说明性的例子" class="headerlink" title="一个说明性的例子"></a>一个说明性的例子</h3><p>考虑一个<code>9CPU，18GBRAM</code>的系统，拥有两个用户，其中用户A运行的任务的需求向量为<code>{1CPU, 4GB}</code>，用户B运行的任务的需求向量为<code>{3CPU，1GB}</code>，用户可以执行尽量多的任务来使用系统的资源。</p>
+<p>在上述方案中，A的每个任务消耗总cpu的<code>1/9</code>和总内存的<code>2/9</code>，所以A的<strong>dominant resource</strong>是<code>内存</code>；B的每个任务消耗总cpu的<code>1/3</code>和总内存的<code>1/18</code>，所以B的<strong>dominant resource</strong>为<code>CPU</code>。DRF会均衡用户的<strong>dominant shares</strong>，执行3个用户A的任务，执行2个用户B的任务。三个用户A的任务总共消耗了{3CPU，12GB}，两个用户B的任务总共消耗了{6CPU，2GB}；在这个分配中，每一个用户的<strong>dominant share</strong>是相等的，用户A获得了2/3的RAM，而用户B获得了2/3的CPU。</p>
+<p>以上的这个分配可以用如下方式计算出来：x和y分别是用户A和用户B的分配任务的数目，那么用户A消耗了{xCPU，4xGB}，用户B消耗了{3yCPU，yGB}，在图三中用户A和用户B消耗了同等dominant resource；用户A的dominant share为4x/18，用户B的dominant share为3y/9。所以DRF分配可以通过求解以下的优化问题来得到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">max(x,y)            	#(Maximize allocations)</div><div class="line">	subject to</div><div class="line">		x + 3y &lt;= 9 		#(CPU constraint)</div><div class="line">		4x + y &lt;= 18 		#(Memory Constraint)</div><div class="line">			2x/9 = y/3 	#(Equalize dominant shares)</div></pre></td></tr></table></figure>
+<p>最后解出<code>x=3</code>以及<code>y=2</code>，因而用户A获得{3CPU，12GB}，B得到{6CPU， 2GB}。</p>
+<h3 id="DRF在Mesos中的一个例子"><a href="#DRF在Mesos中的一个例子" class="headerlink" title="DRF在Mesos中的一个例子"></a>DRF在Mesos中的一个例子</h3><p>换个使用场景，假设有数据中心包含一个offer为9核CPU和18GB内存。Framework 1运行的任务需要（1核CPU、4GB内存），Framework 2运行的任务需要（3核CPU、2GB内存）。Framework 1的任务会消耗CPU总数的1/9、内存总数的2/9，Framework 1的主导资源是内存。同样，Framework 2的每个任务会CPU总数的1/3、内存总数的1/18，Framework 2的主导资源是CPU。</p>
+<p><img src="http://cdn3.infoqstatic.com/statics_s1_20151118-0143/resource/articles/analyse-mesos-part-04/zh/resources/0604003.jpg" alt="DRF-Table"></p>
+<p>上面表中的每一行提供了以下信息：</p>
+<ul>
+<li><strong>Framework chosen：</strong>收到最新offer的Framework。</li>
+<li><strong>Resource Shares：</strong>给定时间内Framework接受的资源总数，包括CPU和内存，以占资源总量的比例表示。</li>
+<li><strong>Dominant Share（主导份额：</strong>给定时间内Framework主导资源占总份额的比例，以占资源总量的比例表示。</li>
+<li><strong>Dominant Share %（主导份额百分比）：</strong>给定时间内Framework主导资源占总份额的百分比，以占资源总量的百分比表示。</li>
+<li><strong>CPU Total Allocation：</strong>给定时间内接受的所有Framework的总CPU资源。</li>
+<li><strong>RAM Total Allocation：</strong>给定时间内接受的所有Framework的总内存资源。</li>
+</ul>
+<p>最初，两个Framework的主导份额是0％，我们假设DRF首先选择的是Framework 2，当然我们也可以假设Framework 1，但是最终的结果是一样的。</p>
+<ol>
+<li>Framework 2接收offer并运行任务，使其主导资源成为CPU，主导份额增加至33％。</li>
+<li>由于Framework 1的主导份额维持在0％，它接收offer并运行任务，主导份额的主导资源（内存）增加至22％。</li>
+<li>由于Framework 1仍具有较低的主导份额，它接收offer并运行任务，增 加其主导份额至44％。</li>
+<li>然后DRF将offer发送给Framework 2，因为它现在拥有更低的主导份额。</li>
+<li>该过程继续进行，直到由于缺乏可用资源，不能运行新的任务。在这种情况下，CPU资源已经饱和。</li>
+<li>然后该过程将使用一组新的offer重复进行。</li>
+</ol>
+<p><strong>需要注意的是</strong>：可以创建一个资源分配模块，使用加权的DRF使其偏向某个Framework或某组Framework。如前面所提到的，也可以创建一些自定义模块来提供组织特定的分配策略。</p>
+<h2 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h2><ul>
+<li>细粒度分配资源（细到每个任务在哪个机器上跑）,这是最显而易见的好处，也是Mesos社区和Mesosphere经常津津乐道的。</li>
+</ul>
+<p><img src="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos-elastic-cea4da90b3c819bd96b3158da1a6f86b.jpg" alt="Elastic Sharing"></p>
+<ul>
+<li>支持各类应用资源共同管理，不用担心各个应用的资源冲突。</li>
+</ul>
+<p><img src="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos_frameworks.png" alt="Mesos Frameworks"></p>
+<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><p>在众多文章中看到大家对Mesos缺陷评价的一些共同点:</p>
+<ul>
+<li><p>Mesos中的DRF调度算法过分的追求公平，没有考虑到实际的应用需求。</p>
+</li>
+<li><p>Mesos采用了Resource Offer机制，这种调度机制面临着资源碎片问题，即：每个节点上的资源不可能全部被分配完，剩下的一点可能不足以让任何任务运行，这样，便产生了类似于操作系统中的内存碎片问题。</p>
+</li>
+<li><p>由于Mesos采用了双层调度机制，在实际调度时，将面临设计决策问题：第一层和第二层调度器分别实现哪几个调度机制，即：将大部分调度机制放到第一层调度器，还是第一层调度器仅支持简单的资源分配</p>
+</li>
+</ul>
+
+	
+	
+	
+	
+</div>
+				
+				
+
+                <!-- Post Comments -->
+                
+    <!-- 使用多说评论 -->
+    <link rel="stylesheet" href="/css/duoshuo.min.css">
+<style>
+    #ds-thread #ds-reset .ds-post-button{
+        background-color: #607D8B !important;
+    }
+    #ds-wrapper #ds-reset .ds-icons-32{
+        background-color: #607D8B !important;
+    }
+    #ds-reset .ds-highlight {
+        color: #607D8B !important;
+    }
+</style>
+<div id="comments">
+    <!-- 多说评论框 start -->
+        <div class="ds-thread" 
+            data-thread-key="2015/11/23/Mesos-调度机制及调度算法初探/" 
+            data-url="https://www.jetmuffin.com/2015/11/23/Mesos-调度机制及调度算法初探/"
+            data-title="Mesos 调度机制及调度算法初探"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+
+
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    
+    <!-- Prev Nav -->
+    
+        <a href="/2015/11/29/杭电校赛部分赛题题解/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2015/11/23/给Mesos换一个新的WebUI/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+        </div>
+    </div>
+
+				
+				
+					<!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay "></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored  sidebar-fixed-left" role="navigation">
+	<div id="sidebar-main">
+	    <!-- Sidebar Header -->
+		<div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+    <i class="material-icons">clear_all</i>
+    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.jpg" alt="JetMuffin's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        jeffchen328@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+		<!-- Sidebar Navigation  -->
+		<ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+			
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+						<i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    <li id="sidebar-first-li">
+        <a href="/" target="_self">
+            <i class="material-icons sidebar-material-icons">home</i>
+             主页
+        </a>
+    </li>
+
+    <!-- I'm Feeling Lucky -->
+<!--
+    <li class="dropdown">
+        <a href="" target="_self">
+            <i class="material-icons sidebar-material-icons">explore</i>
+             sidebar.imlucky
+        </a>
+    </li>
+-->
+
+	
+    <!-- Archives  -->
+    <li class="dropdown">
+        <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+            <i class="material-icons sidebar-material-icons">inbox</i>
+             归档
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+            <a class="sidebar_archives-link" href="/archives/2016/12/">十二月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">十一月 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">十月 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">九月 2016<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">五月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/03/">三月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/01/">一月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/12/">十二月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/11/">十一月 2015<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/10/">十月 2015<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/09/">九月 2015<span class="sidebar_archives-count">10</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/08/">八月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/07/">七月 2015<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/06/">六月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/05/">五月 2015<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/04/">四月 2015<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/03/">三月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/02/">二月 2015<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2015/01/">一月 2015<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/11/">十一月 2014<span class="sidebar_archives-count">8</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/10/">十月 2014<span class="sidebar_archives-count">12</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/09/">九月 2014<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2014/07/">七月 2014<span class="sidebar_archives-count">2</span></a>
+        </ul>
+    </li>
+
+    <!-- Divider -->
+    <li class="divider"></li>
+
+
+    <!-- Pages  -->
+	
+		<li>
+			<a href="/about" title="关于我">
+				关于我
+			</a>
+		</li>
+	
+		<li>
+			<a href="/tags" title="标签云">
+				标签云
+			</a>
+		</li>
+	
+
+    <!-- Article Numebr  -->
+    <li>
+        <a href="/archives">
+             文章总数
+             <span class="sidebar-badge">95</span>
+        </a>
+    </li>
+</ul>
+
+		<!-- Sidebar Divider -->
+		<div class="sidebar-divider"></div>
+
+		<!-- Sidebar Footer -->
+		<!-- 
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持。 :) 
+-->
+
+<!-- Theme Material -->
+<a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+	<div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+		主题 - Material
+		<span class="sidebar-badge badge-circle">i</span>
+	</div>
+</a>
+
+<!-- Help & Support -->
+<!--
+<a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+		sidebar.help
+		<span class="mdl-button__ripple-container">
+			<span class="mdl-ripple"></span>
+		</span>
+	</div>
+</a>
+-->
+
+<!-- Feedback -->
+<!--
+<a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.feedback
+                    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>
+-->
+
+<!-- Abount Theme -->
+<!--
+<a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.about_theme
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>-->
+
+	</div>
+    
+    <!-- Sidebar Sponsor -->
+    
+
+
+</aside>
+
+				
+				
+				
+					<!-- Footer Top Button -->
+					<div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+				
+				
+				<!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+	
+	
+		<!-- Paradox Footer Left Section -->
+		<div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+    <a href="https://twitter.com/JeffChe97845794" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-twitter.png);">
+        <span class="visuallyhidden">Twitter</span>
+    </button></a>
+    
+    
+    <!-- Facebook -->
+    
+    
+    
+    <!-- Google + -->
+    
+    
+    
+    <!-- Weibo -->
+    
+    <a href="http://weibo.com/1922357801" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-weibo.png);">
+        <span class="visuallyhidden">Weibo</span>
+    </button></a>
+    
+    
+    <!-- Instagram -->
+    
+    
+    
+    <!-- Tumblr -->
+    
+    
+    
+    <!-- Github -->
+    
+    <a href="https://github.com/JetMuffin" target="view_window"><button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.png);">
+        <span class="visuallyhidden">Github</span>
+    </button></a>
+    
+</div>
+
+
+		<!--Copyright-->
+		<div id="copyright">Copyright&nbsp;©&nbsp;<script type="text/javascript">var fd = new Date();document.write(fd.getFullYear());</script>&nbsp;JetMuffin's Blog</div>
+
+		<!-- Paradox Footer Right Section -->
+
+		<!-- 
+		I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+		It will not impact the appearance and can give developers a lot of support :)
+
+		很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+		它不会影响美观并可以给开发者很大的支持。 :) 
+		-->
+
+		<div class="mdl-mini-footer--right-section">
+			<div>
+				<div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+				<div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+			</div>
+		</div>
+	
+    
+</footer>
+                
+				<!-- Import File -->
+<script src="/js/highlight.min.js"></script>
+<script src="/js/js.min.js"></script>
+<script src="/js/nprogress.js"></script>
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    
+    $('#nprogress .bar').css({
+        'background': '#FF4081'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #FF4081, 0 0 15px #FF4081'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#FF4081',
+        'border-left-color': '#FF4081'
+    });
+    
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    <!-- 多说公共 js 代码 start -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jetmuffin"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = 'https://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共 js 代码 end -->
+
+
+
+
+<!-- Swiftye -->
+
+
+<!-- Local Search-->
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $(".post-toc-wrap").parent(".mdl-menu__container").css("position", "fixed");
+    });
+</script>
+
+<!-- MathJax Load-->
+
+            </main>
+        </div>
+		
+    
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+		
+	
+</html>
