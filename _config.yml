@@ -75,10 +75,9 @@ theme: icarus
 # DuoShuo
 # duoshuo_shortname: hexo-theme-icarus
 
-plugins:
-- hexo-generator-feed
-- hexo-generator-sitemap
-- hexo-math
+#plugins:
+#- hexo-generator-sitemap
+#- hexo-math
 # title, chinese available
 links_title: Links
 # links
