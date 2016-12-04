@@ -2,7 +2,7 @@ title: kubernetes源码阅读 - scheduler
 date: 2016-11-24 19:50:52
 tags: [kubernetes, scheduler]
 categories: 基础架构
-thumbnail: http://ohlxaxn1q.bkt.clouddn.com/kubernetes.jpg
+thumbnail: http://cdn.jetmuffin.com/posts/kubernetes.jpg
 ---
 
 阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。

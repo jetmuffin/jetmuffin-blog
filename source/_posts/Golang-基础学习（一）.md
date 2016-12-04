@@ -2,7 +2,7 @@ title: Golang 基础学习（一）
 date: 2016-09-03 20:09:56
 tags: [golang,hello world]
 categories: 编程语言
-thumbnail: http://ohlxaxn1q.bkt.clouddn.com/golang.png
+thumbnail: http://cdn.jetmuffin.com/posts/golang.png
 ---
 
 ## 目的

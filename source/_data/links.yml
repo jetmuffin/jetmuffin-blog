@@ -1,4 +1,24 @@
 NAP:
   link:  http://example.com
-  avatar: http://example.com
-  descr: "NAP group"
+  avatar: http://cdn.jetmuffin.com/links/njuics.png
+  descr: "NAP group, ICS, NJU"
+
+InnerAC:
+  link: http://innerac.github.io
+  avatar: http://cdn.jetmuffin.com/links/innerac.png
+  descr: Don't fire the unknown
+
+Sloriac:
+  link: http://www.sunzequn.com
+  avatar: http://cdn.jetmuffin.com/links/Sloriac.png
+  descr: "所谓成就，就是在喜欢的领域达..."
+
+Legend4917:
+  link: http://legend4917.github.io
+  avatar: http://cdn.jetmuffin.com/links/legend4917.png
+  descr: witness
+
+BLKStone:
+  link: http://blkstone.github.io
+  avatar: http://cdn.jetmuffin.com/links/BLKStone.png
+  descr: Neurohazard

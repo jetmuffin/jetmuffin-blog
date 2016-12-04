@@ -3,6 +3,7 @@ date: 2016-09-04 10:25:44
 tags: [golang]
 categories: 编程语言
 toc: true
+thumbnail: http://cdn.jetmuffin.com/posts/golang.png
 ---
 
 ## 类型

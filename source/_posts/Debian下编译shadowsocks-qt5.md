@@ -2,6 +2,7 @@ title: Debian下编译shadowsocks-qt5
 date: 2016-10-18 13:53:08
 tags: [shadowsocks,debian]
 categories: 设计开发
+thumbnail: http://cdn.jetmuffin.com/posts/shadowsocks.jpg
 ---
 
 平时开发用的是 debian 的 linux 发行版，而 shadowsocks-qt5 没有提供 debian 的 release 版本，于是得自己动手编译，编译的时候会遇到许多坑，这里记录一下。
