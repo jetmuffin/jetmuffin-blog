@@ -1,4 +1,4 @@
-title: hdu5072 Coprime 2014鞍山现场赛C题 容斥原理+单色三角
+Ctitle: hdu5072 Coprime 2014鞍山现场赛C题 容斥原理+单色三角
 tags: [容斥原理,单色三角]
 date: 2014-11-28 19:00:04
 categories: 算法题解

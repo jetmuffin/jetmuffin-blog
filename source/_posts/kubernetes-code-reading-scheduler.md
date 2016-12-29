@@ -7,6 +7,8 @@ thumbnail: http://cdn.jetmuffin.com/posts/kubernetes.jpg
 
 阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。
 
+![k8s](http://cdn.jetmuffin.com/posts/kubernetes.jpg)
+
 <!--more-->
 
 ## Scheduler 入口

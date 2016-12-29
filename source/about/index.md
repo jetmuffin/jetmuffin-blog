@@ -14,7 +14,7 @@ thumbnail: http://cdn.jetmuffin.com/about/header.jpg
     "tags": ["Geek?", "ACMer"],
     "contact": {
         "email": ["jeffchen328@gmail.com", "564936642@qq.com"]
-        "weibo": "@JetMmmmmmuffin ",
+        "weibo": "@JetMmmmmmuffin",
     },
 }
 ```
@@ -27,7 +27,4 @@ thumbnail: http://cdn.jetmuffin.com/about/header.jpg
 
 > 欢迎留言！
 
-<br/>
-### 最近访客
 
-<div class="ds-recent-visitors" data-num-items="28" data-avatar-size="42" id="ds-recent-visitors"></div>
