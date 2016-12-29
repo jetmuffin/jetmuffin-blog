@@ -4,6 +4,3 @@
 [submodule "themes/material"]
 	path = themes/material
 	url = https://github.com/viosey/hexo-theme-material.git
-[submodule "themes/otakism"]
-	path = themes/otakism
-	url = https://github.com/artchen/hexo-theme-typescript.git
