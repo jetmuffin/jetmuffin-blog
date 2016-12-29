@@ -17,7 +17,7 @@ since: 2015 # The start year showing in your copyright section.
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://www.jetmuffin.com
+url: http://blog.jetmuffin.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -85,7 +85,7 @@ links:
   MacTalk: http://macshuo.com/
 
 # duoshuo comments
-duoshuo_shortname: jetmuffin
+# duoshuo_shortname: jetmuffin
 
 # Switfype Search Key
 swiftype_key: 4Puw4pvQK1ydAQDsQwaN
@@ -93,6 +93,9 @@ swiftype_key: 4Puw4pvQK1ydAQDsQwaN
 # Baidu Tongji
 baidu_analytics: f67ecffc11ffd32260e0bcf804da1040
 
+search:
+  path: search.xml
+  field: post
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html

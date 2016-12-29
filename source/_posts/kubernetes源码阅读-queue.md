@@ -2,7 +2,7 @@ title: kubernetes源码阅读 - queue
 date: 2016-12-03 16:04:00
 tags: [kubernetes, queue]
 categories: 基础架构
-thumbnail: http://ohlxaxn1q.bkt.clouddn.com/kubernetes.jpg
+thumbnail: http://cdn.jetmuffin.com/posts/kubernetes.jpg
 ---
 上篇文章中对 k8s 的 scheduler 部分进行了简单的源码阅读和分析，现在接着上次的位置继续往下阅读。
 

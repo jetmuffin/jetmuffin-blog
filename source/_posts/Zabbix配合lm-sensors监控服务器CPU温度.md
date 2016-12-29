@@ -2,6 +2,7 @@ title: Zabbix配合lm_sensors监控服务器CPU温度
 date: 2016-09-01 14:18:06
 tags: [zabbix,lm_sensors,cpu]
 categories: 系统运维
+thumbnail: http://cdn.jetmuffin.com/posts/zabbix.png
 ---
 手上的一个任务，需要对集群的每台机器 CPU 温度进行监控，防止集群在进行计算时温度过高导致 CPU 损坏。由于集群里已经部署了 Zabbix 进行监控和报警，所以很自然的想法就是在 Zabbix 中集成 CPU 监控这一内容。
 
