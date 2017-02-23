@@ -17,7 +17,7 @@
     "hexo-generator-search": "^1.0.2",
     "hexo-generator-sitemap": "^1.1.2",
     "hexo-generator-tag": "^0.1.2",
-    "hexo-math": "^2.0.1",
+    "hexo-math": "^2.1.1",
     "hexo-migrator-rss": "^0.1.2",
     "hexo-pagination": "^0.1.0",
     "hexo-renderer-ejs": "^0.1.1",
