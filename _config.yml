@@ -91,6 +91,12 @@ duoshuo_shortname: jetmuffin
 # Switfype Search Key
 swiftype_key: 4Puw4pvQK1ydAQDsQwaN
 
+sitemap:
+    path: sitemap.xml
+
+baidusitemap:
+    path: baidusitemap.xml
+
 # Baidu Tongji
 baidu_analytics: f67ecffc11ffd32260e0bcf804da1040
 
