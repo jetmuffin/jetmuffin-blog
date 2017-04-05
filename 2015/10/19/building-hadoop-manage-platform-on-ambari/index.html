@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>Ambari搭建Hadoop管理平台 | JetMuffin&#39;s Blog</title>
+  <meta name="description" content="JetMuffin's blog." />
+  <meta name="keywords" content="hexo,blog,jetmuffin" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="介绍Apache Ambari项目的目标是通过配置、管理、监控Hadoop集群，使得Hadoop集群的管理更加简单。Ambari提供了直观易用、基于Restful APIs的Web UI。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ambari搭建Hadoop管理平台">
+<meta property="og:url" content="http://blog.jetmuffin.com/2015/10/19/building-hadoop-manage-platform-on-ambari/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="介绍Apache Ambari项目的目标是通过配置、管理、监控Hadoop集群，使得Hadoop集群的管理更加简单。Ambari提供了直观易用、基于Restful APIs的Web UI。">
+<meta property="og:updated_time" content="2016-12-02T07:03:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ambari搭建Hadoop管理平台">
+<meta name="twitter:description" content="介绍Apache Ambari项目的目标是通过配置、管理、监控Hadoop集群，使得Hadoop集群的管理更加简单。Ambari提供了直观易用、基于Restful APIs的Web UI。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+	<!-- <script src="https://use.typekit.net/eyf3hir.js"></script>
+  <script>try{Typekit.load({ async: false });}catch(e){}</script> -->
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+  <script>setLoadingBarProgress(20)</script>
+  
+  <div id="site-wrapper">
+    
+    <header id="header">
+	<div id="header-wrapper" class="clearfix">
+		<a id="logo" href="/">
+			<img src="/images/logo.png" />
+			<span id="site-desc">
+			  Kaizokuou ore ha naru
+      </span>
+		</a>
+		<button id="site-nav-switch">
+	    <span class="icon icon-menu"></span>
+	  </button>
+	</div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+    
+    <main id="main" role="main">
+      
+
+<article id="post-building-hadoop-manage-platform-on-ambari"
+  class="post article white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<h2 class="title">
+  	<a href="/2015/10/19/building-hadoop-manage-platform-on-ambari/">
+    	Ambari搭建Hadoop管理平台
+    </a>
+  </h2>
+	<time>
+	  10月 19, 2015
+	</time>
+	<section class="content">
+  	<div class="article-entry" itemprop="articleBody">
+    	<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Apache Ambari项目的目标是通过配置、管理、监控Hadoop集群，使得Hadoop集群的管理更加简单。Ambari提供了直观易用、基于Restful APIs的Web UI。<br><a id="more"></a><br>Ambari使得系统管理员可以：</p>
+<ul>
+<li>配置Hadoop集群<ul>
+<li>Ambari提供了逐步安装Hadoop服务的向导</li>
+<li>Ambari处理了Hadoop集群中复杂的配置</li>
+</ul>
+</li>
+<li>管理Hadoop集群<ul>
+<li>Ambari对整个Hadoop集群提供了中心管理服务，可以进行Hadoop的启动、终止和重新配置。</li>
+</ul>
+</li>
+<li>监控Hadoop集群 <ul>
+<li>Ambari提供了监控Hadoop集群健康和状态的控制台</li>
+<li>Ambari使用<code>Ambari Metrics System</code>进行各项指标的收集</li>
+<li>Ambari使用<code>Ambari Alert Framework</code>进行系统报警（当节点宕机或者剩余空间不足等）</li>
+</ul>
+</li>
+</ul>
+<h2 id="安装Ambari-Ubuntu-14-04"><a href="#安装Ambari-Ubuntu-14-04" class="headerlink" title="安装Ambari(Ubuntu 14.04)"></a>安装Ambari(Ubuntu 14.04)</h2><h3 id="step1-从服务器下载Ambari"><a href="#step1-从服务器下载Ambari" class="headerlink" title="step1: 从服务器下载Ambari"></a>step1: 从服务器下载Ambari</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/apt/sources.list.d</div><div class="line">wget http://public-repo-1.hortonworks.com/ambari/ubuntu14/2.x/updates/2.1.2/ambari.list</div></pre></td></tr></table></figure>
+<h3 id="step2-安装、启动Ambari-Server"><a href="#step2-安装、启动Ambari-Server" class="headerlink" title="step2: 安装、启动Ambari Server"></a>step2: 安装、启动Ambari Server</h3><p>从Ambari仓库下载Ambari Server：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD</div><div class="line">apt-get update</div><div class="line">apt-get install ambari-server</div></pre></td></tr></table></figure></p>
+<p>执行命令配置Ambari Server, Database, JDK, LDAP，和其他配置项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ambari-server setup</div></pre></td></tr></table></figure></p>
+<p>启动 Ambari Server：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ambari-server start</div></pre></td></tr></table></figure></p>
+<h3 id="step3-使用Ambari-Web-UI"><a href="#step3-使用Ambari-Web-UI" class="headerlink" title="step3: 使用Ambari Web UI"></a>step3: 使用Ambari Web UI</h3><p>浏览器打开地址<code>http://&lt;ambari-server-host&gt;:8080</code><br>使用账号<code>admin</code>和密码<code>admin</code>进行登录</p>
+<h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><h3 id="配置mysql数据库"><a href="#配置mysql数据库" class="headerlink" title="配置mysql数据库"></a>配置mysql数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p</div><div class="line">mysql&gt; create database ambari;</div><div class="line">mysql&gt; use ambari;</div><div class="line">Database changed</div><div class="line">mysql&gt;source /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql</div></pre></td></tr></table></figure>
+<h2 id="设置ambari-server"><a href="#设置ambari-server" class="headerlink" title="设置ambari-server"></a>设置ambari-server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ambari-server setup</div></pre></td></tr></table></figure>
+<p>过程中会要求配置运行用户、JDK、数据库等内容</p>
+<h2 id="启动ambari-server"><a href="#启动ambari-server" class="headerlink" title="启动ambari-server"></a>启动ambari-server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ambari-server start</div></pre></td></tr></table></figure>
+<p><strong>若启动失败，可以查看/var/log/ambari-server/ambari-ser.out</strong><br>对于以下错误：</p>
+<blockquote>
+<p>com.mysql.jdbc.exceptions.jdbc4.Communicationsxception: Communications link failure</p>
+</blockquote>
+<p>可以采取以下方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">vim /etc/mysql/my.cnf</div><div class="line"># 将bind-address: 127.0.0.1 改为 bind-address: 0.0.0.0</div><div class="line">/etc/init.d/mysql restart</div><div class="line">ambari-server restart</div></pre></td></tr></table></figure></p>
+
+  	</div>
+	  
+	  <div class="article-tags tags">
+		  
+        <a class="tag-link" href="/tags/ambari/">ambari</a><a class="tag-link" href="/tags/hadoop/">hadoop</a>
+      
+	  </div>
+	</section>
+</article>
+
+
+<section id="comments">
+	<div id="disqus_thread"></div>
+</section>
+
+
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </main>
+    
+    <footer id="footer" class="clearfix">
+  
+  
+	<div class="search">
+	  <form name="searchform" id="searchform" class="u-search-form">
+	    <input type="text" id="searchinput" class="u-search-input" placeholder="Looking for something?" />
+	    <button type="submit" id="u-search-btn-submit" class="u-search-btn-submit">
+	      <span class="icon icon-search"></span>
+	    </button>
+	  </form>
+	</div>
+	
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/jetmuffin" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://twitter.com/otakism" class="social twitter"
+          target="_blank" rel="external">
+          <span class="icon icon-twitter"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+        <a href="https://plus.google.com/+ArtChenOtakism/posts" class="social google"
+          target="_blank" rel="external">
+          <span class="icon icon-google"></span>
+        </a>
+      
+        <a href="http://weibo.com/u/1922357801/" class="social sina-weibo"
+          target="_blank" rel="external">
+          <span class="icon icon-sina-weibo"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <span class="codename">Typescript</span> designed by <a href="http://rakugaki.me/" target="_blank">Art Chen</a>.</div>
+  <div>&copy; <a href="/">JetMuffin&#39;s Blog</a></div>
+  
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+    
+    <div class="overlay"></div>
+  </div>
+
+  <div class="site-sidebar" id="site-sidebar">
+	<div class="site-bio show">
+		<div class="about-me clearfix">
+			<div class="avatar">
+				<img src="/uploads/avatar.jpg" alt="">
+			</div>
+			<div class="info">
+				<a href="/about" class="name dark-btn">jetmuffin </a>
+			</div>
+			<div class="info">
+				<span class="item desc">Kaizokuou ore ha naru </span>
+			</div>
+		</div>
+		<div class="menu section">
+			<ul class="clearfix">
+			
+						<li class="left"><a href="/" class="nav-home dark-btn block">
+		        			Home
+		        		</a></li>
+		    
+		        		<li class="right"><a href="/about" class="nav-about dark-btn block">
+		        			About
+		        		</a></li>
+		        		
+						<li class="left"><a href="/archives" class="nav-archives dark-btn block">
+		        			Archives
+		        		</a></li>
+		    
+		        		<li class="right"><a href="/tags" class="nav-tags dark-btn block">
+		        			Tags
+		        		</a></li>
+		        		
+			</ul>
+		</div>			
+	</div>
+	<div class="shortcuts">
+		<a href="#header" class="top window-nav dark-btn" id="go-top"><span class="icon icon-chevron-thin-up"></span> </a>
+		<a class="close dark-btn" id="sidebar-close"><span class="icon icon-close"></span> </a><a href="#footer" class="top window-nav dark-btn" id="go-bottom"><span class="icon icon-chevron-thin-down"></span></a>
+	</div>
+</div>
+    <script>setLoadingBarProgress(90);</script>
+
+  
+<script>
+  var disqus_shortname = 'jetmuffin';
+  
+  var disqus_url = 'http://blog.jetmuffin.com/2015/10/19/building-hadoop-manage-platform-on-ambari/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="http://cdn.jetmuffin.com/static/jquery-2.1.4.min.js"></script>
+<script src="http://cdn1.lncld.net/static/js/av-min-1.5.3.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+<script src="/js/jquery.fitvids.js"></script>
+<script>AV.init({appId: "IxqcEzmebHkRECv72mAIKAAk-gzGzoHsz", appKey: "JIhGNtTGcnfuLSkHRx70dlVw"});</script>
+<script>
+	function showTime(Counter) {
+		var query = new AV.Query(Counter);
+		$(".leancloud-views_num").each(function() {
+			var url = $(this).attr("id").trim();
+			query.equalTo("url", url);
+			query.find({
+				success: function(results) {
+					if (results.length == 0) {
+						var content = '0 ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+						return;
+					}
+					for (var i = 0; i < results.length; i++) {
+						var object = results[i];
+						var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					}
+				},
+				error: function(object, error) {
+					console.log("Error: " + error.code + " " + error.message);
+				}
+			});
+
+		});
+	}
+
+	function addCount(Counter) {
+		var Counter = AV.Object.extend("Counter");
+		var url = $('.post > .title a').attr('href').trim();
+		var title = $('.post > .title a').text().trim();
+		var query = new AV.Query(Counter);
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length > 0) {
+					var counter = results[0];
+					counter.save(true);
+					counter.increment("time");
+					counter.save(null, {
+						success: function(counter) {
+							var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+							$(document.getElementById(url)).text(content);
+						},
+						error: function(counter, error) {
+							console.log('Failed to save Visitor num, with error message: ' + error.message);
+						}
+					});
+				} else {
+					var newcounter = new Counter();
+					newcounter.set("title", title);
+					newcounter.set("url", url);
+					newcounter.set("time", 1);
+					newcounter.save(null, {
+						success: function(newcounter) {
+							console.log("newcounter.get('time')="+newcounter.get('time'));
+							var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+							$(document.getElementById(url)).text(content);
+						},
+						error: function(newcounter, error) {
+							console.log('Failed to create');
+						}
+					});
+				}
+			},
+			error: function(error) {
+				console.log('Error:' + error.code + " " + error.message);
+			}
+		});
+	}
+	$(function() {
+		var Counter = AV.Object.extend("Counter");
+		if ($('.post > .title').length == 1) {
+			addCount(Counter);
+		}
+	}); 
+</script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+</script>
+<script src="/js/search.js"></script>
+<script src="/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+  
+</body>
+</html>
