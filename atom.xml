@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://www.jetmuffin.com/"/>
-  <updated>2016-12-03T13:42:26.000Z</updated>
-  <id>https://www.jetmuffin.com/</id>
+  <link href="http://blog.jetmuffin.com/"/>
+  <updated>2017-04-05T11:07:35.000Z</updated>
+  <id>http://blog.jetmuffin.com/</id>
   
   <author>
     <name>JetMuffin</name>
@@ -16,13 +16,426 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>使用Ansible进行服务器自动化运维</title>
+    <link href="http://blog.jetmuffin.com/2017/04/05/use-ansible-for-automatic-cluster-operation/"/>
+    <id>http://blog.jetmuffin.com/2017/04/05/use-ansible-for-automatic-cluster-operation/</id>
+    <published>2017-04-05T11:04:04.000Z</published>
+    <updated>2017-04-05T11:07:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>ansible是新出现的自动化运维工具，基于Python开发，集合了众多运维工具（puppet、cfengine、chef、func、fabric）的优点，实现了批量系统配置、批量程序部署、批量运行命令等功能。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>Virtualbox &amp;&amp; Vagrant，安装 CentOS 7。用 Vagrant 自动分配 CPU、内存以及 IP。共两台虚拟机，一台为 master，一台为 slave，以模拟集群下环境。</p>
+<ul>
+<li>IP: 192.168.32.10(master) 192.168.32.11(slave)</li>
+<li>子网掩码：255.255.255.0</li>
+<li>用户：root</li>
+</ul>
+<h2 id="Ansible-脚本使用流程"><a href="#Ansible-脚本使用流程" class="headerlink" title="Ansible 脚本使用流程"></a>Ansible 脚本使用流程</h2><h3 id="安装-Ansible"><a href="#安装-Ansible" class="headerlink" title="安装 Ansible"></a>安装 Ansible</h3><p>Ansible 可以直接通过 yum 的 epel 源进行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y install epel-release</div><div class="line">yum -y install ansible</div></pre></td></tr></table></figure>
+<h3 id="配置-ssh-无密码登陆"><a href="#配置-ssh-无密码登陆" class="headerlink" title="配置 ssh 无密码登陆"></a>配置 ssh 无密码登陆</h3><p>Ansible 在集群的机器之间所有的操作都是基于 ssh 进行的，因此需要配置每台机器上 master 的无密码登陆。这里我们只要配置 slave 这台机器即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P <span class="string">""</span></div><div class="line">ssh-copy-id slave</div></pre></td></tr></table></figure>
+<p>配置完 ssh-key 后尝试从 master 登录 slave，若不需密码则配置成功。</p>
+<h3 id="Ansible-脚本使用"><a href="#Ansible-脚本使用" class="headerlink" title="Ansible 脚本使用"></a>Ansible 脚本使用</h3><p>从 gitlab 上 clone Ansible 运维的 playbooks 至 master，playbooks 的目录层级如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ics-cluster/ansible</div><div class="line">tree</div><div class="line">├── bin</div><div class="line">│   └── setup.sh</div><div class="line">├── firewall.yml</div><div class="line">├── group_vars</div><div class="line">│   └── all</div><div class="line">├── hosts</div><div class="line">├── keys.yml</div><div class="line">├── roles</div><div class="line">│   ├── authorized_keys</div><div class="line">│   ├── autofs</div><div class="line">│   ├── common</div><div class="line">│   ├── firewalld</div><div class="line">│   ├── nfs</div><div class="line">│   ├── nis</div><div class="line">│   ├── ntp</div><div class="line">│   └── user</div><div class="line">├── setup.retry</div><div class="line">├── setup.yml</div><div class="line">└── user.yml</div></pre></td></tr></table></figure>
+<p>其中根目录下的 <code>yml</code> 文件为指定功能的 playbook，运行方法为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ansible-playbook -i host xxx.yml</div></pre></td></tr></table></figure>
+<p>若需要对过程进行 debug，在命令后加上 <code>-vvv</code> 参数即可。</p>
+<h3 id="Playbook-编写"><a href="#Playbook-编写" class="headerlink" title="Playbook 编写"></a>Playbook 编写</h3><p>编写 playbook 需要按照在单机上配置软件的过程，大体包括三个部分：安装软件、配置软件和启动服务。因此 <code>package</code>，<code>template</code> 和 <code>service</code> 是经常使用的三个模块。</p>
+<p>根据具体需要部署的软件的部署流程，依次在 playbook 中写好每个阶段的任务。其中可能还会涉及到选择分支等高级用法，具体详询 <a href="http://docs.ansible.com/ansible/playbooks.html" target="_blank" rel="external">Ansible Playbook Documents</a>。</p>
+<h2 id="具体问题解决"><a href="#具体问题解决" class="headerlink" title="具体问题解决"></a>具体问题解决</h2><p>在配置集群环境以及编写 ansible playbooks 的过程中，会遇到非常多的坑，这里记录了一些可能会遇到的问题。</p>
+<h4 id="1-ansible-在某个节点-setup-阶段卡住"><a href="#1-ansible-在某个节点-setup-阶段卡住" class="headerlink" title="1. ansible 在某个节点 setup 阶段卡住"></a>1. ansible 在某个节点 setup 阶段卡住</h4><p>Setup 阶段 ansible 主要收集机器节点的一些信息，而在这个阶段卡住原因可能出在文件系统（fs）和挂载点（mounts）上。因此登录到这个节点上使用 <code>df</code> 或者 <code>mount</code> 去人为检查文件系统是否出现问题。</p>
+<h4 id="2-在-目录下-df-或-ls-卡住"><a href="#2-在-目录下-df-或-ls-卡住" class="headerlink" title="2. 在 / 目录下 df 或 ls 卡住"></a>2. 在 / 目录下 df 或 ls 卡住</h4><p>出现这种状况极有可能的原因是挂载点的问题。检查 <code>/etc/fstab</code> 中所有挂载点是否正常。如果在 <code>/etc/fstab</code> 中配置了自动挂载 nfs，那么如果 nfs-server 挂掉了，就会导致 nfs-client 上的 <code>df</code> 或 <code>ls</code> 卡住。</p>
+<p>当然在这种状况下使用 <code>umount /exports</code> 也会卡住，需要使用 <code>umount -l /exports</code> 来解除挂载。</p>
+<h4 id="3-ypbind-服务无法启动"><a href="#3-ypbind-服务无法启动" class="headerlink" title="3. ypbind 服务无法启动"></a>3. ypbind 服务无法启动</h4><p>配置 NIS 时，在 client 上启动 <code>ypbind</code> 服务时会出现启动超时的问题，主要的原因是 client 无法和 server 端通信。以下是两个排查的方向：</p>
+<ol>
+<li>检查 server 端的防火墙配置（iptables 或 firewalld），打开 <code>ypserv</code> 和 <code>yppasswdd</code> 的端口</li>
+<li>server 端在初次启动 <code>ypserv</code> 后需要对 yp 进行初始化，运行 <code>ypinit -m</code></li>
+</ol>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="docs.ansible.com">Ansible Documentation</a></li>
+<li><a href="http://cn.linux.vbird.org/linux_server/0330nfs.php" target="_blank" rel="external">鸟哥的Linux 私房菜– NFS 服务器
+</a></li>
+<li><a href="https://www.server-world.info/en/note?os=CentOS_7&amp;p=nis" target="_blank" rel="external">Configure NIS Server</a></li>
+<li><a href="https://www.server-world.info/en/note?os=CentOS_7&amp;p=nis&amp;f=2" target="_blank" rel="external">Configure NIS Client</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;ansible是新出现的自动化运维工具，基于Python开发，集合了众多运维工具（puppet、cfengine、chef、func、fabric）的优点，实现了批量系统配置、批量程序部署、批量运行命令等功能。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>除法取模（逆元求法）总结</title>
+    <link href="http://blog.jetmuffin.com/2017/03/15/method-of-computing-inverse-of-number/"/>
+    <id>http://blog.jetmuffin.com/2017/03/15/method-of-computing-inverse-of-number/</id>
+    <published>2017-03-15T10:49:31.000Z</published>
+    <updated>2017-04-05T11:03:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近刷的笔试题和以前打 ACM 中经常遇到求某个公式，最后的结果需要对某个数取模。我们都知道除法无法直接取模，即  $\frac{a}{b} \bmod c \neq \frac{a \bmod c}{b \bmod c} \bmod c$（当然，$ a \mid b $）。因此需要对 $b$ 求逆元，即 $\frac{a}{b} \bmod c = (a \bmod c)*(b^{‘} \bmod c) \bmod c $ 。这里总结一下求逆元的方法。</p>
+<a id="more"></a>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>对于正整数 $a$ 和 $m$，如果有 $ax \equiv 1 \pmod m$，那么把同余方程组里 $x$ 的最小正整数解称为 $a$ 模 $m$ 的逆元。</p>
+<h2 id="求法"><a href="#求法" class="headerlink" title="求法"></a>求法</h2><h3 id="费马小定理"><a href="#费马小定理" class="headerlink" title="费马小定理"></a>费马小定理</h3><p><strong>前提：$a$ 与 $m$ 互质</strong>。</p>
+<p>一般情况下题目会给小于 <code>int</code> 的最大素数 <code>1e9+7</code>，那么费马小定力就可以用了。</p>
+<p>$$ a^{m-1} \equiv 1 \pmod m \Rightarrow a \cdot a^{m-2} \equiv 1 \pmod m \Rightarrow a^{m-2} \equiv \frac{1}{a} \pmod m $$</p>
+<p>那么逆元即为 $a^{m-2} \bmod m$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1000000007</span>;</div><div class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">quick_pow</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> a, <span class="keyword">long</span> <span class="keyword">long</span> b)</span> </span>&#123;</div><div class="line">  <span class="keyword">long</span> <span class="keyword">long</span> res = <span class="number">1</span>;</div><div class="line">  <span class="keyword">while</span>(b) &#123;</div><div class="line">    <span class="keyword">if</span>(b &amp; <span class="number">1</span>) &#123;</div><div class="line">      res = a * res % mod;</div><div class="line">    &#125;</div><div class="line">    a = a * a % mod;</div><div class="line">    a &gt;&gt;= <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> res;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">inv</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> x)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> quick_pow(a, mod - <span class="number">2</span>) % mod;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="扩展欧几里得"><a href="#扩展欧几里得" class="headerlink" title="扩展欧几里得"></a>扩展欧几里得</h3><p><strong>前提：$a$ 与 $m$ 互质</strong></p>
+<p>由逆元定义可知，给定模数 $m$，求 $a$ 的逆相当于求解 $ax \equiv 1 \pmod m$。方程可以转化为 $ax-my=1$。那么当 $gcd(a, m) = 1$ 时，可以通过扩展欧几里得算法算出解，再将算出的特解转化到 $[0,m−1]$ 即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ext_gcd</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> a, <span class="keyword">long</span> <span class="keyword">long</span> b, <span class="keyword">long</span> <span class="keyword">long</span> &amp;x, <span class="keyword">long</span> <span class="keyword">long</span> &amp;y)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span>(b == <span class="number">0</span>) &#123;</div><div class="line">    x = <span class="number">1</span>;</div><div class="line">    y = <span class="number">0</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    ext_gcd(b, a % b, x, y);</div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> t;</div><div class="line">    t = x;</div><div class="line">    x = y;</div><div class="line">    y = t - a / b * y;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">inv</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> x)</span> </span>&#123;</div><div class="line">  <span class="keyword">long</span> <span class="keyword">long</span> now, t;</div><div class="line">  ext_gcd(x, mod, now, t);</div><div class="line">  <span class="keyword">return</span> (now % mod + mod) % mod;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h3><p>TBD</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近刷的笔试题和以前打 ACM 中经常遇到求某个公式，最后的结果需要对某个数取模。我们都知道除法无法直接取模，即  $\frac{a}{b} \bmod c \neq \frac{a \bmod c}{b \bmod c} \bmod c$（当然，$ a \mid b $）。因此需要对 $b$ 求逆元，即 $\frac{a}{b} \bmod c = (a \bmod c)*(b^{‘} \bmod c) \bmod c $ 。这里总结一下求逆元的方法。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法分析" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/"/>
+    
+    
+      <category term="数论" scheme="http://blog.jetmuffin.com/tags/%E6%95%B0%E8%AE%BA/"/>
+    
+      <category term="逆元" scheme="http://blog.jetmuffin.com/tags/%E9%80%86%E5%85%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>矩形计数 hihocoder 1476</title>
+    <link href="http://blog.jetmuffin.com/2017/03/05/counting-rectangle-hihocoder-1476/"/>
+    <id>http://blog.jetmuffin.com/2017/03/05/counting-rectangle-hihocoder-1476/</id>
+    <published>2017-03-05T12:18:11.000Z</published>
+    <updated>2017-04-05T10:42:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址 <a href="http://hihocoder.com/problemset/problem/1476" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1476</a></p>
+<p><img src="https://media.hihocoder.com//problem_images/20170305/14886790334060.png" alt="图1"></p>
+<a id="more"></a>
+<p>如图所示， 给定的矩形中有 K 个单位正方形是黑色的，其余是白色的，求多少个不同的子矩形是完全由白色的正方形组成的。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>直接算由白色正方形组成的不好计数，需要反向通过减去包含黑色方块的计算更方便。但是减去黑色方块时需要用<strong>容斥原理</strong>。即总矩形数减去包含 1 个黑色方格的矩形数，加上包含 2 个黑色方格的矩形数，减去包含 3 个黑色方格的矩形数……依次类推。</p>
+<p>可以想到的是，对于 n <em> m 大小的矩形，包含的所有子矩形的个数的 $\binom{n}{2} </em> \binom{m}{2}$。</p>
+<p>而包含 t 个黑色方格的矩形数，可以首先处理出所有这些黑色方格的范围的四条线，$x_1$，$x_2$， $y_1$，$y_2$，那么如果矩形要包括所有的黑格，它的上横线必然从 $[0, x_1]$ 取，下横线从 $[x_2, n]$ 取，那么横线的取法有 $\binom{x_1}{1} <em> \binom{n - x_2 + 1}{1}$ 种，同理可得纵线取值，最后可以得到包含黑色方格的取法一共有 $x_1</em>(n-x_2+1)<em>y_1</em>(m-y_2+1)$ 种。</p>
+<p>最后通过容斥原理统计一遍即可。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/hihocoder_1476.png" alt="图2"></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1010</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf = <span class="number">0x3f3f3f</span>;</div><div class="line">ll n, m, k;</div><div class="line">ll r[maxn], c[maxn];</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%lld%lld%lld"</span>, &amp;n, &amp;m, &amp;k)) &#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</div><div class="line">			<span class="built_in">scanf</span>(<span class="string">"%lld%lld"</span>, &amp;r[i], &amp;c[i]);</div><div class="line">		&#125;</div><div class="line">		ll ans = n * (n + <span class="number">1</span>) / <span class="number">2</span> * m * (m + <span class="number">1</span>) / <span class="number">2</span>;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; (<span class="number">1</span> &lt;&lt; k); i++) &#123;</div><div class="line">			<span class="keyword">int</span> num = __builtin_popcount(i);</div><div class="line">			<span class="keyword">int</span> x1 = inf, x2 = <span class="number">0</span>, y1 = inf, y2 = <span class="number">0</span>;</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; k; j++) &#123;</div><div class="line">				<span class="keyword">if</span>(i &amp; (<span class="number">1</span> &lt;&lt; j)) &#123;</div><div class="line">					<span class="keyword">if</span>(x1 &gt; r[j]) x1 = r[j];</div><div class="line">					<span class="keyword">if</span>(x2 &lt; r[j]) x2 = r[j];</div><div class="line">					<span class="keyword">if</span>(y1 &gt; c[j]) y1 = c[j];</div><div class="line">					<span class="keyword">if</span>(y2 &lt; c[j]) y2 = c[j];</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span>(num % <span class="number">2</span> == <span class="number">0</span>) ans += x1 * y1 * (n - x2 + <span class="number">1</span>) * (m - y2 + <span class="number">1</span>);</div><div class="line">			<span class="keyword">else</span> ans -= x1 * y1 * (n - x2 + <span class="number">1</span>) * (m - y2 + <span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;题目地址 &lt;a href=&quot;http://hihocoder.com/problemset/problem/1476&quot;&gt;http://hihocoder.com/problemset/problem/1476&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://media.hihocoder.com//problem_images/20170305/14886790334060.png&quot; alt=&quot;图1&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法题解" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
+    
+    
+      <category term="容斥原理" scheme="http://blog.jetmuffin.com/tags/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Counting Hamming Numbers</title>
+    <link href="http://blog.jetmuffin.com/2017/02/18/Counting-Hamming-Numbers/"/>
+    <id>http://blog.jetmuffin.com/2017/02/18/Counting-Hamming-Numbers/</id>
+    <published>2017-02-18T02:26:40.000Z</published>
+    <updated>2017-04-05T10:42:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="http://oeis.org/A051037" target="_blank" rel="external">Hamming Number</a> 是一类特殊的数，他们的因数仅为2，3，5 中的任意组合。形式化地说即：</p>
+<p>$$x = 2^i \times 3^j \times 5^k, i,j,k \geq 0, \forall x \in H$$</p>
+<a id="more"></a>
+<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>若要求解 Hamming Number，第一反应是使用一个最小堆来维护整个数列，不断从堆里取出最小的数 <code>top</code>，再往堆里放入 <code>2*top</code>，<code>3*top</code>，<code>5*top</code>，同时对拿出来的数进行去重，整个计算的复杂度是 <code>O(logn)</code> 的。</p>
+<p>大概的解决代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">long</span> <span class="title">countHammingNumber</span><span class="params">(<span class="keyword">long</span> n)</span> </span>&#123;</div><div class="line">  priority_queue&lt;<span class="keyword">long</span>, <span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt;, greater&lt;<span class="keyword">long</span>&gt; &gt; q;</div><div class="line">  <span class="keyword">long</span> peak = <span class="number">1</span>;</div><div class="line">  q.push(<span class="number">2</span>);</div><div class="line">  q.push(<span class="number">3</span>);</div><div class="line">  q.push(<span class="number">5</span>);</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</div><div class="line">    peak = q.top();</div><div class="line">    q.pop();</div><div class="line">    <span class="keyword">if</span>(!q.empty()) &#123;</div><div class="line">      <span class="keyword">while</span>(q.top() == peak) &#123;</div><div class="line">        q.pop();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    q.push(peak * <span class="number">2</span>);</div><div class="line">    q.push(peak * <span class="number">3</span>);</div><div class="line">    q.push(peak * <span class="number">5</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过这样处理，最小堆每次取出的数放进一个数组里则这个数组里就全是 Hamming Number 了。</p>
+<p>然而这样的处理比较耗时，再仔细分析 Hamming Number 的由来可以想到：</p>
+<p>x（Hamming Number） 的因数仅存在 2、3、5，那么只要 count 2、3、5 的个数即可了。列一个表可以表示为：</p>
+<table>
+<thead>
+<tr>
+<th>n-th</th>
+<th>5</th>
+<th>3</th>
+<th>2</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p>从表中可以看出 Hamming Number 的递推过程存在一定规律，可以用 dp 的思路去解决，大体可以表示成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dp[i] = min(dp[j]*2, dp[k]*3, dp[l]*5)</div></pre></td></tr></table></figure>
+<p>即我们维护上表中的 <code>5、3、2</code> 因子为 <code>j、k、l</code>，那么当计算某个 <code>n-th</code> 即 <code>i</code> 时，<code>dp[i]</code> 就通过上式子递推得出。这样求解的话复杂度为 <code>O(n)</code></p>
+<p>代码大致如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">countHammingNumber</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">  <span class="keyword">int</span> dp[<span class="number">1690</span>];</div><div class="line">  <span class="keyword">int</span> j = <span class="number">1</span>, k = <span class="number">1</span>, l = <span class="number">1</span>;</div><div class="line">  dp[<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</div><div class="line">    dp[i] = min(<span class="number">2</span> * dp[j], min(<span class="number">3</span> * dp[k], <span class="number">5</span> * dp[l]));</div><div class="line">    <span class="keyword">if</span>(dp[i] == <span class="number">2</span> * dp[j]) j++;</div><div class="line">    <span class="keyword">if</span>(dp[i] == <span class="number">3</span> * dp[k]) k++;</div><div class="line">    <span class="keyword">if</span>(dp[i] == <span class="number">5</span> * dp[l]) l++;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> dp[n];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><ul>
+<li><a href="https://leetcode.com/problems/ugly-number/?tab=Description" target="_blank" rel="external">Ugly Number</a></li>
+<li><a href="https://leetcode.com/problems/ugly-number-ii/?tab=Description" target="_blank" rel="external">Ugly Number II</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;http://oeis.org/A051037&quot;&gt;Hamming Number&lt;/a&gt; 是一类特殊的数，他们的因数仅为2，3，5 中的任意组合。形式化地说即：&lt;/p&gt;
+&lt;p&gt;$$x = 2^i \times 3^j \times 5^k, i,j,k \geq 0, \forall x \in H$$&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法题解" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
+    
+    
+      <category term="prime" scheme="http://blog.jetmuffin.com/tags/prime/"/>
+    
+      <category term="因数分解" scheme="http://blog.jetmuffin.com/tags/%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>集群调度架构的发展</title>
+    <link href="http://blog.jetmuffin.com/2017/01/02/The-evoolution-of-cluster-scheduler-architectures/"/>
+    <id>http://blog.jetmuffin.com/2017/01/02/The-evoolution-of-cluster-scheduler-architectures/</id>
+    <published>2017-01-02T12:41:33.000Z</published>
+    <updated>2017-02-17T13:05:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>文章翻译自<a href="http://firmament.io/blog/scheduler-architectures.html" target="_blank" rel="external">《The evolution of cluster scheduler architectures》</a>，原作者为 Cambridge 的 Sys@Scale 实验室。</p>
+<a id="more"></a>
+<blockquote>
+<p>集群调度器作为当今基础设施架构中重要的组件，在近几年中发展非常迅速。它们的结构从整体化的设计逐渐松散化，分布式化，变得更为灵活。然而，许多现在的开源实现要么仍然采用整体化设计，要么缺少重要的功能，而这些功能则正是关系到现实世界的用户所关心的问题，即他们要求实现的高利用。</p>
+</blockquote>
+<p>这篇文章是我们撰写的一个系列中的第一篇。这个系列阐述关于如何在大型集群调度任务，像那些互联网公司如 Amazon，Google，Facebook，Microsoft，Yahoo!等所在生产实践中所做的那样。调度是一个重要的主题，因为它直接影响着操作一个集群的代价。例如一个差的调度器会导致集群的使用率低下，这就意味着昂贵的服务器大部分在空闲着，必然造成经济上的损失。然而集群高使用率不仅仅是针对单个任务而言，因为任务之间往往会相互影响，这也就要求调度器在决策上更加地细致，小心。</p>
+<h2 id="架构发展"><a href="#架构发展" class="headerlink" title="架构发展"></a>架构发展</h2><p>这篇文章讨论调度器的结构在近几年来是如何发展的，以及为什么这么发展。如图一所示，当前的调度器主要有以下几种不同的调度模式。其中灰色的正方形表示机器节点，彩色的圆形表示任务，而带有“S”的圆角矩形则代表调度器。箭头显示了调度器的调度决策，而三种不同的颜色（红黄蓝）则表示了不同的任务类型（例如 web 服务，批处理分析以及机器学习任务）。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/scheduler-arch-sharestate.png" alt="图1"></p>
+<h3 id="中央调度架构"><a href="#中央调度架构" class="headerlink" title="中央调度架构"></a>中央调度架构</h3><p>许多集群调度器是<strong>中央调度架构</strong>的，例如大多数的高性能计算中的调度器，<a href="#">Borg 调度器</a>，一些早期的 Hadoop 中的调度器以及现在 Kubernetes 中的调度器。这种模式会在集群的某台机器上允许一个单独的调度进程（例如 Hadoop v1 中的 <code>JobTracker</code> 和 Kubernetes 中的 <code>kube-scheduler</code>），而这个调度进程负责分配任务到每台机器节点上。所有任务都是由一个调度器处理，也就是说所有的任务均是由一个调度逻辑进行分配的（如图 1a 所示）。这种架构简单一致，在许多越来越复杂的调度器中采用。例如 <a href="#">Paragon</a> 和 <a href="#">Quasar</a>，使用机器学习的方法来防止任务之间的资源竞争的调度器，也使用了这种调度模式。</p>
+<p>相比于早些时候的 Hadoop 上的 MapReduce 任务，当前的集群允许的应用种类越来越多，不再针对单一的任务。然而，维护一个中央调度器来处理多类型混合任务是相当棘手的，原因有以下几点：</p>
+<ol>
+<li>很明显调度器在应该用不同方式处理长时间服务作业（Long-running service jobs）和批处理作业（batch jobs）。</li>
+<li>不同的应用有不同的需求，需要满足他们所有的需求相当于不断在调度器上增加功能，这也使得调度器的逻辑和实现越来越复杂。</li>
+<li>调度器处理任务的顺序也会成为一个问题，队列的影响（例如 head-of-line blocking）和任务存储将难以处理，除非调度器是精心设计的。</li>
+</ol>
+<p>总之，这些问题将造成工程上的噩梦，调度器的维护者将收到源源不断的功能需求而没法实现它。</p>
+<h3 id="两层调度架构"><a href="#两层调度架构" class="headerlink" title="两层调度架构"></a>两层调度架构</h3><p><strong>两层调度架构</strong>通过分离<em>资源分配</em>和<em>任务调度</em>这两部分来解决了这个问题。它上层允许针对不同的应用定制不同的任务分配逻辑，同时维持他们共用集群的能力。<a href="#">Mesos</a>最先使用了这种架构，<a href="#">YARN</a>也在某个版本之后开始支持。在 Mesos 中，底层资源管理器将资源以 <code>offer</code> 的形式提供给应用级的调度器，这些调度器可以在其中选择适合的 <code>offer</code> 并使用它来运行任务。而 YARN 中则允许应用级的调度器向底层资源管理器请求资源。图 1b 显示了这种架构模式：针对任务定制的调度器（S0-S2）和资源管理器进行交互，动态地对资源进行分片，分配给各个任务。总体而言，这是一种灵活的，允许根据任务类型进行定制的架构模式。</p>
+<p>但是，两层调度框架分层的思想也存在着缺陷。应用层的调度器无法获得上帝视角，例如他们无法看到<em>所有</em>可能的调度选项。相反，他们仅仅能够看到通过资源管理器提供的资源对应的调度选项。这就存在着一些缺点：</p>
+<ol>
+<li>优先级将难以实现：在基于 <code>offer</code> 的调度模型（Mesos）中，上层调度器无法看到分配给正在运行的任务的资源；在基于请求（YARN）的调度模型中，底层的资源管理器必须知道优先级策略（这和两层调度模式相矛盾）。</li>
+<li>因为调度器无法看到所有的资源，它无法确认运行任务是否会影响降低资源的质量。</li>
+<li>根据应用定制的调度器可能需要关注来自下层的资源中的许多不同的方面的信息，而他们仅仅能通过和底层资源管理器的接口获知这些内容，这也就导致这些接口可能会变得十分复杂。</li>
+</ol>
+<h3 id="共享状态架构"><a href="#共享状态架构" class="headerlink" title="共享状态架构"></a>共享状态架构</h3><p><strong>共享状态架构</strong>采用了一种半分布式的模型来解决上述的这些问题。在这个架构中，每个应用层的调度器相互独立地更新集群状态的多个副本，如图 1c 中所示。在这些变化在本地进行以后，调度器会进行启动一个乐观一致的事物去更新共享集群状态。当然这个事物也会失败，不同的调度器在同一时间进行了进行的变动可能会存在矛盾。</p>
+<p>共享状态架构最典型的设计例子就是 Google 的 <a href="#">Omega</a> 了，其次就是微软的 <a href="#">Apollo</a>，以及 Hashicorp 的 [Nomad] 容器调度器。这些调度器都是将集群的共享状态储存在单个位置上，例如 Omega 中的 <code>cell state</code>，Apollo 中的 <code>resource monitor</code> 以及 Nomad 中的 <code>plan queue</code>。区别于其他两个调度框架，Apollo 中共享状态是只读的，同时调度事务是直接通过集群机器提交的。这些机器会自己确认是否存在矛盾，以及接受和拒绝这些变动。这也使得 Apollo 在集群共享状态暂时不可访问时也能短暂工作。</p>
+<p>逻辑上的共享状态架构设计允许不在整个集群上实现完全的状态共享。在这种设计中（类似 Apollo 的设计），每台机器维护它自己的状态，发送要更新的状态到不同的 agent 上，例如调度器，机器的健康监控器，以及资源监控系统。每台机器局部的共享状态构成了整个集群的全局共享状态。</p>
+<p>然而共享状态架构同样也有缺陷。和中央调度不同的是，共享状态总是处理着旧的集群状态信息，而不是实时的信息。这可能在高并发的场景下会降低调度器的性能。</p>
+<h3 id="完全分布式架构"><a href="#完全分布式架构" class="headerlink" title="完全分布式架构"></a>完全分布式架构</h3><p><strong>完全分布式架构</strong>则将结构分解的更加彻底，如图 1d 所示，它甚至在调度器中没有协调者，仅仅是使用各个独立的调度器来对任务提供调度服务。这种架构中，每个调度器只是处理它本地的，部分的，常常过时的集群信息。作业可以提交到任意的调度器上，每个调度器可以调配任务到集群中的任意一个位置。和两层调度架构不同的是，它的调度器不负责对集群资源进行分片。相反，所有的调度和资源分片是任务在统计学上的多元性和随机性以及调度器的决策形成的结果。</p>
+<p>虽然在之前有关于相关概念（利用多元随机决策）<a href="#">在1996年发表</a>，最近的关于完全分布式架构的调度器的文章大概是从 <a href="#">Sparrow</a> 的文章开始的。Sparrow 的主要前提是基于一个假设，即我们在集群中运行的任务在执行时间上在不断缩短，因为任务的划分粒度变得更加细粒度了。因此，作者假设瞬时任务数量变得更加庞大，这也就意味着调度器的决策吞吐量将会变得很大。而单个调度器可能支撑不了这么大的吞吐量（可能达到每秒百万个任务），Sparrow 想要将负载分配到多个调度器上。</p>
+<p>这可能带来一些完美的作用，从概念上可以显示省去了中央的控制，同时它非常满足一些任务的需求——在之后的文章中会提到。在这里，以下一些原因足以显示这种分布式的，无中心协调的调度模式，在逻辑上相比比中央控制的，两层调度的，或共享状态的调度器，过于简单。例如：</p>
+<ol>
+<li>分布式的调度器通常基于简单的 <code>&quot;slot&quot;</code> 概念，把每台机器细分成 n 个一致的 slot，在其中运行 n 个并行的任务。这简化了任务的资源需求不一致的问题，然而在现实中这个不一致的问题是存在的。</li>
+<li>它同样会在 worker 上使用一些特定的队列（例如 Sparrow 中的 FIFO），这会限制调度的灵活性，因为这种架构下的调度器只能从集群中选择一台机器来讲一个任务入队。</li>
+<li>因为分布式调度器没有中心控制，它在使用全局约束上回存在问题（例如要求公平性策略或者严格的优先级顺序时）</li>
+<li>由于它是为了基于最少的信息来做快速的决策而设计的，分布式调度器难以支持复杂的或者应用指定的调度策略。换言之，这种调度目前能架构处理的任务相对比较简单。例如对相互影响的任务它在处理上将会十分棘手。</li>
+</ol>
+<h3 id="混合式架构"><a href="#混合式架构" class="headerlink" title="混合式架构"></a>混合式架构</h3><p>最近在学术上提出了<strong>混合式架构</strong>，为了解决完全分布式架构的问题，它将中央调度和共享状态调度设计相结合。它的工作方式是，将所有任务通过两种途径进行调度，对于短任务和低优先级批处理任务通过分布式调度来进行分配，而其他的任务则通过中央调度来分配，例如 <a href="#">Tarcil</a>，<a href="#">Mercury</a> 和 <a href="#">Hawk</a>，图 1e 显示了这种设计模式的工作原理。这种设计的好处是，混合调度器混用了上述几种调度架构模式来避免各自的缺点。但据笔者所知，目前没有这种调度器用于生产实践中。</p>
+<h2 id="在实践中的结果"><a href="#在实践中的结果" class="headerlink" title="在实践中的结果"></a>在实践中的结果</h2><p>讨论不同调度架构之间相对的优缺点不仅仅是学术上的话题，同样需要在工业界生产实践中去考虑考虑诸如 Borg，Mesos 和 Omega 之类的文章。更进一步的是，许多上面讨论到的系统已经在许多大企业中投入生产使用，例如微软的 Apollo，谷歌的 Borg 和 Apple 的 Mesos，它们同样启示其他的系统可能作为开源项目在生产中使用也是可行的。</p>
+<p>最近几年，许多集群允许容器华的任务，导致了许多不同的基于容器的“编排框架”开始出现。这也和谷歌以及其他公司声称的“集群管理者”相类似。然而，集群调度器上仍然有许多细节需要讨论，例如他们的设计原则，他们关注的调度 API等。更重要的是，许多用户既不知道调度器架构起到什么作用，也不知道这些调度器适合哪些应用。</p>
+<p>图 2 显示了一系列开源的编排框架的概况，以及它们的架构和它们的调度器支持的功能。在表格的最底部，我们同样引用了谷歌和微软的非开源的系统。<code>Resource granularity</code> 这一列表示资源使用固定的 slots，还是用多维的形式分配资源。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/orch-framework-feature-matrix.png" alt="图2"></p>
+<p>其中一个帮助你确定调度框架是否合适的重要方面是你的集群是否允许不同的任务。例如在同一个集群中既有前端服务（负载均衡 web server 和 memcached）以及数据批处理分析（例如 MapReduce 或者 Spark）。在同一个集群上运行这两类任务可以提高该集群的使用率，但是不同的应用可能有不同的调度需求。在这种情况下，中央调度的调度器可能导致一个局部最优的调度结果，因为它在逻辑上无法做到根据每个任务进行的多样性调度。而两层调度和共享状态调度可能就更加适合一些。</p>
+<p>大多数用户面对的服务任务是用服务时的峰值需求来设定的资源分配量的，但是在实际中通常这些服务的资源使用率是低于他们的分配需求。<strong>在这种情况下，能够适当的超售资源给低优先级的任务（同时保证服务的 QoS）是集群效率的关键。</strong>Mesos 是当前的开源系统中唯一支持资源超售的，而 Kubernetes 则是把它作为一个长远的目标。我们应该更加关注这个方面，因为根据谷歌 Borg 的报告指出，大多数集群的使用率仍然是低于 60-70% 的。我们将在未来的这个系列的文章中更加关注资源评估，资源超配和高效的机器使用率。</p>
+<p>最后，特定的分析和 OLAP 风格的应用（例如 Dremel 或 SparkSQL queries）适用于完全分布式调度器。然而，完全分布式调度器（例如 Sparrow）受到一系列的约束，而在任务相同时工作效果最好。我们会在之后的文章中更加详细地解释完全分布式调度器和混合调度器中的分布式组件部分的内容。而现在足以说明从观察的结果看出，这种架构在调度策略上过于简单，以致于没法支持多类资源类型，资源超售和资源重分配等功能。</p>
+<p>总体的说，从图 2 的表格中可以看出目前的开源调度框架还有很多的功能需要去支持和改进。这应该成为一个行动号召，解决这些框架中缺少的功能，低下的使用率，不可预测的任务性能等问题。</p>
+<p>然而，一个好消息是，许多框架采用中央调度模式的调度框架正在往更加灵活的设计上发展。Kubernetes 已经支持了可插件化的调度器（<code>kube-scheduler</code> pod 可以被其他兼容 API 的调度器 pod 替代），从 v1.2 开始支持多调度器，以及正在开发的支持用户自定义的调度策略等。Docker Swarm 在未来可能同样会变得可插件化。</p>
+<h2 id="下回预告"><a href="#下回预告" class="headerlink" title="下回预告"></a>下回预告</h2><p>本系列的下篇文章会关注完全分布式架构的主要问题。同时，我们会关注 resource-fitting 策略，以及最后讨论为什么我们的 Firmament scheduling 平台综合了其他调度架构所有的优点。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>Verma A, Pedrosa L, Korupolu M, et al. Large-scale cluster management at Google with Borg[C]//Proceedings of the Tenth European Conference on Computer Systems. ACM, 2015: 18.</li>
+<li>Hindman B, Konwinski A, Zaharia M, et al. Mesos: A Platform for Fine-Grained Resource Sharing in the Data Center[C]//NSDI. 2011, 11: 22-22.</li>
+<li>Vavilapalli V K, Murthy A C, Douglas C, et al. Apache hadoop yarn: Yet another resource negotiator[C]//Proceedings of the 4th annual Symposium on Cloud Computing. ACM, 2013: 5.</li>
+<li>Boutin E, Ekanayake J, Lin W, et al. Apollo: scalable and coordinated scheduling for cloud-scale computing[C]//11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14). 2014: 285-300.</li>
+<li>Schwarzkopf M, Konwinski A, Abd-El-Malek M, et al. Omega: flexible, scalable schedulers for large compute clusters[C]//Proceedings of the 8th ACM European Conference on Computer Systems. ACM, 2013: 351-364.</li>
+<li>Ousterhout K, Wendell P, Zaharia M, et al. Sparrow: distributed, low latency scheduling[C]//Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles. ACM, 2013: 69-84.</li>
+<li>Delimitrou C, Kozyrakis C. Paragon: QoS-aware scheduling for heterogeneous datacenters[C]//ACM SIGPLAN Notices. ACM, 2013, 48(4): 77-88.</li>
+<li>Delimitrou C, Kozyrakis C. Quasar: resource-efficient and QoS-aware cluster management[C]//ACM SIGPLAN Notices. ACM, 2014, 49(4): 127-144.</li>
+<li>Delimitrou C, Sanchez D, Kozyrakis C. Tarcil: Reconciling scheduling speed and quality in large shared clusters[C]//Proceedings of the Sixth ACM Symposium on Cloud Computing. ACM, 2015: 97-110.</li>
+<li>Delgado P, Dinu F, Kermarrec A M, et al. Hawk: Hybrid datacenter scheduling[C]//2015 USENIX Annual Technical Conference (USENIX ATC 15). 2015: 499-510.</li>
+<li>Karanasos K, Rao S, Curino C, et al. Mercury: Hybrid centralized and distributed scheduling in large shared clusters[C]//2015 USENIX Annual Technical Conference (USENIX ATC</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;文章翻译自&lt;a href=&quot;http://firmament.io/blog/scheduler-architectures.html&quot;&gt;《The evolution of cluster scheduler architectures》&lt;/a&gt;，原作者为 Cambridge 的 Sys@Scale 实验室。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="资源调度" scheme="http://blog.jetmuffin.com/categories/%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6/"/>
+    
+    
+      <category term="mesos" scheme="http://blog.jetmuffin.com/tags/mesos/"/>
+    
+      <category term="资源调度" scheme="http://blog.jetmuffin.com/tags/%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6/"/>
+    
+      <category term="borg" scheme="http://blog.jetmuffin.com/tags/borg/"/>
+    
+      <category term="omega" scheme="http://blog.jetmuffin.com/tags/omega/"/>
+    
+      <category term="sparrow" scheme="http://blog.jetmuffin.com/tags/sparrow/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>kubernetes源码阅读 - storage part 1 - cache</title>
+    <link href="http://blog.jetmuffin.com/2016/12/04/kubernetes-code-reading-storage-part-1-cache/"/>
+    <id>http://blog.jetmuffin.com/2016/12/04/kubernetes-code-reading-storage-part-1-cache/</id>
+    <published>2016-12-04T13:28:54.000Z</published>
+    <updated>2017-02-17T13:05:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>kubernetes 的 scheduler 维护了一个先进先出的队列，而这个队列的事实上是一种 <code>Storage</code>，只不过它重载了 Storage 中的各种方法。那么 kubernetes 中的存储是如何设计的呢？</p>
+<a id="more"></a>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/fifo.go</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> Queue <span class="keyword">interface</span> &#123;</div><div class="line">	Store <span class="comment">// Queue事实上也是一种Storage，而在FIFOQueue中具体对Add,List,Delete等方法进行了重写</span></div><div class="line"></div><div class="line">	Pop(PopProcessFunc) (<span class="keyword">interface</span>&#123;&#125;, error)</div><div class="line"></div><div class="line">	AddIfNotPresent(<span class="keyword">interface</span>&#123;&#125;) error</div><div class="line"></div><div class="line">	<span class="comment">// Return true if the first batch of items has been popped</span></div><div class="line">	HasSynced() <span class="keyword">bool</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h2><p>在 <code>pkg/client/cache</code> 包里实现了 cache 的一些基本结构，其中最核心的，也是最顶层的结构是 <code>Store</code> 接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/store.go</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> Store <span class="keyword">interface</span> &#123;</div><div class="line">	Add(obj <span class="keyword">interface</span>&#123;&#125;) error <span class="comment">// 增</span></div><div class="line">	Update(obj <span class="keyword">interface</span>&#123;&#125;) error <span class="comment">// 改</span></div><div class="line">	Delete(obj <span class="keyword">interface</span>&#123;&#125;) error <span class="comment">// 删</span></div><div class="line">	List() []<span class="keyword">interface</span>&#123;&#125; <span class="comment">// 列举</span></div><div class="line">	ListKeys() []<span class="keyword">string</span> <span class="comment">// 列举 key</span></div><div class="line">	Get(obj <span class="keyword">interface</span>&#123;&#125;) (item <span class="keyword">interface</span>&#123;&#125;, exists <span class="keyword">bool</span>, err error) <span class="comment">// 查</span></div><div class="line">	GetByKey(key <span class="keyword">string</span>) (item <span class="keyword">interface</span>&#123;&#125;, exists <span class="keyword">bool</span>, err error) <span class="comment">// 按key查</span></div><div class="line"></div><div class="line">	<span class="comment">// Replace will delete the contents of the store, using instead the</span></div><div class="line">	<span class="comment">// given list. Store takes ownership of the list, you should not reference</span></div><div class="line">	<span class="comment">// it after calling this function.</span></div><div class="line">	Replace([]<span class="keyword">interface</span>&#123;&#125;, <span class="keyword">string</span>) error <span class="comment">// 替换</span></div><div class="line">	Resync() error <span class="comment">// 同步</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Store 接口定义了 cache 中的所有数据类型的最通用的一层抽象，包括对 cache 存储的增删改查列举等操作。Store 具体的接口实现包括前面提到的 <code>FIFO</code>，<code>DeltaFIFO</code>，以及后面会提到的 <code>ThreadSafeStore</code>，<code>UnDeltaStore</code> 和 <code>ExpirationCache</code>。</p>
+<h3 id="ThreadSafeStore"><a href="#ThreadSafeStore" class="headerlink" title="ThreadSafeStore"></a>ThreadSafeStore</h3><p><code>ThreadSafeStore</code> 是 k8s 中用的最多，也是默认的 cache 存储。它允许对数据并行的访问，同时使用加锁的机制保证数据在多线程中是线程安全的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/thread_safe_store.go</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> threadSafeMap <span class="keyword">struct</span> &#123;</div><div class="line">	lock  sync.RWMutex <span class="comment">// 锁</span></div><div class="line">	items <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125; <span class="comment">// 存储数据的map</span></div><div class="line"></div><div class="line">	<span class="comment">// indexers maps a name to an IndexFunc</span></div><div class="line">	indexers Indexers <span class="comment">// 存储Indexer的map</span></div><div class="line">	<span class="comment">// indices maps a name to an Index</span></div><div class="line">	indices Indices <span class="comment">// 存储Index的map</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>ThreadSafeStore</code> 的实现上也比较简单，数据放在 map 的数据结构里，同时使用 <code>sync.RWMutex</code> 对这个 map 的 Add，Update，Delete，Get 等操作加读锁和写锁。此外，它还允许对同一作用的 items 加一个共同的索引方便直接获取，而这个索引放在 <code>indices</code> 里，获得索引的函数放在 <code>indexers</code> 里。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/thread_safe_store.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *threadSafeMap)</span> <span class="title">Index</span><span class="params">(indexName <span class="keyword">string</span>, obj <span class="keyword">interface</span>&#123;&#125;)</span> <span class="params">([]<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</div><div class="line">	c.lock.RLock()</div><div class="line">	<span class="keyword">defer</span> c.lock.RUnlock()</div><div class="line"></div><div class="line">	indexFunc := c.indexers[indexName] <span class="comment">// 通过给的索引名称拿到索引函数</span></div><div class="line">	<span class="keyword">if</span> indexFunc == <span class="literal">nil</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">"Index with name %s does not exist"</span>, indexName)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	indexKeys, err := indexFunc(obj) <span class="comment">// 用索引函数拿到索引的keys</span></div><div class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</div><div class="line">	&#125;</div><div class="line">	index := c.indices[indexName]</div><div class="line"></div><div class="line">	<span class="comment">// need to de-dupe the return list.  Since multiple keys are allowed, this can happen.</span></div><div class="line">	returnKeySet := sets.String&#123;&#125;</div><div class="line">	<span class="keyword">for</span> _, indexKey := <span class="keyword">range</span> indexKeys &#123;  <span class="comment">// 对索引的keys进行去重</span></div><div class="line">		set := index[indexKey]</div><div class="line">		<span class="keyword">for</span> _, key := <span class="keyword">range</span> set.UnsortedList() &#123;</div><div class="line">			returnKeySet.Insert(key)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	list := <span class="built_in">make</span>([]<span class="keyword">interface</span>&#123;&#125;, <span class="number">0</span>, returnKeySet.Len())</div><div class="line">	<span class="keyword">for</span> absoluteKey := <span class="keyword">range</span> returnKeySet &#123;</div><div class="line">		list = <span class="built_in">append</span>(list, c.items[absoluteKey]) <span class="comment">// 根据keys拿到实际的items放到list里</span></div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> list, <span class="literal">nil</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="UndeltaStore"><a href="#UndeltaStore" class="headerlink" title="UndeltaStore"></a>UndeltaStore</h3><p><code>UndeltaStore</code> 在 <code>Store</code> 上做了一层封装，在实例化时传入了一个回调函数 <code>PushFunc</code>，每当 <code>Store</code> 进行了 Add，Update，Delete 等操作，会调用 <code>PushFunc</code> 来告知这个数据的操作已经完成，可以进行后续的工作。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/undelta_store.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(u *UndeltaStore)</span> <span class="title">Add</span><span class="params">(obj <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</div><div class="line">	<span class="keyword">if</span> err := u.Store.Add(obj); err != <span class="literal">nil</span> &#123;</div><div class="line">		<span class="keyword">return</span> err</div><div class="line">	&#125;</div><div class="line">	u.PushFunc(u.Store.List())</div><div class="line">	<span class="keyword">return</span> <span class="literal">nil</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在实现上其实也很简单，在每个操作的最后调用一次传入的 <code>PushFunc()</code>。</p>
+<h3 id="ExpirationCache"><a href="#ExpirationCache" class="headerlink" title="ExpirationCache"></a>ExpirationCache</h3><p><code>ExpirationCache</code> 同样是对 <code>Store</code> 做了一层的封装，和 <code>UndeltaStore</code> 不同的是它是在 <code>ThreadSafeStore</code> 上进行的封装，实现了带过期期限的 cache 功能。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/expiration_cache.go</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> ExpirationCache <span class="keyword">struct</span> &#123;</div><div class="line">	cacheStorage     ThreadSafeStore <span class="comment">// 实际存储的storage</span></div><div class="line">	keyFunc          KeyFunc</div><div class="line">	clock            clock.Clock <span class="comment">// 标记创建时间的时间戳</span></div><div class="line">	expirationPolicy ExpirationPolicy <span class="comment">// 失效策略</span></div><div class="line">	<span class="comment">// expirationLock is a write lock used to guarantee that we don't clobber</span></div><div class="line">	<span class="comment">// newly inserted objects because of a stale expiration timestamp comparison</span></div><div class="line">	expirationLock sync.Mutex <span class="comment">// 失效检查的锁</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当 <code>ExpirationCache</code> 中的每个 item 被创建的时候会为其打上时间戳，而这个 item 在查询的时候会检查这个时间戳到目前的时间间隔是否超过了失效的阈值，若超过了则返回 <code>nil</code> 并把这个 item 从 map 里删掉。（这里相当于做了一个 lazy 操作，如果 item 失效了但是一直没有查询，那么它会一直在 map 里待着）。</p>
+<p>默认使用的失效策略比较简单，就是给定一个时间范围阈值 <code>TTL(TimeToLive)</code>，然后判断这个时间戳到现在的时间距离是否大于这个阈值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/expiration_cache.go</span></div><div class="line"><span class="keyword">type</span> TTLPolicy <span class="keyword">struct</span> &#123;</div><div class="line">	<span class="comment">//	 &gt;0: Expire entries with an age &gt; ttl</span></div><div class="line">	<span class="comment">//	&lt;=0: Don't expire any entry</span></div><div class="line">	Ttl time.Duration <span class="comment">// 过期阈值</span></div><div class="line"></div><div class="line">	<span class="comment">// Clock used to calculate ttl expiration</span></div><div class="line">	Clock clock.Clock</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *TTLPolicy)</span> <span class="title">IsExpired</span><span class="params">(obj *timestampedEntry)</span> <span class="title">bool</span></span> &#123;</div><div class="line">	<span class="keyword">return</span> p.Ttl &gt; <span class="number">0</span> &amp;&amp; p.Clock.Since(obj.timestamp) &gt; p.Ttl <span class="comment">// 判断是否失效（间隔是否大于TTL）</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>相比于 <code>ThreadSafeStore</code>，<code>ExpirationCache</code> 在使用时还需要检查 item 是不是失效了，而这个检查的过程也是加锁的，而我们知道 <code>ThreadSafeStore</code> 自身本来就是带锁的操作的，所以它的操作会比 <code>ThreadSafeStore</code> 慢一些。</p>
+<h3 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h3><p>除了上面提到的几种 cache 中用到的数据结构外，cache 包里还提供了一些其他的类来进行辅助工作：</p>
+<ul>
+<li>Indexer（<code>pkg/client/cache/index.go</code>）允许用多种方法对 items 进行过滤（索引）</li>
+<li>Lister（<code>pkg/client/cache/lister.go</code>）提供了各种列举 items 的方法</li>
+<li>MutationDetection（<code>pkg/client/cache/mutation_dectector.go</code>）检测某个 item 是否发生变化了</li>
+<li>…</li>
+</ul>
+<h2 id="Reflector"><a href="#Reflector" class="headerlink" title="Reflector"></a>Reflector</h2><p>cache 包里的各个类定义了不同场景下 k8s 使用的数据结构，我们也知道 k8s 里实际存储 pods 等资源是放在 <code>ThreadSafeStore</code> 里的，那么 k8s 是如何将 APIServer 里的 RESTful API 和 cache 相联系起来的呢？</p>
+<p>在 <code>pkg/client/cache/reflector.go</code> 里，k8s 提供了一种叫做 <code>Reflector</code> 的类，用于作为 APIServer 和 cache 之间的桥梁。对每一类 Resource 为它创建一个从 RESTful Resource 到 cache item 的 Reflector。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/reflector.go</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> Reflector <span class="keyword">struct</span> &#123;</div><div class="line">	<span class="comment">// name identifies this reflector. By default it will be a file:line if possible.</span></div><div class="line">	name <span class="keyword">string</span></div><div class="line"></div><div class="line">	<span class="comment">// The type of object we expect to place in the store.</span></div><div class="line">	expectedType reflect.Type <span class="comment">// item的类型</span></div><div class="line">	<span class="comment">// The destination to sync up with the watch source</span></div><div class="line">	store Store <span class="comment">// item 的实际存储</span></div><div class="line">	<span class="comment">// listerWatcher is used to perform lists and watches.</span></div><div class="line">	listerWatcher ListerWatcher <span class="comment">// 用于监听item变化的watcher</span></div><div class="line">	<span class="comment">// period controls timing between one watch ending and</span></div><div class="line">	<span class="comment">// the beginning of the next one.</span></div><div class="line">	period       time.Duration <span class="comment">//watch的间隔</span></div><div class="line">	resyncPeriod time.Duration</div><div class="line">	<span class="comment">// now() returns current time - exposed for testing purposes</span></div><div class="line">	now <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">time</span>.<span class="title">Time</span></span></div><div class="line">	// <span class="title">lastSyncResourceVersion</span> <span class="title">is</span> <span class="title">the</span> <span class="title">resource</span> <span class="title">version</span> <span class="title">token</span> <span class="title">last</span></div><div class="line">	// <span class="title">observed</span> <span class="title">when</span> <span class="title">doing</span> <span class="title">a</span> <span class="title">sync</span> <span class="title">with</span> <span class="title">the</span> <span class="title">underlying</span> <span class="title">store</span></div><div class="line">	// <span class="title">it</span> <span class="title">is</span> <span class="title">thread</span> <span class="title">safe</span>, <span class="title">but</span> <span class="title">not</span> <span class="title">synchronized</span> <span class="title">with</span> <span class="title">the</span> <span class="title">underlying</span> <span class="title">store</span></div><div class="line">	<span class="title">lastSyncResourceVersion</span> <span class="title">string</span></div><div class="line">	// <span class="title">lastSyncResourceVersionMutex</span> <span class="title">guards</span> <span class="title">read</span>/<span class="title">write</span> <span class="title">access</span> <span class="title">to</span> <span class="title">lastSyncResourceVersion</span></div><div class="line">	<span class="title">lastSyncResourceVersionMutex</span> <span class="title">sync</span>.<span class="title">RWMutex</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Reflector 有两种允许方式：</p>
+<ul>
+<li><code>Run()</code></li>
+<li><code>RunUntil(stopCh &lt;-chan struct{})</code></li>
+</ul>
+<p>两者的区别在于后者传入了一个 stopCh，当收到停止信号会停止这个 <code>Run()</code> 方法，而前者则是 Run forever 的。而两者的方法的主题都是一致的，都在启动了一个 goroutine 去一直执行 <code>ListAndWatch()</code> 方法。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/reflector.go</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reflector)</span> <span class="title">Run</span><span class="params">()</span></span> &#123;</div><div class="line">	glog.V(<span class="number">3</span>).Infof(<span class="string">"Starting reflector %v (%s) from %s"</span>, r.expectedType, r.resyncPeriod, r.name)</div><div class="line">	<span class="keyword">go</span> wait.Until(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">		<span class="keyword">if</span> err := r.ListAndWatch(wait.NeverStop); err != <span class="literal">nil</span> &#123; <span class="comment">// 一直执行ListAndWatch</span></div><div class="line">			utilruntime.HandleError(err)</div><div class="line">		&#125;</div><div class="line">	&#125;, r.period, wait.NeverStop)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么来看一看这个 <code>ListAndWatch()</code> 是做什么的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/reflector.go</span></div><div class="line"></div><div class="line"><span class="comment">//...</span></div><div class="line">w, err := r.listerWatcher.Watch(options) <span class="comment">// 获得一个watch.Interface</span></div><div class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">	<span class="keyword">switch</span> err &#123;</div><div class="line">	<span class="keyword">case</span> io.EOF:</div><div class="line">		<span class="comment">// watch closed normally</span></div><div class="line">	<span class="keyword">case</span> io.ErrUnexpectedEOF:</div><div class="line">		glog.V(<span class="number">1</span>).Infof(<span class="string">"%s: Watch for %v closed with unexpected EOF: %v"</span>, r.name, r.expectedType, err)</div><div class="line">	<span class="keyword">default</span>:</div><div class="line">		utilruntime.HandleError(fmt.Errorf(<span class="string">"%s: Failed to watch %v: %v"</span>, r.name, r.expectedType, err))</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// If this is "connection refused" error, it means that most likely apiserver is not responsive.</span></div><div class="line">	<span class="comment">// It doesn't make sense to re-list all objects because most likely we will be able to restart</span></div><div class="line">	<span class="comment">// watch where we ended.</span></div><div class="line">	<span class="comment">// If that's the case wait and resend watch request.</span></div><div class="line">	<span class="keyword">if</span> urlError, ok := err.(*url.Error); ok &#123;</div><div class="line">		<span class="keyword">if</span> opError, ok := urlError.Err.(*net.OpError); ok &#123;</div><div class="line">			<span class="keyword">if</span> errno, ok := opError.Err.(syscall.Errno); ok &amp;&amp; errno == syscall.ECONNREFUSED &#123;</div><div class="line">				time.Sleep(time.Second)</div><div class="line">				<span class="keyword">continue</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">nil</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> err := r.watchHandler(w, &amp;resourceVersion, resyncerrc, stopCh); err != <span class="literal">nil</span> &#123; <span class="comment">// 处理这个 watch.Interface</span></div><div class="line">	<span class="keyword">if</span> err != errorStopRequested &#123;</div><div class="line">		glog.Warningf(<span class="string">"%s: watch of %v ended with: %v"</span>, r.name, r.expectedType, err)</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">nil</span></div><div class="line">&#125;</div><div class="line"><span class="comment">//...</span></div></pre></td></tr></table></figure>
+<p>在 <code>ListAndWatch()</code> 中前面先开了一个独立的 goroutine 去同步 Store 这里就不细说了。核心的内容在后面，首先是 <code>r.listerWatcher.Watch(options)</code> 获取到一个 <code>watch.Interface</code> 对象，然后对这个对象进行处理，即 <code>r.watchHandler()</code>。</p>
+<p>首先看这个 <code>watch.Interface</code>，寻找引用它的路径可以按着 <code>pkg/client/cache/listwatch.go: ListerWatcher.Watch()</code> -&gt; <code>pkg/client/cache/listwatch.go: ListWatch.WatchFunc</code> -&gt; <code>pkg/client/cache/listwatch.go: NewListWatchFromClient()</code> 的一个思路去看。</p>
+<p>那么最终关注这个 <code>NewListWatchFromClient()</code> 方法，它事实上就是连接着 API 的那一头，传入了 API 的一个 Resource，而 <code>ListerWatcher</code> 的 <code>Watch()</code> 方法就是这个 Resource 中的 <code>Watch()</code> 方法。具体实例化是在每个资源的包中，例如 <code>pkg/kubelet/config/apiserver.go</code> 中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/kubelet/config/apiserver.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewSourceApiserver</span><span class="params">(c *clientset.Clientset, nodeName types.NodeName, updates <span class="keyword">chan</span>&lt;- <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</div><div class="line">	lw := cache.NewListWatchFromClient(c.Core().RESTClient(), <span class="string">"pods"</span>, v1.NamespaceAll, fields.OneTermEqualSelector(api.PodHostField, <span class="keyword">string</span>(nodeName)))</div><div class="line">	newSourceApiserverFromLW(lw, updates)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里为 pods 创建了一个 RESTClient，同时用这个 Client 作为参数创建一个 ListWatcher，ListAndWatch 中的 Watch 方法就是 Client 中的 Watch 方法。</p>
+<p>那么搞清楚了这一头了以后看一看检测到变化以后 Reflector 是怎么处理的。在 ListAndWatch 方法中还有一个重要的方法 <code>watchHandler()</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pkg/client/cache/reflector.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reflector)</span> <span class="title">watchHandler</span><span class="params">(w watch.Interface, resourceVersion *<span class="keyword">string</span>, errc <span class="keyword">chan</span> error, stopCh &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</div><div class="line">  	<span class="comment">//...</span></div><div class="line">	<span class="keyword">for</span> &#123;</div><div class="line">		<span class="keyword">select</span> &#123;</div><div class="line">		<span class="keyword">case</span> &lt;-stopCh:</div><div class="line">			<span class="keyword">return</span> errorStopRequested</div><div class="line">		<span class="keyword">case</span> err := &lt;-errc:</div><div class="line">			<span class="keyword">return</span> err</div><div class="line">		<span class="keyword">case</span> event, ok := &lt;-w.ResultChan(): <span class="comment">// 从ResultChan中拿出一个event</span></div><div class="line">			<span class="keyword">if</span> !ok &#123;</div><div class="line">				<span class="keyword">break</span> loop</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span> event.Type == watch.Error &#123;</div><div class="line">				<span class="keyword">return</span> apierrs.FromObject(event.Object)</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span> e, a := r.expectedType, reflect.TypeOf(event.Object); e != <span class="literal">nil</span> &amp;&amp; e != a &#123;</div><div class="line">				utilruntime.HandleError(fmt.Errorf(<span class="string">"%s: expected type %v, but watch event object had type %v"</span>, r.name, e, a))</div><div class="line">				<span class="keyword">continue</span></div><div class="line">			&#125;</div><div class="line">			meta, err := meta.Accessor(event.Object) <span class="comment">//用event.Object获取meta信息</span></div><div class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">				utilruntime.HandleError(fmt.Errorf(<span class="string">"%s: unable to understand watch event %#v"</span>, r.name, event))</div><div class="line">				<span class="keyword">continue</span></div><div class="line">			&#125;</div><div class="line">			newResourceVersion := meta.GetResourceVersion()</div><div class="line">			<span class="keyword">switch</span> event.Type &#123; <span class="comment">// 根据event的不同类型对cache做不同处理</span></div><div class="line">			<span class="keyword">case</span> watch.Added:</div><div class="line">				r.store.Add(event.Object)</div><div class="line">			<span class="keyword">case</span> watch.Modified:</div><div class="line">				r.store.Update(event.Object)</div><div class="line">			<span class="keyword">case</span> watch.Deleted:</div><div class="line">				<span class="comment">// <span class="doctag">TODO:</span> Will any consumers need access to the "last known</span></div><div class="line">				<span class="comment">// state", which is passed in event.Object? If so, may need</span></div><div class="line">				<span class="comment">// to change this.</span></div><div class="line">				r.store.Delete(event.Object)</div><div class="line">			<span class="keyword">default</span>:</div><div class="line">				utilruntime.HandleError(fmt.Errorf(<span class="string">"%s: unable to understand watch event %#v"</span>, r.name, event))</div><div class="line">			&#125;</div><div class="line">			*resourceVersion = newResourceVersion</div><div class="line">			r.setLastSyncResourceVersion(newResourceVersion)</div><div class="line">			eventCount++</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">  <span class="comment">//...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>watchHandler()</code> 的核心是这个 loop，Reflector 会从 watch.Interface 中拿到一个叫做 ResultChan 的 chanel，watch.Interface 在 API 的那一头会根据 HTTP Request 源源不断往这个 chanel 里扔进去事件 Event（<code>pkg/watch/watch.go: Event</code>），而 Reflector 从 chanel 的这一头不断的拿出这些事件，获取他们的 meta 信息，再根据事件的不同类型对 cache 做增删改查操作。</p>
+<p>也就是说 k8s 对各种操作事实上是统一通过这个 chanel 里以事件的形式市传过来的，这也解释了为什么 cache 和 Store 中的实现所有的方法都是传进去一个 object 的 interface。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里所有的路径都打通了，再最后理一遍 k8s 是如何从 API 到 cache 的 Store 的：</p>
+<ol>
+<li>APIServer 为每类资源（例如 pods）创建一个 RESTClient（client）用于处理诸如 POST，PUT，GET 的 RESTful HTTP requsts</li>
+<li>APIServer 用 client 创建一个 ListWatcher（lw）用于监控每类资源的变化</li>
+<li>APIServer 用 lw，指定的 store，创建一个 Reflector（reflector），将这个变化作用到 store 上</li>
+<li>当发生 HTTP Requests 时，client 的 Watch 方法会把资源和资源变化类型打包成 event 放进 lw 的 ResultChan 中</li>
+<li>reflector 从 ResultChan 里拿出 event，根据 event.EventType 把 event.Object 作用到 store 里去</li>
+</ol>
+<p>整个过程中用了许多的 goroutine 来完成这么一件事。相比于 k8s 的实现，常见的 webapp 的处理相对就简单了好多，也可以看出 k8s 在设计上的精妙。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;kubernetes 的 scheduler 维护了一个先进先出的队列，而这个队列的事实上是一种 &lt;code&gt;Storage&lt;/code&gt;，只不过它重载了 Storage 中的各种方法。那么 kubernetes 中的存储是如何设计的呢？&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+    
+      <category term="容器管理" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86/"/>
+    
+    
+      <category term="kubernetes" scheme="http://blog.jetmuffin.com/tags/kubernetes/"/>
+    
+      <category term="cache" scheme="http://blog.jetmuffin.com/tags/cache/"/>
+    
+      <category term="storage" scheme="http://blog.jetmuffin.com/tags/storage/"/>
+    
+  </entry>
+  
+  <entry>
     <title>kubernetes源码阅读 - queue</title>
-    <link href="https://www.jetmuffin.com/2016/12/03/kubernetes%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-queue/"/>
-    <id>https://www.jetmuffin.com/2016/12/03/kubernetes源码阅读-queue/</id>
+    <link href="http://blog.jetmuffin.com/2016/12/03/kubernetes-code-reading-queue/"/>
+    <id>http://blog.jetmuffin.com/2016/12/03/kubernetes-code-reading-queue/</id>
     <published>2016-12-03T08:04:00.000Z</published>
-    <updated>2016-12-03T13:42:26.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>上篇文章中对 k8s 的 scheduler 部分进行了简单的源码阅读和分析，现在接着上次的位置继续往下阅读。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/gce.png" alt="k8s"></p>
 <a id="more"></a>
 <h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>在 <code>plugin/pkg/scheduler/factory/factory.go</code> 的代码中，scheduler 在创建时引用了一个 <code>getNextPod</code> 方法，获取下一个待调度的 pod。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/pkg/scheduler/factory/factory.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f *ConfigFactory)</span> <span class="title">getNextPod</span><span class="params">()</span> *<span class="title">v1</span>.<span class="title">Pod</span></span> &#123;</div><div class="line">    <span class="keyword">for</span> &#123;</div><div class="line">        pod := cache.Pop(f.PodQueue).(*v1.Pod) <span class="comment">// 获取下一个待调度的 Pod</span></div><div class="line">        <span class="keyword">if</span> f.responsibleForPod(pod) &#123;</div><div class="line">            glog.V(<span class="number">4</span>).Infof(<span class="string">"About to try and schedule pod %v"</span>, pod.Name)</div><div class="line">            <span class="keyword">return</span> pod</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -77,26 +490,28 @@
     <summary type="html">
     
       &lt;p&gt;上篇文章中对 k8s 的 scheduler 部分进行了简单的源码阅读和分析，现在接着上次的位置继续往下阅读。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://cdn.jetmuffin.com/posts/gce.png&quot; alt=&quot;k8s&quot;&gt;&lt;/p&gt;
     
     </summary>
     
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="kubernetes" scheme="https://www.jetmuffin.com/tags/kubernetes/"/>
+      <category term="kubernetes" scheme="http://blog.jetmuffin.com/tags/kubernetes/"/>
     
-      <category term="queue" scheme="https://www.jetmuffin.com/tags/queue/"/>
+      <category term="queue" scheme="http://blog.jetmuffin.com/tags/queue/"/>
     
   </entry>
   
   <entry>
     <title>kubernetes源码阅读 - scheduler</title>
-    <link href="https://www.jetmuffin.com/2016/11/24/Kubernetes%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Scheduler/"/>
-    <id>https://www.jetmuffin.com/2016/11/24/Kubernetes源码阅读-Scheduler/</id>
+    <link href="http://blog.jetmuffin.com/2016/11/24/kubernetes-code-reading-scheduler/"/>
+    <id>http://blog.jetmuffin.com/2016/11/24/kubernetes-code-reading-scheduler/</id>
     <published>2016-11-24T11:50:52.000Z</published>
-    <updated>2016-12-03T13:42:15.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/kubernetes.jpg" alt="k8s"></p>
 <a id="more"></a>
 <h2 id="Scheduler-入口"><a href="#Scheduler-入口" class="headerlink" title="Scheduler 入口"></a>Scheduler 入口</h2><p>首先定位到 <code>plugin/cmd/scheduler.go</code> 这个文件。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// plugin/cmd/scheduler.go</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    s := options.NewSchedulerServer()</div><div class="line">    s.AddFlags(pflag.CommandLine) <span class="comment">// 解析参数</span></div><div class="line"></div><div class="line">    flag.InitFlags()</div><div class="line">    logs.InitLogs()</div><div class="line">    <span class="keyword">defer</span> logs.FlushLogs()</div><div class="line"></div><div class="line">    verflag.PrintAndExitIfRequested()</div><div class="line"></div><div class="line">    app.Run(s) <span class="comment">// 启动调度器</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -150,22 +565,23 @@
     <summary type="html">
     
       &lt;p&gt;阅读 scheduler 部分的源码我们从控制流的低端向上延伸去阅读。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://cdn.jetmuffin.com/posts/kubernetes.jpg&quot; alt=&quot;k8s&quot;&gt;&lt;/p&gt;
     
     </summary>
     
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="kubernetes" scheme="https://www.jetmuffin.com/tags/kubernetes/"/>
+      <category term="kubernetes" scheme="http://blog.jetmuffin.com/tags/kubernetes/"/>
     
-      <category term="scheduler" scheme="https://www.jetmuffin.com/tags/scheduler/"/>
+      <category term="scheduler" scheme="http://blog.jetmuffin.com/tags/scheduler/"/>
     
   </entry>
   
   <entry>
     <title>How to fix &#39;/bin/rm: Argument list too long</title>
-    <link href="https://www.jetmuffin.com/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/"/>
-    <id>https://www.jetmuffin.com/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/</id>
+    <link href="http://blog.jetmuffin.com/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/"/>
+    <id>http://blog.jetmuffin.com/2016/11/13/How-to-fix-bin-rm-Argument-list-too-long/</id>
     <published>2016-11-13T08:09:57.000Z</published>
     <updated>2016-11-13T08:18:43.000Z</updated>
     
@@ -190,17 +606,17 @@
     
     </summary>
     
-      <category term="系统运维" scheme="https://www.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
+      <category term="系统运维" scheme="http://blog.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="linux" scheme="https://www.jetmuffin.com/tags/linux/"/>
+      <category term="linux" scheme="http://blog.jetmuffin.com/tags/linux/"/>
     
   </entry>
   
   <entry>
     <title>Difference between Mesos and Kubernetes</title>
-    <link href="https://www.jetmuffin.com/2016/10/24/Difference-between-Mesos-and-Kubernetes/"/>
-    <id>https://www.jetmuffin.com/2016/10/24/Difference-between-Mesos-and-Kubernetes/</id>
+    <link href="http://blog.jetmuffin.com/2016/10/24/Difference-between-Mesos-and-Kubernetes/"/>
+    <id>http://blog.jetmuffin.com/2016/10/24/Difference-between-Mesos-and-Kubernetes/</id>
     <published>2016-10-24T03:09:27.000Z</published>
     <updated>2016-10-24T06:03:00.000Z</updated>
     
@@ -226,23 +642,23 @@
     
     </summary>
     
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="mesos" scheme="https://www.jetmuffin.com/tags/mesos/"/>
+      <category term="mesos" scheme="http://blog.jetmuffin.com/tags/mesos/"/>
     
-      <category term="docker" scheme="https://www.jetmuffin.com/tags/docker/"/>
+      <category term="kubernetes" scheme="http://blog.jetmuffin.com/tags/kubernetes/"/>
     
-      <category term="kubernetes" scheme="https://www.jetmuffin.com/tags/kubernetes/"/>
+      <category term="docker" scheme="http://blog.jetmuffin.com/tags/docker/"/>
     
   </entry>
   
   <entry>
     <title>Debian下编译shadowsocks-qt5</title>
-    <link href="https://www.jetmuffin.com/2016/10/18/Debian%E4%B8%8B%E7%BC%96%E8%AF%91shadowsocks-qt5/"/>
-    <id>https://www.jetmuffin.com/2016/10/18/Debian下编译shadowsocks-qt5/</id>
+    <link href="http://blog.jetmuffin.com/2016/10/18/compile-shadowsocks-qt5-on-debian/"/>
+    <id>http://blog.jetmuffin.com/2016/10/18/compile-shadowsocks-qt5-on-debian/</id>
     <published>2016-10-18T05:53:08.000Z</published>
-    <updated>2016-10-18T06:39:25.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>平时开发用的是 debian 的 linux 发行版，而 shadowsocks-qt5 没有提供 debian 的 release 版本，于是得自己动手编译，编译的时候会遇到许多坑，这里记录一下。</p>
 <a id="more"></a>
@@ -271,21 +687,21 @@
     
     </summary>
     
-      <category term="设计开发" scheme="https://www.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
+      <category term="设计开发" scheme="http://blog.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="shadowsocks" scheme="https://www.jetmuffin.com/tags/shadowsocks/"/>
+      <category term="shadowsocks" scheme="http://blog.jetmuffin.com/tags/shadowsocks/"/>
     
-      <category term="debian" scheme="https://www.jetmuffin.com/tags/debian/"/>
+      <category term="debian" scheme="http://blog.jetmuffin.com/tags/debian/"/>
     
   </entry>
   
   <entry>
     <title>使用 gh-md-doc 生成 markdown 文章结构</title>
-    <link href="https://www.jetmuffin.com/2016/09/13/%E4%BD%BF%E7%94%A8-gh-md-doc-%E7%94%9F%E6%88%90-markdown-%E6%96%87%E7%AB%A0%E7%BB%93%E6%9E%84/"/>
-    <id>https://www.jetmuffin.com/2016/09/13/使用-gh-md-doc-生成-markdown-文章结构/</id>
+    <link href="http://blog.jetmuffin.com/2016/09/13/use-gh-md-doc-to-generate-toc-of-blog/"/>
+    <id>http://blog.jetmuffin.com/2016/09/13/use-gh-md-doc-to-generate-toc-of-blog/</id>
     <published>2016-09-13T12:23:11.000Z</published>
-    <updated>2016-09-13T12:34:12.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>本篇技巧来自于我在 <a href="http://www.iqiyi.com" target="_blank" rel="external">iQiyi</a> 的云平台部门实习时的内部分享，主要用于文档编写。<br>在开发开源项目或进行团队协作时，总要写一些文档，并把代码托管在 git 上，对于长篇文档希望能够生成文档的结构，这里就用到了一个非常好的插件 <a href="https://github.com/ekalinin/github-markdown-toc" target="_blank" rel="external">gh-md-toc</a>。</p>
 <a id="more"></a>
@@ -322,21 +738,21 @@
     
     </summary>
     
-      <category term="设计开发" scheme="https://www.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
+      <category term="设计开发" scheme="http://blog.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="markdown" scheme="https://www.jetmuffin.com/tags/markdown/"/>
+      <category term="markdown" scheme="http://blog.jetmuffin.com/tags/markdown/"/>
     
-      <category term="gh-md-doc" scheme="https://www.jetmuffin.com/tags/gh-md-doc/"/>
+      <category term="gh-md-doc" scheme="http://blog.jetmuffin.com/tags/gh-md-doc/"/>
     
   </entry>
   
   <entry>
     <title>Moore vote algorithm 多数投票算法</title>
-    <link href="https://www.jetmuffin.com/2016/09/04/Moore-vote-algorithm-%E5%A4%9A%E6%95%B0%E6%8A%95%E7%A5%A8%E7%AE%97%E6%B3%95/"/>
-    <id>https://www.jetmuffin.com/2016/09/04/Moore-vote-algorithm-多数投票算法/</id>
+    <link href="http://blog.jetmuffin.com/2016/09/04/moore-vote-algorithm/"/>
+    <id>http://blog.jetmuffin.com/2016/09/04/moore-vote-algorithm/</id>
     <published>2016-09-04T12:24:16.000Z</published>
-    <updated>2016-09-05T00:38:17.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>在刷 leetcode 时，发现一道题目 <a href="https://leetcode.com/problems/majority-element/" target="_blank" rel="external">Majority Element</a>，要求求出数组中出现元素超过 <code>n/2</code> 的元素。思考了许久也只能写出 <code>O(nlogn)</code> 的解法（即用 map 计数）。查阅资料后发现一个比较巧妙的算法 Moore vote algorithm，可以在 <code>O(n)</code> 时间和 <code>O(1)</code> 空间解决这个问题。</p>
 <a id="more"></a>
@@ -369,19 +785,19 @@
     
     </summary>
     
-      <category term="算法分析" scheme="https://www.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/"/>
+      <category term="算法分析" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="moore vote algorithm" scheme="https://www.jetmuffin.com/tags/moore-vote-algorithm/"/>
+      <category term="moore vote algorithm" scheme="http://blog.jetmuffin.com/tags/moore-vote-algorithm/"/>
     
   </entry>
   
   <entry>
     <title>Golang 基础学习（二）类型</title>
-    <link href="https://www.jetmuffin.com/2016/09/04/Golang-%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89%E7%B1%BB%E5%9E%8B%E3%80%81%E5%8F%98%E9%87%8F%E3%80%81%E5%B8%B8%E9%87%8F/"/>
-    <id>https://www.jetmuffin.com/2016/09/04/Golang-基础学习（二）类型、变量、常量/</id>
+    <link href="http://blog.jetmuffin.com/2016/09/04/go-learning-2/"/>
+    <id>http://blog.jetmuffin.com/2016/09/04/go-learning-2/</id>
     <published>2016-09-04T02:25:44.000Z</published>
-    <updated>2016-12-03T13:43:18.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。</p>
 <a id="more"></a>
@@ -450,19 +866,19 @@
     
     </summary>
     
-      <category term="编程语言" scheme="https://www.jetmuffin.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+      <category term="编程语言" scheme="http://blog.jetmuffin.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     
-      <category term="golang" scheme="https://www.jetmuffin.com/tags/golang/"/>
+      <category term="golang" scheme="http://blog.jetmuffin.com/tags/golang/"/>
     
   </entry>
   
   <entry>
     <title>Golang 基础学习（一）</title>
-    <link href="https://www.jetmuffin.com/2016/09/03/Golang-%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
-    <id>https://www.jetmuffin.com/2016/09/03/Golang-基础学习（一）/</id>
+    <link href="http://blog.jetmuffin.com/2016/09/03/go-learning-1/"/>
+    <id>http://blog.jetmuffin.com/2016/09/03/go-learning-1/</id>
     <published>2016-09-03T12:09:56.000Z</published>
-    <updated>2016-12-03T13:42:37.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>最初接触 go 是在 15 年，最开始对 go 的理解是写多线程的程序非常方便，于是学习了 go 的基本语法，并尝试写了一些 go 的简单应用，包括我的本科毕业设计也是使用 go 写的（<a href="https://github.com/icsnju/apt-mesos" target="_blank" rel="external">apt-mesos</a>）。但是对 go 也是停留在最基本的语法认识，有很多特性并未了解。所以想要从头再屡一遍 go 的所有内容。对每一块儿内容，以重学的角度深入学习。</p>
 <a id="more"></a>
@@ -481,21 +897,21 @@
     
     </summary>
     
-      <category term="编程语言" scheme="https://www.jetmuffin.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+      <category term="编程语言" scheme="http://blog.jetmuffin.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     
-      <category term="golang" scheme="https://www.jetmuffin.com/tags/golang/"/>
+      <category term="golang" scheme="http://blog.jetmuffin.com/tags/golang/"/>
     
-      <category term="hello world" scheme="https://www.jetmuffin.com/tags/hello-world/"/>
+      <category term="hello world" scheme="http://blog.jetmuffin.com/tags/hello-world/"/>
     
   </entry>
   
   <entry>
     <title>Zabbix配合lm_sensors监控服务器CPU温度</title>
-    <link href="https://www.jetmuffin.com/2016/09/01/Zabbix%E9%85%8D%E5%90%88lm-sensors%E7%9B%91%E6%8E%A7%E6%9C%8D%E5%8A%A1%E5%99%A8CPU%E6%B8%A9%E5%BA%A6/"/>
-    <id>https://www.jetmuffin.com/2016/09/01/Zabbix配合lm-sensors监控服务器CPU温度/</id>
+    <link href="http://blog.jetmuffin.com/2016/09/01/monitor-temperature-of-server-by-zabbix-and-lm-sensors/"/>
+    <id>http://blog.jetmuffin.com/2016/09/01/monitor-temperature-of-server-by-zabbix-and-lm-sensors/</id>
     <published>2016-09-01T06:18:06.000Z</published>
-    <updated>2016-09-01T07:13:17.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>手上的一个任务，需要对集群的每台机器 CPU 温度进行监控，防止集群在进行计算时温度过高导致 CPU 损坏。由于集群里已经部署了 Zabbix 进行监控和报警，所以很自然的想法就是在 Zabbix 中集成 CPU 监控这一内容。</p>
 <p>首先是获取 CPU 温度的方法，常见的有两种：</p>
@@ -548,23 +964,23 @@
     
     </summary>
     
-      <category term="系统运维" scheme="https://www.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
+      <category term="系统运维" scheme="http://blog.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="zabbix" scheme="https://www.jetmuffin.com/tags/zabbix/"/>
+      <category term="zabbix" scheme="http://blog.jetmuffin.com/tags/zabbix/"/>
     
-      <category term="lm_sensors" scheme="https://www.jetmuffin.com/tags/lm-sensors/"/>
+      <category term="lm_sensors" scheme="http://blog.jetmuffin.com/tags/lm-sensors/"/>
     
-      <category term="cpu" scheme="https://www.jetmuffin.com/tags/cpu/"/>
+      <category term="cpu" scheme="http://blog.jetmuffin.com/tags/cpu/"/>
     
   </entry>
   
   <entry>
     <title>InfiniBand技术介绍</title>
-    <link href="https://www.jetmuffin.com/2016/06/07/InfiniBand%E6%8A%80%E6%9C%AF%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93/"/>
-    <id>https://www.jetmuffin.com/2016/06/07/InfiniBand技术介绍及其相关操作总结/</id>
+    <link href="http://blog.jetmuffin.com/2016/06/07/infiniband-technique/"/>
+    <id>http://blog.jetmuffin.com/2016/06/07/infiniband-technique/</id>
     <published>2016-06-07T01:51:44.000Z</published>
-    <updated>2016-08-30T09:07:44.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>随着服务器处理速度的不断加快，用户对提升网络传输速度的需求也越来越紧迫，传统意义上的输入 / 输出技术， 如 PCI、以太等，已经无法满足这种需求。如何更为有效的提高数据传输速度，增加有效带宽成为摆在人们面前必须解决的一个重大问题。 InfiniBand 标准就是在这种情况下应运而生的，它在很大程度上解决了传统输入 / 输出架构的传输瓶颈问题 , 运行速度可达到每端口 2.5Gb/s 或 10Gb/s 。 目前，这项技术已经广泛应用到高性能计算等领域，Linux 操作系统内核也对其提供了全面的支持，本文将逐一介绍 InfiniBand 技术架构，以及如何在 Red Hat Enterprise Linux 5.3 和 SLES11 系统中配置 InfiniBand 网络设备，包括网卡驱动的安装以及 IPoIB（IP over InfiniBand）接口配置。</p>
@@ -594,23 +1010,23 @@
     
     </summary>
     
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="hpc" scheme="https://www.jetmuffin.com/tags/hpc/"/>
+      <category term="hpc" scheme="http://blog.jetmuffin.com/tags/hpc/"/>
     
-      <category term="网络" scheme="https://www.jetmuffin.com/tags/%E7%BD%91%E7%BB%9C/"/>
+      <category term="网络" scheme="http://blog.jetmuffin.com/tags/%E7%BD%91%E7%BB%9C/"/>
     
-      <category term="InfiniBand" scheme="https://www.jetmuffin.com/tags/InfiniBand/"/>
+      <category term="InfiniBand" scheme="http://blog.jetmuffin.com/tags/InfiniBand/"/>
     
   </entry>
   
   <entry>
     <title>使用slurm进行集群的资源管理（vagrant）</title>
-    <link href="https://www.jetmuffin.com/2016/05/30/Ubuntu-%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8Slurm/"/>
-    <id>https://www.jetmuffin.com/2016/05/30/Ubuntu-安装与使用Slurm/</id>
+    <link href="http://blog.jetmuffin.com/2016/05/30/install-and-use-slurm-on-ubuntu/"/>
+    <id>http://blog.jetmuffin.com/2016/05/30/install-and-use-slurm-on-ubuntu/</id>
     <published>2016-05-30T01:42:48.000Z</published>
-    <updated>2016-08-30T09:08:39.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
 <p>SLURM 是一种可用于大型计算节点集群的高度可伸缩和容错的集群管理器和作业调度系统。SLURM 维护着一个待处理工作的队列并管理此工作的整体资源利用。它还以一种排他或非排他的方式管理可用的计算节点（取决于资源的需求）。最后，SLURM 将作业分发给一组已分配的节点来执行工作并监视平行作业至其完成。</p>
@@ -669,21 +1085,21 @@
     
     </summary>
     
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
+      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="资源管理" scheme="https://www.jetmuffin.com/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/"/>
+      <category term="资源管理" scheme="http://blog.jetmuffin.com/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/"/>
     
-      <category term="集群" scheme="https://www.jetmuffin.com/tags/%E9%9B%86%E7%BE%A4/"/>
+      <category term="集群" scheme="http://blog.jetmuffin.com/tags/%E9%9B%86%E7%BE%A4/"/>
     
   </entry>
   
   <entry>
     <title>OSX系统列举USB设备方法</title>
-    <link href="https://www.jetmuffin.com/2016/03/13/OSX%E7%B3%BB%E7%BB%9F%E5%88%97%E4%B8%BEUSB%E8%AE%BE%E5%A4%87%E6%96%B9%E6%B3%95/"/>
-    <id>https://www.jetmuffin.com/2016/03/13/OSX系统列举USB设备方法/</id>
+    <link href="http://blog.jetmuffin.com/2016/03/13/list-usb-devices-on-mac-os-x/"/>
+    <id>http://blog.jetmuffin.com/2016/03/13/list-usb-devices-on-mac-os-x/</id>
     <published>2016-03-13T13:38:34.000Z</published>
-    <updated>2016-08-27T12:52:21.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>Linux 用户在列举USB设备时，可以使用<code>lsusb</code>命令来查看所有已经连接的usb设备，或者进入<code>/dev/bus/usb/001</code>之类进行查看。</p>
 <a id="more"></a>
@@ -705,16 +1121,16 @@
     </summary>
     
     
-      <category term="系统运维" scheme="https://www.jetmuffin.com/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
+      <category term="系统运维" scheme="http://blog.jetmuffin.com/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
   <entry>
     <title>运行Mesos Framework报no mesos in java.library.path解决方法</title>
-    <link href="https://www.jetmuffin.com/2016/01/05/%E8%BF%90%E8%A1%8CMesos-Framework%E6%8A%A5no-mesos-in-java-library-path%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
-    <id>https://www.jetmuffin.com/2016/01/05/运行Mesos-Framework报no-mesos-in-java-library-path解决方法/</id>
+    <link href="http://blog.jetmuffin.com/2016/01/05/solution-to-no-mesos-in-java-library-path/"/>
+    <id>http://blog.jetmuffin.com/2016/01/05/solution-to-no-mesos-in-java-library-path/</id>
     <published>2016-01-05T07:08:33.000Z</published>
-    <updated>2016-08-27T12:32:39.000Z</updated>
+    <updated>2017-02-17T13:05:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>在运行自己用scala编写的Framework时遇到了一个巨大的问题，即<br><a id="more"></a><br>在执行</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -cp xxxx.jar -Djava.library.path=libs xxxx.xxxx.xxx</div></pre></td></tr></table></figure>
@@ -733,577 +1149,12 @@
     
     </summary>
     
-      <category term="设计开发" scheme="https://www.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
+      <category term="设计开发" scheme="http://blog.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
     
     
-      <category term="mesos" scheme="https://www.jetmuffin.com/tags/mesos/"/>
+      <category term="mesos" scheme="http://blog.jetmuffin.com/tags/mesos/"/>
     
-      <category term="bugfix" scheme="https://www.jetmuffin.com/tags/bugfix/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DCOS上的cron 分布式作业调度器 Chronos</title>
-    <link href="https://www.jetmuffin.com/2015/12/28/DCOS%E4%B8%8A%E7%9A%84cron-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E5%99%A8-Chronos/"/>
-    <id>https://www.jetmuffin.com/2015/12/28/DCOS上的cron-分布式作业调度器-Chronos/</id>
-    <published>2015-12-28T13:34:27.000Z</published>
-    <updated>2016-08-30T08:36:18.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Chronos是Aribnb公司开发的替代<code>cron</code>的Mesos框架。它是一个运行在<code>Apache Mesos</code>上的分布式的，高容错的任务编排、定时任务的框架。</p>
-<a id="more"></a>
-<p>Chronos作为DCOS中的一部分，它默认所处的环境下存在任务的环境。例如Chronos会执行Hadoop任务脚本，即使执行的slave上并没有Hadoop环境（但是这样会导致任务的失败）。此外，Chronos支持任务脚本传输文件到远程机器上，并执行文件，同时接受异步的回调，通知Chronos任务成功或是失败。比较重要的一点是，Chronos同样支持在<code>Docker</code>容器中进行执行任务。</p>
-<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="http://7xpl2y.com1.z0.glb.clouddn.com/chronos.png" alt="architecture"></p>
-<p>Chronos通过Mesos Master下的<code>Scheduler</code>选择指定slave执行job，来完成相应的task。而在Chronos中并不会对环境进行选择，而只是对从Mesos Master接受的<code>Resource offers</code>进行筛选。</p>
-<h2 id="JobGraph"><a href="#JobGraph" class="headerlink" title="JobGraph"></a>JobGraph</h2><p>Chronos中比较重要的一点是利用JobGraph来确定各个job之间的依赖关系，以确定任务执行的先后顺序。</p>
-<p>Chronos中根据JobGraph计算出job执行的优先级，然后再根据当前的job执行情况，然后确定每个任务是否进行执行。</p>
-<p>如图，我创建了2个任务:</p>
-<p><img src="http://7xpl2y.com1.z0.glb.clouddn.com/QQ20151228-3%402x.png" alt="create-job"></p>
-<p>指定<code>sleep2</code>的父元素为<code>sleep</code>，则<code>sleep2</code>依赖于<code>sleep</code>，先后顺序也应该为先执行<code>sleep</code>然后是<code>sleep2</code>，如下图(绿色代表已经执行，白色代表未执行)</p>
-<p><img src="http://7xpl2y.com1.z0.glb.clouddn.com/QQ20151228-2%402x.png" alt="job-run"></p>
-<p>而实际生产中JobGraph的图是非常复杂的，因此Chronos利用JobGraph能够很有效的进行任务的调度。</p>
-<h2 id="部分源码解析"><a href="#部分源码解析" class="headerlink" title="部分源码解析"></a>部分源码解析</h2><p>这里主要分析framework部分的主要核心代码：</p>
-<p><strong>resourceOffers()</strong></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//该方法实现调用mesos的scala接口，进行offer的分配</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">resourceOffers</span></span>(schedulerDriver: <span class="type">SchedulerDriver</span>, receivedOffers: java.util.<span class="type">List</span>[<span class="type">Offer</span>]) &#123;</div><div class="line">    log.info(<span class="string">"Received resource offers"</span>)</div><div class="line">    <span class="keyword">import</span> scala.collection.<span class="type">JavaConverters</span>._</div><div class="line"></div><div class="line">    <span class="keyword">val</span> offers = receivedOffers.asScala.toList</div><div class="line">    <span class="keyword">val</span> offerResources = mutable.<span class="type">HashMap</span>(offers.map(o =&gt; (o, <span class="type">Resources</span>(o))).toSeq: _*)</div><div class="line">    <span class="comment">//生成可以执行的task(详细见下文)</span></div><div class="line">    <span class="keyword">val</span> tasksToLaunch = generateLaunchableTasks(offerResources)</div><div class="line"></div><div class="line">    log.info(<span class="string">"Declining unused offers."</span>)</div><div class="line">    </div><div class="line">    <span class="comment">// 创建一个Set保存已经使用的offer</span></div><div class="line">    <span class="keyword">val</span> usedOffers = mutable.<span class="type">HashSet</span>(tasksToLaunch.map(_._3.getId.getValue): _*)</div><div class="line">	</div><div class="line">	<span class="comment">//如果当前的offer已经被使用了（在usedOffers里出现），则decline掉</span></div><div class="line">    offers.foreach(o =&gt; &#123;</div><div class="line">      <span class="keyword">if</span> (!usedOffers.contains(o.getId.getValue))</div><div class="line">        mesosDriver.get().declineOffer(o.getId, declineOfferFilters)</div><div class="line">    &#125;)</div><div class="line"></div><div class="line">    log.info(<span class="string">s"Declined unused offers with filter refuseSeconds=<span class="subst">$&#123;declineOfferFilters.getRefuseSeconds&#125;</span> "</span> +</div><div class="line">      <span class="string">s"(use --<span class="subst">$&#123;config.declineOfferDuration.name&#125;</span> to reconfigure)"</span>)</div><div class="line">	</div><div class="line">	<span class="comment">//执行任务</span></div><div class="line">    launchTasks(tasksToLaunch)</div><div class="line"></div><div class="line">    <span class="comment">// Perform a reconciliation, if needed.</span></div><div class="line">    reconcile(schedulerDriver)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p><strong>generateLaunchableTasks（）</strong></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">def</span> <span class="title">generateLaunchableTasks</span></span>(offerResources: mutable.<span class="type">HashMap</span>[<span class="type">Offer</span>, <span class="type">Resources</span>]): mutable.<span class="type">Buffer</span>[(<span class="type">String</span>, <span class="type">BaseJob</span>, <span class="type">Offer</span>)] = &#123;</div><div class="line">   <span class="keyword">val</span> tasks = mutable.<span class="type">Buffer</span>[(<span class="type">String</span>, <span class="type">BaseJob</span>, <span class="type">Offer</span>)]()</div><div class="line">   </div><div class="line"><span class="comment">// 属性约束检查</span></div><div class="line">   <span class="function"><span class="keyword">def</span> <span class="title">checkConstraints</span></span>(attributes: <span class="type">Seq</span>[<span class="type">Protos</span>.<span class="type">Attribute</span>], constraints: <span class="type">Seq</span>[<span class="type">Constraint</span>]): <span class="type">Boolean</span> = &#123;</div><div class="line">   	<span class="comment">//遍历所有的属性约束</span></div><div class="line">     constraints.foreach &#123; c =&gt;</div><div class="line">       <span class="keyword">if</span> (!c.matches(attributes)) &#123;</div><div class="line">         <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line">     <span class="literal">true</span></div><div class="line">   &#125;</div><div class="line"></div><div class="line"><span class="comment">//尾递归注解</span></div><div class="line">   <span class="meta">@tailrec</span></div><div class="line">   <span class="function"><span class="keyword">def</span> <span class="title">generate</span></span>() &#123;</div><div class="line">     taskManager.getTask <span class="keyword">match</span> &#123;</div><div class="line">       <span class="keyword">case</span> <span class="type">None</span> =&gt; log.info(<span class="string">"No tasks scheduled or next task has been disabled.\n"</span>)</div><div class="line">       <span class="keyword">case</span> <span class="type">Some</span>((taskId, job)) =&gt;</div><div class="line">         <span class="keyword">if</span> (runningTasks.contains(job.name)) &#123;</div><div class="line">         	<span class="comment">// 若当前的task正在执行，则从taskManager里将其去除</span></div><div class="line">           <span class="keyword">val</span> deleted = taskManager.removeTask(taskId)</div><div class="line">           log.warning(<span class="string">"The head of the task queue appears to already be running: "</span> + job.name + <span class="string">"\n"</span>)</div><div class="line">           <span class="comment">// 递归调用</span></div><div class="line">           generate()</div><div class="line">         &#125; <span class="keyword">else</span> &#123;</div><div class="line">           tasks.find(_._2.name == job.name) <span class="keyword">match</span> &#123;</div><div class="line">             <span class="keyword">case</span> <span class="type">Some</span>((subtaskId, subJob, offer)) =&gt;</div><div class="line">               <span class="comment">//若发现已经调度的任务出现在队列中，则将其删除</span></div><div class="line">               <span class="keyword">val</span> deleted = taskManager.removeTask(subtaskId)</div><div class="line">               log.warning(<span class="string">"Found job in queue that is already scheduled for launch with this offer set: "</span> + subJob.name + <span class="string">"\n"</span>)</div><div class="line">               <span class="comment">//递归调用</span></div><div class="line">               generate()</div><div class="line">             <span class="keyword">case</span> <span class="type">None</span> =&gt;</div><div class="line">             	<span class="comment">//生产当前任务所需的资源，并且判断每个offer的各个资源是否能够满足</span></div><div class="line">               <span class="keyword">val</span> neededResources = <span class="keyword">new</span> <span class="type">Resources</span>(job)</div><div class="line">               offerResources.toIterator.find &#123; ors =&gt;</div><div class="line">                 ors._2.canSatisfy(neededResources) &amp;&amp; checkConstraints(ors._1.getAttributesList.asScala, job.constraints)</div><div class="line">               &#125; <span class="keyword">match</span> &#123;</div><div class="line">                 <span class="keyword">case</span> <span class="type">Some</span>((offer, resources)) =&gt;</div><div class="line">                 	<span class="comment">//若存在资源能够满足</span></div><div class="line">                   <span class="comment">// Subtract this job's resource requirements from the remaining available resources in this offer.	</span></div><div class="line">                   <span class="comment">//计算新资源，执行任务</span></div><div class="line">                   resources -= neededResources</div><div class="line">                   tasks.append((taskId, job, offer))</div><div class="line">                   <span class="comment">//继续递归</span></div><div class="line">                   generate()</div><div class="line">                 <span class="keyword">case</span> <span class="type">None</span> =&gt;</div><div class="line">                 	<span class="comment">// 资源不足，则将task重新加回队列（taskManager）</span></div><div class="line">                   <span class="keyword">val</span> foundResources = offerResources.toIterator.map(_._2.toString()).mkString(<span class="string">","</span>)</div><div class="line">                   log.warning(</div><div class="line">                     <span class="string">"Insufficient resources remaining for task '%s', will append to queue. (Needed: [%s], Found: [%s])"</span></div><div class="line">                       .stripMargin.format(taskId, neededResources, foundResources)</div><div class="line">                   )</div><div class="line">                   taskManager.enqueue(taskId, job.highPriority)</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">         &#125;</div><div class="line">     &#125;</div><div class="line">   &#125;</div><div class="line">   generate()</div><div class="line">   tasks</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>从这段源码中可以看出来taskManaer事实上是一个task的<code>优先队列</code>。同时从generateLaunchableTasks()这个函数看出Chronos利用Scala的尾递归巧妙地处理了所有情况，保证调度器工作的执行。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Chronos是一个非常好的Mesos框架，同时它的源码采用scala语言进行编写，函数式编程也让代码看起来非常的舒畅。由于笔者毕业设计打算写一个Mesos Framework，所以Chronos是一个很好的典范！</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Chronos是Aribnb公司开发的替代&lt;code&gt;cron&lt;/code&gt;的Mesos框架。它是一个运行在&lt;code&gt;Apache Mesos&lt;/code&gt;上的分布式的，高容错的任务编排、定时任务的框架。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
-    
-    
-      <category term="mesos" scheme="https://www.jetmuffin.com/tags/mesos/"/>
-    
-      <category term="chronos" scheme="https://www.jetmuffin.com/tags/chronos/"/>
-    
-      <category term="批处理" scheme="https://www.jetmuffin.com/tags/%E6%89%B9%E5%A4%84%E7%90%86/"/>
-    
-      <category term="脚本" scheme="https://www.jetmuffin.com/tags/%E8%84%9A%E6%9C%AC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mesos Authentication详解</title>
-    <link href="https://www.jetmuffin.com/2015/12/28/Mesos-Authentication%E8%AF%A6%E8%A7%A3/"/>
-    <id>https://www.jetmuffin.com/2015/12/28/Mesos-Authentication详解/</id>
-    <published>2015-12-28T09:01:24.000Z</published>
-    <updated>2016-08-30T09:08:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Authentication模块是Mesos中较为重要的一部分，涉及了整个系统的安全性。Mesos 0.15.0引入了framework authentication，0.19.0引入了slave authentication。Mesos Authentication只允许信任的实体可以和Mesos集群进行交互。</p>
-<a id="more"></a>
-<p>Mesos中的Authentication模块常用使用方法有三种：</p>
-<ol>
-<li>要求framework必须被授权才能向master注册</li>
-<li>要求slaves必须被授权才能获得resources offer</li>
-<li>限制<code>/teardown</code>端的访问</li>
-</ol>
-<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>Mesos的Authentication模块使用了<code>Cyrus SASL Library</code>实现验证。SASL提供了多种验证机制，包括（<code>ANOYMOUS</code>,<code>PLAIN</code>,’CRAM-MD5<code>,</code>GSSAPI`等）。</p>
-<p>现在Mesos默认支持<code>CRAM-MD5</code>进行验证，单用户可以拓展自己的<code>authentication modules</code>（详见之后的文章<a href="#">mesos modules</a>）。<code>CRAM-MD5</code>使用<code>principal</code>和<code>secret</code>对进行验证，其中<code>principal</code>代表framework的身份。<strong>注意，这里的framework并不是执行framework的user而是framework自身</strong></p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在启动mesos节点时可以通过配置项来选择是否启用authentication模块，对哪些部分启用authentication。</p>
-<h3 id="Masters"><a href="#Masters" class="headerlink" title="Masters"></a>Masters</h3><ul>
-<li>-authenticate/-no-authenticate 前者只允许授权的framework接入集群，后者还允许未授权的framework接入</li>
-<li>-authenticate_slaves/-no-authenticate_slaves 前者只允许授权的slave介入集群，后者还允许未授权的framework接入</li>
-<li>-authenticators 指定选用的<code>authenticator module</code>默认是<code>crammd5</code>，用户可以通过<code>-modules</code>选项进行拓展</li>
-<li>-credentials 指定证书路径（可能因<code>authenticator module</code>不同而不一定使用该选项）</li>
-</ul>
-<h3 id="Slaves"><a href="#Slaves" class="headerlink" title="Slaves"></a>Slaves</h3><ul>
-<li>-authenticatee 指定slave使用哪个<code>authenticator module</code>和master的<code>authenticators</code>进行授权。默认是<code>crammd5</code></li>
-<li>-credential 指定证书路径</li>
-</ul>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>这里使用默认的<code>CRAM-MD5</code>进行验证。</p>
-<p><strong>1.创建credentials文件</strong></p>
-<p>首先为master创建credentials文件，其中的内容像如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">principal1 secret1</div><div class="line">principal2 secret2</div></pre></td></tr></table></figure>
-<p><strong>2. 启动master</strong></p>
-<p>然后启动master,并使用我们刚刚生成的credentials文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/bin/mesos-master.sh --ip=127.0.0.1 --work_dir=/var/lib/mesos --authenticate --authenticate_slaves --credentials=~/credentials</div></pre></td></tr></table></figure></p>
-<p><strong>3.创建slave的credentials</strong></p>
-<p>像步骤1一样创建slave的credentials</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">principal1 secret1</div></pre></td></tr></table></figure>
-<p><strong>4.启动slave</strong></p>
-<p>启动slave并进行验证：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/mesos-slave.sh --master=127.0.0.1:5050 --credential=~/slave_credential</div></pre></td></tr></table></figure>
-<p><strong>6.framework验证</strong></p>
-<p>不同的framework的验证方法可能不同，可以写入<code>scheduler driver</code>的构造方法中，也可以在启动框架时加入，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MESOS_AUTHENTICATE=true DEFAULT_PRINCIPAL=principal2 DEFAULT_SECRET=secret2 ./src/test-framework --master=127.0.0.1:5050</div></pre></td></tr></table></figure>
-<p>结果：</p>
-<p>使用credentials验证成功的slave:</p>
-<p><img src="http://7xpl2y.com1.z0.glb.clouddn.com/QQ20151228-0.png" alt="authenticate_success"></p>
-<p>未使用credentials验证的slave:</p>
-<p><img src="http://7xpl2y.com1.z0.glb.clouddn.com/QQ20151228-1.png" alt="authenticate_failed"></p>
-<p>可以看到未使用的slave无法进行注册</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Authentication模块是Mesos中较为重要的一部分，涉及了整个系统的安全性。Mesos 0.15.0引入了framework authentication，0.19.0引入了slave authentication。Mesos Authentication只允许信任的实体可以和Mesos集群进行交互。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
-    
-    
-      <category term="mesos" scheme="https://www.jetmuffin.com/tags/mesos/"/>
-    
-      <category term="authentication" scheme="https://www.jetmuffin.com/tags/authentication/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mesos Monitoring机制总结</title>
-    <link href="https://www.jetmuffin.com/2015/12/23/Mesos-Monitoring%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/"/>
-    <id>https://www.jetmuffin.com/2015/12/23/Mesos-Monitoring机制总结/</id>
-    <published>2015-12-23T14:24:56.000Z</published>
-    <updated>2016-08-30T09:08:29.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Mesos的master和slave提供了一组统计数据和指标，使用户能够方便地监控资源使用情况并且尽早发现异常状态。Mesos的监控包括可用资源，已经使用的资源，已经注册的框架，活跃的slave和任务的状态等。开发者可以利用这些监控信息实现自动化的报警，也可以在监控界面里绘制动态的监控图表。</p>
-<a id="more"></a>
-<h2 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h2><p>Mesos提供了两种不同的指标：<code>counter</code>和<code>gauge</code>。</p>
-<p><code>counter</code>（计数器）用来跟踪不连续的事件。它是单向递增的，并且它的类型是自然数。典型的例子就是失败的任务数量、注册的slave数量等。对于这类指标，变化率比数值本身更加重要。</p>
-<p><code>gauge</code>(我也不知道怎么翻译好）代表一瞬间的某个属性的测量值。例如当前集群中使用内存的总量，在线的slave连接数量。这类指标通常用来监控其是否在一段时间内高于或低于一个阈值（即是否异常）。</p>
-<h2 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h2><h3 id="api"><a href="#api" class="headerlink" title="api"></a>api</h3><p>Master节点的指标对外提供了api，具体可通过浏览器访问<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://&lt;master-ip&gt;:5050/metrics/snapshot</div></pre></td></tr></table></figure></p>
-<p>来进行获取，访问该链接(GET请求）会返回一组JSON串，内容为指标名称和内容的键值对。</p>
-<h3 id="1-指标内容：Slave总资源"><a href="#1-指标内容：Slave总资源" class="headerlink" title="1. 指标内容：Slave总资源"></a>1. 指标内容：Slave总资源</h3><p>属于该类别的指标主要包括整个集群的可用资源总量和当前已经使用的资源部分。如果资源使用量持续高举不下，说明应该增加集群的资源总量，或者集群内的某个Framework已经运行失常。</p>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>说明</th>
-<th>类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>master/cpus_percent</code></td>
-<td>已使用的CPU占总量百分比</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/cpus_used</code></td>
-<td>已使用的CPU的个数</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/cpus_total</code></td>
-<td>CPU的总数</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/cpus_revocable_percent</code></td>
-<td>可回收</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/cpus_revocable_total</code></td>
-<td>Number of revocable CPUs</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/cpus_revocable_used</code></td>
-<td>Number of allocated revocable CPUs</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_percent</code></td>
-<td>已使用的磁盘空间占总量百分比</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_used</code></td>
-<td>已使用的磁盘空间(MB为单位)</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_used</code></td>
-<td>已使用的磁盘空间(MB为单位)</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_total</code></td>
-<td>磁盘总空间(MB为单位)</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_revocable_percent</code></td>
-<td>Percentage of allocated revocable disk space</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_revocable_total</code></td>
-<td>Revocable disk space in MB</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/disk_revocable_used</code></td>
-<td>Allocated revocable disk space in MB</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/mem_percent</code></td>
-<td>已使用的内存占总量百分比</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/mem_used</code></td>
-<td>已使用的内存（MB为单位）</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/mem_total</code></td>
-<td>内存总量（MB为单位）</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/mem_revocable_percent</code></td>
-<td>Percentage of allocated revocable memory</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/mem_revocable_total</code></td>
-<td>Revocable memory in MB</td>
-<td>Gauge</td>
-</tr>
-<tr>
-<td><code>master/mem_revocable_used</code></td>
-<td>Allocated revocable memory in MB</td>
-<td>Gauge</td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-指标内容：Master状态"><a href="#2-指标内容：Master状态" class="headerlink" title="2. 指标内容：Master状态"></a>2. 指标内容：Master状态</h3><p>这部分的指标主要说明Master是否是leading master，它已经启动运行了多长时间。当一个集群经过一段时间依然没有选出leading master，则认为这个集群已经处于故障状态。这说明要么竞选过程出现问题（检查 ZooKeeper 的连接），要么选出的 Master 有故障。此外较短的已经运行时间表明Master近期有过重启。</p>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>说明</th>
-<th>类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>master/elected</code></td>
-<td>是否是 leading master</td>
-<td>Gaude</td>
-</tr>
-<tr>
-<td><code>master/uptime_secs</code></td>
-<td>已经运行时间（秒）</td>
-<td>Gaude</td>
-</tr>
-</tbody>
-</table>
-<h3 id="3-指标内容：Master资源"><a href="#3-指标内容：Master资源" class="headerlink" title="3. 指标内容：Master资源"></a>3. 指标内容：Master资源</h3><p>这部分的指标主要说明指定Master的资源总量和使用情况。Master节点资源使用率长期高居不下，可能会影响集群的整体性能。区别于1中的资源，以下的system的资源特指Master的资源，而1中为Slave的总体资源情况</p>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>说明</th>
-<th>类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>system/cpus_total</code></td>
-<td>在这个master的可用 CPU 的数量</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>system/load_15min</code></td>
-<td>过去15分钟的平均负载</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>system/load_5min</code></td>
-<td>过去5分钟的平均负载</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>system/load_1min</code></td>
-<td>过去1分钟的平均负载</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>system/mem_free_bytes</code></td>
-<td>空闲内存的字节数</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>system/mem_total_bytes</code></td>
-<td>全部内存的字节数</td>
-<td>Guage</td>
-</tr>
-</tbody>
-</table>
-<h3 id="4-指标内容：Slave状态"><a href="#4-指标内容：Slave状态" class="headerlink" title="4. 指标内容：Slave状态"></a>4. 指标内容：Slave状态</h3><p>改部分的指标主要包括Slave的事件、Slave数量和Slave状态的信息。活跃的Slave数量过少表明这个集群的Slave不健康，或者它们无法连接到当前的leading master。</p>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>说明</th>
-<th>类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>master/slave_registrations</code></td>
-<td>能够顺利地完成与Master断开然后                                                             重联的Slave的数量</td>
-<td>Counter</td>
-</tr>
-<tr>
-<td><code>master/slave_removals</code></td>
-<td>各种原因被删除的Slave数量，包括维护</td>
-<td>Counter</td>
-</tr>
-<tr>
-<td><code>master/slave_reregistrations</code></td>
-<td>重新注册的 slave 的数目</td>
-<td>Counter</td>
-</tr>
-<tr>
-<td><code>master/slave_shutdowns_scheduled</code></td>
-<td>因为健康检查失败而被计划删除                                                             的 slave 的数量。由于对删除 slave 的速度有限制（Slave Removal Rate-Limit），所以它们不一定会立即被删除。                                                             当他们真正被删掉，指标 master/slave_shutdowns_completed 会增加。</td>
-<td>Counter</td>
-</tr>
-<tr>
-<td><code>master/slave_shutdowns_cancelled</code></td>
-<td>被取消的删除 slave 操作的数量。                                                               发生在因为删除 Slave 有限速，slave 在被删除之前有机会成功重连并且发送 PONG 给 master</td>
-<td>Counter</td>
-</tr>
-<tr>
-<td><code>master/slave_shutdowns_completed</code></td>
-<td>成功地被删除了的 Slave 的数量</td>
-<td>Counter</td>
-</tr>
-<tr>
-<td><code>master/slaves_active</code></td>
-<td>活跃的 slave 的数量</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>master/slaves_connected</code></td>
-<td>连接在线的 slave 的数量</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>master/slaves_disconnected</code></td>
-<td>断开离线的 slave 的数量</td>
-<td>Guage</td>
-</tr>
-<tr>
-<td><code>master/slaves_inactive</code></td>
-<td>不活跃的 slave 的数量</td>
-<td>Guage</td>
-</tr>
-</tbody>
-</table>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Mesos的master和slave提供了一组统计数据和指标，使用户能够方便地监控资源使用情况并且尽早发现异常状态。Mesos的监控包括可用资源，已经使用的资源，已经注册的框架，活跃的slave和任务的状态等。开发者可以利用这些监控信息实现自动化的报警，也可以在监控界面里绘制动态的监控图表。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
-    
-    
-      <category term="mesos" scheme="https://www.jetmuffin.com/tags/mesos/"/>
-    
-      <category term="监控" scheme="https://www.jetmuffin.com/tags/%E7%9B%91%E6%8E%A7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>FZUOJ 1759 Super A^B mod C 指数循环节</title>
-    <link href="https://www.jetmuffin.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-%E6%8C%87%E6%95%B0%E5%BE%AA%E7%8E%AF%E8%8A%82/"/>
-    <id>https://www.jetmuffin.com/2015/12/08/FZUOJ-1759-Super-A-B-mod-C-指数循环节/</id>
-    <published>2015-12-08T12:38:44.000Z</published>
-    <updated>2016-08-30T08:43:34.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=1759" target="_blank" rel="external">http://acm.fzu.edu.cn/problem.php?pid=1759</a></p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定A，B和C的值，求$A^{B}modC的值，其中<code>1&lt;=A,C&lt;=1e10,1&lt;=B&lt;=10e1000000</code></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>今天刚刚学到一个内容，指数降幂公式，即$A^{B}modC=A^{Bmodphi(c)+phi(c)}modC$</p>
-<p>用这个公式，可以很方便地对大指数问题进行降维处理。<br><a id="more"></a></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1000005</span>;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</div><div class="line"></div><div class="line"><span class="keyword">char</span> str[maxn];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">phi</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> res = n;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i * i &lt;= n; i++)&#123;</div><div class="line">	<span class="keyword">if</span>(n % i == <span class="number">0</span>)&#123;</div><div class="line">	  res = res - res / i;</div><div class="line">	  <span class="keyword">while</span>(n % i == <span class="number">0</span>) n /= i;</div><div class="line">	&#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span>(n &gt; <span class="number">1</span>)</div><div class="line">	res = res - res / n;</div><div class="line">  <span class="keyword">return</span> res;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">ll <span class="title">multi</span><span class="params">(ll a, ll b, ll m)</span></span>&#123;</div><div class="line">	ll ans = <span class="number">0</span>;</div><div class="line">	a %= m;</div><div class="line">	<span class="keyword">while</span>(b)&#123;</div><div class="line">		<span class="keyword">if</span>(b &amp; <span class="number">1</span>)&#123;</div><div class="line">			ans = (ans + a) % m;</div><div class="line">			b--;</div><div class="line">		&#125;</div><div class="line">		b &gt;&gt;= <span class="number">1</span>;</div><div class="line">		a = (a + a) % m;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> ans;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">ll <span class="title">quickmod</span><span class="params">(ll a, ll b, ll m)</span></span>&#123;</div><div class="line">	ll ans = <span class="number">1</span>;</div><div class="line">	a %= m;</div><div class="line">	<span class="keyword">while</span>(b)&#123;</div><div class="line">		<span class="keyword">if</span>(b &amp; <span class="number">1</span>)&#123;</div><div class="line">			ans = multi(ans, a, m);</div><div class="line">			b--;</div><div class="line">		&#125;</div><div class="line">		b &gt;&gt;= <span class="number">1</span>;</div><div class="line">		a = multi(a,a,m);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> ans;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line"> 	ll a,c;</div><div class="line"> 	<span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%I64d%s%I64d"</span>, &amp;a, str, &amp;c))&#123;</div><div class="line"> 		ll len = <span class="built_in">strlen</span>(str);</div><div class="line"> 		ll ans = <span class="number">0</span>;</div><div class="line"> 		ll p = phi(c);</div><div class="line"> 		<span class="keyword">if</span>(len &lt;= <span class="number">15</span>)&#123;</div><div class="line"> 			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; len; i++)</div><div class="line"> 				ans = ans * <span class="number">10</span> + str[i] - <span class="string">'0'</span>;</div><div class="line"> 		&#125;<span class="keyword">else</span>&#123; <span class="comment">// A^B%C = A^(B%phi(C)+phi(C))%C</span></div><div class="line"> 			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; len ; i++)&#123;</div><div class="line"> 				ans = ans * <span class="number">10</span> + str[i] - <span class="string">'0'</span>;</div><div class="line"> 				ans %= p;</div><div class="line"> 			&#125;</div><div class="line"> 			ans += p;</div><div class="line"> 		&#125;</div><div class="line"> 		<span class="built_in">printf</span>(<span class="string">"%I64d\n"</span>, quickmod(a,ans,c));</div><div class="line"> 	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://acm.fzu.edu.cn/problem.php?pid=1759&quot;&gt;http://acm.fzu.edu.cn/problem.php?pid=1759&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;题意&quot;&gt;&lt;a href=&quot;#题意&quot; class=&quot;headerlink&quot; title=&quot;题意&quot;&gt;&lt;/a&gt;题意&lt;/h2&gt;&lt;p&gt;给定A，B和C的值，求$A^{B}modC的值，其中&lt;code&gt;1&amp;lt;=A,C&amp;lt;=1e10,1&amp;lt;=B&amp;lt;=10e1000000&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h2&gt;&lt;p&gt;今天刚刚学到一个内容，指数降幂公式，即$A^{B}modC=A^{Bmodphi(c)+phi(c)}modC$&lt;/p&gt;
-&lt;p&gt;用这个公式，可以很方便地对大指数问题进行降维处理。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="算法题解" scheme="https://www.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
-    
-    
-      <category term="数论" scheme="https://www.jetmuffin.com/tags/%E6%95%B0%E8%AE%BA/"/>
-    
-      <category term="循环节" scheme="https://www.jetmuffin.com/tags/%E5%BE%AA%E7%8E%AF%E8%8A%82/"/>
-    
-      <category term="欧拉函数" scheme="https://www.jetmuffin.com/tags/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>杭电校赛部分赛题题解</title>
-    <link href="https://www.jetmuffin.com/2015/11/29/%E6%9D%AD%E7%94%B5%E6%A0%A1%E8%B5%9B%E9%83%A8%E5%88%86%E8%B5%9B%E9%A2%98%E9%A2%98%E8%A7%A3/"/>
-    <id>https://www.jetmuffin.com/2015/11/29/杭电校赛部分赛题题解/</id>
-    <published>2015-11-29T14:16:08.000Z</published>
-    <updated>2016-08-27T12:15:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>下午大家在做题的时候我把后面几个题目写了写，写一个题解和大家分享。简单题大家自己讨论下，可能有什么坑的，自己细心点就行了。这里主要写一下<code>1003</code>，<code>1005</code>，<code>1006</code>，<code>1007</code>的题解。下午没怎么认真做，代码写的乱七八糟，大家见谅。</p>
-<a id="more"></a>
-<h2 id="1003-玩骰子"><a href="#1003-玩骰子" class="headerlink" title="1003 玩骰子"></a>1003 玩骰子</h2><h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>两个人扔骰子，根据规则（有三条、对子、散牌什么的，具体看题）比较大小，大的人赢。现在主角已经扔了一个结果了，然后对方也扔了一个结果，主角有一个机会选择一个数重新扔一次，问获胜的几率有多少。</p>
-<p>这里有个需要理解一下的地方，<strong>因为主角很机智</strong>，所以肯定不会选择毫无胜算的数字来重新扔（就是选择了一个数字，重新扔骰子，扔出来的数字不管是多少都不会改变输的结果），所以算概率的时候分母注意一下不是全部的可能性，而是选择的可能性。</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>这题就是个大模拟。。写一个结构体把比较函数写清楚了（<strong>注意罗列所有情况</strong>），然后暴力枚举吧，注意如果win的数量为0，就不要加tot了，然后取所有数里面赢的概率最大的为结果。</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> x &gt; y;</div><div class="line">&#125;</div><div class="line"><span class="keyword">int</span> vis[<span class="number">6</span>];</div><div class="line"><span class="keyword">struct</span> node</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> n[<span class="number">3</span>];</div><div class="line">    <span class="keyword">int</span> t;</div><div class="line">    <span class="keyword">int</span> tn;</div><div class="line">    <span class="keyword">int</span> tnn;</div><div class="line">    node(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)&#123;</div><div class="line">        n[<span class="number">0</span>] = a;</div><div class="line">        n[<span class="number">1</span>] = b;</div><div class="line">        n[<span class="number">2</span>] = c;</div><div class="line">        sort(n, n+<span class="number">3</span>, cmp);</div><div class="line">        <span class="keyword">if</span>(n[<span class="number">0</span>] == n[<span class="number">2</span>])&#123;</div><div class="line">            t = <span class="number">3</span>;</div><div class="line">            tn = n[<span class="number">0</span>];</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(n[<span class="number">0</span>] == n[<span class="number">1</span>])&#123;</div><div class="line">            t = <span class="number">2</span>;</div><div class="line">            tn = n[<span class="number">1</span>];</div><div class="line">            tnn = n[<span class="number">2</span>];</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(n[<span class="number">1</span>] == n[<span class="number">2</span>])&#123;</div><div class="line">            t = <span class="number">2</span>;</div><div class="line">            tn = n[<span class="number">1</span>];</div><div class="line">            tnn = n[<span class="number">0</span>];</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            t = <span class="number">1</span>;</div><div class="line">            tn = n[<span class="number">0</span>];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">ncmp</span><span class="params">(node y)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(t == y.t)&#123;</div><div class="line">            <span class="keyword">if</span>(t == <span class="number">1</span>)&#123;</div><div class="line">                <span class="keyword">if</span>(n[<span class="number">0</span>] == y.n[<span class="number">0</span>])&#123;</div><div class="line">                    <span class="keyword">if</span>(n[<span class="number">1</span>] == y.n[<span class="number">1</span>])&#123;</div><div class="line">                        <span class="keyword">if</span>(n[<span class="number">2</span>] == y.n[<span class="number">2</span>])&#123;</div><div class="line">                            <span class="keyword">return</span> <span class="number">2</span>;</div><div class="line">                        &#125;<span class="keyword">else</span>&#123;</div><div class="line">                            <span class="keyword">return</span> n[<span class="number">2</span>] &gt; y.n[<span class="number">2</span>];</div><div class="line">                        &#125;</div><div class="line">                    &#125;<span class="keyword">else</span>&#123;</div><div class="line">                        <span class="keyword">return</span> n[<span class="number">1</span>] &gt; y.n[<span class="number">1</span>];</div><div class="line">                    &#125;</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    <span class="keyword">return</span> n[<span class="number">0</span>] &gt; y.n[<span class="number">0</span>];</div><div class="line">                &#125;                </div><div class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t==<span class="number">2</span>)&#123;</div><div class="line">                <span class="keyword">if</span>(tn == y.tn)&#123;</div><div class="line">                    <span class="keyword">return</span> tnn &gt; y.tnn;</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    <span class="keyword">return</span> tn &gt; y.tn;</div><div class="line">                &#125;</div><div class="line">            &#125;<span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">return</span> n[<span class="number">0</span>] &gt; y.n[<span class="number">0</span>]; </div><div class="line">            &#125;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            <span class="keyword">return</span> t &gt; y.t;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="built_in">cout</span>&lt;&lt;n[<span class="number">0</span>]&lt;&lt;<span class="string">" "</span>&lt;&lt;n[<span class="number">1</span>]&lt;&lt;<span class="string">" "</span>&lt;&lt;n[<span class="number">2</span>]&lt;&lt;<span class="string">" "</span>&lt;&lt;t&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> a, b, c,d,e,f;</div><div class="line">    <span class="keyword">int</span> t;</div><div class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;t);</div><div class="line">    <span class="keyword">while</span>(t--)&#123;</div><div class="line">        <span class="built_in">scanf</span>(<span class="string">"%d%d%d%d%d%d"</span>,&amp;a,&amp;b,&amp;c,&amp;d,&amp;e,&amp;f);</div><div class="line">        node x = node(a,b,c);</div><div class="line">        node y = node(d,e,f);</div><div class="line">        <span class="comment">// x.print();</span></div><div class="line">        <span class="comment">// y.print();</span></div><div class="line">        <span class="comment">// cout&lt;&lt;x.ncmp(y)&lt;&lt;endl;        </span></div><div class="line">        <span class="keyword">if</span>(x.ncmp(y)==<span class="number">1</span>)&#123;</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"%.3lf\n"</span>, <span class="number">1.0</span>);</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> tot = <span class="number">6</span>;</div><div class="line">        <span class="keyword">int</span> win = <span class="number">0</span>;</div><div class="line">        <span class="keyword">double</span> ans = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=<span class="number">6</span>; i++)&#123;</div><div class="line">            node z = node(i,b,c);</div><div class="line">            <span class="keyword">if</span>(z.ncmp(y)==<span class="number">1</span>)&#123;</div><div class="line">                win++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        ans = max(ans,(<span class="keyword">double</span>)win/(<span class="keyword">double</span>)tot);</div><div class="line"></div><div class="line">        win = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=<span class="number">6</span>; i++)&#123;</div><div class="line">            node z = node(a,i,c);</div><div class="line">            <span class="keyword">if</span>(z.ncmp(y)==<span class="number">1</span>)&#123;</div><div class="line">                win++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        ans = max(ans,(<span class="keyword">double</span>)win/(<span class="keyword">double</span>)tot);</div><div class="line"></div><div class="line">        win = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=<span class="number">6</span>; i++)&#123;</div><div class="line">            node z = node(a,b,i);</div><div class="line">            <span class="keyword">if</span>(z.ncmp(y)==<span class="number">1</span>)&#123;</div><div class="line">                win++;</div><div class="line">            &#125;</div><div class="line">        &#125;    </div><div class="line">        ans = max(ans,(<span class="keyword">double</span>)win/(<span class="keyword">double</span>)tot);</div><div class="line">       </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%.3f\n"</span>, ans);      </div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="ACM组队安排"><a href="#ACM组队安排" class="headerlink" title="ACM组队安排"></a>ACM组队安排</h2><h3 id="题意-1"><a href="#题意-1" class="headerlink" title="题意"></a>题意</h3><p>n个人组队，每队人数可以为1或2或3，问组队的方案数。</p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">void dfs(int a, int b, int c)&#123;</div><div class="line">	//a为组队人数3的队伍数，b为组队人数2的队伍数，类推。。。</div><div class="line">	dfs(a,b+1,c-2) //取两个孤立的人组成一队2个人的</div><div class="line">	dfs(a+1,b-1,c-1) //取1个孤立的人和1队2人的组成1队3人的</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>为了把所有状态都搜遍，我们从<code>dfs(0,0,n)</code>开始，按上述的搜索方法进行搜索，标记已经访问过的状态vis[a][b][c]。</p>
-<p>然后对于某个状态<code>(a,b,c)</code>，求方案数用排列组合的思路搞搞就出来了。</p>
-<p>例如<code>(1,2,1)</code>，方案数是<code>C(3,8)/1! * (C(2,5) * C(2,3))/2! * C(1,1)/1!</code>。具体就是，8个人挑3个人，5个人挑2个，3个人挑2个，剩下1个人, 各算出方案数，然后乘法原理乘一下就是的了。</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line">ll ans = <span class="number">0</span>;</div><div class="line">ll fact[<span class="number">11</span>];</div><div class="line"><span class="keyword">int</span> vis[<span class="number">25</span>][<span class="number">25</span>][<span class="number">25</span>];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</div><div class="line">    fact[<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= <span class="number">10</span>; i++)&#123;</div><div class="line">        fact[i] = fact[i<span class="number">-1</span>]*i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function">ll <span class="title">c2</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">    <span class="keyword">if</span>(n &lt; <span class="number">2</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    <span class="keyword">return</span> n*(n<span class="number">-1</span>)/<span class="number">2</span>;</div><div class="line">&#125;</div><div class="line"><span class="function">ll <span class="title">c3</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">    <span class="keyword">if</span>(n &lt; <span class="number">3</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    <span class="keyword">return</span> n*(n<span class="number">-1</span>)*(n<span class="number">-2</span>)/<span class="number">6</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">ll <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span>&#123;</div><div class="line">    ll t = <span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> k = a*<span class="number">3</span>+b*<span class="number">2</span>+c;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= a; i++)&#123;</div><div class="line">        t *= c3(k);</div><div class="line">        k -= <span class="number">3</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(a)</div><div class="line">        t/=fact[a];</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= b; i++)&#123;</div><div class="line">        t *= c2(k);</div><div class="line">        k -= <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(b)</div><div class="line">        t/=fact[b];    </div><div class="line">    <span class="keyword">return</span> t;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span>&#123;</div><div class="line">    vis[a][b][c] = <span class="literal">true</span>;</div><div class="line">    <span class="comment">// cout&lt;&lt;a&lt;&lt;" "&lt;&lt;b&lt;&lt;" "&lt;&lt;c&lt;&lt;" "&lt;&lt;sum(a,b,c)&lt;&lt;endl;</span></div><div class="line">    ans += sum(a,b,c);</div><div class="line">    <span class="keyword">if</span>(c<span class="number">-2</span>&gt;=<span class="number">0</span> &amp;&amp; !vis[a][b+<span class="number">1</span>][c<span class="number">-2</span>])&#123;</div><div class="line">        dfs(a, b+<span class="number">1</span>, c<span class="number">-2</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(b<span class="number">-1</span> &gt;= <span class="number">0</span> &amp;&amp; c<span class="number">-1</span> &gt;=<span class="number">0</span> &amp;&amp; !vis[a+<span class="number">1</span>][b<span class="number">-1</span>][c<span class="number">-1</span>])&#123;</div><div class="line">        dfs(a+<span class="number">1</span>, b<span class="number">-1</span>, c<span class="number">-1</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    init();</div><div class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n) &amp;&amp; n)&#123;</div><div class="line">        ans = <span class="number">0</span>;</div><div class="line">        <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</div><div class="line">        dfs(<span class="number">0</span>,<span class="number">0</span>,n);</div><div class="line">        <span class="built_in">cout</span>&lt;&lt;ans&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">        <span class="comment">// cout&lt;&lt;sum(1, 1, 0)&lt;&lt;endl;</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><strong>以上思路为错误方法~~~</strong>(虽然可以过这道题)。</p>
-<p>在写的时候忽然发现这是一道<strong>很简单的dp</strong>…</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f[i]=f[i-1];//第i个人自己组队</div><div class="line">f[i]+=f[i-2]*(i-1);//第i个人与前面i-1个人中的一个人组队，有i-1种方法，剩下的i-2个人进行组队，即f[i-2]种方法。</div><div class="line">f[i]+=f[i-3]*(i-1)*(i-2)/2;//前面的i-1个人中，挑2个人和第i个人组队(C(2,n-1)，剩余i-3个人组队(f(i-3))</div></pre></td></tr></table></figure>
-<p>然后f[1]，f[2]，f[3]都告诉你了，然后你懂的了。。</p>
-<p>所以大家还是按正确的方法写吧…ORZ~</p>
-<h2 id="1006-逆袭指数"><a href="#1006-逆袭指数" class="headerlink" title="1006 逆袭指数"></a>1006 逆袭指数</h2><h3 id="题意-2"><a href="#题意-2" class="headerlink" title="题意"></a>题意</h3><p>给定一个数n，求n的最长的连续的因子，输出为<code>i*(i+1)*(i+2)...</code>。同时乘起来的因子还是n的因子。<br>如<code>630：5*6*7</code>，5*6*7=210是630的因子。</p>
-<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>直接上去暴力搞，枚举n的所有因子p，然后从p开始向后枚举，枚举到最长的时候就行。由于大多数因子连续都在前面的数里，所以复杂度不会很高。</p>
-<p><strong>注意：</strong>从p向后枚举时要枚举到n为止而不是sqrt(n)。</p>
-<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; fac;</div><div class="line"><span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt;::iterator it;</div><div class="line"><span class="keyword">bool</span> vis[<span class="number">1000000</span>];</div><div class="line"><span class="keyword">int</span> ans = <span class="number">0</span>;</div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</div><div class="line"><span class="keyword">long</span> <span class="keyword">long</span> n;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> t = n;</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = k; i &lt;= n; i++)&#123;</div><div class="line">        <span class="keyword">if</span>(t % i == <span class="number">0</span>)&#123;</div><div class="line">            t /= i;</div><div class="line">            vis[i] = <span class="literal">true</span>;</div><div class="line">            len++;</div><div class="line">            v.push_back(i);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(len &gt; ans)&#123;</div><div class="line">        ans = len;</div><div class="line">        <span class="keyword">int</span> size = v.size();</div><div class="line">        path.clear();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= size; i++)</div><div class="line">            path.push_back(v[i]);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%lld"</span>,&amp;n))&#123;</div><div class="line">        ans = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> size = fac.size();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i*i &lt;= n; i++)&#123;</div><div class="line">                dfs(i);</div><div class="line">        &#125;</div><div class="line">        size = path.size();</div><div class="line">        <span class="keyword">if</span>(ans == <span class="number">0</span>)&#123;</div><div class="line">            <span class="built_in">puts</span>(<span class="string">"1"</span>);</div><div class="line">            <span class="built_in">cout</span>&lt;&lt;n&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span>&lt;&lt;ans&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ans; i++)&#123;</div><div class="line">            <span class="keyword">if</span>(i &lt; ans<span class="number">-1</span>)</div><div class="line">                <span class="built_in">cout</span>&lt;&lt;path[i]&lt;&lt;<span class="string">"*"</span>;</div><div class="line">            <span class="keyword">else</span></div><div class="line">                <span class="built_in">cout</span>&lt;&lt;path[i];</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="1007-油菜花王国"><a href="#1007-油菜花王国" class="headerlink" title="1007 油菜花王国"></a>1007 油菜花王国</h2><h3 id="题意-3"><a href="#题意-3" class="headerlink" title="题意"></a>题意</h3><p>现在有n个精力，输入他们的能力k[i]，如果k[i]是斐波那契数，那么他的威望值f[i]为1，反之为0.然后给了m个关系(u,v)表示u和v是同一个家族，家族的威望是他们的和。最后求威望最大的家族的威望。</p>
-<h3 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h3><p>额，非常裸的<strong>并查集</strong>。</p>
-<p>首先，斐波那契判断很方便，预处理一下存数组就行了。<strong>注意：不用快速幂什么的。。因为大概第45项就超过1000000000了。。</strong>，然后判断也就从前往后扫如果相等就返回。。反之随便搞搞。。</p>
-<p>然后是并查集，直接上模板，记得合并<code>merge</code>操作的时候，把子节点的威望加到父节点上去。</p>
-<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></div><div class="line">ll fibo[<span class="number">50</span>];</div><div class="line"><span class="keyword">int</span> f[<span class="number">1050</span>];</div><div class="line"><span class="keyword">int</span> fa[<span class="number">1050</span>];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</div><div class="line">    fibo[<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">    fibo[<span class="number">2</span>] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">3</span>; i &lt;= <span class="number">45</span>; i++)&#123;</div><div class="line">        fibo[i] = fibo[i<span class="number">-2</span>] + fibo[i<span class="number">-1</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">45</span>; i++)&#123;</div><div class="line">        <span class="keyword">if</span>(n == fibo[i])</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        <span class="keyword">if</span>(n &lt; fibo[i])</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span>(x != fa[x])</div><div class="line">        fa[x] = find(fa[x]);</div><div class="line">    <span class="keyword">return</span> fa[x];</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> a = find(x),b = find(y);</div><div class="line">    <span class="keyword">if</span>(a != b)&#123;</div><div class="line">        fa[b] = a;</div><div class="line">        f[a] += f[b];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    init();</div><div class="line">    <span class="keyword">int</span> n,m;</div><div class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m))&#123;</div><div class="line">        <span class="keyword">int</span> u,v,t;</div><div class="line">        <span class="built_in">memset</span>(f,<span class="number">0</span>,<span class="keyword">sizeof</span>(f));</div><div class="line">        <span class="built_in">memset</span>(fa,<span class="number">0</span>,<span class="keyword">sizeof</span>(fa));</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=n; i++)&#123;</div><div class="line">            fa[i] = i;</div><div class="line">            <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;t);</div><div class="line">            f[i] = check(t);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)&#123;</div><div class="line">            <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;u,&amp;v);</div><div class="line">            merge(u,v);            </div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">1000</span>; i++)&#123;</div><div class="line">            <span class="keyword">if</span>(f[i] &gt; ans)&#123;</div><div class="line">                ans = f[i];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="最后说两句"><a href="#最后说两句" class="headerlink" title="最后说两句"></a>最后说两句</h3><p>题目都很简单，大家最好在之后都去把没做出来的题目再做做，继续刷题！</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;下午大家在做题的时候我把后面几个题目写了写，写一个题解和大家分享。简单题大家自己讨论下，可能有什么坑的，自己细心点就行了。这里主要写一下&lt;code&gt;1003&lt;/code&gt;，&lt;code&gt;1005&lt;/code&gt;，&lt;code&gt;1006&lt;/code&gt;，&lt;code&gt;1007&lt;/code&gt;的题解。下午没怎么认真做，代码写的乱七八糟，大家见谅。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="算法题解" scheme="https://www.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
-    
-    
-      <category term="模拟" scheme="https://www.jetmuffin.com/tags/%E6%A8%A1%E6%8B%9F/"/>
-    
-      <category term="并查集" scheme="https://www.jetmuffin.com/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
-    
-      <category term="记忆化搜索" scheme="https://www.jetmuffin.com/tags/%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mesos 调度机制及调度算法初探</title>
-    <link href="https://www.jetmuffin.com/2015/11/23/Mesos-%E8%B0%83%E5%BA%A6%E6%9C%BA%E5%88%B6%E5%8F%8A%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%88%9D%E6%8E%A2/"/>
-    <id>https://www.jetmuffin.com/2015/11/23/Mesos-调度机制及调度算法初探/</id>
-    <published>2015-11-23T12:59:17.000Z</published>
-    <updated>2016-08-30T09:08:13.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>再次分析Mesos的工作原理，将Mesos中出现的各个名词串联到一起。</p>
-<a id="more"></a>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Mesos是Apache下的开源分布式资源管理框架，它被称为是分布式系统的内核,Mesos将集群的所有节点的数据统一进行管理，打造一个DCOS(Data Center Operation System)的概念。调度算法是Mesos最核心也是灵魂部分。</p>
-<h2 id="调度架构"><a href="#调度架构" class="headerlink" title="调度架构"></a>调度架构</h2><h3 id="1-两层架构"><a href="#1-两层架构" class="headerlink" title="1. 两层架构"></a>1. 两层架构</h3><p><strong>第一层，由Mesos将资源分配给框架；第二层，框架自己的调度器将资源分配给自己内部的任务。</strong>两层框架可以使得Mesos不需要知道任务的资源需求量，不需要知道任务的类型和数据存储，只需要和框架进行交互就行了。</p>
-<h3 id="2-Resource-Offer"><a href="#2-Resource-Offer" class="headerlink" title="2. Resource Offer"></a>2. Resource Offer</h3><p>Mesos中的调度机制被称为<strong>“Resource Offer”</strong>，采用了基于资源量的调度机制。在Mesos中，Slave直接将资源量（CPU和内存）汇报给Master，由master将资源量按照某种机制分配给Framework，其中，“某种机制”是<code>“Dominant Resource Fairness（DRF）”</code>，在后面会提到该内容。</p>
-<p>Framework可以根据是否符合任务对资源的约束，选择接受或拒绝<code>offer</code>。一旦<code>offer</code>被接受，Framework将与Master协作调度任务，并在数据中心的相应Slave节点上运行任务。</p>
-<p>两个使<code>Resource Offer</code>高效且具有鲁棒性的附加机制：</p>
-<ol>
-<li><p><strong>filters机制：</strong> 每次调度，<code>mesos-master</code>和<code>framework-scheduler</code>需要进行通信，如果过多的拒绝<code>offer</code>会带来额外的通信开销，因此mesos提供了<code>filters</code>机制，允许Framework只接收<strong>资源量大于L的offer</strong>（换句话说被过滤的offer不会发送到Framework)</p>
-</li>
-<li><p><strong>rescinds机制：</strong> 如果某个Framework接受了某个<code>offer</code>，然而长时间没有为该<code>offer</code>分配任务，而占有该<code>offer</code>（占着xx不xx），Mesos会回收其<code>offer</code>，并将其分配给其他Framework</p>
-</li>
-</ol>
-<h2 id="调度工作流程"><a href="#调度工作流程" class="headerlink" title="调度工作流程"></a>调度工作流程</h2><p><img src="/uploads/images/2015/11/23/mesos-workflow.png" alt="mesos-workflow"></p>
-<p>如上图所示，整个资源调度的工作过程为：</p>
-<ol>
-<li><p><code>Slave</code>定期向<code>Master</code>汇报其机器上的资源情况（包括cpu,mem,disk,port等）。</p>
-</li>
-<li><p><code>Master</code>上的模块<code>Allocator</code>根据<code>DRF</code>算法决定要讲资源分配给哪个<code>Framework</code>，并将资源以<code>offer</code>形式发送给分配的<code>Framework</code>。（一层调度）</p>
-</li>
-<li><p><code>Framework</code>编写时约束了每个<code>Task</code>执行需要的资源（cpu,mem,disk等），Framework根据约束筛选分配到的<code>offer</code>，可以选择接受<code>offer</code>，或者拒绝<code>offer</code>。若拒绝，<code>offer</code>随即可以被给其他<code>Framework</code>。（二层调度）</p>
-</li>
-<li><p>每个<code>Task</code>对应一个<code>offer</code>，也对应一个<code>Slave</code>，则该<code>Task</code>会被该<code>Slave</code>上的守护进程<code>Executor</code>执行。同时，为了<strong>资源隔离</strong>，Mesos为任务的执行提供了<code>Isolator</code>隔离器，为了保证资源不会被其他<code>Task</code>访问，可用的Isolator有<code>Linux Container</code>，<code>Docker</code>等。</p>
-</li>
-<li><p>由于<code>Master</code>很有可能出现单点故障，因此需要设立多<code>Master</code>，利用<code>Zookeeper</code>容错，保证集群运行的一致性。</p>
-</li>
-</ol>
-<p><strong>补充：</strong>Mesos提供了拓展模块，使得我们如果要修改Mesos的部分内容，可以不用修改源码重新编译，而在以上流程中的<code>Allocator（重写调度方法）</code>、<code>Isolator（重写资源隔离方法）</code>均可以进行拓展，此外我还发现了Slave上的<code>Estimator</code>也能进行重写拓展，具体内容之后补充。</p>
-<h2 id="DRF算法"><a href="#DRF算法" class="headerlink" title="DRF算法"></a>DRF算法</h2><p>如何作出offer分配的决定是由资源分配模块<code>Allocator</code>实现的，该模块存在于Master之中。资源分配模块确定Framework接受offer的顺序，与此同时，确保在资源利用最大化的条件下公平地共享资源。</p>
-<p>由于Mesos为跨数据中心调度资源并且是异构的资源需求时，资源分配相比普通调度将会更加困难。因此Mesos采用了<code>DRF（主导资源公平算法 Dominant Resource Fairness）</code>,该算法同样出自于UC Berkeley。DRF的目标是确保每一个用户，即Mesos中的Framework，在异质环境中能够接收到其最需资源的公平份额。</p>
-<p>Framework拥有的全部资源类型份额中占最高百分比的就是Framework的<code>主导份额</code>。DRF算法会使用所有已注册的Framework来计算<code>主导份额</code>，以确保每个Framework能接收到其<code>主导资源</code>的<code>公平份额</code>。</p>
-<p>Mesos源码中默认的Allocator，即<code>HierarchicalDRFAllocator</code>的位置在<code>$MESOS_HOME/src/master/allocator/mesos/hierarchical.hpp</code>，而DRF中对每个Framework排序的<code>Sorter</code>位于<code>$MESOS_HOME/src/master/allocator/sorter/drf/sorter.cpp</code>，可以查看其源码了解它的工作原理。</p>
-<h3 id="一个说明性的例子"><a href="#一个说明性的例子" class="headerlink" title="一个说明性的例子"></a>一个说明性的例子</h3><p>考虑一个<code>9CPU，18GBRAM</code>的系统，拥有两个用户，其中用户A运行的任务的需求向量为<code>{1CPU, 4GB}</code>，用户B运行的任务的需求向量为<code>{3CPU，1GB}</code>，用户可以执行尽量多的任务来使用系统的资源。</p>
-<p>在上述方案中，A的每个任务消耗总cpu的<code>1/9</code>和总内存的<code>2/9</code>，所以A的<strong>dominant resource</strong>是<code>内存</code>；B的每个任务消耗总cpu的<code>1/3</code>和总内存的<code>1/18</code>，所以B的<strong>dominant resource</strong>为<code>CPU</code>。DRF会均衡用户的<strong>dominant shares</strong>，执行3个用户A的任务，执行2个用户B的任务。三个用户A的任务总共消耗了{3CPU，12GB}，两个用户B的任务总共消耗了{6CPU，2GB}；在这个分配中，每一个用户的<strong>dominant share</strong>是相等的，用户A获得了2/3的RAM，而用户B获得了2/3的CPU。</p>
-<p>以上的这个分配可以用如下方式计算出来：x和y分别是用户A和用户B的分配任务的数目，那么用户A消耗了{xCPU，4xGB}，用户B消耗了{3yCPU，yGB}，在图三中用户A和用户B消耗了同等dominant resource；用户A的dominant share为4x/18，用户B的dominant share为3y/9。所以DRF分配可以通过求解以下的优化问题来得到：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">max(x,y)            	#(Maximize allocations)</div><div class="line">	subject to</div><div class="line">		x + 3y &lt;= 9 		#(CPU constraint)</div><div class="line">		4x + y &lt;= 18 		#(Memory Constraint)</div><div class="line">			2x/9 = y/3 	#(Equalize dominant shares)</div></pre></td></tr></table></figure>
-<p>最后解出<code>x=3</code>以及<code>y=2</code>，因而用户A获得{3CPU，12GB}，B得到{6CPU， 2GB}。</p>
-<h3 id="DRF在Mesos中的一个例子"><a href="#DRF在Mesos中的一个例子" class="headerlink" title="DRF在Mesos中的一个例子"></a>DRF在Mesos中的一个例子</h3><p>换个使用场景，假设有数据中心包含一个offer为9核CPU和18GB内存。Framework 1运行的任务需要（1核CPU、4GB内存），Framework 2运行的任务需要（3核CPU、2GB内存）。Framework 1的任务会消耗CPU总数的1/9、内存总数的2/9，Framework 1的主导资源是内存。同样，Framework 2的每个任务会CPU总数的1/3、内存总数的1/18，Framework 2的主导资源是CPU。</p>
-<p><img src="http://cdn3.infoqstatic.com/statics_s1_20151118-0143/resource/articles/analyse-mesos-part-04/zh/resources/0604003.jpg" alt="DRF-Table"></p>
-<p>上面表中的每一行提供了以下信息：</p>
-<ul>
-<li><strong>Framework chosen：</strong>收到最新offer的Framework。</li>
-<li><strong>Resource Shares：</strong>给定时间内Framework接受的资源总数，包括CPU和内存，以占资源总量的比例表示。</li>
-<li><strong>Dominant Share（主导份额：</strong>给定时间内Framework主导资源占总份额的比例，以占资源总量的比例表示。</li>
-<li><strong>Dominant Share %（主导份额百分比）：</strong>给定时间内Framework主导资源占总份额的百分比，以占资源总量的百分比表示。</li>
-<li><strong>CPU Total Allocation：</strong>给定时间内接受的所有Framework的总CPU资源。</li>
-<li><strong>RAM Total Allocation：</strong>给定时间内接受的所有Framework的总内存资源。</li>
-</ul>
-<p>最初，两个Framework的主导份额是0％，我们假设DRF首先选择的是Framework 2，当然我们也可以假设Framework 1，但是最终的结果是一样的。</p>
-<ol>
-<li>Framework 2接收offer并运行任务，使其主导资源成为CPU，主导份额增加至33％。</li>
-<li>由于Framework 1的主导份额维持在0％，它接收offer并运行任务，主导份额的主导资源（内存）增加至22％。</li>
-<li>由于Framework 1仍具有较低的主导份额，它接收offer并运行任务，增 加其主导份额至44％。</li>
-<li>然后DRF将offer发送给Framework 2，因为它现在拥有更低的主导份额。</li>
-<li>该过程继续进行，直到由于缺乏可用资源，不能运行新的任务。在这种情况下，CPU资源已经饱和。</li>
-<li>然后该过程将使用一组新的offer重复进行。</li>
-</ol>
-<p><strong>需要注意的是</strong>：可以创建一个资源分配模块，使用加权的DRF使其偏向某个Framework或某组Framework。如前面所提到的，也可以创建一些自定义模块来提供组织特定的分配策略。</p>
-<h2 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h2><ul>
-<li>细粒度分配资源（细到每个任务在哪个机器上跑）,这是最显而易见的好处，也是Mesos社区和Mesosphere经常津津乐道的。</li>
-</ul>
-<p><img src="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos-elastic-cea4da90b3c819bd96b3158da1a6f86b.jpg" alt="Elastic Sharing"></p>
-<ul>
-<li>支持各类应用资源共同管理，不用担心各个应用的资源冲突。</li>
-</ul>
-<p><img src="http://cdn2.infoqstatic.com/statics_s2_20151118-0143/resource/articles/analyse-mesos-part-02/zh/resources/mesos_frameworks.png" alt="Mesos Frameworks"></p>
-<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><p>在众多文章中看到大家对Mesos缺陷评价的一些共同点:</p>
-<ul>
-<li><p>Mesos中的DRF调度算法过分的追求公平，没有考虑到实际的应用需求。</p>
-</li>
-<li><p>Mesos采用了Resource Offer机制，这种调度机制面临着资源碎片问题，即：每个节点上的资源不可能全部被分配完，剩下的一点可能不足以让任何任务运行，这样，便产生了类似于操作系统中的内存碎片问题。</p>
-</li>
-<li><p>由于Mesos采用了双层调度机制，在实际调度时，将面临设计决策问题：第一层和第二层调度器分别实现哪几个调度机制，即：将大部分调度机制放到第一层调度器，还是第一层调度器仅支持简单的资源分配</p>
-</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;再次分析Mesos的工作原理，将Mesos中出现的各个名词串联到一起。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="基础架构" scheme="https://www.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
-    
-    
-      <category term="mesos" scheme="https://www.jetmuffin.com/tags/mesos/"/>
-    
-      <category term="资源调度" scheme="https://www.jetmuffin.com/tags/%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6/"/>
-    
-      <category term="分布式系统" scheme="https://www.jetmuffin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"/>
+      <category term="bugfix" scheme="http://blog.jetmuffin.com/tags/bugfix/"/>
     
   </entry>
   

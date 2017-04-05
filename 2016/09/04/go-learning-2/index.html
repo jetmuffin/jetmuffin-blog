@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>Golang 基础学习（二）类型 | JetMuffin&#39;s Blog</title>
+  <meta name="description" content="A minimal hexo theme." />
+  <meta name="keywords" content="hexo,theme,typescript,otakism,otaku" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="类型go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 基础学习（二）类型">
+<meta property="og:url" content="http://blog.jetmuffin.com/2016/09/04/go-learning-2/index.html">
+<meta property="og:site_name" content="JetMuffin's Blog">
+<meta property="og:description" content="类型go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。">
+<meta property="og:updated_time" content="2017-02-17T13:05:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang 基础学习（二）类型">
+<meta name="twitter:description" content="类型go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+	<script src="https://use.typekit.net/eyf3hir.js"></script>
+  <script>try{Typekit.load({ async: false });}catch(e){}</script>
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+  <script>setLoadingBarProgress(20)</script>
+  
+  <div id="site-wrapper">
+    
+    <header id="header">
+	<div id="header-wrapper" class="clearfix">
+		<a id="logo" href="/">
+			<img src="/images/logo.png" />
+			<span id="site-desc">
+			  otaku keeps alive
+      </span>
+		</a>
+		<button id="site-nav-switch">
+	    <span class="icon icon-menu"></span>
+	  </button>
+	</div>
+	<div class="site-sidebar">
+	
+	</div>
+	<aside id="site-menu">
+  	<nav>
+  		
+        <a href="/" class="nav-home nav">
+          Home
+        </a>
+      
+        <a href="/about" class="nav-about nav">
+          About
+        </a>
+      
+        <a href="/archives" class="nav-archives nav">
+          Archives
+        </a>
+      
+    </nav>
+	</aside>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+    
+    <main id="main" role="main">
+      <article id="post-go-learning-2"
+  class="post article white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<h2 class="title">
+  	<a href="/2016/09/04/go-learning-2/">
+    	Golang 基础学习（二）类型
+    </a>
+  </h2>
+	<time>
+	  9月 4, 2016
+	</time>
+	<section class="content">
+  	<div class="article-entry" itemprop="articleBody">
+    	<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。</p>
+<a id="more"></a>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"math/cmplx"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">var</span> (</div><div class="line">    flag   <span class="keyword">bool</span>       = <span class="literal">false</span></div><div class="line">    MaxInt <span class="keyword">uint64</span>     = <span class="number">1</span>&lt;&lt;<span class="number">64</span> - <span class="number">1</span></div><div class="line">    z      <span class="keyword">complex128</span> = cmplx.Sqrt(<span class="number">-5</span> + <span class="number">12i</span>)</div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line"></div><div class="line">    fmt.Println(<span class="string">"go"</span> + <span class="string">"lang"</span>)</div><div class="line"></div><div class="line">    fmt.Println(<span class="string">"1+1 = "</span>, <span class="number">1</span>+<span class="number">1</span>)</div><div class="line">    fmt.Println(<span class="string">"7.0/3.0 ="</span>, <span class="number">7.0</span>/<span class="number">3.0</span>)</div><div class="line"></div><div class="line">    fmt.Println(<span class="literal">true</span> &amp;&amp; <span class="literal">false</span>)</div><div class="line">    fmt.Println(<span class="literal">true</span> || <span class="literal">false</span>)</div><div class="line">    fmt.Println(!<span class="literal">true</span>)</div><div class="line"></div><div class="line">    <span class="keyword">const</span> f = <span class="string">"%T(%v)\n"</span></div><div class="line">    fmt.Printf(f, flag, flag)</div><div class="line">    fmt.Printf(f, MaxInt, MaxInt)</div><div class="line">    fmt.Printf(f, z, z)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h3><p>go 语言中的基础数据类型包括以下几种：</p>
+<ul>
+<li>int，Rune（Rune 是 int 的别名，代表一个 Unicode 码）</li>
+<li>int8，int16，int32，int64</li>
+<li>byte，uint8，uint16，uint32，uint64（byte 是 uint8 的别名）</li>
+<li>float32，float64</li>
+<li>bool</li>
+<li>string</li>
+<li>complex128，complex64（复数）</li>
+</ul>
+<p>源码中 <code>runtime.h</code> 对几种简单的基本类型先做了定义，然后用它们对其他的类型进行定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">char</span>             int8;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>           uint8;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">short</span>            int16;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">short</span>          uint16;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">int</span>              int32;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span>            uint32;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span>    int64;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">float</span>                   float32;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">double</span>                  float64;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> uint32                  uintptr</div><div class="line"><span class="keyword">typedef</span> int32                   intptr</div><div class="line"><span class="keyword">typedef</span> int32                   intgo</div><div class="line"><span class="keyword">typedef</span> uint32                  uintgo</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> uint8                   <span class="keyword">bool</span>;</div><div class="line"><span class="keyword">typedef</span> uint8                   byte;</div></pre></td></tr></table></figure>
+<p>从中可以看出 go 中的每个类型在 c 中对应的类型和占用字节大小。另外其中还定义了 <code>intptr</code> 和 <code>intgo</code>，其中 <code>intptr</code> 用于指针运算，<code>intgo</code> 相当于在源码中给 <code>int</code> 起的一个别名。</p>
+<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><p>string 类型事实上是一个结构体：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">struct String &#123;</div><div class="line">    byte*   str;</div><div class="line">    intgo   len;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里对于每个 string 类型，都确定了它的长度和字符数组，也就是说 golang 的字符串初始化话底层的结构就会被初始化。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>go 中使用 <code>var</code> 作为关键字来进行变量声明。但和 javascript 里不同，go 中的变量是强类型。声明的方式有多种，包括：</p>
+<ul>
+<li><code>var a int</code>（仅声明不初始化）</li>
+<li><code>var a = 10</code>（声明同时初始化，但不指定类型，由编译器自动推导类型）</li>
+<li><code>var a int = 10</code>（声明、指定类型以及初始化）</li>
+<li><code>a := 10</code>（省略关键字，声明同时初始化，由编译器推导类型）</li>
+</ul>
+<p><strong>Note:</strong> 这里需要注意的是，<code>:=</code>是用于声明及赋值，而不是赋值，因此仅在变量定义时使用，开始写 go 的时候常常将 <code>:=</code> 用于赋值导致出错。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"initial"</span></div><div class="line">    fmt.Println(a)</div><div class="line"></div><div class="line">    <span class="keyword">var</span> b, c <span class="keyword">int</span> = <span class="number">1</span>, <span class="number">2</span></div><div class="line">    fmt.Println(b, c)</div><div class="line"></div><div class="line">    <span class="keyword">var</span> d = <span class="literal">true</span></div><div class="line">    fmt.Println(d)</div><div class="line"></div><div class="line">    <span class="keyword">var</span> e <span class="keyword">int</span></div><div class="line">    fmt.Println(e)</div><div class="line"></div><div class="line">    f := <span class="string">"short"</span></div><div class="line">    fmt.Println(f)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="类型推导"><a href="#类型推导" class="headerlink" title="类型推导"></a>类型推导</h3><p>对变量声明语句，编译器会对其进行自动的类型推导，可以用 <code>reflect</code> 包来查看变量的类型。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"reflect"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">var</span> a <span class="keyword">int</span> = <span class="number">10</span></div><div class="line">    <span class="keyword">var</span> b <span class="keyword">byte</span> = <span class="number">10</span></div><div class="line"></div><div class="line">    c := <span class="number">10.0</span></div><div class="line">    d := <span class="string">"10"</span></div><div class="line"></div><div class="line">    fmt.Printf(<span class="string">"a type:%s\n"</span>, reflect.TypeOf(a))</div><div class="line">    fmt.Printf(<span class="string">"b type:%s\n"</span>, reflect.TypeOf(b))</div><div class="line">    fmt.Printf(<span class="string">"c type:%s\n"</span>, reflect.TypeOf(c))</div><div class="line">    fmt.Printf(<span class="string">"d type:%s\n"</span>, reflect.TypeOf(d))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a type:int</div><div class="line">b type:uint8</div><div class="line">c type:float64</div><div class="line">d type:string</div></pre></td></tr></table></figure>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>正常情况下，将类型 V 转化为 T 需要显式声明。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a := 5 // typeof(a) is int32</div><div class="line">b := int64(10) // typeof(b) is int64</div></pre></td></tr></table></figure>
+<p>若没有显式声明还需要进行类型转换 V -&gt; T，则需要满足 <code>assignability</code>，根据文档<a href="https://golang.org/ref/spec#Assignability" target="_blank" rel="external">assignability</a>，可能的条件如下：</p>
+<ul>
+<li>T 和 V 的类型相同</li>
+<li>T 和 V 的基础类型相同，并且其中至少一个并未显式指定类型</li>
+<li>T 是一个 <code>interface</code> 类型，并且 V 实现了 T (这在后面会提到)</li>
+<li>V 是一个双向的 <code>channel</code>，而 T 是一个 <code>channel</code>，同时 V 和 T 的元素类型相同</li>
+<li>V 是 nil 同时 T 是 <code>slice</code>, <code>function</code>, <code>map</code>, <code>channel</code>, <code>interface</code>, <code>pointer</code> 中的一种</li>
+<li>V 是未声明类型的常量</li>
+</ul>
+<p>在这些条件下，不需要显式声明，直接可以将 T 的值赋予 V。</p>
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>go 中的常量和 c 相同，需要在编译时确定值，并在编译时被创建。常量需要满足以下几个要求：</p>
+<ul>
+<li>类型必须是数值、字符串和布尔值之一</li>
+<li>可以使用表达式，但表达式必须在编译时可以计算的</li>
+<li>声明常量同时必须指定值（初始化），并且不能再修改值</li>
+</ul>
+<p>常量的关键字和 cpp 相同，用 <code>const</code> 进行声明，声明时可以显式指定数据类型，也可以不指定。多个常量可以同时进行批量声明，常见的使用方法如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"math"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">const</span> (</div><div class="line">    s <span class="keyword">string</span> = <span class="string">"constant"</span></div><div class="line">    one, two = <span class="number">1</span>, <span class="number">2</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    fmt.Println(s)</div><div class="line">    fmt.Println(one)</div><div class="line">    fmt.Println(two)</div><div class="line"></div><div class="line">    <span class="keyword">const</span> n = <span class="number">500000000</span></div><div class="line">    <span class="keyword">const</span> d = <span class="number">3e20</span> / n</div><div class="line">    fmt.Println(d)</div><div class="line"></div><div class="line">    fmt.Println(<span class="keyword">int64</span>(d))</div><div class="line"></div><div class="line">    fmt.Println(math.Sin(n))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="iota"><a href="#iota" class="headerlink" title="iota"></a>iota</h3><p>iota 在 go 中用于常量计数。iota 在 const 关键字出现时置 0，并且 const 内每增加一行讲使 itoa 计数一次，举个例子应该就很清楚了。</p>
+<p>```go<br>const a = iota // a = 0<br>const b = iota // b = 0<br>const (<br>    c = iota   // c = 0<br>    d = iota   // d = 1<br>    e = iota   // e = 2<br>)<br>const (<br>    f, g = iota, 1 &lt;&lt; iota // f = 0, g = 1<br>    h, i = iota, 1 &lt;&lt; iota // h = 1, i = 2<br>)</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://golang.org/ref/spec#Constant" target="_blank" rel="external">Golang Document</a></li>
+<li><a href="http://www.cnblogs.com/howDo/archive/2013/04/15/GoLang-Constant.html" target="_blank" rel="external">老虞学GoLang笔记</a></li>
+<li><a href="http://www.tuicool.com/articles/MJZvi27" target="_blank" rel="external">golang的类型转换的坑和分析</a></li>
+</ul>
+
+  	</div>
+	  
+	  <div class="article-tags tags">
+		  
+        <a class="tag-link" href="/tags/golang/">golang</a>
+      
+	  </div>
+	</section>
+</article>
+
+
+<section id="comments">
+	<div id="disqus_thread"></div>
+</section>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </main>
+    
+    <footer id="footer" class="clearfix">
+  
+  
+	<div class="search">
+	  <form name="searchform" id="searchform" class="u-search-form">
+	    <input type="text" id="searchinput" class="u-search-input" placeholder="Looking for something?" />
+	    <button type="submit" id="u-search-btn-submit" class="u-search-btn-submit">
+	      <span class="icon icon-search"></span>
+	    </button>
+	  </form>
+	</div>
+	
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/artchen" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://twitter.com/otakism" class="social twitter"
+          target="_blank" rel="external">
+          <span class="icon icon-twitter"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+        <a href="https://plus.google.com/+ArtChenOtakism/posts" class="social google"
+          target="_blank" rel="external">
+          <span class="icon icon-google"></span>
+        </a>
+      
+        <a href="http://weibo.com/otakism/" class="social sina-weibo"
+          target="_blank" rel="external">
+          <span class="icon icon-sina-weibo"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <span class="codename">Typescript</span> designed by <a href="http://rakugaki.me/" target="_blank">Art Chen</a>.</div>
+  <div>&copy; <a href="/">JetMuffin&#39;s Blog</a></div>
+  
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+    
+  </div>
+
+  
+<script>
+  var disqus_shortname = 'jetmuffin';
+  
+  var disqus_url = 'http://blog.jetmuffin.com/2016/09/04/go-learning-2/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+<script src="/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "google";
+</script>
+<script src="/js/search.js"></script>
+<script src="/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+  
+</body>
+</html>
