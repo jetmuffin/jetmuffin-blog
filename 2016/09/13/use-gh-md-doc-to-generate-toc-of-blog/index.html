@@ -16,7 +16,7 @@
 <meta property="og:url" content="http://blog.jetmuffin.com/2016/09/13/use-gh-md-doc-to-generate-toc-of-blog/index.html">
 <meta property="og:site_name" content="倦谈">
 <meta property="og:description" content="本篇技巧来自于我在 iQiyi 的云平台部门实习时的内部分享，主要用于文档编写。在开发开源项目或进行团队协作时，总要写一些文档，并把代码托管在 git 上，对于长篇文档希望能够生成文档的结构，这里就用到了一个非常好的插件 gh-md-toc。">
-<meta property="og:updated_time" content="2017-02-17T13:05:25.000Z">
+<meta property="og:updated_time" content="2017-04-06T01:21:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 gh-md-doc 生成 markdown 文章结构">
 <meta name="twitter:description" content="本篇技巧来自于我在 iQiyi 的云平台部门实习时的内部分享，主要用于文档编写。在开发开源项目或进行团队协作时，总要写一些文档，并把代码托管在 git 上，对于长篇文档希望能够生成文档的结构，这里就用到了一个非常好的插件 gh-md-toc。">
@@ -88,7 +88,7 @@
 <p>先看一条命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gh-md-toc file.md | (tail -n +2 &amp;&amp; echo &quot;&quot; &amp;&amp; cat file.md) | sponge file.md</div></pre></td></tr></table></figure>
 <p>你会惊讶的发现，这条命令就完成了所有事，为 file.md 生成了 table of<br>contents，并且自动添加在了 file.md 的头部，并且完美的处理了空行。</p>
-<p>这里使用了一个好工具 <code>sponge</code>，想想为什么不能直接重定向到 file.md 呢？</p>
+<p>这里使用了一个好工具 <code>sponge</code>，需要安装包 <code>moreutils</code>。想想为什么不能直接重定向到 file.md 呢？</p>
 <p>但是，追求极致的程序员不会止步，因为上面的命令中 file.md 这个待处理的文件出现了<br>3 次，所以也挺烦人的，对吧，即使使用命令替换也来得不如一次直接。</p>
 <p>OK，Let’s Rock Again!</p>
 <p>添加一个函数，重定义 gh-md-toc，添加下面的函数定义到你的 shell rc，例如：</p>
