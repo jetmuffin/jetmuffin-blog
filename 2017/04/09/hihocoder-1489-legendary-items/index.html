@@ -10,16 +10,19 @@
   <meta name="HandheldFriendly" content="True" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489">
+  <meta name="description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489
+题目大意是，小 Hi 按一定的初始概率 P 夺宝（成功概率为 P，失败为 1-P，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 Q；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 ⌊P/(2I)⌋（I 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hihocoder 1489 legendary items 微软2017笔试第一场">
 <meta property="og:url" content="http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/index.html">
 <meta property="og:site_name" content="倦谈">
-<meta property="og:description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489">
-<meta property="og:updated_time" content="2017-04-09T12:29:01.000Z">
+<meta property="og:description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489
+题目大意是，小 Hi 按一定的初始概率 P 夺宝（成功概率为 P，失败为 1-P，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 Q；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 ⌊P/(2I)⌋（I 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。">
+<meta property="og:updated_time" content="2017-04-09T12:31:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hihocoder 1489 legendary items 微软2017笔试第一场">
-<meta name="twitter:description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489">
+<meta name="twitter:description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489
+题目大意是，小 Hi 按一定的初始概率 P 夺宝（成功概率为 P，失败为 1-P，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 Q；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 ⌊P/(2I)⌋（I 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -77,8 +80,8 @@
 	<section class="content">
   	<div class="article-entry" itemprop="articleBody">
     	<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址 <a href="http://hihocoder.com/problemset/problem/1489" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1489</a></p>
-<a id="more"></a>
 <p>题目大意是，小 Hi 按一定的初始概率 <code>P</code> 夺宝（成功概率为 <code>P</code>，失败为 <code>1-P</code>，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 <code>Q</code>；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 <code>⌊P/(2I)⌋</code>（<code>I</code> 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。</p>
+<a id="more"></a>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>笔试的时候读题读了半天才弄懂题意，拿到手第一感觉是概率 dp，推一个一维公式推了好长一段时间，然后期间又转战另一个二维的递推方程，结果方程有了，实现的时候写了半天，最后没写出这道题。赛后把两个思路的代码都写完了，这里记录一下这两个思路。</p>
 <h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h3><p><strong>递推方程：</strong></p>
 <p>$$ dp[i, j] = (i / 100) <em> ((dp[next_{i}, j+1] + 1) + ((100 - i) / 100 </em> (dp[i + q] + 1) $$</p>

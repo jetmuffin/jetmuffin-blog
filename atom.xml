@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-04-09T12:29:01.000Z</updated>
+  <updated>2017-04-09T12:31:06.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -20,11 +20,11 @@
     <link href="http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/"/>
     <id>http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/</id>
     <published>2017-04-09T11:39:17.000Z</published>
-    <updated>2017-04-09T12:29:01.000Z</updated>
+    <updated>2017-04-09T12:31:06.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址 <a href="http://hihocoder.com/problemset/problem/1489" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1489</a></p>
-<a id="more"></a>
 <p>题目大意是，小 Hi 按一定的初始概率 <code>P</code> 夺宝（成功概率为 <code>P</code>，失败为 <code>1-P</code>，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 <code>Q</code>；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 <code>⌊P/(2I)⌋</code>（<code>I</code> 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。</p>
+<a id="more"></a>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>笔试的时候读题读了半天才弄懂题意，拿到手第一感觉是概率 dp，推一个一维公式推了好长一段时间，然后期间又转战另一个二维的递推方程，结果方程有了，实现的时候写了半天，最后没写出这道题。赛后把两个思路的代码都写完了，这里记录一下这两个思路。</p>
 <h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h3><p><strong>递推方程：</strong></p>
 <p>$$ dp[i, j] = (i / 100) <em> ((dp[next_{i}, j+1] + 1) + ((100 - i) / 100 </em> (dp[i + q] + 1) $$</p>
@@ -51,6 +51,7 @@
     <summary type="html">
     
       &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;题目地址 &lt;a href=&quot;http://hihocoder.com/problemset/problem/1489&quot;&gt;http://hihocoder.com/problemset/problem/1489&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;题目大意是，小 Hi 按一定的初始概率 &lt;code&gt;P&lt;/code&gt; 夺宝（成功概率为 &lt;code&gt;P&lt;/code&gt;，失败为 &lt;code&gt;1-P&lt;/code&gt;，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 &lt;code&gt;Q&lt;/code&gt;；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 &lt;code&gt;⌊P/(2I)⌋&lt;/code&gt;（&lt;code&gt;I&lt;/code&gt; 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。&lt;/p&gt;
     
     </summary>
     
