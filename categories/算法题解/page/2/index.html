@@ -78,6 +78,35 @@
 
   
   <h2 class="title">
+    <a href="/2015/08/01/hdu-5327-Olympiad-2015-summer-multi-school-trainning/">
+      hdu 5327 Olympiad 2015多校联训第四场 水题
+    </a>
+  </h2>
+  
+  <time>
+    8月 1, 2015
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5327" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=5327</a></p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>求<code>[a,b]</code>范围内，各位都不重复的数字的个数</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>求各位不重复，逐位分解打标记即可；然后对于个数，可以直接打表<code>f[i]</code>表示<code>1-i</code>中符合条件的数的个数，然后对于每次查询，输出<code>f[b]-f[a-1]</code>即可</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">100005</span>;</div><div class="line"><span class="keyword">int</span> f[maxn];</div><div class="line"><span class="keyword">int</span> a[<span class="number">10</span>];</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">  <span class="built_in">memset</span>(a,<span class="number">0</span>,<span class="keyword">sizeof</span>(a));</div><div class="line">  <span class="keyword">while</span>(n)&#123;</div><div class="line">    <span class="keyword">int</span> t = n%<span class="number">10</span>;</div><div class="line">    n /= <span class="number">10</span>;</div><div class="line">    a[t] ++;</div><div class="line">    <span class="keyword">if</span>(a[t] &gt;= <span class="number">2</span>)&#123;</div><div class="line">      <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  f[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= maxn; i++)</div><div class="line">    <span class="keyword">if</span>(check(i))</div><div class="line">      f[i] = f[i<span class="number">-1</span>] + <span class="number">1</span>;</div><div class="line">    <span class="keyword">else</span></div><div class="line">      f[i] = f[i<span class="number">-1</span>];</div><div class="line">  <span class="keyword">int</span> t;</div><div class="line">  <span class="built_in">cin</span>&gt;&gt;t;</div><div class="line">  <span class="keyword">while</span>(t--)&#123;</div><div class="line">    <span class="keyword">int</span> a,b;</div><div class="line">    <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</div><div class="line">    <span class="built_in">cout</span>&lt;&lt;f[b]-f[a<span class="number">-1</span>]&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/多校联训/">多校联训</a><a class="tag-link" href="/tags/水题/">水题</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/08/01/hdu-5317-RGCDQ-2015-multi-school-training/">
       hdu 5317 RGCDQ 2015多校联训第三场 树状数组
     </a>
@@ -669,36 +698,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/期望/">期望</a><a class="tag-link" href="/tags/概率/">概率</a><a class="tag-link" href="/tags/邀请赛/">邀请赛</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/06/06/hdu-5241-Friends-ACM-shanghai-invitation-F/">
-      hdu 5241 Friends ACM上海大都会邀请赛 F题
-    </a>
-  </h2>
-  
-  <time>
-    6月 6, 2015
-  </time>
-  <section class="content">
-	  <p><strong>题目：</strong><a href="http://acm.hdu.edu.cn/showproblem.php?pid=5241">http://acm.hdu.edu.cn/showproblem.php?pid=5241</a></p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/06/06/hdu-5241-Friends-ACM-shanghai-invitation-F/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/结论题/">结论题</a><a class="tag-link" href="/tags/邀请赛/">邀请赛</a>
 	  </div>
     
 

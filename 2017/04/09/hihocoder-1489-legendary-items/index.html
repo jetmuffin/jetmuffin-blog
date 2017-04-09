@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>hihocoder 1489 legendary items 微软2017笔试第一场 | 倦谈</title>
+  <meta name="description" content="JetMuffin's blog." />
+  <meta name="keywords" content="jetmuffin,blog" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hihocoder 1489 legendary items 微软2017笔试第一场">
+<meta property="og:url" content="http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/index.html">
+<meta property="og:site_name" content="倦谈">
+<meta property="og:description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489">
+<meta property="og:updated_time" content="2017-04-09T12:29:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hihocoder 1489 legendary items 微软2017笔试第一场">
+<meta name="twitter:description" content="题目题目地址 http://hihocoder.com/problemset/problem/1489">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("IxqcEzmebHkRECv72mAIKAAk-gzGzoHsz", "JIhGNtTGcnfuLSkHRx70dlVw");</script>
+  
+
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+  <script>setLoadingBarProgress(20)</script>
+  
+  <div id="site-wrapper">
+    
+    <header id="header">
+	<div id="header-wrapper" class="clearfix">
+		<a id="logo" href="/">
+			<img src="/images/logo.png" />
+			<span id="site-desc">
+			  kai zo ku, ore wa naru
+      </span>
+		</a>
+		<button id="site-nav-switch">
+	    <span class="icon icon-menu"></span>
+	  </button>
+	</div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+    
+    <main id="main" role="main">
+      <article id="post-hihocoder-1489-legendary-items"
+  class="post article white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<h2 class="title">
+  	<a href="/2017/04/09/hihocoder-1489-legendary-items/">
+    	hihocoder 1489 legendary items 微软2017笔试第一场
+    </a>
+  </h2>
+	<time>
+	  4月 9, 2017
+	</time>
+	<section class="content">
+  	<div class="article-entry" itemprop="articleBody">
+    	<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址 <a href="http://hihocoder.com/problemset/problem/1489" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1489</a></p>
+<a id="more"></a>
+<p>题目大意是，小 Hi 按一定的初始概率 <code>P</code> 夺宝（成功概率为 <code>P</code>，失败为 <code>1-P</code>，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 <code>Q</code>；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 <code>⌊P/(2I)⌋</code>（<code>I</code> 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>笔试的时候读题读了半天才弄懂题意，拿到手第一感觉是概率 dp，推一个一维公式推了好长一段时间，然后期间又转战另一个二维的递推方程，结果方程有了，实现的时候写了半天，最后没写出这道题。赛后把两个思路的代码都写完了，这里记录一下这两个思路。</p>
+<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h3><p><strong>递推方程：</strong></p>
+<p>$$ dp[i, j] = (i / 100) <em> ((dp[next_{i}, j+1] + 1) + ((100 - i) / 100 </em> (dp[i + q] + 1) $$</p>
+<p>其中 $dp[i,j]$ 表示已经取了 $j$ 个宝物，当前状态闯关成功概率为 $i$ 时还需要 $dp[i,j]$ 步才能取完所有 N 个宝物。</p>
+<p>那么公式中，前半部分为以$i/100$ 的概率闯关成功，那么还需要的步数为现在走的这一步加上下一个状态 $dp[next<em>{i}, j+1]$ 的剩余步数。其中 $next</em>{i}$ 为闯关成功后刷新的下一个状态的成功概率，即 <code>⌊P/(2I)⌋</code>。</p>
+<p>后半部分为以 $(100 - i) / 100$ 概率闯关失败，那么还需要现在走的这一步加上下一个状态 $dp[i + q]$ 的剩余步数。</p>
+<p>那么按这个思路的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">int</span> p, q, n;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1000001</span>;</div><div class="line"><span class="keyword">double</span> dp[<span class="number">101</span>][maxn];</div><div class="line"><span class="keyword">int</span> nxt[maxn];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</div><div class="line">    nxt[<span class="number">0</span>] = p;</div><div class="line">    <span class="keyword">int</span> nxti, nxtii;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = n<span class="number">-1</span>; j &gt;= <span class="number">0</span>; j--) &#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">100</span> ; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">            nxti = nxt[j+<span class="number">1</span>];</div><div class="line">            nxtii = i + q &gt;= <span class="number">100</span>? <span class="number">100</span> : i+q;</div><div class="line"></div><div class="line">            dp[i][j] = (i / <span class="number">100.0</span>) * (dp[nxti][j+<span class="number">1</span>] + <span class="number">1.0</span>) + (<span class="number">100</span> - i) / <span class="number">100.0</span> * (dp[nxtii][j] + <span class="number">1.0</span>);</div><div class="line">            <span class="comment">// printf("(%d %d)-&gt;(%lf %lf %lf %d) ;\n", i, j, (i / 100.0) * (dp[nxti][j+1] + 1), (100 - i) / 100.0 * (dp[min(i + q, 100)][j] + 1), dp[i][j], nxti);</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre</span><span class="params">()</span> </span>&#123;</div><div class="line">    nxt[<span class="number">0</span>] = p;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</div><div class="line">        nxt[i] = nxt[i - <span class="number">1</span>] / <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;p, &amp;q, &amp;n);</div><div class="line">    pre();</div><div class="line">    solve();</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%.2lf\n"</span>, dp[p][<span class="number">0</span>]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>算法的复杂度为 <code>O(100N)</code>，在 <code>1 ≤ N ≤ 1e6</code> 的情况下时间非常吃紧，后来交的几发提交都 T 了。</p>
+<p>实际上从递推方程中可以发现的是，有许多情况下的概率 <code>i</code> 是不会出现的，那么也就没有必要遍历去求。在这个基础上用 dfs 加记忆化去求这个方程可能就可以减少计算量。</p>
+<h3 id="方法-2"><a href="#方法-2" class="headerlink" title="方法 2"></a>方法 2</h3><p><strong>递推方程：</strong></p>
+<p>$$ dp[i] = \sum<em>{j=0}^{(100-s)/q} (s <em> j </em> \prod</em>{k=0}^{j-1}( 1 - (s+k*q))) $$</p>
+<p>其中 $dp[i]$ 表示从取得 $i-1$ 个宝物到取得 $i$ 个物品需要的步数。严格意义上讲这并不是一个 dp，因为事实上每个 $dp[i]$ 是独立的。</p>
+<p>公式中 $s$ 表示手上有 $i-1$ 个物品时的闯关成功概率。</p>
+<p>在手上有 $i-1$ 个物品的情况下，最多失败 $(100-s)/q$ 次。</p>
+<p>而失败 $j$ 次的概率是可以计算的，例如起始闯关成功概率 $s$，失败3次，那么总概率为 $(1-s)<em>(1-s+q)</em>(1-s+2q)*(s+2q)$ 再乘上步数就是期望了。</p>
+<p>最后答案就是 $\sum_{i=0}^n dp[i]$</p>
+<p>根据这个思路写的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1000001</span>;</div><div class="line"><span class="keyword">double</span> dp[maxn];</div><div class="line"><span class="keyword">int</span> nxt[maxn];</div><div class="line"><span class="keyword">int</span> p, q, n;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre</span><span class="params">()</span> </span>&#123;</div><div class="line">    nxt[<span class="number">0</span>] = p;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</div><div class="line">        nxt[i] = nxt[i - <span class="number">1</span>] / <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</div><div class="line">    dp[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</div><div class="line">        <span class="keyword">int</span> cnt = (<span class="number">100</span> - nxt[i<span class="number">-1</span>]) / q;</div><div class="line">        <span class="keyword">if</span>(cnt * q == <span class="number">100</span> - nxt[i<span class="number">-1</span>]) cnt--;</div><div class="line">        cnt++;</div><div class="line">        <span class="comment">// printf("i(%d) cnt(%d)\n", i, cnt);</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= cnt; j++) &#123;</div><div class="line">            <span class="keyword">double</span> t = <span class="number">1.0</span>;</div><div class="line">            <span class="keyword">double</span> s = nxt[i<span class="number">-1</span>] / <span class="number">100.0</span>;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; j; k++) &#123;</div><div class="line">                t *= (<span class="number">1</span> - s);</div><div class="line">                <span class="comment">// printf("i(%d) j(%d) k(%d) %lf\n", i, j, k, 1 - s);</span></div><div class="line">                s += q / <span class="number">100.0</span>;</div><div class="line">            &#125;</div><div class="line">            t *= s &gt; <span class="number">1</span> ? <span class="number">1</span> : s;</div><div class="line">            t *= j + <span class="number">1</span>;</div><div class="line">            <span class="comment">// printf("s(%lf) t(%lf)\n", s, t);</span></div><div class="line">            dp[i] += t;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;p, &amp;q, &amp;n)) &#123;</div><div class="line">        <span class="built_in">memset</span>(dp, <span class="number">0</span>, <span class="keyword">sizeof</span>(dp));</div><div class="line">        pre();</div><div class="line">        solve();</div><div class="line">        <span class="keyword">double</span> ans = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++) &#123;</div><div class="line">            ans += dp[i];</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%.2lf\n"</span>, ans);</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个思路的复杂度为 <code>O(100N/q)</code> 平均情况会比上个方法好。</p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>这场笔试雪崩，虽然还有一年，还是得多练。。</p>
+
+  	</div>
+
+	  <div class="article-tags tags">
+		  
+        <a class="tag-link" href="/tags/概率dp/">概率dp</a>
+      
+	  </div>
+	</section>
+</article>
+
+
+<section id="comments">
+	<div id="disqus_thread"></div>
+</section>
+
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </main>
+    
+    <footer id="footer" class="clearfix">
+  
+  
+	<div class="search">
+	  <form name="searchform" id="searchform" class="u-search-form">
+	    <input type="text" id="searchinput" class="u-search-input" placeholder="Looking for something?" />
+	    <button type="submit" id="u-search-btn-submit" class="u-search-btn-submit">
+	      <span class="icon icon-search"></span>
+	    </button>
+	  </form>
+	</div>
+	
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="mailto:jeffchen328@gmail.com" class="social email"
+          target="_blank" rel="external">
+          <span class="icon icon-email"></span>
+        </a>
+      
+        <a href="https://github.com/JetMuffin" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+        <a href="https://plus.google.com/u/0/104827733284453469708" class="social google"
+          target="_blank" rel="external">
+          <span class="icon icon-google"></span>
+        </a>
+      
+        <a href="http://weibo.com/1922357801" class="social sina-weibo"
+          target="_blank" rel="external">
+          <span class="icon icon-sina-weibo"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <span class="codename">Typescript</span> designed by <a href="http://rakugaki.me/" target="_blank">Art Chen</a>.</div>
+  <div>&copy; <a href="/">倦谈</a></div>
+  
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+
+    <div class="overlay"></div>
+    
+  </div>
+
+  <div class="site-sidebar" id="site-sidebar">
+    <div class="sidebar-switch clearfix" style="display:none"><a class="dark-btn active" data-toggle="toc"><span
+                    class="icon icon-list"></span> <span class="text">Index</span> </a><a class="dark-btn"
+                                                                                          data-toggle="bio"><span
+                    class="icon icon-person"></span> <span class="text">Bio</span></a></div>
+    <div class="site-toc" style="display:none">
+        <div class="no-index">No Index</div>
+    </div>
+    <div class="site-bio show" style="display:block">
+        <div class="about-me clearfix">
+            <div class="avatar"><img src="/images/avatar.jpeg"></div>
+            <div class="info"><a class="name dark-btn" href="/about">JetMuffin</a></div>
+            <div class="info"><span class="item desc">kai zo ku, ore wa naru</span></div>
+        </div>
+        <div class="menu section">
+            <ul class="clearfix">
+                
+                <li class="left"><a href="/" onfocus="this.blur()"
+                                    class="nav-home dark-btn block">Home</a></li>
+
+                
+
+                <li class="right"><a href="/about" onfocus="this.blur()"
+                                     class="nav-about dark-btn block">About</a></li>
+
+                </a>
+                
+                <li class="left"><a href="/archives" onfocus="this.blur()"
+                                    class="nav-archives dark-btn block">Archives</a></li>
+
+                
+
+                <li class="right"><a href="/links" onfocus="this.blur()"
+                                     class="nav-links dark-btn block">Links</a></li>
+
+                </a>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="shortcuts"><a href="#header" class="top window-nav dark-btn" id="go-top"><span
+                    class="icon icon-chevron-thin-up"></span> </a><a class="close dark-btn" id="sidebar-close"><span
+                    class="icon icon-close"></span> </a><a href="#footer" class="top window-nav dark-btn"
+                                                           id="go-bottom"><span
+                    class="icon icon-chevron-thin-down"></span></a></div>
+</div>
+
+  
+<script>
+  var disqus_shortname = 'jetmuffin';
+  
+  var disqus_url = 'http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+<!--page counter part-->
+<script src="/js/leancloud.js"></script>
+<script>
+var Counter = AV.Object.extend("Counter");
+
+if ($('.article').length == 1) {
+  addCount(Counter);
+}
+  
+</script>
+<script src="/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+</script>
+<script src="/js/search.js"></script>
+<script src="/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+  
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

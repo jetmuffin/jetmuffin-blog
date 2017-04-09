@@ -74,6 +74,36 @@
 
   
   <h2 class="title">
+    <a href="/2015/09/05/dijkstra-single-source-shortest-path-optimize-by-heap/">
+      Dijkstra算法 单源最短路径 堆优化
+    </a>
+  </h2>
+  
+  <time>
+    9月 5, 2015
+  </time>
+  <section class="content">
+	  <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Dijkstra是用来解决只含有非负边权的单源最短路径问题。给定一个起始点s，算法可以求出s到其他所有点的最短路径距离。算法结束后会生成一棵最短路径树。<br>
+
+    
+	  <div class="readmore">
+      <a href="/2015/09/05/dijkstra-single-source-shortest-path-optimize-by-heap/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/dijkstra/">dijkstra</a><a class="tag-link" href="/tags/图论/">图论</a><a class="tag-link" href="/tags/最短路径/">最短路径</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/09/04/spfa-single-source-shortest-path-optimize-by-queue/">
       SPFA 单源最短路径 队列优化版Bellman-ford
     </a>
@@ -501,35 +531,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/多校联训/">多校联训</a><a class="tag-link" href="/tags/暴力/">暴力</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/08/01/hdu-5326-Work-2015-summer-multi-school-training/">
-      hdu 5326 Work 2015多校联训第三场 并查集
-    </a>
-  </h2>
-  
-  <time>
-    8月 1, 2015
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5326" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=5326</a></p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>题意非常像裸并查集，每个员工都有一个直系上司，给定员工的管理状态，求管理k个下级员工的员工有多数个</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>本题比并查集简单，不需要用到查询部分，只要进行合并，添加一个子节点时将节点合并至父节点，更新权值即可，因为数据量小，所以直接遍历一遍求<code>a[i] = k</code>的个数就行了</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXN 400</span></div><div class="line"><span class="keyword">int</span> pre[MAXN];</div><div class="line"><span class="keyword">int</span> a[MAXN];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</div><div class="line">    pre[j] = i;</div><div class="line">    a[i]++;</div><div class="line">    <span class="keyword">while</span>(pre[i] != <span class="number">-1</span>)&#123;</div><div class="line">        a[pre[i]]++;</div><div class="line">        i = pre[i];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n,k;</div><div class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;k) != EOF)&#123;</div><div class="line">        <span class="built_in">memset</span>(pre,<span class="number">-1</span>,<span class="keyword">sizeof</span>(pre));</div><div class="line">        <span class="built_in">memset</span>(a,<span class="number">0</span>,<span class="keyword">sizeof</span>(a));</div><div class="line">        <span class="keyword">int</span> x,y;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n<span class="number">-1</span>; i++)&#123;</div><div class="line">            <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;x,&amp;y);</div><div class="line">            merge(x,y);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> cnt = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=n; i++)&#123;</div><div class="line">            <span class="keyword">if</span>(a[i] == k)</div><div class="line">                cnt++;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span>&lt;&lt;cnt&lt;&lt;<span class="built_in">endl</span>;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/并查集/">并查集</a>
 	  </div>
     
 

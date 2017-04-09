@@ -78,6 +78,37 @@
 
   
   <h2 class="title">
+    <a href="/2014/10/30/poj-2248-shortest-addition-chain/">
+      最短加法链问题，POJ2248，BFS，搜索
+    </a>
+  </h2>
+  
+  <time>
+    10月 30, 2014
+  </time>
+  <section class="content">
+	  <p>该题也是算法导论的结课作业，看了一下貌似在POJ上有原题。</p>
+<p>宽搜<code>BFS</code>，因为要找到的是最短的加法链，宽搜是最快速的方法。算法的设计上，因为需要保存路径，所以用结构体<code>node（intid,int val, int pre)，保存每个节点，根据</code>pre<code>和</code>id`的映射关系使得路径成为链式，再宽搜路径即可</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/10/30/poj-2248-shortest-addition-chain/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/bfs/">bfs</a><a class="tag-link" href="/tags/加法链/">加法链</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2014/10/30/least-cost-shopping-dp/">
       最少费用购物问题，裸DP，动态规划
     </a>
@@ -367,37 +398,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a><a class="tag-link" href="/tags/博弈论/">博弈论</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/09/14/hdu-5007-ACM-ICPC-xian-online-a/">
-      hdu5007 ACM-ICPC 西安赛区网赛A题 水题
-    </a>
-  </h2>
-  
-  <time>
-    9月 14, 2014
-  </time>
-  <section class="content">
-	  <p>题意为 只要文章中出现相应词语，就输出语句。第一眼看这题想用字典树，想想不对，后来果断拉了一段KMP代码AC了，后来才发现根本不需要这么复杂KMP，直接每碰到一个‘A’，’i’，‘S’,进行相应判断就好了，不过用KMP直接码一小段代码就可以快速AC也是不错的！</p>
-<p>代码：
-
-    
-	  <div class="readmore">
-      <a href="/2014/09/14/hdu-5007-ACM-ICPC-xian-online-a/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a><a class="tag-link" href="/tags/KMP/">KMP</a>
 	  </div>
     
 
