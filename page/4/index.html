@@ -74,6 +74,36 @@
 
   
   <h2 class="title">
+    <a href="/2015/11/16/use-docker-and-marathon-to-build-web-service-with-data-analysis/">
+      利用Docker和Marathon构建带数据分析的Web应用
+    </a>
+  </h2>
+  
+  <time>
+    11月 16, 2015
+  </time>
+  <section class="content">
+	  <p>利用搭建的Mesos、Marathon和Docker的环境，搭建一个带数据分析模块的Web应用。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/11/16/use-docker-and-marathon-to-build-web-service-with-data-analysis/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/docker/">docker</a><a class="tag-link" href="/tags/marathon/">marathon</a><a class="tag-link" href="/tags/mesos/">mesos</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/11/12/hdu-5546-Acient-go-CCPC-G-BFS/">
       hdu-5546-Acient-go-CCPC-G题-BFS
     </a>
@@ -338,42 +368,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/威尔逊定理/">威尔逊定理</a><a class="tag-link" href="/tags/拓展欧几里得/">拓展欧几里得</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/矩阵快速幂/">矩阵快速幂</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/09/05/floyd-warshall-multi-source-shortest-path/">
-      Floyd-Warshall算法 多源最短路径
-    </a>
-  </h2>
-  
-  <time>
-    9月 5, 2015
-  </time>
-  <section class="content">
-	  <h2 id="算法思路"><a href="#算法思路" class="headerlink" title="算法思路"></a>算法思路</h2><p>Floyd算法的原理即动态规划，令D(i,j)表示从i点到达j点的最短路径长度。那么从i点到达j点有两种可能：</p>
-<ol>
-<li>直接从i到达j不经过中间点k</li>
-<li><p>i经过中间点k到达j，那么需要比较D(i,k)+D(k,j)和D(i,j)的大小并且更新最小值</p>
-<p>我们遍历所有的点k,就可以得到从点i到j的最短路径了，而D数组不需要重新开辟，直接在邻接矩阵g上操作就行了</p>
-</li>
-</ol>
-
-    
-	  <div class="readmore">
-      <a href="/2015/09/05/floyd-warshall-multi-source-shortest-path/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/floyd/">floyd</a><a class="tag-link" href="/tags/图论/">图论</a>
 	  </div>
     
 

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-04-09T12:31:06.000Z</updated>
+  <updated>2017-05-09T15:14:43.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -16,11 +16,232 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>2017 年系统软件与软件体系结构会议收集</title>
+    <link href="http://blog.jetmuffin.com/2017/05/09/archive-of-system-and-architecture-conferences/"/>
+    <id>http://blog.jetmuffin.com/2017/05/09/archive-of-system-and-architecture-conferences/</id>
+    <published>2017-05-09T15:11:35.000Z</published>
+    <updated>2017-05-09T15:14:43.000Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a>
+<h2 id="会议列表"><a href="#会议列表" class="headerlink" title="会议列表"></a>会议列表</h2><table>
+<thead>
+<tr>
+<th>CCF等级</th>
+<th>缩写</th>
+<th>全称</th>
+<th>2016/2017 submission deadline</th>
+<th>主页</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>OSDI</td>
+<td>USENIX Symposium on Operating Systems Design and Implementations</td>
+<td>2016.05.10</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td>ASPLOS</td>
+<td>Architectural Support for Programming Languages and Operating Systems</td>
+<td>2016.04.15</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td><strong>HPCA</strong></td>
+<td>High-Performance Computer Architecture</td>
+<td>2017.07.25</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td>ISCA</td>
+<td>International Symposium on Computer Architecture</td>
+<td>2016.11.18</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td>SC</td>
+<td>International Conference for High Performance Computing, Networking, Storage, and Analysis</td>
+<td>2017.3.1</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td>USENIX ATC</td>
+<td>USENIX Annul Technical Conference</td>
+<td>2017.02.07</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td>PPoPP</td>
+<td>Principles and Practice of Parallel Programming</td>
+<td>2016.08.01</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>SPAA</td>
+<td>ACM Symposium on Parallelism in Algorithms and Architectures</td>
+<td>2017.02.09</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>PODC</td>
+<td>ACM Symposium on Principles of Distributed Computing</td>
+<td>2016.02.09</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>EuroSys</td>
+<td>EoruSys</td>
+<td>2016.10.21</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>HPDC</td>
+<td>High-Performance Distributed Computing</td>
+<td>2017.01.10</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>ICDCS</td>
+<td>International Conference on Distributed Computing Systems</td>
+<td>2016.12.05</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>SIGMETRICS</td>
+<td>International Conference on Measurement and Modeling of Computer Systems</td>
+<td>2016.10.11</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>SOCC</td>
+<td>ACM Symposium on Cloud Computing</td>
+<td>2017.05.05</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>Middleware</td>
+<td>Conference on middleware</td>
+<td>2017.05.29</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>HotOS</td>
+<td>USENIX Workshop on Hot Topics in Operating Systems</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td><strong>Performance</strong></td>
+<td>International Symposium on Computer Performance, Modeling, Measurements and Evaluation</td>
+<td>2017.06.19</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td><strong>ICSOC</strong></td>
+<td>International Conference on Service Oriented Computing</td>
+<td>2017.06.06</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td>ASAP</td>
+<td>Application-Specific Systems, Architectures, and Processors</td>
+<td>2017.04.03</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td>CLUSTER</td>
+<td>Cluster Computing</td>
+<td>2017.05.15</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td>CCGRID</td>
+<td>Cluster Computing and the Grid</td>
+<td>2016.11.16</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td>Euro-Par</td>
+<td>European Conference on Parallel and Distributed Computing</td>
+<td>2017.02.09</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td>HPCC</td>
+<td>IEEE International Conference on High Performance Computing and Communications</td>
+<td>2017.06.01</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td><strong>ICPADS</strong></td>
+<td>International Conference on Parallel and Distributed Systems</td>
+<td>2017.07.01</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td><strong>ISPA</strong></td>
+<td>International Symposium on Parallel and Distributed Processing with Applications</td>
+<td>2017.07.15</td>
+<td></td>
+</tr>
+<tr>
+<td>C</td>
+<td><strong>APSEC</strong></td>
+<td>Asia-Pacific Software Engineering Conference</td>
+<td>2017.06.30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h2><ul>
+<li><a href="https://ying-zhang.github.io/misc/2016-09-we-love-paper/" target="_blank" rel="external">如何收集和整理论文（面向CS专业）- ying-zhang 的博客</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;会议列表&quot;&gt;&lt;a href=&quot;#会议列表&quot; class=&quot;headerlink&quot; title=&quot;会议列表&quot;&gt;&lt;/a&gt;会议列表&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;CCF等级&lt;/th&gt;
+&lt;th&gt;缩写&lt;/th&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>hihocoder 1489 legendary items 微软2017笔试第一场</title>
     <link href="http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/"/>
     <id>http://blog.jetmuffin.com/2017/04/09/hihocoder-1489-legendary-items/</id>
     <published>2017-04-09T11:39:17.000Z</published>
-    <updated>2017-04-09T12:31:06.000Z</updated>
+    <updated>2017-04-09T12:32:01.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址 <a href="http://hihocoder.com/problemset/problem/1489" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1489</a></p>
 <p>题目大意是，小 Hi 按一定的初始概率 <code>P</code> 夺宝（成功概率为 <code>P</code>，失败为 <code>1-P</code>，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 <code>Q</code>；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 <code>⌊P/(2I)⌋</code>（<code>I</code> 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。</p>
@@ -1144,37 +1365,6 @@
       <category term="资源管理" scheme="http://blog.jetmuffin.com/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/"/>
     
       <category term="集群" scheme="http://blog.jetmuffin.com/tags/%E9%9B%86%E7%BE%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OSX系统列举USB设备方法</title>
-    <link href="http://blog.jetmuffin.com/2016/03/13/list-usb-devices-on-mac-os-x/"/>
-    <id>http://blog.jetmuffin.com/2016/03/13/list-usb-devices-on-mac-os-x/</id>
-    <published>2016-03-13T13:38:34.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Linux 用户在列举USB设备时，可以使用<code>lsusb</code>命令来查看所有已经连接的usb设备，或者进入<code>/dev/bus/usb/001</code>之类进行查看。</p>
-<a id="more"></a>
-<p>而在Mac OS下，系统自带的命令则是<code>system_profiler SPUSBDataType</code>，使用这条命令可以查看所有连接的USB设备，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div></pre></td><td class="code"><pre><div class="line"> jeff@promote ⮀ ~ ⮀ system_profiler SPUSBDataType</div><div class="line">USB:</div><div class="line"></div><div class="line">    USB 3.0 Bus:</div><div class="line"></div><div class="line">      BSD Name: en4</div><div class="line">      Host Controller Driver: AppleUSBXHCIWPT</div><div class="line">      PCI Device ID: 0x9cb1</div><div class="line">      PCI Revision ID: 0x0003</div><div class="line">      PCI Vendor ID: 0x8086</div><div class="line"></div><div class="line">        USB3.0 Hub:</div><div class="line"></div><div class="line">          Product ID: 0x0612</div><div class="line">          Vendor ID: 0x05e3  (Genesys Logic, Inc.)</div><div class="line">          Version: 92.16</div><div class="line">          Speed: Up to 5 Gb/sec</div><div class="line">          Manufacturer: GenesysLogic</div><div class="line">          Location ID: 0x14400000 / 6</div><div class="line">          Current Available (mA): 1800</div><div class="line">          Current Required (mA): 0</div><div class="line">          Extra Operating Current (mA): 0</div><div class="line"></div><div class="line">        Bluetooth USB Host Controller:</div><div class="line"></div><div class="line">          Product ID: 0x8290</div><div class="line">          Vendor ID: 0x05ac  (Apple Inc.)</div><div class="line">          Version: 1.11</div><div class="line">          Speed: Up to 12 Mb/sec</div><div class="line">          Manufacturer: Broadcom Corp.</div><div class="line">          Location ID: 0x14300000 / 2</div><div class="line">          Current Available (mA): 1000</div><div class="line">          Current Required (mA): 0</div><div class="line">          Extra Operating Current (mA): 0</div><div class="line">          Built-In: Yes</div><div class="line"></div><div class="line">        Razer DeathAdder:</div><div class="line"></div><div class="line">          Product ID: 0x0016</div><div class="line">          Vendor ID: 0x1532</div><div class="line">          Version: 1.00</div><div class="line">          Speed: Up to 12 Mb/sec</div><div class="line">          Manufacturer: Razer</div><div class="line">          Location ID: 0x14200000 / 4</div><div class="line">          Current Available (mA): 1000</div><div class="line">          Current Required (mA): 100</div><div class="line">          Extra Operating Current (mA): 0</div><div class="line"></div><div class="line">        USB2.0 Hub:</div><div class="line"></div><div class="line">          Product ID: 0x0610</div><div class="line">          Vendor ID: 0x05e3  (Genesys Logic, Inc.)</div><div class="line">          Version: 92.16</div><div class="line">          Speed: Up to 480 Mb/sec</div><div class="line">          Manufacturer: GenesysLogic</div><div class="line">          Location ID: 0x14100000 / 5</div><div class="line">          Current Available (mA): 1000</div><div class="line">          Current Required (mA): 100</div><div class="line">          Extra Operating Current (mA): 0</div><div class="line">          BSD Name: en4</div><div class="line"></div><div class="line">            Apple USB Ethernet Adapter:</div><div class="line"></div><div class="line">              Product ID: 0x1402</div><div class="line">              Vendor ID: 0x05ac  (Apple Inc.)</div><div class="line">              Version: 0.01</div><div class="line">              Serial Number: 1460AB</div><div class="line">              Speed: Up to 480 Mb/sec</div><div class="line">              Manufacturer: Apple Inc.</div><div class="line">              Location ID: 0x14140000 / 7</div><div class="line">              Current Available (mA): 1000</div><div class="line">              Current Required (mA): 250</div><div class="line">              Extra Operating Current (mA): 0</div><div class="line">              BSD Name: en4</div><div class="line"></div><div class="line">            iPhone:</div><div class="line"></div><div class="line">              Product ID: 0x12a8</div><div class="line">              Vendor ID: 0x05ac  (Apple Inc.)</div><div class="line">              Version: 7.02</div><div class="line">              Serial Number: 1ba089f6c8745ae921e95dea83879c7e36b43b9c</div><div class="line">              Speed: Up to 480 Mb/sec</div><div class="line">              Manufacturer: Apple Inc.</div><div class="line">              Location ID: 0x14130000 / 8</div><div class="line">              Current Available (mA): 1000</div><div class="line">              Current Required (mA): 500</div><div class="line">              Extra Operating Current (mA): 0</div><div class="line">              Sleep current (mA): 500</div></pre></td></tr></table></figure>
-<p>而在图形界面上<code>EL Capitan</code>的操作步骤为：</p>
-<ul>
-<li>点击左上角苹果标志</li>
-<li>点击<code>关于本机</code>-&gt; <code>系统报告</code> -&gt; <code>USB</code></li>
-<li>然后则可以查看系统总线上挂载的USB信息了</li>
-</ul>
-<p><strong>最后说下为啥写这个：</strong>最近在研究怎么在<code>docker container</code>中挂载USB，首先要获取总线上的USB设备，这是个开头吧。 </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Linux 用户在列举USB设备时，可以使用&lt;code&gt;lsusb&lt;/code&gt;命令来查看所有已经连接的usb设备，或者进入&lt;code&gt;/dev/bus/usb/001&lt;/code&gt;之类进行查看。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="系统运维" scheme="http://blog.jetmuffin.com/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
