@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-05-10T04:29:01.000Z</updated>
+  <updated>2017-05-15T12:25:32.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.jetmuffin.com/2017/05/09/archive-of-system-and-architecture-conferences/"/>
     <id>http://blog.jetmuffin.com/2017/05/09/archive-of-system-and-architecture-conferences/</id>
     <published>2017-05-09T15:11:35.000Z</published>
-    <updated>2017-05-10T04:29:01.000Z</updated>
+    <updated>2017-05-15T12:25:32.000Z</updated>
     
     <content type="html"><![CDATA[<p>收集整理了系统软件和体系结构方面的会议信息，具体如下：</p>
 <a id="more"></a>
@@ -54,7 +54,7 @@
 <td><strong>HPCA</strong></td>
 <td>High-Performance Computer Architecture</td>
 <td><strong>2017.07.25</strong></td>
-<td></td>
+<td><a href="http://hpca2018.ece.ucsb.edu/" target="_blank" rel="external">HPCA2017</a></td>
 </tr>
 <tr>
 <td>A</td>
@@ -152,14 +152,14 @@
 <td><strong>Performance</strong></td>
 <td>International Symposium on Computer Performance, Modeling, Measurements and Evaluation</td>
 <td><strong>2017.06.19</strong></td>
-<td></td>
+<td><a href="http://performance17.cs.columbia.edu/" target="_blank" rel="external">Performance2017</a></td>
 </tr>
 <tr>
 <td>B</td>
 <td><strong>ICSOC</strong></td>
 <td>International Conference on Service Oriented Computing</td>
 <td><strong>2017.06.06</strong></td>
-<td></td>
+<td><a href="http://www.icsoc.spilab.es/" target="_blank" rel="external">ICSOC2017</a></td>
 </tr>
 <tr>
 <td>C</td>
@@ -191,30 +191,31 @@
 </tr>
 <tr>
 <td>C</td>
-<td>HPCC</td>
+<td><strong>HPCC</strong></td>
 <td>IEEE International Conference on High Performance Computing and Communications</td>
 <td>2017.06.01</td>
-<td></td>
+<td><a href="http://hpcl.seas.gwu.edu/hpcc2017/" target="_blank" rel="external">HPCC2017</a></td>
 </tr>
 <tr>
 <td>C</td>
 <td><strong>ICPADS</strong></td>
 <td>International Conference on Parallel and Distributed Systems</td>
 <td><strong>2017.07.01</strong></td>
-<td></td>
+<td><a href="http://nhpcc.szu.edu.cn/icpads2017/" target="_blank" rel="external">ICPADS2017</a></td>
 </tr>
 <tr>
 <td>C</td>
 <td><strong>ISPA</strong></td>
 <td>International Symposium on Parallel and Distributed Processing with Applications</td>
 <td><strong>2017.07.15</strong></td>
-<td></td>
+<td><a href="http://trust.gzhu.edu.cn/conference/ISPA2017/" target="_blank" rel="external">ISPA2017</a></td>
 </tr>
 <tr>
 <td>C</td>
 <td><strong>APSEC</strong></td>
 <td>Asia-Pacific Software Engineering Conference</td>
 <td><strong>2017.06.30</strong></td>
+<td><a href="http://www.apsec2017.org/" target="_blank" rel="external">APSEC2017</a></td>
 </tr>
 </tbody>
 </table>
