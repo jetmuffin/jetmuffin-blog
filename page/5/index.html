@@ -74,6 +74,36 @@
 
   
   <h2 class="title">
+    <a href="/2015/09/08/HHU-ACM-training-week-five-number-theory-solutions/">
+      HHU ACM第五周 数论专题（二）题解
+    </a>
+  </h2>
+  
+  <time>
+    9月 8, 2015
+  </time>
+  <section class="content">
+	  <h2 id="1000-Zball-in-Tina-Town-HDOJ-5391"><a href="#1000-Zball-in-Tina-Town-HDOJ-5391" class="headerlink" title="1000 Zball in Tina Town HDOJ-5391"></a>1000 Zball in Tina Town <a href="http://acm.hdu.edu.cn/showproblem.php?pid=5391">HDOJ-5391</a></h2><h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>Z-ball在第n天会变为前一天的n倍，求最后的大小mod n，即求(n-1)!%n<br>
+
+    
+	  <div class="readmore">
+      <a href="/2015/09/08/HHU-ACM-training-week-five-number-theory-solutions/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/威尔逊定理/">威尔逊定理</a><a class="tag-link" href="/tags/拓展欧几里得/">拓展欧几里得</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/矩阵快速幂/">矩阵快速幂</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/09/05/floyd-warshall-multi-source-shortest-path/">
       Floyd-Warshall算法 多源最短路径
     </a>
@@ -350,194 +380,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/多校联训/">多校联训</a><a class="tag-link" href="/tags/水题/">水题</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/08/01/hdu-5317-RGCDQ-2015-multi-school-training/">
-      hdu 5317 RGCDQ 2015多校联训第三场 树状数组
-    </a>
-  </h2>
-  
-  <time>
-    8月 1, 2015
-  </time>
-  <section class="content">
-	  <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
-
-<span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">1000010</span>;
-<span class="keyword">int</span> c[MAXN];
-<span class="keyword">int</span> n;
-<span class="keyword">bool</span> test[MAXN];
-<span class="keyword">int</span> tot,factor_num;
-<span class="keyword">int</span> prim[<span class="number">500000</span>];
-
-<span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span>
-</span>{
-    <span class="keyword">return</span> x&amp;(-x);
-}
-
-<span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> val)</span>
-</span>{
-    <span class="keyword">while</span>(i &lt;= n)
-    {
-        c[i] = max(c[i],val);
-        i += lowbit(i);
-    }
-}
-
-<span class="function"><span class="keyword">int</span> <span class="title">Max</span><span class="params">(<span class="keyword">int</span> i)</span>
-</span>{
-    <span class="keyword">int</span> s = <span class="number">0</span>;
-    <span class="keyword">while</span>(i &gt; <span class="number">0</span>)
-    {
-        s = max(s,c[i]);
-        i -= lowbit(i);
-    }
-    <span class="keyword">return</span> s;
-}
-
-<span class="keyword">int</span> a[MAXN];
-<span class="keyword">int</span> b[MAXN];
-<span class="keyword">int</span> ans[MAXN];
-
-<span class="keyword">struct</span> Node
-{
-    <span class="keyword">int</span> l,r;
-    <span class="keyword">int</span> index;
-}node[MAXN];
-
-<span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(Node a,Node b)</span>
-</span>{
-    <span class="keyword">return</span> a.l &gt; b.l;
-}
-
-<span class="function"><span class="keyword">void</span> <span class="title">getPrim</span><span class="params">()</span>
-</span>{
-    <span class="built_in">memset</span>(test,<span class="literal">true</span>,<span class="keyword">sizeof</span>(test));
-    <span class="built_in">memset</span>(prim,<span class="number">0</span>,<span class="keyword">sizeof</span>(prim));
-    tot = <span class="number">0</span>;
-    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)
-    {
-        <span class="keyword">if</span> (test[i])
-        {
-                    prim[tot] = i;
-                    tot++;
-        }
-        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;(j&lt;tot &amp;&amp; i*prim[j]&lt;=n);j++)
-        {
-            test[i*prim[j]] = <span class="literal">false</span>;
-            <span class="keyword">if</span> (i%prim[j]==<span class="number">0</span>)
-            <span class="keyword">break</span>;
-        }
-    }
-}
-
-<span class="function"><span class="keyword">void</span> <span class="title">resolve</span><span class="params">(<span class="keyword">int</span> now)</span>
-</span>{
-     factor_num = <span class="number">0</span>;
-     <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;tot;i++)
-     {
-         <span class="keyword">if</span> (test[now])
-         {
-               factor_num++;
-               <span class="keyword">return</span>;
-         }
-         <span class="keyword">if</span> (now%prim[i]==<span class="number">0</span>)
-         {
-               factor_num++;
-         }
-         <span class="keyword">while</span> (now%prim[i]==<span class="number">0</span>)
-         {
-               now=now/prim[i];
-         }
-         <span class="keyword">if</span> (prim[i]&gt;now)
-            <span class="keyword">break</span>;
-      }
-}
-
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-    <span class="keyword">int</span> T;
-    n = <span class="number">0</span>;
-    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;T);
-    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;T;i++)
-    {
-        <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;node[i].l,&amp;node[i].r);
-        node[i].index = i;
-        <span class="keyword">if</span> (node[i].r&gt;n)
-            n = node[i].r;
-    }
-    getPrim();
-    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)
-    {
-        resolve(i);
-        a[i] = factor_num;
-    }
-    sort(node,node+T,cmp);
-    <span class="keyword">int</span> i = n;
-    <span class="keyword">int</span> j = <span class="number">0</span>;
-    <span class="built_in">memset</span>(b,<span class="number">0</span>,<span class="keyword">sizeof</span>(b));
-    <span class="built_in">memset</span>(c,<span class="number">0</span>,<span class="keyword">sizeof</span>(c));
-    <span class="keyword">while</span>(j &lt; T)
-    {
-        <span class="keyword">while</span>(i &gt; <span class="number">1</span> &amp;&amp; i&gt;= node[j].l)
-        {
-            <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">1</span>;k*k&lt;=a[i];k++)
-            {
-                <span class="keyword">if</span>(a[i]%k==<span class="number">0</span>)
-                {
-                    <span class="keyword">if</span>(b[k]!=<span class="number">0</span>)
-                    {
-                        add(b[k],k);
-                    }
-                    b[k] = i;
-                    <span class="keyword">if</span>(k!=a[i]/k)
-                    {
-                        <span class="keyword">if</span>(b[a[i]/k]!=<span class="number">0</span>)
-                        {
-                            add(b[a[i]/k],a[i]/k);
-                        }
-                        b[a[i]/k]=i;
-                    }
-                }
-            }
-            i--;
-        }
-        <span class="keyword">while</span>(j&lt;T &amp;&amp; node[j].l&gt;i)
-        {
-            ans[node[j].index]=Max(node[j].r);
-            j++;
-        }
-    }
-    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;T;i++)
-        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans[i]);
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre>
-
-
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/因数分解/">因数分解</a><a class="tag-link" href="/tags/多校联训/">多校联训</a><a class="tag-link" href="/tags/树状数组/">树状数组</a>
 	  </div>
     
 

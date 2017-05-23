@@ -70,6 +70,39 @@
 
 <section class="post-list">
 	
+    <article class="post no-title">
+
+  
+  <time>
+    11月 28, 2014
+  </time>
+  <section class="content">
+	  <p>鞍山赛区比赛的时候这题没有任何思路，比赛结束后clj提到了单色三角，后来在做白书的训练指南时候看到了这点，然后就把这题写一写。</p>
+<p>用到的几个知识点：</p>
+<ol>
+<li><p>单色三角</p>
+<p> 平面中n个点没有三点共线，每两个点染白边或者染黑边，求单色三角形的数量。</p>
+<p> 事实上只要求非单色三角形，因为一个公共点的两条异色边总是唯一且对应一个非单色三角形，因此第i个点连接了a条白边，n-1-a条黑边，这些边属于a<em>(n-1-a)个非单色三角形，因此答案是C(3,n)-sigma(ai</em>(n-1-ai))。</p>
+</li>
+<li><p>容斥原理</p>
+<p> 这里用的容斥原理和hdu4135的题目相似。即求1-n中有多少个数与k互质。</p>
+<p> 求法就是将k分解质因数，然后对于其质因数的每一个组合，求多少个数可以被整除，最后用容斥原理相加可得不互质的数量，也就能得到答案了。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/11/28/hdu-5072-Coprime-2014-anshan-reigion-C/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/单色三角/">单色三角</a><a class="tag-link" href="/tags/容斥原理/">容斥原理</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
     <article class="post ">
 
   
@@ -360,37 +393,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/ACM/">ACM</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/10/22/solution-to-cannot-save-on-row-editing/">
-      extjs 解决rowEditing不满足allowBlank时，无法save的问题
-    </a>
-  </h2>
-  
-  <time>
-    10月 22, 2014
-  </time>
-  <section class="content">
-	  <p><span style="white-space:pre"></span>最近一个项目使用了extjs，在用rowEditing的时候遇到了棘手的问题，当某一column的editor使用了属性allowBlank:true时，启用编辑时会报错（“该行不能为空”），这时save按钮是灰色的无法提交。然而填了该行，save仍然无法提交。</p>
-<p><span style="white-space:pre"></span>经过google之后发现这是个bug，最好的解决方法就是重写rowEditing~ORZ</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/10/22/solution-to-cannot-save-on-row-editing/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/extjs/">extjs</a><a class="tag-link" href="/tags/web前端/">web前端</a>
 	  </div>
     
 

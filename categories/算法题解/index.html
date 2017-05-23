@@ -78,6 +78,36 @@
 
   
   <h2 class="title">
+    <a href="/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/">
+      fzu 2214 super capacitated knapsack problem
+    </a>
+  </h2>
+  
+  <time>
+    5月 23, 2017
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=2214">Problem 2214 Knapsack problem</a></p>
+
+    
+	  <div class="readmore">
+      <a href="/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/dp/">dp</a><a class="tag-link" href="/tags/背包/">背包</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2017/04/09/hihocoder-1489-legendary-items/">
       hihocoder 1489 legendary items 微软2017笔试第一场
     </a>
@@ -348,42 +378,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/最小公倍数/">最小公倍数</a><a class="tag-link" href="/tags/群论/">群论</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/08/01/hdu-5328-Problem-Killer-2015-summer-multi-school-trainning/">
-      hdu 5328 Problem Killer 2015多校联训第四场 等差数列等比数列
-    </a>
-  </h2>
-  
-  <time>
-    8月 1, 2015
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5328" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=5328</a></p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定一个序列，求其中等差数列或者等比数列的最大长度</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>思路很明确，对于从第二个起的输入数字，计算与前一个数的差和比，然后向后比较计数。值得一提的是，这题的数据非常严格，有很多的坑。下面列举以下：</p>
-<ul>
-<li>坑一：输入输出一定要scanf+printf，不然铁定超时</li>
-<li>坑二：等比数列比值要用浮点数，浮点数相等比较要用精度，即<code>fabs(a-b)&lt;eps</code></li>
-<li>坑三：用double不知为何TLE了好多发</li>
-<li>坑四：精度太低会WA，1e-6才能过</li>
-<li>坑五：精度过高同样会TLE</li>
-</ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></div><div class="line"><span class="keyword">const</span> <span class="keyword">float</span> eps = <span class="number">0.000001</span>;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> t;</div><div class="line"><span class="comment">//    cin&gt;&gt;t;</span></div><div class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;t);</div><div class="line">    <span class="keyword">double</span> ap,gp;</div><div class="line">    <span class="keyword">int</span> nap,ngp;</div><div class="line">    <span class="keyword">int</span> max_nap,max_ngp;</div><div class="line">    <span class="keyword">double</span> fi,se,ne;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    <span class="keyword">while</span>(t--)&#123;</div><div class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n);</div><div class="line">        n--;</div><div class="line">        <span class="built_in">scanf</span>(<span class="string">"%lf"</span>,&amp;fi);</div><div class="line"></div><div class="line">        nap = <span class="number">1</span>;</div><div class="line">        ap = <span class="number">-1</span>;</div><div class="line">        max_nap = <span class="number">0</span>;</div><div class="line"></div><div class="line">        ngp = <span class="number">1</span>;</div><div class="line">        gp = <span class="number">-1</span>;</div><div class="line">        max_ngp = <span class="number">0</span>;</div><div class="line"></div><div class="line">        <span class="keyword">bool</span> iaSecond = <span class="literal">true</span>,ibSecond = <span class="literal">true</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span>(n--)&#123;</div><div class="line">            <span class="built_in">scanf</span>(<span class="string">"%lf"</span>,&amp;ne);</div><div class="line"></div><div class="line">            <span class="comment">//ap</span></div><div class="line">            <span class="keyword">if</span>(iaSecond)&#123;</div><div class="line">                iaSecond = <span class="literal">false</span>;</div><div class="line">                ap = ne - fi;</div><div class="line">                nap = <span class="number">2</span>;</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                <span class="keyword">if</span>(<span class="built_in">fabs</span>(ap - (ne - se)) &lt; eps)&#123;</div><div class="line">                    nap++;</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    ap = ne-se;</div><div class="line">                    max_nap = max_nap&gt;nap?max_nap:nap;</div><div class="line">                    nap = <span class="number">2</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//gp</span></div><div class="line">            <span class="keyword">if</span>(ibSecond)&#123;</div><div class="line">                ibSecond = <span class="literal">false</span>;</div><div class="line">                gp = ne / fi;</div><div class="line">                ngp = <span class="number">2</span>;</div><div class="line">                <span class="comment">// cout &lt;&lt; ne/fi &lt;&lt;endl;</span></div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                <span class="comment">// cout &lt;&lt; ne/se &lt;&lt;endl;</span></div><div class="line">                <span class="comment">// cout&lt;&lt;fabs(gp - (ne / se))&lt;&lt;endl;</span></div><div class="line">                <span class="keyword">if</span>(<span class="built_in">fabs</span>(gp - (ne / se)) &lt; eps)&#123;</div><div class="line">                    ngp++; </div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    gp = ne/se;</div><div class="line">                    max_ngp = max_ngp&gt;ngp?max_ngp:ngp;</div><div class="line">                    ngp = <span class="number">2</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            se = ne;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        max_nap = max_nap&gt;nap?max_nap:nap;</div><div class="line">        max_ngp = max_ngp&gt;ngp?max_ngp:ngp;</div><div class="line">        <span class="keyword">if</span>(max_nap &gt; max_ngp)</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, max_nap);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, max_ngp);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/多校联训/">多校联训</a><a class="tag-link" href="/tags/等差数列/">等差数列</a><a class="tag-link" href="/tags/等比数列/">等比数列</a>
 	  </div>
     
 

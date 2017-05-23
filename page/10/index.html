@@ -74,6 +74,37 @@
 
   
   <h2 class="title">
+    <a href="/2014/10/22/solution-to-cannot-save-on-row-editing/">
+      extjs 解决rowEditing不满足allowBlank时，无法save的问题
+    </a>
+  </h2>
+  
+  <time>
+    10月 22, 2014
+  </time>
+  <section class="content">
+	  <p><span style="white-space:pre"></span>最近一个项目使用了extjs，在用rowEditing的时候遇到了棘手的问题，当某一column的editor使用了属性allowBlank:true时，启用编辑时会报错（“该行不能为空”），这时save按钮是灰色的无法提交。然而填了该行，save仍然无法提交。</p>
+<p><span style="white-space:pre"></span>经过google之后发现这是个bug，最好的解决方法就是重写rowEditing~ORZ</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/10/22/solution-to-cannot-save-on-row-editing/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/extjs/">extjs</a><a class="tag-link" href="/tags/web前端/">web前端</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2014/10/22/usage-of-set-and-map-in-stl/">
       stl set和map应用记录
     </a>
@@ -363,39 +394,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/dfs/">dfs</a><a class="tag-link" href="/tags/剪枝/">剪枝</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/09/14/hdu-5012-ACM-ICPC-Xian-region-E-Dice/">
-      hdu5012 ACM-ICPC 西安赛区E题 Dice
-    </a>
-  </h2>
-  
-  <time>
-    9月 14, 2014
-  </time>
-  <section class="content">
-	  <p>题目的意思是给定骰子的一个开始状态（六个面的数字），再给定另一个结束状态，问从初始到结束状态最少要走几步，只能前后左右翻滚。</p>
-<p>一开始做题想简单了，以为模拟所有方案就可以了，后来发现模拟的越多越乱，结果没A出来。</p>
-<p>比赛结束后尝试BFS+Hash(记忆化搜索)，先确定四种操作各改变的数组元素，然后搜索，便可以A了。</p>
-<p>代码不够优美，毕竟菜鸟：</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/09/14/hdu-5012-ACM-ICPC-Xian-region-E-Dice/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a><a class="tag-link" href="/tags/bfs/">bfs</a>
 	  </div>
     
 

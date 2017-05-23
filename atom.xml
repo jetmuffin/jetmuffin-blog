@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-05-15T12:25:32.000Z</updated>
+  <updated>2017-05-23T12:39:53.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -14,6 +14,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>fzu 2214 super capacitated knapsack problem</title>
+    <link href="http://blog.jetmuffin.com/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/"/>
+    <id>http://blog.jetmuffin.com/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/</id>
+    <published>2017-05-23T12:38:49.000Z</published>
+    <updated>2017-05-23T12:39:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=2214" target="_blank" rel="external">Problem 2214 Knapsack problem</a></p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题目的意思和普通的 01 背包一模一样，不过在背包的容量上非常大，我们知道传统的 01 背包复杂度为 $o(wn)$，而在题目中 w 的范围达到了 $10^9$，因此传统 01 背包肯定是会超时的。</p>
+<p>这道题比较有意思的地方是，思路是从反方向思考，颠倒了 01 背包的方向。</p>
+<p>传统 01 背包里，递推公式为 $dp_j=max(dp<em>j, dp</em>{j-w_i}+v<em>i)$，而在超大背包中，我们可以先算出物品的总价值 $v</em>{sum}$，再将价值作为物品，物品作为价值，即计算得到价值为 $j$ 时的最小容量 $dp_j$。递推公式为 $dp_j=min(dp<em>j, dp</em>{j-v_i}+w_i)$。</p>
+<p>最后，遍历 $j$，找到第一个 $dp<em>j &lt; w</em>{total}$ 就是我们需要求的最大价值了。</p>
+<p>这样总体复杂度为 $o(v_{sum}n)$</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">5100</span>;</div><div class="line"><span class="keyword">const</span> ll inf = <span class="number">1000000100</span>;</div><div class="line">ll w[maxn], v[maxn], dp[maxn];</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> t, n;</div><div class="line">    ll p;</div><div class="line">    <span class="comment">// scanf("%d", &amp;t);</span></div><div class="line">    <span class="built_in">cin</span>&gt;&gt;t;</div><div class="line">    <span class="keyword">while</span>(t--) &#123;</div><div class="line">        <span class="comment">// scanf("%d%lld", &amp;n, &amp;p);</span></div><div class="line">        <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;p;</div><div class="line"></div><div class="line">        ll sum = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="comment">// scanf("%lld%lld", &amp;w[i], &amp;v[i]);</span></div><div class="line">            <span class="built_in">cin</span>&gt;&gt;w[i]&gt;&gt;v[i];</div><div class="line">            sum += v[i];</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">memset</span>(dp , <span class="number">0x3f3f3f3f</span> , <span class="keyword">sizeof</span>(dp));</div><div class="line">        dp[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = sum; j &gt;= v[i]; j--) &#123;</div><div class="line">                dp[j] = min(dp[j], dp[j - v[i]] + w[i]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = sum; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">            <span class="keyword">if</span>(dp[i] &lt;= p) &#123;</div><div class="line">                <span class="comment">// printf("%d\n", i);</span></div><div class="line">                <span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://acm.fzu.edu.cn/problem.php?pid=2214&quot;&gt;Problem 2214 Knapsack problem&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法题解" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
+    
+    
+      <category term="dp" scheme="http://blog.jetmuffin.com/tags/dp/"/>
+    
+      <category term="背包" scheme="http://blog.jetmuffin.com/tags/%E8%83%8C%E5%8C%85/"/>
+    
+  </entry>
   
   <entry>
     <title>2017 年系统软件与软件体系结构会议收集</title>
@@ -1289,79 +1320,6 @@
       <category term="网络" scheme="http://blog.jetmuffin.com/tags/%E7%BD%91%E7%BB%9C/"/>
     
       <category term="InfiniBand" scheme="http://blog.jetmuffin.com/tags/InfiniBand/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用slurm进行集群的资源管理（vagrant）</title>
-    <link href="http://blog.jetmuffin.com/2016/05/30/install-and-use-slurm-on-ubuntu/"/>
-    <id>http://blog.jetmuffin.com/2016/05/30/install-and-use-slurm-on-ubuntu/</id>
-    <published>2016-05-30T01:42:48.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
-<p>SLURM 是一种可用于大型计算节点集群的高度可伸缩和容错的集群管理器和作业调度系统。SLURM 维护着一个待处理工作的队列并管理此工作的整体资源利用。它还以一种排他或非排他的方式管理可用的计算节点（取决于资源的需求）。最后，SLURM 将作业分发给一组已分配的节点来执行工作并监视平行作业至其完成。</p>
-</blockquote>
-<a id="more"></a>
-<p>slrum相当于一个集群管理器，可以伸缩至大型节点集群，容错好，而更重要的是他开源。而现在，slurm已经成为很多强大的超级计算机上使用的资源管理器。</p>
-<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="http://www.ibm.com/developerworks/cn/linux/l-slurm-utility/figure2.gif" alt="slurm架构"><br>slurm的架构和一般的集群管理架构相类似，顶部是一对冗余集群控制器，它充当计算集群的管理器并实现一个管理守护程序（<code>slurmctld</code>），<code>slurmctld</code>提供了对计算资源的监视，同时它将进入的作业映射到基本的计算资源。</p>
-<p>此外，每个计算节点上有一个守护程序<code>slurmd</code>，<code>slurmd</code>负责管理在其上执行的节点包括运行的任务，来自控制器的工作，以及接受控制器的请求等。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装上，为了模拟集群的环境，需要使用多个节点，所以我们用<code>vagrant</code>创建多个虚拟机。<code>Vagrantfile</code>如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># -*- mode: ruby -*-</div><div class="line"># vi: set ft=ruby :</div><div class="line">Vagrant.configure(2) do |config|</div><div class="line">  config.vm.box = &quot;ubuntu/trusty64&quot;</div><div class="line">  config.ssh.insert_key = false</div><div class="line">  config.vm.define &quot;master&quot; do |node|</div><div class="line">	node.vm.network &quot;private_network&quot;, ip: &quot;192.168.10.10&quot;</div><div class="line">	node.vm.hostname = &quot;master&quot;</div><div class="line">	node.vm.provider &quot;virtualbox&quot; do |v|</div><div class="line">	  v.memory = 2048</div><div class="line">	  v.cpus = 2</div><div class="line">	end</div><div class="line">  end</div><div class="line">  config.vm.define &quot;compute&quot; do |slave|</div><div class="line">	slave.vm.network &quot;private_network&quot;, ip: &quot;192.168.10.11&quot;</div><div class="line">	slave.vm.hostname = &quot;compute&quot;</div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure>
-<p>分别使用<code>vagrant up master</code>和<code>vagrant up compute</code>启动控制节点和计算节点。</p>
-<p>Ubuntu源里提供了munge，所以可以直接通过源进行安装。在控制节点和计算节点分别安装slurm包，这个包里包含了<code>slurmctld</code>和<code>slurmd</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install slurm-llnl</div></pre></td></tr></table></figure>
-<p>由于计算节点和控制节点需要通信，而通信之间需要进行认证，所以这里需要生成key并启动认证服务。这里使用的是llnl的munge。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo create-munge-key</div><div class="line">Generating a pseudo-random key using /dev/urandom complete.</div></pre></td></tr></table></figure>
-<p>然后启动munge的认证服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo service munge start</div></pre></td></tr></table></figure>
-<p>接下来配置slurm的配置文件，然而笔者在使用时，slrum的配置工具<a href="https://computing.llnl.gov/linux/slurm/configurator.html" target="_blank" rel="external">Slurm Configuration Tool</a>失效了，所以可以去slurm的源码里复制一份<a href="https://github.com/SchedMD/slurm/blob/master/etc/slurm.conf.example" target="_blank" rel="external">example</a>。我的配置文件如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">ClusterName=vagrant</div><div class="line">ControlMachine=master</div><div class="line">#ControlAddr=</div><div class="line">#</div><div class="line">SlurmUser=slurm</div><div class="line">SlurmctldPort=6817</div><div class="line">SlurmdPort=6818</div><div class="line">AuthType=auth/munge</div><div class="line">StateSaveLocation=/tmp</div><div class="line">SlurmdSpoolDir=/tmp/slurmd</div><div class="line">SwitchType=switch/none</div><div class="line">MpiDefault=none</div><div class="line">SlurmctldPidFile=/var/run/slurmctld.pid</div><div class="line">SlurmdPidFile=/var/run/slurmd.pid</div><div class="line">ProctrackType=proctrack/pgid</div><div class="line">ReturnToService=0</div><div class="line">#</div><div class="line"># TIMERS</div><div class="line">SlurmctldTimeout=300</div><div class="line">SlurmdTimeout=300</div><div class="line">InactiveLimit=0</div><div class="line">MinJobAge=300</div><div class="line">KillWait=30</div><div class="line">Waittime=0</div><div class="line">#</div><div class="line"># SCHEDULING</div><div class="line">SchedulerType=sched/backfill</div><div class="line">SelectType=select/linear</div><div class="line">FastSchedule=1</div><div class="line">#</div><div class="line"># LOGGING</div><div class="line">SlurmctldDebug=3</div><div class="line">SlurmdDebug=3</div><div class="line">JobCompType=jobcomp/none</div><div class="line">#</div><div class="line"># ACCOUNTING</div><div class="line">#</div><div class="line"># COMPUTE NODES</div><div class="line">NodeName=compute Procs=1 State=UNKNOWN</div><div class="line">PartitionName=debug Nodes=compute Default=YES MaxTime=INFINITE State=UP</div></pre></td></tr></table></figure>
-<p>这份配置文件在计算节点上同样要使用，所以要复制到计算节点上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo scp /etc/slurm-llnl/slurm.conf vagrant@compute/~</div></pre></td></tr></table></figure>
-<p>然后启动控制节点上的slurmctld服务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo service slurm-llnl start</div><div class="line">* Starting slurm central management daemon slurmctld</div></pre></td></tr></table></figure>
-<p>接着是计算节点的配置，同样需要使用munge，将控制节点生成的<code>munge.key</code>拷贝到计算节点上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo scp /etc/munge/munge.key vagrant@compute:/~</div></pre></td></tr></table></figure>
-<p>然后进入计算节点，将<code>munge.key</code>拷贝到munge的目录并启动munge,<strong>注意要修改key的owner和group为munge</strong>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo mv ~/munge.key /etc/munge/</div><div class="line">$ sudo chown munge:munge /etc/munge/munge.key</div></pre></td></tr></table></figure>
-<p>然后就可以启动munge服务了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo service munge start</div></pre></td></tr></table></figure>
-<p>再将之前复制的<code>slurm.conf</code>放到指定位置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mv ~/slurm.conf /etc/slurm-llnl/slurm.conf</div></pre></td></tr></table></figure>
-<p>接着启动计算节点上的slurmd</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo service slurm-llnl start</div></pre></td></tr></table></figure>
-<p>这样，slurm就配置完毕了。</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>这里就简单测试下slurm的功能（在控制节点上运行），首先运行<code>sinfo</code>查看集群状况。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sinfo</div><div class="line">PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST</div><div class="line">debug*       up   infinite      1   idle compute</div></pre></td></tr></table></figure>
-<p>然后启动一个任务（<code>/bin/hostname</code>）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ srun -N1 /bin/hostname</div><div class="line">compute</div></pre></td></tr></table></figure>
-<h2 id="错误与解决方案"><a href="#错误与解决方案" class="headerlink" title="错误与解决方案"></a>错误与解决方案</h2><p><strong>1. 启动munge报错误munged: Error: Logfile is insecure: group-writable permissions set on “/var/log”</strong></p>
-<p>在Ubuntu 14.04下启动munge会出现以下错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo service munge start</div><div class="line"> * Starting MUNGE munged [fail]</div><div class="line">munged: Error: Logfile is insecure: group-writable permissions set on &quot;/var/log&quot;</div></pre></td></tr></table></figure>
-<p>原因是因为Ubuntu 14.04将<code>/var/log</code>目录的权限从0755 root:root调整为0755 root:syslog，因此直接启动会报group-writable permissions的错误。</p>
-<p>解决方案是启动munge时加上<code>--force</code>或<code>--syslog</code>的参数。</p>
-<ul>
-<li><code>--force</code>会将errors转为warnings，跳过错误</li>
-<li><code>--syslog</code>会跳过<code>/var/log</code>目录的权限检查</li>
-</ul>
-<p>如果是使用<code>/etc/init.d/munge start</code>或者<code>service munge start</code>的话，可以将Option写到配置文件<code>/etc/default/munge</code>里：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">OPTIONS=&quot;--force&quot;</div></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;SLURM 是一种可用于大型计算节点集群的高度可伸缩和容错的集群管理器和作业调度系统。SLURM 维护着一个待处理工作的队列并管理此工作的整体资源利用。它还以一种排他或非排他的方式管理可用的计算节点（取决于资源的需求）。最后，SLURM 将作业分发给一组已分配的节点来执行工作并监视平行作业至其完成。&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="基础架构" scheme="http://blog.jetmuffin.com/categories/%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84/"/>
-    
-    
-      <category term="资源管理" scheme="http://blog.jetmuffin.com/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/"/>
-    
-      <category term="集群" scheme="http://blog.jetmuffin.com/tags/%E9%9B%86%E7%BE%A4/"/>
     
   </entry>
   

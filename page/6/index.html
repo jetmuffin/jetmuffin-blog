@@ -74,6 +74,194 @@
 
   
   <h2 class="title">
+    <a href="/2015/08/01/hdu-5317-RGCDQ-2015-multi-school-training/">
+      hdu 5317 RGCDQ 2015多校联训第三场 树状数组
+    </a>
+  </h2>
+  
+  <time>
+    8月 1, 2015
+  </time>
+  <section class="content">
+	  <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+<span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">1000010</span>;
+<span class="keyword">int</span> c[MAXN];
+<span class="keyword">int</span> n;
+<span class="keyword">bool</span> test[MAXN];
+<span class="keyword">int</span> tot,factor_num;
+<span class="keyword">int</span> prim[<span class="number">500000</span>];
+
+<span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span>
+</span>{
+    <span class="keyword">return</span> x&amp;(-x);
+}
+
+<span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> val)</span>
+</span>{
+    <span class="keyword">while</span>(i &lt;= n)
+    {
+        c[i] = max(c[i],val);
+        i += lowbit(i);
+    }
+}
+
+<span class="function"><span class="keyword">int</span> <span class="title">Max</span><span class="params">(<span class="keyword">int</span> i)</span>
+</span>{
+    <span class="keyword">int</span> s = <span class="number">0</span>;
+    <span class="keyword">while</span>(i &gt; <span class="number">0</span>)
+    {
+        s = max(s,c[i]);
+        i -= lowbit(i);
+    }
+    <span class="keyword">return</span> s;
+}
+
+<span class="keyword">int</span> a[MAXN];
+<span class="keyword">int</span> b[MAXN];
+<span class="keyword">int</span> ans[MAXN];
+
+<span class="keyword">struct</span> Node
+{
+    <span class="keyword">int</span> l,r;
+    <span class="keyword">int</span> index;
+}node[MAXN];
+
+<span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(Node a,Node b)</span>
+</span>{
+    <span class="keyword">return</span> a.l &gt; b.l;
+}
+
+<span class="function"><span class="keyword">void</span> <span class="title">getPrim</span><span class="params">()</span>
+</span>{
+    <span class="built_in">memset</span>(test,<span class="literal">true</span>,<span class="keyword">sizeof</span>(test));
+    <span class="built_in">memset</span>(prim,<span class="number">0</span>,<span class="keyword">sizeof</span>(prim));
+    tot = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)
+    {
+        <span class="keyword">if</span> (test[i])
+        {
+                    prim[tot] = i;
+                    tot++;
+        }
+        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;(j&lt;tot &amp;&amp; i*prim[j]&lt;=n);j++)
+        {
+            test[i*prim[j]] = <span class="literal">false</span>;
+            <span class="keyword">if</span> (i%prim[j]==<span class="number">0</span>)
+            <span class="keyword">break</span>;
+        }
+    }
+}
+
+<span class="function"><span class="keyword">void</span> <span class="title">resolve</span><span class="params">(<span class="keyword">int</span> now)</span>
+</span>{
+     factor_num = <span class="number">0</span>;
+     <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;tot;i++)
+     {
+         <span class="keyword">if</span> (test[now])
+         {
+               factor_num++;
+               <span class="keyword">return</span>;
+         }
+         <span class="keyword">if</span> (now%prim[i]==<span class="number">0</span>)
+         {
+               factor_num++;
+         }
+         <span class="keyword">while</span> (now%prim[i]==<span class="number">0</span>)
+         {
+               now=now/prim[i];
+         }
+         <span class="keyword">if</span> (prim[i]&gt;now)
+            <span class="keyword">break</span>;
+      }
+}
+
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+    <span class="keyword">int</span> T;
+    n = <span class="number">0</span>;
+    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;T);
+    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;T;i++)
+    {
+        <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;node[i].l,&amp;node[i].r);
+        node[i].index = i;
+        <span class="keyword">if</span> (node[i].r&gt;n)
+            n = node[i].r;
+    }
+    getPrim();
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++)
+    {
+        resolve(i);
+        a[i] = factor_num;
+    }
+    sort(node,node+T,cmp);
+    <span class="keyword">int</span> i = n;
+    <span class="keyword">int</span> j = <span class="number">0</span>;
+    <span class="built_in">memset</span>(b,<span class="number">0</span>,<span class="keyword">sizeof</span>(b));
+    <span class="built_in">memset</span>(c,<span class="number">0</span>,<span class="keyword">sizeof</span>(c));
+    <span class="keyword">while</span>(j &lt; T)
+    {
+        <span class="keyword">while</span>(i &gt; <span class="number">1</span> &amp;&amp; i&gt;= node[j].l)
+        {
+            <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">1</span>;k*k&lt;=a[i];k++)
+            {
+                <span class="keyword">if</span>(a[i]%k==<span class="number">0</span>)
+                {
+                    <span class="keyword">if</span>(b[k]!=<span class="number">0</span>)
+                    {
+                        add(b[k],k);
+                    }
+                    b[k] = i;
+                    <span class="keyword">if</span>(k!=a[i]/k)
+                    {
+                        <span class="keyword">if</span>(b[a[i]/k]!=<span class="number">0</span>)
+                        {
+                            add(b[a[i]/k],a[i]/k);
+                        }
+                        b[a[i]/k]=i;
+                    }
+                }
+            }
+            i--;
+        }
+        <span class="keyword">while</span>(j&lt;T &amp;&amp; node[j].l&gt;i)
+        {
+            ans[node[j].index]=Max(node[j].r);
+            j++;
+        }
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;T;i++)
+        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans[i]);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/因数分解/">因数分解</a><a class="tag-link" href="/tags/多校联训/">多校联训</a><a class="tag-link" href="/tags/树状数组/">树状数组</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/08/01/hdu-5319-Painter-2015-summer-multi-school-training/">
       hdu 5319 Painter 2015多校联训第三场 暴力
     </a>
@@ -609,83 +797,6 @@ quicksort(q+1,r);
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/dp/">dp</a><a class="tag-link" href="/tags/数塔/">数塔</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/06/26/text-mining-feature-extraction/">
-      文本挖掘初步 - 文本特征值提取
-    </a>
-  </h2>
-  
-  <time>
-    6月 26, 2015
-  </time>
-  <section class="content">
-	  <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>继续上文<a href="http://www.jetmuffin.com/archives/225" target="_blank" rel="external">文本中文分词</a>的内容，本文的目的是从文本中提取出其特征向量，以便之后的分类器进行分类。</p>
-<h2 id="语料库"><a href="#语料库" class="headerlink" title="语料库"></a>语料库</h2><p>本文采用Sougou实验室的语料库，下载地址为：<a href="http://www.sogou.com/labs/dl/c.html" target="_blank" rel="external">搜狗实验室文本分类资料</a>。其中预料文件大小不一，有mini版(136K)，精简版(30M)，以及完整版(108M)，这里笔者就直接上最大的语料了～:lol:</p>
-<p><strong>文档结构：</strong></p>
-<ul>
-<li>C000007 汽车</li>
-<li>C000008 财经</li>
-<li>C000010  IT</li>
-<li>C000013 健康</li>
-<li>C000014 体育</li>
-<li>C000016 旅游</li>
-<li>C000020 教育</li>
-<li>C000022 招聘</li>
-<li>C000023 文学</li>
-<li>C000024 军事</li>
-</ul>
-<p><strong>注意：</strong>搜狗的语料库均为GBK编码，若在Linux环境下会出现乱码影响处理，建议修改文件编码为utf-8</p>
-<h2 id="词袋模型"><a href="#词袋模型" class="headerlink" title="词袋模型"></a>词袋模型</h2><p>利用中文分词工具，我们对每篇文章进行分词，去停用词后，用一个Map存储每个词的相关信息，保存形式为单词 &lt;词的文本字符串, 词的相关属性&gt;，其中单词(Term)的相关属性有(词性、tf、df、tfidf、chi等)。这样，遍历数据集目录和文件，就能去将全部的文档分词，最终就能构建词袋模型。</p>
-<p>其中词(Term)的类如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.jetmuffin.TextClassifier.common;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Term</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</div><div class="line">    <span class="keyword">private</span> String word;</div><div class="line">    <span class="keyword">private</span> String lexicalCategory = <span class="string">"unknown"</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> freq = <span class="number">0</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> tf;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> idf;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> tfidf = <span class="number">0</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> chi = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</div><div class="line">        ....</div><div class="line">    &#125;</div><div class="line">    ......</div></pre></td></tr></table></figure>
-<p>而词袋的存储Map格式如下:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">int</span> totalDocCount;</div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> List labels = <span class="keyword">new</span> ArrayList();</div><div class="line"><span class="comment">// Map&lt;类别, 文档数量&gt;</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Integer&gt; labelledTotalDocCountMap = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</div><div class="line"><span class="comment">// Map&lt;类别, Map&lt;文档 ,Map&lt;词, 词信息&gt;&gt;&gt;</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Map&lt;String, Map&lt;String, Term&gt;&gt;&gt; termTable = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Map&lt;String, Term&gt;&gt;&gt;();</div><div class="line"><span class="comment">// Map&lt;词 ,Map&lt;类别, Set&lt;文档&gt;&gt;&gt;</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Map&lt;String, Set&gt;&gt; invertedTable = <span class="keyword">new</span> HashMap&lt;String, Map&lt;String, Set&gt;&gt;();</div></pre></td></tr></table></figure>
-<h2 id="特征值-TFIDF-计算"><a href="#特征值-TFIDF-计算" class="headerlink" title="特征值(TFIDF)计算"></a>特征值(TFIDF)计算</h2><p>tfidf是文本分类中最常使用的特征权值，其中tf(Term Frequency)为词频，idf为(Inverse Document Frequency)，tf反映了该词在该类文本中的热门程度，而idf则反映了该词对于其他文本更好的区别能力。</p>
-<p>tfidf的计算方式如下：</p>
-<p><img src="http://i4.tietuku.com/218e13597b4ea3d8.png" alt="tf"><img src="http://i4.tietuku.com/c20eec142f06b175.png" alt=""><img src="http://i4.tietuku.com/a15b04b7d23c4837.png" alt=""></p>
-<h2 id="卡方拟合检验"><a href="#卡方拟合检验" class="headerlink" title="卡方拟合检验"></a>卡方拟合检验</h2><p>经上一步计算出的tfidf值作为文章的特征值，但因为文章所包含的词往往非常多，特征向量的维数巨大，可能会达到上千维之多。因此需要对文章的特征向量进行降维。</p>
-<p>进行降维，可以达到以下效果：</p>
-<ul>
-<li>避免过拟合（over fitting），提高分类准确度</li>
-<li>通过降维，大大节省计算时间和空间<br>我们选择基于卡方统计量（chi-square statistic， CHI）技术来实现选择，这里根据计算公式：</li>
-</ul>
-<p><img src="http://i4.tietuku.com/2dce06a9ac95d718.jpg" alt=""></p>
-<p>其中，公式中各个参数的含义，说明如下：</p>
-<ul>
-<li>N：训练数据集文档总数</li>
-<li>A：在一个类别中，包含某个词的文档的数量</li>
-<li>B：在一个类别中，排除该类别，其他类别包含某个词的文档的数量</li>
-<li>C：在一个类别中，不包含某个词的文档的数量</li>
-<li>D：在一个类别中，不包含某个词也不在该类别中的文档的数量<br>使用卡方统计量，为每个类别下的每个词都进行计算得到一个CHI值，然后对这个类别下的所有的词基于CHI值进行排序，选择出最大的topN个词；最后将多个类别下选择的多组topN个词进行合并，得到最终的特征向量。</li>
-</ul>
-<h2 id="向量空间模型"><a href="#向量空间模型" class="headerlink" title="向量空间模型"></a>向量空间模型</h2><p>提取文档的特征向量，目的是建立向量空间模型，每个文档 dj 可以用标引项向量来表示  (a1j,a2j,…,aMj)  <img src="http://i4.tietuku.com/e665571f39dec3cb.png" alt=""></p>
-<p>利用向量空间模型，可以很容易计算出两个文档的相似度：</p>
-<ul>
-<li>余弦公式（计算向量夹角）</li>
-<li><p>欧式距离（计算两点距离）<br>计算出了文本相似度（文本距离），则可以进行我们的下，即进行分类器的建立了。我们将在后续的文章继续研究不同的分类方法对文本的分类，包括：</p>
-</li>
-<li><p>KNN</p>
-</li>
-<li>SVM</li>
-<li>Naive Bayes</li>
-<li>BP Neural Network (furthermore, RBF Neural Network)</li>
-</ul>
-
-
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/tfidf/">tfidf</a><a class="tag-link" href="/tags/卡方校验/">卡方校验</a><a class="tag-link" href="/tags/文本特征值/">文本特征值</a>
 	  </div>
     
 

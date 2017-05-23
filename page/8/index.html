@@ -74,6 +74,39 @@
 
   
   <h2 class="title">
+    <a href="/2015/02/07/bestCoder-29-1002-hdu-5171-gty-s-birthday-gift-solution/">
+      BestCoder #29 1002 hdu 5171 GTY&#39;s birthday gift 题解
+    </a>
+  </h2>
+  
+  <time>
+    2月 7, 2015
+  </time>
+  <section class="content">
+	  <p>假期放松了太多，状态太差，水题都WA了好几发。。</p>
+<p>先是第一题，思路很简单，取个对数判断大小就行了，然后脑抽了居然直接用“==”进行判断，事实上应该要用精度判断，然后卡到第二题做出来才想到。。ORZ</p>
+<p>然后是第二题，读题后很容易可以发现最后的答案是取最大的2个数a,b，进行相加，然后得到第三个数a+b，再相加得到a+2b，反复下去类似斐波那契数列。然后可以得出a的系数是从斐波那契的某一项开始的前n项和-1，b同理是前某项和-2，然后用矩阵快速幂o(log(n))轻松搞定斐波那契，再加上数列所有数的和即可。</p>
+<p>官方题解是直接从线性方程推出转移矩阵，然后根据三阶矩阵快速幂求得解，同样可用。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/02/07/bestCoder-29-1002-hdu-5171-gty-s-birthday-gift-solution/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/斐波那契/">斐波那契</a><a class="tag-link" href="/tags/矩阵快速幂/">矩阵快速幂</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/02/04/hdu-4549-fermat-little-theorem/">
       hdu 4549 费马小定理 矩阵快速幂
     </a>
@@ -361,39 +394,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/标记法/">标记法</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post no-title">
-
-  
-  <time>
-    11月 28, 2014
-  </time>
-  <section class="content">
-	  <p>鞍山赛区比赛的时候这题没有任何思路，比赛结束后clj提到了单色三角，后来在做白书的训练指南时候看到了这点，然后就把这题写一写。</p>
-<p>用到的几个知识点：</p>
-<ol>
-<li><p>单色三角</p>
-<p> 平面中n个点没有三点共线，每两个点染白边或者染黑边，求单色三角形的数量。</p>
-<p> 事实上只要求非单色三角形，因为一个公共点的两条异色边总是唯一且对应一个非单色三角形，因此第i个点连接了a条白边，n-1-a条黑边，这些边属于a<em>(n-1-a)个非单色三角形，因此答案是C(3,n)-sigma(ai</em>(n-1-ai))。</p>
-</li>
-<li><p>容斥原理</p>
-<p> 这里用的容斥原理和hdu4135的题目相似。即求1-n中有多少个数与k互质。</p>
-<p> 求法就是将k分解质因数，然后对于其质因数的每一个组合，求多少个数可以被整除，最后用容斥原理相加可得不互质的数量，也就能得到答案了。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/11/28/hdu-5072-Coprime-2014-anshan-reigion-C/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/单色三角/">单色三角</a><a class="tag-link" href="/tags/容斥原理/">容斥原理</a>
 	  </div>
     
 

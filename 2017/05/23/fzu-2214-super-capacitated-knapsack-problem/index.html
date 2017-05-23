@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>fzu 2214 super capacitated knapsack problem | 倦谈</title>
+  <meta name="description" content="JetMuffin's blog." />
+  <meta name="keywords" content="jetmuffin,blog" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="题目Problem 2214 Knapsack problem">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fzu 2214 super capacitated knapsack problem">
+<meta property="og:url" content="http://blog.jetmuffin.com/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/index.html">
+<meta property="og:site_name" content="倦谈">
+<meta property="og:description" content="题目Problem 2214 Knapsack problem">
+<meta property="og:updated_time" content="2017-05-23T12:39:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="fzu 2214 super capacitated knapsack problem">
+<meta name="twitter:description" content="题目Problem 2214 Knapsack problem">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("IxqcEzmebHkRECv72mAIKAAk-gzGzoHsz", "JIhGNtTGcnfuLSkHRx70dlVw");</script>
+  
+
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+  <script>setLoadingBarProgress(20)</script>
+  
+  <div id="site-wrapper">
+    
+    <header id="header">
+	<div id="header-wrapper" class="clearfix">
+		<a id="logo" href="/">
+			<img src="/images/logo.png" />
+			<span id="site-desc">
+			  kai zo ku, ore wa naru
+      </span>
+		</a>
+		<button id="site-nav-switch">
+	    <span class="icon icon-menu"></span>
+	  </button>
+	</div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+    
+    <main id="main" role="main">
+      <article id="post-fzu-2214-super-capacitated-knapsack-problem"
+  class="post article white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<h2 class="title">
+  	<a href="/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/">
+    	fzu 2214 super capacitated knapsack problem
+    </a>
+  </h2>
+	<time>
+	  5月 23, 2017
+	</time>
+	<section class="content">
+  	<div class="article-entry" itemprop="articleBody">
+    	<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=2214" target="_blank" rel="external">Problem 2214 Knapsack problem</a></p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题目的意思和普通的 01 背包一模一样，不过在背包的容量上非常大，我们知道传统的 01 背包复杂度为 $o(wn)$，而在题目中 w 的范围达到了 $10^9$，因此传统 01 背包肯定是会超时的。</p>
+<p>这道题比较有意思的地方是，思路是从反方向思考，颠倒了 01 背包的方向。</p>
+<p>传统 01 背包里，递推公式为 $dp_j=max(dp<em>j, dp</em>{j-w_i}+v<em>i)$，而在超大背包中，我们可以先算出物品的总价值 $v</em>{sum}$，再将价值作为物品，物品作为价值，即计算得到价值为 $j$ 时的最小容量 $dp_j$。递推公式为 $dp_j=min(dp<em>j, dp</em>{j-v_i}+w_i)$。</p>
+<p>最后，遍历 $j$，找到第一个 $dp<em>j &lt; w</em>{total}$ 就是我们需要求的最大价值了。</p>
+<p>这样总体复杂度为 $o(v_{sum}n)$</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">5100</span>;</div><div class="line"><span class="keyword">const</span> ll inf = <span class="number">1000000100</span>;</div><div class="line">ll w[maxn], v[maxn], dp[maxn];</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> t, n;</div><div class="line">    ll p;</div><div class="line">    <span class="comment">// scanf("%d", &amp;t);</span></div><div class="line">    <span class="built_in">cin</span>&gt;&gt;t;</div><div class="line">    <span class="keyword">while</span>(t--) &#123;</div><div class="line">        <span class="comment">// scanf("%d%lld", &amp;n, &amp;p);</span></div><div class="line">        <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;p;</div><div class="line"></div><div class="line">        ll sum = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="comment">// scanf("%lld%lld", &amp;w[i], &amp;v[i]);</span></div><div class="line">            <span class="built_in">cin</span>&gt;&gt;w[i]&gt;&gt;v[i];</div><div class="line">            sum += v[i];</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">memset</span>(dp , <span class="number">0x3f3f3f3f</span> , <span class="keyword">sizeof</span>(dp));</div><div class="line">        dp[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = sum; j &gt;= v[i]; j--) &#123;</div><div class="line">                dp[j] = min(dp[j], dp[j - v[i]] + w[i]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = sum; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">            <span class="keyword">if</span>(dp[i] &lt;= p) &#123;</div><div class="line">                <span class="comment">// printf("%d\n", i);</span></div><div class="line">                <span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  	</div>
+
+	  <div class="article-tags tags">
+		  
+        <a class="tag-link" href="/tags/dp/">dp</a><a class="tag-link" href="/tags/背包/">背包</a>
+      
+	  </div>
+	</section>
+</article>
+
+
+<section id="comments">
+	<div id="disqus_thread"></div>
+</section>
+
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </main>
+    
+    <footer id="footer" class="clearfix">
+  
+  
+	<div class="search">
+	  <form name="searchform" id="searchform" class="u-search-form">
+	    <input type="text" id="searchinput" class="u-search-input" placeholder="Looking for something?" />
+	    <button type="submit" id="u-search-btn-submit" class="u-search-btn-submit">
+	      <span class="icon icon-search"></span>
+	    </button>
+	  </form>
+	</div>
+	
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="mailto:jeffchen328@gmail.com" class="social email"
+          target="_blank" rel="external">
+          <span class="icon icon-email"></span>
+        </a>
+      
+        <a href="https://github.com/JetMuffin" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+        <a href="https://plus.google.com/u/0/104827733284453469708" class="social google"
+          target="_blank" rel="external">
+          <span class="icon icon-google"></span>
+        </a>
+      
+        <a href="http://weibo.com/1922357801" class="social sina-weibo"
+          target="_blank" rel="external">
+          <span class="icon icon-sina-weibo"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <span class="codename">Typescript</span> designed by <a href="http://rakugaki.me/" target="_blank">Art Chen</a>.</div>
+  <div>&copy; <a href="/">倦谈</a></div>
+  
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+
+    <div class="overlay"></div>
+    
+  </div>
+
+  <div class="site-sidebar" id="site-sidebar">
+    <div class="sidebar-switch clearfix" style="display:none"><a class="dark-btn active" data-toggle="toc"><span
+                    class="icon icon-list"></span> <span class="text">Index</span> </a><a class="dark-btn"
+                                                                                          data-toggle="bio"><span
+                    class="icon icon-person"></span> <span class="text">Bio</span></a></div>
+    <div class="site-toc" style="display:none">
+        <div class="no-index">No Index</div>
+    </div>
+    <div class="site-bio show" style="display:block">
+        <div class="about-me clearfix">
+            <div class="avatar"><img src="/images/avatar.jpeg"></div>
+            <div class="info"><a class="name dark-btn" href="/about">JetMuffin</a></div>
+            <div class="info"><span class="item desc">kai zo ku, ore wa naru</span></div>
+        </div>
+        <div class="menu section">
+            <ul class="clearfix">
+                
+                <li class="left"><a href="/" onfocus="this.blur()"
+                                    class="nav-home dark-btn block">Home</a></li>
+
+                
+
+                <li class="right"><a href="/about" onfocus="this.blur()"
+                                     class="nav-about dark-btn block">About</a></li>
+
+                </a>
+                
+                <li class="left"><a href="/archives" onfocus="this.blur()"
+                                    class="nav-archives dark-btn block">Archives</a></li>
+
+                
+
+                <li class="right"><a href="/links" onfocus="this.blur()"
+                                     class="nav-links dark-btn block">Links</a></li>
+
+                </a>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="shortcuts"><a href="#header" class="top window-nav dark-btn" id="go-top"><span
+                    class="icon icon-chevron-thin-up"></span> </a><a class="close dark-btn" id="sidebar-close"><span
+                    class="icon icon-close"></span> </a><a href="#footer" class="top window-nav dark-btn"
+                                                           id="go-bottom"><span
+                    class="icon icon-chevron-thin-down"></span></a></div>
+</div>
+
+  
+<script>
+  var disqus_shortname = 'jetmuffin';
+  
+  var disqus_url = 'http://blog.jetmuffin.com/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+<!--page counter part-->
+<script src="/js/leancloud.js"></script>
+<script>
+var Counter = AV.Object.extend("Counter");
+
+if ($('.article').length == 1) {
+  addCount(Counter);
+}
+  
+</script>
+<script src="/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+</script>
+<script src="/js/search.js"></script>
+<script src="/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+  
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>
