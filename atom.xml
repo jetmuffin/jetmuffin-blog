@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-06-25T10:23:32.000Z</updated>
+  <updated>2017-06-25T10:25:15.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -16,22 +16,23 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>a view of tree dp</title>
+    <title>树形 DP 总结</title>
     <link href="http://blog.jetmuffin.com/2017/06/25/a-view-of-tree-dp/"/>
     <id>http://blog.jetmuffin.com/2017/06/25/a-view-of-tree-dp/</id>
     <published>2017-06-25T10:21:48.000Z</published>
-    <updated>2017-06-25T10:23:32.000Z</updated>
+    <updated>2017-06-25T10:25:15.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="树形-DP-总结"><a href="#树形-DP-总结" class="headerlink" title="树形 DP 总结"></a>树形 DP 总结</h2><blockquote>
+    <content type="html"><![CDATA[<h2 id="占坑"><a href="#占坑" class="headerlink" title="占坑"></a>占坑</h2><blockquote>
 <p>某比赛被树形 DP 坑进去了，太弱，先占坑等有时间填上</p>
 </blockquote>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;树形-DP-总结&quot;&gt;&lt;a href=&quot;#树形-DP-总结&quot; class=&quot;headerlink&quot; title=&quot;树形 DP 总结&quot;&gt;&lt;/a&gt;树形 DP 总结&lt;/h2&gt;&lt;blockquote&gt;
+      &lt;h2 id=&quot;占坑&quot;&gt;&lt;a href=&quot;#占坑&quot; class=&quot;headerlink&quot; title=&quot;占坑&quot;&gt;&lt;/a&gt;占坑&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;某比赛被树形 DP 坑进去了，太弱，先占坑等有时间填上&lt;/p&gt;
-&lt;
+&lt;/blockquote&gt;
+
     
     </summary>
     

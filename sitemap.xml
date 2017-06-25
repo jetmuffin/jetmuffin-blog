@@ -4,7 +4,7 @@
   <url>
     <loc>http://blog.jetmuffin.com/2017/06/25/a-view-of-tree-dp/</loc>
     
-    <lastmod>2017-06-25T10:23:32.000Z</lastmod>
+    <lastmod>2017-06-25T10:25:15.000Z</lastmod>
     
   </url>
   
@@ -240,14 +240,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/09/05/floyd-warshall-multi-source-shortest-path/</loc>
+    <loc>http://blog.jetmuffin.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/09/08/HHU-ACM-training-week-five-number-theory-solutions/</loc>
+    <loc>http://blog.jetmuffin.com/2015/09/05/floyd-warshall-multi-source-shortest-path/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -415,14 +415,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/06/06/hdu-5241-Friends-ACM-shanghai-invitation-F/</loc>
+    <loc>http://blog.jetmuffin.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-solution/</loc>
+    <loc>http://blog.jetmuffin.com/2015/06/06/hdu-5241-Friends-ACM-shanghai-invitation-F/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -436,14 +436,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/07/26/hdu-5311-Hidden-String-BestCoder-1st-Anniversary-B-search/</loc>
+    <loc>http://blog.jetmuffin.com/2015/07/26/hdu-5305-Friends-2015-summer-multi-school-trainning-search/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/07/26/hdu-5305-Friends-2015-summer-multi-school-trainning-search/</loc>
+    <loc>http://blog.jetmuffin.com/2015/07/26/hdu-5311-Hidden-String-BestCoder-1st-Anniversary-B-search/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -499,7 +499,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-solution/</loc>
+    <loc>http://blog.jetmuffin.com/2015/09/08/HHU-ACM-training-week-five-number-theory-solutions/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -562,6 +562,13 @@
   </url>
   
   <url>
+    <loc>http://blog.jetmuffin.com/2015/12/23/mesos-monitor-policy/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2015/11/07/mesos-framework/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -570,13 +577,6 @@
   
   <url>
     <loc>http://blog.jetmuffin.com/2017/01/02/The-evoolution-of-cluster-scheduler-architectures/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/12/23/mesos-monitor-policy/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -639,13 +639,6 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/07/26/segment-tree/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.jetmuffin.com/2014/10/22/solution-to-cannot-save-on-row-editing/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -653,7 +646,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/11/29/solution-to-hdu-school-contest/</loc>
+    <loc>http://blog.jetmuffin.com/2015/07/26/segment-tree/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -667,6 +660,13 @@
   </url>
   
   <url>
+    <loc>http://blog.jetmuffin.com/2015/11/29/solution-to-hdu-school-contest/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2015/09/04/spfa-single-source-shortest-path-optimize-by-queue/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -674,14 +674,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/05/10/text-mining-extract-information-from-text/</loc>
+    <loc>http://blog.jetmuffin.com/2015/06/05/text-mining-chinese-segments/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/06/05/text-mining-chinese-segments/</loc>
+    <loc>http://blog.jetmuffin.com/2015/05/10/text-mining-extract-information-from-text/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
