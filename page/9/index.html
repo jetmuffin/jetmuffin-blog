@@ -70,6 +70,38 @@
 
 <section class="post-list">
 	
+    <article class="post ">
+
+  
+  <h2 class="title">
+    <a href="/2014/11/30/hdu-5124-BestCoder-20-1002-lines-solution/">
+      hdu 5124 BestCoder #20 1002 lines 解题报告
+    </a>
+  </h2>
+  
+  <time>
+    11月 30, 2014
+  </time>
+  <section class="content">
+	  <p>这道题和以前做过的一道很像，然后哗啦哗啦就敲了提交了，然后pretest pass了 ，交了以后发现有问题，我的方法只是对一维数组进行标记然后扫描一遍，但是对于1e9的数据不仅爆数组又会T。想了一会儿怎么改进，最后还是卡这了。</p>
+<p>赛后想了想，做一个简单的映射就行了，在原来的数组上相当于再加一层数组，对当前数组的index也就是上层数组的value进行标记扫描，就好过了。。。</p>
+<p>将线段的x和y都放在一个数组v里，然后对2*n大小的v数组排序，然后对于每一个x，二分查找v数组的lower_bound，然后标记++，对于每一个y,二分查找v数组的lower_bound，然后标记–，最后扫描一遍OK了。。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/11/30/hdu-5124-BestCoder-20-1002-lines-solution/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/标记法/">标记法</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
     <article class="post no-title">
 
   
@@ -355,44 +387,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/dp/">dp</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/10/28/2014-ACM-ICPC-xian-region-conclusion/">
-      2014 ACM-ICPC 亚洲地区赛 西安站小结
-    </a>
-  </h2>
-  
-  <time>
-    10月 28, 2014
-  </time>
-  <section class="content">
-	  <p><span style="white-space:pre"></span>弱菜第二次参加地区赛，继续流水帐记录下。</p>
-<p><span style="white-space:pre"></span>西安赛区举办很隆重，西工大校园也是够大，只是长安校区太远，从火车站打的到友谊校区再坐公交到长安校区花了2个多小时ORZ～本来以为赶不上热身赛，结果热身赛是15：30开始，时间很够。</p>
-<p><span style="white-space:pre"></span>热身赛1个小时半，4道题。3分钟就看到有人出了D，仔细看是map计数，统计单词出现次数，大小写不区分，输出为大写。以前做过这种题，当时死活想不起怎么用STL里的MAP，无奈先让老范和纪存写其他题先。老范写的C，多边形的面积和周长计算，几何模板套用，打完代码发现有点小问题，接着思考去了。纪存写的A的模拟，是要写一个类&#20284;JAVA中的String to (Integer、Double、String)的模拟，目测坑多，写到一半纪存又思考去了。这时我才有点想起如何用MAP，立即code，打完测试，提交1Y</p>
-<ul>
-<li><ul>
-<li>。交完老范也想到哪儿出问题了，改完提交C，1Y。之后时间不是很多了，我们继续思考A，后来发现A一个队伍都没过，还是果断放弃了。热身赛结束2题排在120左右，铜牌区，还行～</li>
-</ul>
-</li>
-</ul>
-
-    
-	  <div class="readmore">
-      <a href="/2014/10/28/2014-ACM-ICPC-xian-region-conclusion/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/ACM/">ACM</a>
 	  </div>
     
 

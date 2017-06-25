@@ -74,6 +74,37 @@
 
   
   <h2 class="title">
+    <a href="/2015/03/04/popover/">
+      弹出框popover点击框外区域关闭弹出框效果
+    </a>
+  </h2>
+  
+  <time>
+    3月 4, 2015
+  </time>
+  <section class="content">
+	  <p>bootstrap用多了，前不久自己写一个popover，弹出很简单，但是让弹出框失去焦点消失时有点问题，记录一下：</p>
+<p>原先的想法是获取鼠标点击范围，若鼠标点击在弹出框之外，则绑定事件关闭弹出框，代码如下：</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/03/04/popover/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/jquery/">jquery</a><a class="tag-link" href="/tags/popover/">popover</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/02/07/bestCoder-29-1002-hdu-5171-gty-s-birthday-gift-solution/">
       BestCoder #29 1002 hdu 5171 GTY&#39;s birthday gift 题解
     </a>
@@ -362,38 +393,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/FaceBook-Hacker-Cup/">FaceBook Hacker Cup</a><a class="tag-link" href="/tags/二进制/">二进制</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/11/30/hdu-5124-BestCoder-20-1002-lines-solution/">
-      hdu 5124 BestCoder #20 1002 lines 解题报告
-    </a>
-  </h2>
-  
-  <time>
-    11月 30, 2014
-  </time>
-  <section class="content">
-	  <p>这道题和以前做过的一道很像，然后哗啦哗啦就敲了提交了，然后pretest pass了 ，交了以后发现有问题，我的方法只是对一维数组进行标记然后扫描一遍，但是对于1e9的数据不仅爆数组又会T。想了一会儿怎么改进，最后还是卡这了。</p>
-<p>赛后想了想，做一个简单的映射就行了，在原来的数组上相当于再加一层数组，对当前数组的index也就是上层数组的value进行标记扫描，就好过了。。。</p>
-<p>将线段的x和y都放在一个数组v里，然后对2*n大小的v数组排序，然后对于每一个x，二分查找v数组的lower_bound，然后标记++，对于每一个y,二分查找v数组的lower_bound，然后标记–，最后扫描一遍OK了。。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/11/30/hdu-5124-BestCoder-20-1002-lines-solution/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/标记法/">标记法</a>
 	  </div>
     
 
