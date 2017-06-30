@@ -83,115 +83,12 @@
     6月 30, 2017
   </time>
   <section class="content">
-	  <a id="more"></a>
-<h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2><p>首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 <code>/opt/matlab</code>，以下命令都需要按照自己的环境修改路径。</p>
-<p>将 dvd1.iso 挂载到系统中：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /matlab</div><div class="line">mount -t auto -o loop ~/Matlab\ R2017a\ linux_x64/R2017a_glnxa64_dvd1.iso /matlab</div></pre></td></tr></table></figure>
-<p>服务器上没有图形界面，所以需要以 <code>silent</code> 模式进行安装，需要配置 <code>installer_input.txt</code> 和 <code>activate.ini</code> 这两个文件。默认这两个文件都在挂载后的主目录中，即 <code>/matlab/installer_input.txt</code> 和 <code>/matlab/activate.ini</code>。</p>
-<p>iso 以光盘模式在挂载时是只读的，因此把这两个文件拷出来，分别修改对应的内容。其中比较重要的是，在集群机器非常多的时候，激活要用 network 模式（非 standalone），并且需要安装 <strong>License Manager</strong> 对集群的 client 进行认证。</p>
-<p>修改 <code>activate.ini</code>，内容如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">isSilent=<span class="literal">true</span></div><div class="line">activateCommand=activateOffline</div><div class="line">licenseFile=/root/crack/license_server.lic <span class="comment"># 破解文件夹里的 license_server.lic 路径</span></div><div class="line">activationKey=31095-30030-55416-47440-21946-54205 <span class="comment"># 破解文件夹里 readme.txt 里 network 激活方式的 key</span></div></pre></td></tr></table></figure>
-<p>修改 <code>installer_input.txt</code>，内容如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">destinationFolder=/opt/matlab <span class="comment"># 安装目录</span></div><div class="line">fileInstallationKey=31095-30030-55416-47440-21946-54205 <span class="comment"># 激活 key</span></div><div class="line">agreeToLicense=yes</div><div class="line">mode=silent</div><div class="line">activationPropertiesFile=/root/activate.ini <span class="comment"># 上面创建的 activate.ini 的路径</span></div><div class="line">licensePath=/root/crack/license_server.lic <span class="comment"># license 路径</span></div><div class="line">lmgrFiles=<span class="literal">true</span> <span class="comment"># 安装 License Manager</span></div><div class="line">lmgrService=<span class="literal">true</span></div></pre></td></tr></table></figure>
-<p>确认两个文件的信息内容无误后，就可以进行安装了：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/matlab/install -inputFile /root/installer_input.txt</div></pre></td></tr></table></figure>
-<p>安装会持续一段时间，其中当 DVD1 的内容安装完毕后，会提醒插入 DVD2，这时直接把 dvd2.iso 挂载到同一个目录就行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mount -t auto -o loop ~/Matlab\ R2017a\ linux_x64/R2017a_glnxa64_dvd2.iso /matlab</div></pre></td></tr></table></figure>
-<p>再等待一段时间，安装就完成了，安装完毕后配置环境变量，把 <code>/opt/matlab/bin</code> （你的 Matlab 安装目录的 bin 路径）加入到 <code>PATH</code> 里就行了。</p>
-<p>在使用之前，需要替换 Matlab 的 <code>libmwservices.so</code> 进行破解：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /root/crack/R2017a/bin/glnxa64/libmwservices.so /opt/matlab/bin/R2017a/bin/glnxa64/libmwservices.so</div></pre></td></tr></table></figure>
-<p>直接覆盖即可，覆盖完毕后，键入 <code>matlab</code>，显示以下内容就表示安装成功。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">MATLAB is selecting SOFTWARE OPENGL rendering.</div><div class="line"></div><div class="line">                                                        &lt; M A T L A B (R) &gt;</div><div class="line">                                              Copyright 1984-2017 The MathWorks, Inc.</div><div class="line">                                              R2017a (9.2.0.538062) 64-bit (glnxa64)</div><div class="line">                                                         February 23, 2017</div><div class="line"></div><div class="line"></div><div class="line">To get started, <span class="built_in">type</span> one of these: helpwin, helpdesk, or demo.</div><div class="line">For product information, visit www.mathworks.com.</div><div class="line"></div><div class="line">&gt;&gt;</div></pre></td></tr></table></figure>
-<h2 id="部署-MDCE"><a href="#部署-MDCE" class="headerlink" title="部署 MDCE"></a>部署 MDCE</h2><p>MDCE 是 Matlab 的分布式计算引擎，默认已经安装，如果没有安装则需要进到 <code>toolbox</code> 中手动安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /opt/matlab/toolbox/distcomp/bin</div><div class="line">./mdce install</div></pre></td></tr></table></figure>
-<p>然后启动 MDCE 即可：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./mdce start</div></pre></td></tr></table></figure>
-<h2 id="启动-Job-Manager-和-Worker"><a href="#启动-Job-Manager-和-Worker" class="headerlink" title="启动 Job Manager 和 Worker"></a>启动 Job Manager 和 Worker</h2><p>在集群中所有的提交的Job都是通过Job Manager分配和管理的，所有的work node都是注册在Job Manager这台机器上，需要固定这台Job Manager主机。client端编写完任务就可以向这台Job Manager这台主机提交。MDCE支持当前所有主流的作业调度程序如LSF， CCS， PBS Pro等。</p>
-<p>启动 Job Manager 的命令参数解释如下：</p>
-<table>
-<thead>
-<tr>
-<th>flag</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-name &lt;job_manager_name&gt;</code></td>
-<td>指定 Job Manager 的名称</td>
-</tr>
-<tr>
-<td><code>-remotehost &lt;hostname&gt;</code></td>
-<td>Job Manager 所在主机的 hostname</td>
-</tr>
-<tr>
-<td><code>-clean</code></td>
-<td>删除 Job Manager 机器上的检查点信息</td>
-</tr>
-<tr>
-<td><code>-multicast</code></td>
-<td>多播</td>
-</tr>
-<tr>
-<td><code>-baseport &lt;port&gt;</code></td>
-<td>指定运行的端口，默认为 <code>27350</code></td>
-</tr>
-<tr>
-<td><code>-v</code></td>
-<td>显示 Verbose 信息</td>
-</tr>
-</tbody>
-</table>
-<p>启动 Job Manager</p>
-<p><code>startjobmanager -name jmname -remotehost jmip</code></p>
-<p>启动 Worker 的命令参数解释如下：</p>
-<table>
-<thead>
-<tr>
-<th>flag</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-name &lt;worker_name&gt;</code></td>
-<td>指定 Worker 名称</td>
-</tr>
-<tr>
-<td><code>-remotehost &lt;hostname&gt;</code></td>
-<td>Worker 所在主机的 hostname</td>
-</tr>
-<tr>
-<td><code>jobmanager &lt;job_manager_name&gt;</code></td>
-<td>指定 Worker 接受任务的 Job Manager 的名称</td>
-</tr>
-<tr>
-<td><code>-jobmanagerhost &lt;hostname&gt;</code></td>
-<td>指定 Worker 接受任务的 Job Manager 所在主机的 hostname</td>
-</tr>
-<tr>
-<td><code>-multicast</code></td>
-<td>多播</td>
-</tr>
-<tr>
-<td><code>-baseport &lt;port&gt;</code></td>
-<td>指定运行的端口，默认为 mdce 占用的端口</td>
-</tr>
-<tr>
-<td><code>-v</code></td>
-<td>显示 Verbose 信息</td>
-</tr>
-</tbody>
-</table>
-<p>启动 Worker：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startworker -jobmanagerhost jmip -jobmanager jmname -name worker_name -remotehost localip</div></pre></td></tr></table></figure>
-<p>同样依次在其他所有的计算节点上，启动 mdce 并启动 worker 即可。最后在管理节点上使用<code>nodestatus</code> 就可以看到这个 Matlab 集群的状况了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Job manager lookup processes:</div><div class="line">     Status                        Running</div><div class="line"></div><div class="line">Job manager:</div><div class="line">     Name                          cluster</div><div class="line">     Running on host               xxx</div><div class="line">     Number of workers             16</div><div class="line">     Supported releases            R2017a</div><div class="line"></div><div class="line">Summary:</div><div class="line">The mdce service on xxx manages the following processes:</div><div class="line">     Job manager lookup processes  1</div><div class="line">     Job managers                  1</div><div class="line">     Workers                       0</div></pre></td></tr></table></figure>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li><a href="https://www.mathworks.com/help/mdce/mdce.html" target="_blank" rel="external">https://www.mathworks.com/help/mdce/mdce.html</a></li>
-</ul>
+	  <h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2>
 
-
+    
+	  <div class="readmore">
+      <a href="/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/">Read More</a>
+    </div>
     
     
     

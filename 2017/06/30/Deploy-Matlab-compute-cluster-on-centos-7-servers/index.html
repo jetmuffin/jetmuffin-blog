@@ -10,22 +10,16 @@
   <meta name="HandheldFriendly" content="True" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="安装 Matlab 2017首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 /opt/matlab，以下命令都需要按照自己的环境修改路径。
-将 dvd1.iso 挂载到系统中：
-12mkdir /matlabmount -t auto -o loop ~/Matlab\ R2017a\ linux_x6">
+  <meta name="description" content="安装 Matlab 2017">
 <meta property="og:type" content="article">
 <meta property="og:title" content="部署 Matlab MDCE 计算集群">
 <meta property="og:url" content="http://blog.jetmuffin.com/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/index.html">
 <meta property="og:site_name" content="倦谈">
-<meta property="og:description" content="安装 Matlab 2017首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 /opt/matlab，以下命令都需要按照自己的环境修改路径。
-将 dvd1.iso 挂载到系统中：
-12mkdir /matlabmount -t auto -o loop ~/Matlab\ R2017a\ linux_x6">
-<meta property="og:updated_time" content="2017-06-30T13:14:47.000Z">
+<meta property="og:description" content="安装 Matlab 2017">
+<meta property="og:updated_time" content="2017-06-30T13:16:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="部署 Matlab MDCE 计算集群">
-<meta name="twitter:description" content="安装 Matlab 2017首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 /opt/matlab，以下命令都需要按照自己的环境修改路径。
-将 dvd1.iso 挂载到系统中：
-12mkdir /matlabmount -t auto -o loop ~/Matlab\ R2017a\ linux_x6">
+<meta name="twitter:description" content="安装 Matlab 2017">
   
   
     <link rel="icon" href="/favicon.png">
@@ -82,8 +76,8 @@
 	</time>
 	<section class="content">
   	<div class="article-entry" itemprop="articleBody">
-    	<a id="more"></a>
-<h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2><p>首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 <code>/opt/matlab</code>，以下命令都需要按照自己的环境修改路径。</p>
+    	<h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2><a id="more"></a>
+<p>首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 <code>/opt/matlab</code>，以下命令都需要按照自己的环境修改路径。</p>
 <p>将 dvd1.iso 挂载到系统中：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /matlab</div><div class="line">mount -t auto -o loop ~/Matlab\ R2017a\ linux_x64/R2017a_glnxa64_dvd1.iso /matlab</div></pre></td></tr></table></figure>
 <p>服务器上没有图形界面，所以需要以 <code>silent</code> 模式进行安装，需要配置 <code>installer_input.txt</code> 和 <code>activate.ini</code> 这两个文件。默认这两个文件都在挂载后的主目录中，即 <code>/matlab/installer_input.txt</code> 和 <code>/matlab/activate.ini</code>。</p>
