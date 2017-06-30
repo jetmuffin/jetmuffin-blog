@@ -46,7 +46,7 @@ $ gh-md-toc file.md | (tail -n +2 && echo "" && cat file.md) | sponge file.md
 你会惊讶的发现，这条命令就完成了所有事，为 file.md 生成了 table of
 contents，并且自动添加在了 file.md 的头部，并且完美的处理了空行。
 
-这里使用了一个好工具 `sponge`，想想为什么不能直接重定向到 file.md 呢？
+这里使用了一个好工具 `sponge`，需要安装包 `moreutils`。想想为什么不能直接重定向到 file.md 呢？
 
 但是，追求极致的程序员不会止步，因为上面的命令中 file.md 这个待处理的文件出现了
 3 次，所以也挺烦人的，对吧，即使使用命令替换也来得不如一次直接。

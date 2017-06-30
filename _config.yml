@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: JetMuffin's Blog
+title: 倦谈
 subtitle:
 description: JetMuffin's Blog
 author: JetMuffin
@@ -86,7 +86,7 @@ links:
   MacTalk: http://macshuo.com/
 
 # duoshuo comments
-duoshuo_shortname: jetmuffin
+# duoshuo_shortname: jetmuffin
 
 # Switfype Search Key
 swiftype_key: 4Puw4pvQK1ydAQDsQwaN

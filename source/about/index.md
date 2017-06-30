@@ -1,4 +1,4 @@
-title: About Me
+title: 关于 「我」
 date: 2015-10-14 09:23:39
 thumbnail: http://cdn.jetmuffin.com/about/header.jpg
 ---
