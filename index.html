@@ -75,7 +75,7 @@
   
   <h2 class="title">
     <a href="/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/">
-      Deploy Matlab compute cluster on centos 7 servers
+      部署 Matlab MDCE 计算集群
     </a>
   </h2>
   
@@ -83,11 +83,7 @@
     6月 30, 2017
   </time>
   <section class="content">
-	  <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><pre><code>* [安装 Matlab 2017](#安装-matlab-2017)
-* [部署 MDCE](#部署-mdce)
-* [启动 Job Manager 和 Worker](#启动-job-manager-和-worker)
-* [参考链接](#参考链接)
-</code></pre><p>Created by <a href="https://github.com/ekalinin/github-markdown-toc" target="_blank" rel="external">gh-md-toc</a></p>
+	  <a id="more"></a>
 <h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2><p>首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 <code>/opt/matlab</code>，以下命令都需要按照自己的环境修改路径。</p>
 <p>将 dvd1.iso 挂载到系统中：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /matlab</div><div class="line">mount -t auto -o loop ~/Matlab\ R2017a\ linux_x64/R2017a_glnxa64_dvd1.iso /matlab</div></pre></td></tr></table></figure>
