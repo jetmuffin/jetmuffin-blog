@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-06-25T10:25:15.000Z</updated>
+  <updated>2017-06-30T13:10:13.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -14,6 +14,141 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Deploy Matlab compute cluster on centos 7 servers</title>
+    <link href="http://blog.jetmuffin.com/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/"/>
+    <id>http://blog.jetmuffin.com/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/</id>
+    <published>2017-06-30T09:25:30.000Z</published>
+    <updated>2017-06-30T13:10:13.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><pre><code>* [安装 Matlab 2017](#安装-matlab-2017)
+* [部署 MDCE](#部署-mdce)
+* [启动 Job Manager 和 Worker](#启动-job-manager-和-worker)
+* [参考链接](#参考链接)
+</code></pre><p>Created by <a href="https://github.com/ekalinin/github-markdown-toc" target="_blank" rel="external">gh-md-toc</a></p>
+<h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2><p>首先需要在每台机器上安装 Matlab，如果集群使用 NFS 的话，则只需要在 NFS 上装 Matlab 即可。我将 Matlab 安装在 <code>/opt/matlab</code>，以下命令都需要按照自己的环境修改路径。</p>
+<p>将 dvd1.iso 挂载到系统中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /matlab</div><div class="line">mount -t auto -o loop ~/Matlab\ R2017a\ linux_x64/R2017a_glnxa64_dvd1.iso /matlab</div></pre></td></tr></table></figure>
+<p>服务器上没有图形界面，所以需要以 <code>silent</code> 模式进行安装，需要配置 <code>installer_input.txt</code> 和 <code>activate.ini</code> 这两个文件。默认这两个文件都在挂载后的主目录中，即 <code>/matlab/installer_input.txt</code> 和 <code>/matlab/activate.ini</code>。</p>
+<p>iso 以光盘模式在挂载时是只读的，因此把这两个文件拷出来，分别修改对应的内容。其中比较重要的是，在集群机器非常多的时候，激活要用 network 模式（非 standalone），并且需要安装 <strong>License Manager</strong> 对集群的 client 进行认证。</p>
+<p>修改 <code>activate.ini</code>，内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">isSilent=<span class="literal">true</span></div><div class="line">activateCommand=activateOffline</div><div class="line">licenseFile=/root/crack/license_server.lic <span class="comment"># 破解文件夹里的 license_server.lic 路径</span></div><div class="line">activationKey=31095-30030-55416-47440-21946-54205 <span class="comment"># 破解文件夹里 readme.txt 里 network 激活方式的 key</span></div></pre></td></tr></table></figure>
+<p>修改 <code>installer_input.txt</code>，内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">destinationFolder=/opt/matlab <span class="comment"># 安装目录</span></div><div class="line">fileInstallationKey=31095-30030-55416-47440-21946-54205 <span class="comment"># 激活 key</span></div><div class="line">agreeToLicense=yes</div><div class="line">mode=silent</div><div class="line">activationPropertiesFile=/root/activate.ini <span class="comment"># 上面创建的 activate.ini 的路径</span></div><div class="line">licensePath=/root/crack/license_server.lic <span class="comment"># license 路径</span></div><div class="line">lmgrFiles=<span class="literal">true</span> <span class="comment"># 安装 License Manager</span></div><div class="line">lmgrService=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>确认两个文件的信息内容无误后，就可以进行安装了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/matlab/install -inputFile /root/installer_input.txt</div></pre></td></tr></table></figure>
+<p>安装会持续一段时间，其中当 DVD1 的内容安装完毕后，会提醒插入 DVD2，这时直接把 dvd2.iso 挂载到同一个目录就行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mount -t auto -o loop ~/Matlab\ R2017a\ linux_x64/R2017a_glnxa64_dvd2.iso /matlab</div></pre></td></tr></table></figure>
+<p>再等待一段时间，安装就完成了，安装完毕后配置环境变量，把 <code>/opt/matlab/bin</code> （你的 Matlab 安装目录的 bin 路径）加入到 <code>PATH</code> 里就行了。</p>
+<p>在使用之前，需要替换 Matlab 的 <code>libmwservices.so</code> 进行破解：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /root/crack/R2017a/bin/glnxa64/libmwservices.so /opt/matlab/bin/R2017a/bin/glnxa64/libmwservices.so</div></pre></td></tr></table></figure>
+<p>直接覆盖即可，覆盖完毕后，键入 <code>matlab</code>，显示以下内容就表示安装成功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">MATLAB is selecting SOFTWARE OPENGL rendering.</div><div class="line"></div><div class="line">                                                        &lt; M A T L A B (R) &gt;</div><div class="line">                                              Copyright 1984-2017 The MathWorks, Inc.</div><div class="line">                                              R2017a (9.2.0.538062) 64-bit (glnxa64)</div><div class="line">                                                         February 23, 2017</div><div class="line"></div><div class="line"></div><div class="line">To get started, <span class="built_in">type</span> one of these: helpwin, helpdesk, or demo.</div><div class="line">For product information, visit www.mathworks.com.</div><div class="line"></div><div class="line">&gt;&gt;</div></pre></td></tr></table></figure>
+<h2 id="部署-MDCE"><a href="#部署-MDCE" class="headerlink" title="部署 MDCE"></a>部署 MDCE</h2><p>MDCE 是 Matlab 的分布式计算引擎，默认已经安装，如果没有安装则需要进到 <code>toolbox</code> 中手动安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /opt/matlab/toolbox/distcomp/bin</div><div class="line">./mdce install</div></pre></td></tr></table></figure>
+<p>然后启动 MDCE 即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./mdce start</div></pre></td></tr></table></figure>
+<h2 id="启动-Job-Manager-和-Worker"><a href="#启动-Job-Manager-和-Worker" class="headerlink" title="启动 Job Manager 和 Worker"></a>启动 Job Manager 和 Worker</h2><p>在集群中所有的提交的Job都是通过Job Manager分配和管理的，所有的work node都是注册在Job Manager这台机器上，需要固定这台Job Manager主机。client端编写完任务就可以向这台Job Manager这台主机提交。MDCE支持当前所有主流的作业调度程序如LSF， CCS， PBS Pro等。</p>
+<p>启动 Job Manager 的命令参数解释如下：</p>
+<table>
+<thead>
+<tr>
+<th>flag</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-name &lt;job_manager_name&gt;</code></td>
+<td>指定 Job Manager 的名称</td>
+</tr>
+<tr>
+<td><code>-remotehost &lt;hostname&gt;</code></td>
+<td>Job Manager 所在主机的 hostname</td>
+</tr>
+<tr>
+<td><code>-clean</code></td>
+<td>删除 Job Manager 机器上的检查点信息</td>
+</tr>
+<tr>
+<td><code>-multicast</code></td>
+<td>多播</td>
+</tr>
+<tr>
+<td><code>-baseport &lt;port&gt;</code></td>
+<td>指定运行的端口，默认为 <code>27350</code></td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>显示 Verbose 信息</td>
+</tr>
+</tbody>
+</table>
+<p>启动 Job Manager</p>
+<p><code>startjobmanager -name jmname -remotehost jmip</code></p>
+<p>启动 Worker 的命令参数解释如下：</p>
+<table>
+<thead>
+<tr>
+<th>flag</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-name &lt;worker_name&gt;</code></td>
+<td>指定 Worker 名称</td>
+</tr>
+<tr>
+<td><code>-remotehost &lt;hostname&gt;</code></td>
+<td>Worker 所在主机的 hostname</td>
+</tr>
+<tr>
+<td><code>jobmanager &lt;job_manager_name&gt;</code></td>
+<td>指定 Worker 接受任务的 Job Manager 的名称</td>
+</tr>
+<tr>
+<td><code>-jobmanagerhost &lt;hostname&gt;</code></td>
+<td>指定 Worker 接受任务的 Job Manager 所在主机的 hostname</td>
+</tr>
+<tr>
+<td><code>-multicast</code></td>
+<td>多播</td>
+</tr>
+<tr>
+<td><code>-baseport &lt;port&gt;</code></td>
+<td>指定运行的端口，默认为 mdce 占用的端口</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>显示 Verbose 信息</td>
+</tr>
+</tbody>
+</table>
+<p>启动 Worker：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startworker -jobmanagerhost jmip -jobmanager jmname -name worker_name -remotehost localip</div></pre></td></tr></table></figure>
+<p>同样依次在其他所有的计算节点上，启动 mdce 并启动 worker 即可。最后在管理节点上使用<code>nodestatus</code> 就可以看到这个 Matlab 集群的状况了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Job manager lookup processes:</div><div class="line">     Status                        Running</div><div class="line"></div><div class="line">Job manager:</div><div class="line">     Name                          cluster</div><div class="line">     Running on host               xxx</div><div class="line">     Number of workers             16</div><div class="line">     Supported releases            R2017a</div><div class="line"></div><div class="line">Summary:</div><div class="line">The mdce service on xxx manages the following processes:</div><div class="line">     Job manager lookup processes  1</div><div class="line">     Job managers                  1</div><div class="line">     Workers                       0</div></pre></td></tr></table></figure>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://www.mathworks.com/help/mdce/mdce.html" target="_blank" rel="external">https://www.mathworks.com/help/mdce/mdce.html</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Table-of-Contents&quot;&gt;&lt;a href=&quot;#Table-of-Contents&quot; class=&quot;headerlink&quot; title=&quot;Table of Contents&quot;&gt;&lt;/a&gt;Table of Contents&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;* 
+    
+    </summary>
+    
+      <category term="系统运维" scheme="http://blog.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
+    
+    
+      <category term="matlab" scheme="http://blog.jetmuffin.com/tags/matlab/"/>
+    
+      <category term="centos" scheme="http://blog.jetmuffin.com/tags/centos/"/>
+    
+  </entry>
   
   <entry>
     <title>树形 DP 总结</title>
@@ -397,9 +532,9 @@
       <category term="系统运维" scheme="http://blog.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
     
     
-      <category term="ansible" scheme="http://blog.jetmuffin.com/tags/ansible/"/>
-    
       <category term="centos" scheme="http://blog.jetmuffin.com/tags/centos/"/>
+    
+      <category term="ansible" scheme="http://blog.jetmuffin.com/tags/ansible/"/>
     
   </entry>
   
@@ -1233,75 +1368,6 @@
       <category term="golang" scheme="http://blog.jetmuffin.com/tags/golang/"/>
     
       <category term="hello world" scheme="http://blog.jetmuffin.com/tags/hello-world/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Zabbix配合lm_sensors监控服务器CPU温度</title>
-    <link href="http://blog.jetmuffin.com/2016/09/01/monitor-temperature-of-server-by-zabbix-and-lm-sensors/"/>
-    <id>http://blog.jetmuffin.com/2016/09/01/monitor-temperature-of-server-by-zabbix-and-lm-sensors/</id>
-    <published>2016-09-01T06:18:06.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>手上的一个任务，需要对集群的每台机器 CPU 温度进行监控，防止集群在进行计算时温度过高导致 CPU 损坏。由于集群里已经部署了 Zabbix 进行监控和报警，所以很自然的想法就是在 Zabbix 中集成 CPU 监控这一内容。</p>
-<p>首先是获取 CPU 温度的方法，常见的有两种：</p>
-<ul>
-<li>IPMI</li>
-<li>lm_sensors</li>
-</ul>
-<p>其中 IPMI 需要硬件上的支持，同时还需要进行配置，比较复杂。而 lm_sensors 是 linux 下的一个小工具，安装简单，所以这里就选择 lm_sensors 来采集 CPU 的温度。<br><a id="more"></a></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>lm_sensors 的安装很简单，repo 里已经有这个包了，所以直接通过 yum 安装就行了（集群是用的 CentOS，Debian系的也差不多）。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install lm_sensors</div></pre></td></tr></table></figure>
-<p>考虑到大多数集群是无法直接通外网的，所以可以在一台可以通外网的机器上下好 rpm 包，再传到 NFS 上或者直接 <code>scp</code>进去。下载 rpm 包可以使用 <code>yumdownloader</code>，刚好 lm_sensors 没有要依赖的包。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yumdownloader install lm_sensors</div></pre></td></tr></table></figure>
-<h2 id="采集"><a href="#采集" class="headerlink" title="采集"></a>采集</h2><p>采集数据之前，先看一下 zabbix 的自定义监控项的定义方法。在 <code>zabbix_agentd</code> 中对自定义监控项的定义格式为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UserParameter=&lt;key&gt;,&lt;shell command&gt;</div></pre></td></tr></table></figure>
-<p>其中可以看出监控项通过一句 shell 命令获得，并且获得的需要是一个数值。这样我们大概明确了需要采集的目标。</p>
-<p>然后先简单过掉下 lm_sensors 需要的配置，即监测 sensors 的信息。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ sensors-detect</div><div class="line">This program will <span class="built_in">help</span> you determine <span class="built_in">which</span> kernel modules you need</div><div class="line">to load to use lm_sensors most effectively. It is generally safe</div><div class="line">and recommended to accept the default answers to all questions,</div><div class="line">unless you know what you<span class="string">'re doing.</span></div><div class="line"></div><div class="line">Some south bridges, CPUs or memory controllers contain embedded sensors.</div><div class="line">Do you want to scan for them? This is totally safe. (YES/no):</div></pre></td></tr></table></figure>
-<p>一路敲 <code>yes</code> 即可，然后执行 <code>sensors</code> 命令可以看到 CPU 的温度：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ sensors</div><div class="line">power_meter-acpi-0</div><div class="line">Adapter: ACPI interface</div><div class="line">power1:     18446.74 GW  (interval =   2.00 s)</div><div class="line"></div><div class="line">coretemp-isa-0000</div><div class="line">Adapter: ISA adapter</div><div class="line">Physical id 0: +41.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 0:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 1:        +32.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 2:        +28.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 3:        +34.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 4:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 5:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line"></div><div class="line">coretemp-isa-0001</div><div class="line">Adapter: ISA adapter</div><div class="line">Physical id 1: +38.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 0:        +33.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 1:        +34.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 2:        +32.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 3:        +31.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 4:        +32.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 5:        +31.0°C  (high = +75.0°C, crit = +85.0°C)</div></pre></td></tr></table></figure>
-<p>命令显示的结果是每个核心的温度以及物理核的温度，最后要聚合到一个数值上。这里可以选择两个方向，一是对每个核心进行监控，这样较为复杂，但是细节明显；二是对每个核心取平均值，处理比较简单。这里我选择了后者，那么就需要从命令输出中获取到需要的信息了。这里就用 <code>grep</code>，<code>cut</code>，<code>awk</code> 乱处理一通了。</p>
-<p>首先用 <code>grep</code> 拿到每个核心的温度行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ sensors | grep <span class="string">"Core"</span></div><div class="line">Core 0:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 1:        +32.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 2:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 3:        +34.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 4:        +31.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 5:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 0:        +31.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 1:        +33.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 2:        +32.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 3:        +30.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 4:        +32.0°C  (high = +75.0°C, crit = +85.0°C)</div><div class="line">Core 5:        +31.0°C  (high = +75.0°C, crit = +85.0°C)</div></pre></td></tr></table></figure>
-<p>然后用 <code>cut</code> 或者 <code>awk</code> 获取每行的温度数值。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ sensors | grep <span class="string">"Core"</span> | awk <span class="string">'&#123;print $3&#125;'</span> | awk -F <span class="string">'.'</span> <span class="string">'&#123;print $1&#125;'</span> | awk -F <span class="string">'+'</span> <span class="string">'&#123;print $2&#125;'</span></div><div class="line">30</div><div class="line">33</div><div class="line">29</div><div class="line">34</div><div class="line">30</div><div class="line">30</div><div class="line">31</div><div class="line">34</div><div class="line">32</div><div class="line">32</div><div class="line">32</div><div class="line">30</div></pre></td></tr></table></figure>
-<p>最后对这些输出按行取平均，再四舍五入到整数就行了（也可以不四舍五入）。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sensors | grep <span class="string">'Core'</span> | awk <span class="string">'&#123;print $3&#125;'</span> | awk -F <span class="string">"."</span> <span class="string">'&#123;print $1&#125;'</span> | awk -F <span class="string">"+"</span> <span class="string">'&#123;print $2&#125;'</span> | \</div><div class="line">awk <span class="string">'&#123;sum+=$1;count+=1&#125; END &#123;print sum/count&#125;'</span> | awk -F. <span class="string">'&#123;if(substr($2,1,1)&gt;=5)$1+=1 ; print $1&#125;'</span></div><div class="line">31</div></pre></td></tr></table></figure>
-<h2 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h2><p>做完数据的采集工作，那么就要集成进 Zabbix 里了。首先需要在 zabbix_agentd 里定义这个监控项，在 <code>zabbix_agentd.conf</code> 里加入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UserParameter=system.cpu.temperature,/usr/bin/sensors | grep &apos;Core&apos; | awk &apos;&#123;print $3&#125;&apos; | awk -F &quot;.&quot; &apos;&#123;print $1&#125;&apos; | awk -F &quot;+&quot; &apos;&#123;print $2&#125;&apos; | awk  &apos;&#123;sum+=$1;count+=1&#125; END &#123;print sum/count&#125;&apos; | awk -F. &apos;&#123;if(substr($2,1,1)&gt;=5)$1+=1 ; print $1&#125;&apos;</div></pre></td></tr></table></figure>
-<p>然后重启 agent 服务即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ service zabbix_agentd restart</div><div class="line">Shutting down zabbix_agentd:                               [  OK  ]</div><div class="line">Starting zabbix_agentd:                                    [  OK  ]</div></pre></td></tr></table></figure>
-<p>回到 Zabbix 的界面，选择一个合适的模板，进到它的监控项中，点击新建监控项，然后如下图填入信息即可。注意这里的键值即上面填的 <code>UserParameters</code> 里的 <code>key</code>。</p>
-<p><img src="/uploads/images/2016/09/01/QQ20160901-0@2x.png" alt="add-new-metric"></p>
-<p>然后对相应的主机应用这个模板，那么就可以获取到这台主机的 CPU 温度了。</p>
-<p><img src="/uploads/images/2016/09/01/QQ20160901-1@2x.png" alt="metric-data"></p>
-<p>报警设置和普通监控项相同，如下：</p>
-<p><img src="/uploads/images/2016/09/01/QQ20160901-2@2x.png" alt="alert"></p>
-<p>最后，如果对 Zabbix 增加了 grafana 的话，还可以在 grafana 里去显示 CPU 温度。</p>
-<p><img src="/uploads/images/2016/09/01/QQ20160901-3@2x.png" alt="grafana"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;手上的一个任务，需要对集群的每台机器 CPU 温度进行监控，防止集群在进行计算时温度过高导致 CPU 损坏。由于集群里已经部署了 Zabbix 进行监控和报警，所以很自然的想法就是在 Zabbix 中集成 CPU 监控这一内容。&lt;/p&gt;
-&lt;p&gt;首先是获取 CPU 温度的方法，常见的有两种：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;IPMI&lt;/li&gt;
-&lt;li&gt;lm_sensors&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;其中 IPMI 需要硬件上的支持，同时还需要进行配置，比较复杂。而 lm_sensors 是 linux 下的一个小工具，安装简单，所以这里就选择 lm_sensors 来采集 CPU 的温度。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="系统运维" scheme="http://blog.jetmuffin.com/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/"/>
-    
-    
-      <category term="zabbix" scheme="http://blog.jetmuffin.com/tags/zabbix/"/>
-    
-      <category term="lm_sensors" scheme="http://blog.jetmuffin.com/tags/lm-sensors/"/>
-    
-      <category term="cpu" scheme="http://blog.jetmuffin.com/tags/cpu/"/>
     
   </entry>
   

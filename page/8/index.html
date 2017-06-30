@@ -74,6 +74,38 @@
 
   
   <h2 class="title">
+    <a href="/2015/03/06/hdu-5178-Pairs/">
+      Hdu 5178 BestCoder #31 1001 Pairs 解题报告
+    </a>
+  </h2>
+  
+  <time>
+    3月 6, 2015
+  </time>
+  <section class="content">
+	  <p>题意简单，找到线段上距离小于k的点对的个数。</p>
+<p>解法为，先排序所有点，然后遍历每个点x[a]，二分刚好小于b=x[a]+k的所在点下标，表示a和a+1～b之间的点都为符合点。然后累加b-a即可。</p>
+<p>用lower_bound会WA，要用upper_bound或者自己手写二分，问题出在当x[b]=x[a]+k时的区别。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/03/06/hdu-5178-Pairs/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/二分/">二分</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/03/04/popover/">
       弹出框popover点击框外区域关闭弹出框效果
     </a>
@@ -361,38 +393,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/CodeForces/">CodeForces</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/01/14/2014-Facebook-Hacker-Cup-qualification-B/">
-      2014 Facebook Hacker Cup 资格赛 第二题 二进制模拟
-    </a>
-  </h2>
-  
-  <time>
-    1月 14, 2015
-  </time>
-  <section class="content">
-	  <p>Facebook Hacker Cup资格赛的第二题，题目的意思问，给定的三个指标Ga,Gb,Gc，给定最多20种食物，能否任意组合刚刚好达到该指标。</p>
-<p>范围不是很大，20的话怎么搞都行，于是敲了一个二进制模拟去枚举。。过了</p>
-<p>思路类似容斥原理里的枚举因子，例如 i = 3 = ‘011’ 即选中第一个和第二个。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/01/14/2014-Facebook-Hacker-Cup-qualification-B/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/FaceBook-Hacker-Cup/">FaceBook Hacker Cup</a><a class="tag-link" href="/tags/二进制/">二进制</a>
 	  </div>
     
 

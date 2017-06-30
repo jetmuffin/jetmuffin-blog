@@ -74,6 +74,36 @@
 
   
   <h2 class="title">
+    <a href="/2016/12/04/kubernetes-code-reading-storage-part-1-cache/">
+      kubernetes源码阅读 - storage part 1 - cache
+    </a>
+  </h2>
+  
+  <time>
+    12月 4, 2016
+  </time>
+  <section class="content">
+	  <p>kubernetes 的 scheduler 维护了一个先进先出的队列，而这个队列的事实上是一种 <code>Storage</code>，只不过它重载了 Storage 中的各种方法。那么 kubernetes 中的存储是如何设计的呢？</p>
+
+    
+	  <div class="readmore">
+      <a href="/2016/12/04/kubernetes-code-reading-storage-part-1-cache/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/cache/">cache</a><a class="tag-link" href="/tags/kubernetes/">kubernetes</a><a class="tag-link" href="/tags/storage/">storage</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2016/12/03/kubernetes-code-reading-queue/">
       kubernetes源码阅读 - queue
     </a>
@@ -336,42 +366,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/golang/">golang</a><a class="tag-link" href="/tags/hello-world/">hello world</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2016/09/01/monitor-temperature-of-server-by-zabbix-and-lm-sensors/">
-      Zabbix配合lm_sensors监控服务器CPU温度
-    </a>
-  </h2>
-  
-  <time>
-    9月 1, 2016
-  </time>
-  <section class="content">
-	  <p>手上的一个任务，需要对集群的每台机器 CPU 温度进行监控，防止集群在进行计算时温度过高导致 CPU 损坏。由于集群里已经部署了 Zabbix 进行监控和报警，所以很自然的想法就是在 Zabbix 中集成 CPU 监控这一内容。</p>
-<p>首先是获取 CPU 温度的方法，常见的有两种：</p>
-<ul>
-<li>IPMI</li>
-<li>lm_sensors</li>
-</ul>
-<p>其中 IPMI 需要硬件上的支持，同时还需要进行配置，比较复杂。而 lm_sensors 是 linux 下的一个小工具，安装简单，所以这里就选择 lm_sensors 来采集 CPU 的温度。<br>
-
-    
-	  <div class="readmore">
-      <a href="/2016/09/01/monitor-temperature-of-server-by-zabbix-and-lm-sensors/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/cpu/">cpu</a><a class="tag-link" href="/tags/lm-sensors/">lm_sensors</a><a class="tag-link" href="/tags/zabbix/">zabbix</a>
 	  </div>
     
 

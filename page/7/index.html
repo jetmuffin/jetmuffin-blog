@@ -74,6 +74,86 @@
 
   
   <h2 class="title">
+    <a href="/2015/07/12/basic-algorithm-training-sort/">
+      基础算法训练 - 排序专题
+    </a>
+  </h2>
+  
+  <time>
+    7月 12, 2015
+  </time>
+  <section class="content">
+	  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>以前的算法和数据结构基础不是很扎实，从现在开始，弄懂每个算法的原理，打好基础。</p>
+<h2 id="1-快速排序"><a href="#1-快速排序" class="headerlink" title="1.快速排序"></a>1.快速排序</h2><p>快排的核心思想是分治，核心算法则是对数组的划分：</p>
+<p>`quicksort(A,p,r):</p>
+<p>if p &lt; r</p>
+<p>q = partition(A,p,r)</p>
+<p>quicksort(A,p,q-1)</p>
+<p>quicksort(A,q+1,r)`</p>
+<p>其中划分函数partition的核心操作是：</p>
+<ol>
+<li>将数组最后一个元素A[r]作为比较对象</li>
+<li>i = p-1 , j = p, j不停自加，判断A[r]和A[j]大小，若A[j]小于A[r]则将后游标i前进1位，并交换a[i]和a[j]</li>
+<li>最后交换a[i+1]和a[r]</li>
+<li>交换所得目的数将所有比a[r]小的数放在数组前面，所有比a[r]大的数放在数组后面，a[r]则在数组中间，返回数字为比a[r]小的数的个数</li>
+</ol>
+<p>代码：</p>
+<p>`#include <iostream></iostream></p>
+<p>using namespace std;</p>
+<p>int a[100] = {13,19,9,5,12,8,7,4,21,2,6,11};</p>
+<p>void swap(int &amp;x,int &amp;y){</p>
+<p>  int t = x;</p>
+<p>  x = y;</p>
+<p>  y = t;</p>
+<p>}</p>
+<p>int partition(int p,int r){</p>
+<p>  int i = p - 1;</p>
+<p>  int j = p;</p>
+<p>  for(;j &lt; r; j++){</p>
+<pre><code>if(a[j] &lt; a[r]){
+
+  i++;
+
+  swap(a[i],a[j]);
+
+}
+</code></pre><p>  }</p>
+<p>  swap(a[r],a[i+1]);</p>
+<p>  return i+1;</p>
+<p>}</p>
+<p>void quicksort(int p,int r){</p>
+<p>  if(p &lt; r){</p>
+<pre><code>int q = partition(p,r);
+
+quicksort(p,q-1);
+
+quicksort(q+1,r);
+</code></pre><p>  }</p>
+<p>}</p>
+<p>int main(){</p>
+<p> quicksort(0,11); </p>
+<p>  // int n = partition(0,11);</p>
+<p>  for(int i = 0 ; i &lt; 12;i++)</p>
+<pre><code>cout&lt;&lt;a[i]&lt;&lt;&quot; &quot;;
+</code></pre><p>  cout&lt;&lt;endl;</p>
+<p>}`</p>
+
+
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/基础算法/">基础算法</a><a class="tag-link" href="/tags/排序/">排序</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/06/27/hdu-1176-free-pie-dp/">
       hdu 1176 免费馅饼 变型数塔 dp
     </a>
@@ -425,38 +505,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/二分答案/">二分答案</a><a class="tag-link" href="/tags/离线查询/">离线查询</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/03/06/hdu-5178-Pairs/">
-      Hdu 5178 BestCoder #31 1001 Pairs 解题报告
-    </a>
-  </h2>
-  
-  <time>
-    3月 6, 2015
-  </time>
-  <section class="content">
-	  <p>题意简单，找到线段上距离小于k的点对的个数。</p>
-<p>解法为，先排序所有点，然后遍历每个点x[a]，二分刚好小于b=x[a]+k的所在点下标，表示a和a+1～b之间的点都为符合点。然后累加b-a即可。</p>
-<p>用lower_bound会WA，要用upper_bound或者自己手写二分，问题出在当x[b]=x[a]+k时的区别。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/03/06/hdu-5178-Pairs/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/二分/">二分</a>
 	  </div>
     
 
