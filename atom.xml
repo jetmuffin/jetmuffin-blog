@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-06-30T13:16:48.000Z</updated>
+  <updated>2017-07-23T12:37:52.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -14,6 +14,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hdu 2586 how far away? tarjan lca</title>
+    <link href="http://blog.jetmuffin.com/2017/07/23/hdu-2586-how-far-away-tarjan-lca/"/>
+    <id>http://blog.jetmuffin.com/2017/07/23/hdu-2586-how-far-away-tarjan-lca/</id>
+    <published>2017-07-23T12:30:48.000Z</published>
+    <updated>2017-07-23T12:37:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=2586</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>给定一棵无向带权树，询问其中若干个 (u, v) 的节点的距离。</p>
+<p>首先维护从 root 到每个节点的距离 $dis(root, i)$，那么任意两个节点的距离就可以转化为 $dis(u, v)=dis(root, u)+dis(root, v)-2*dis(root, lca(u, v))$</p>
+<p>那么题目就可以转化成求树上任意两点的 LCA 问题，因为有多个询问，可以用 <strong>Tarjan</strong> 离线处理完。同时在 <strong>Tarjan</strong> DFS 的过程中，可以处理上述的 $dis(root, i)$。</p>
+<a id="more"></a>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">40010</span>;</div><div class="line"><span class="keyword">struct</span> Edge &#123;</div><div class="line">	<span class="keyword">int</span> to, next, len;</div><div class="line">&#125;edge[maxn * <span class="number">2</span>];</div><div class="line"><span class="keyword">int</span> fa[maxn], ans[maxn], head[maxn], dis[maxn], cnt;</div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; query[maxn];</div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; num[maxn];</div><div class="line"><span class="keyword">bool</span> vis[maxn];</div><div class="line"><span class="keyword">int</span> n, q;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</div><div class="line">	cnt = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; maxn; i++) &#123;</div><div class="line">		head[i] = <span class="number">-1</span>;</div><div class="line">		fa[i] = i;</div><div class="line">		ans[i] = <span class="number">0</span>;</div><div class="line">		vis[i] = <span class="literal">false</span>;</div><div class="line">		dis[i] = <span class="number">0</span>;</div><div class="line">		query[i].clear();</div><div class="line">		num[i].clear();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_edge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v, <span class="keyword">int</span> length)</span> </span>&#123;</div><div class="line">	edge[cnt].to = v;</div><div class="line">	edge[cnt].len = length;</div><div class="line">	edge[cnt].next = head[u];</div><div class="line">	head[u] = cnt++;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">Find</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> x == fa[x] ? x : fa[x] = Find(fa[x]);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Union</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</div><div class="line">	fa[Find(y)] = Find(x);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">lca</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</div><div class="line">	vis[u] = <span class="literal">true</span>;</div><div class="line"></div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = head[u]; i != <span class="number">-1</span>; i = edge[i].next) &#123;</div><div class="line">		<span class="keyword">int</span> v = edge[i].to;</div><div class="line">		<span class="keyword">if</span>(vis[v]) </div><div class="line">			<span class="keyword">continue</span>;</div><div class="line">		dis[v] = dis[u] + edge[i].len;</div><div class="line">		lca(v);</div><div class="line"></div><div class="line">		Union(u, v);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; query[u].size(); i++) &#123;</div><div class="line">		<span class="keyword">int</span> v = query[u][i];</div><div class="line">		<span class="keyword">if</span>(!vis[v])</div><div class="line">			<span class="keyword">continue</span>;</div><div class="line">		ans[num[u][i]] = dis[u] + dis[v] - <span class="number">2</span> * dis[Find(v)];</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> t, u, v, w;</div><div class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;t);</div><div class="line">	<span class="keyword">while</span>(t--) &#123;</div><div class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;q);</div><div class="line">		init();</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</div><div class="line">			<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;u, &amp;v, &amp;w);</div><div class="line">			add_edge(u, v, w);</div><div class="line">			add_edge(v, u, w);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; q; i++) &#123;</div><div class="line">			<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;u, &amp;v);</div><div class="line">			query[u].push_back(v);</div><div class="line">			query[v].push_back(u);</div><div class="line">			num[u].push_back(i);</div><div class="line">			num[v].push_back(i);</div><div class="line">		&#125;</div><div class="line">		lca(<span class="number">1</span>);</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; q; i++) &#123;</div><div class="line">			<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans[i]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://acm.hdu.edu.cn/showproblem.php?pid=2586&quot;&gt;http://acm.hdu.edu.cn/showproblem.php?pid=2586&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h2&gt;&lt;p&gt;给定一棵无向带权树，询问其中若干个 (u, v) 的节点的距离。&lt;/p&gt;
+&lt;p&gt;首先维护从 root 到每个节点的距离 $dis(root, i)$，那么任意两个节点的距离就可以转化为 $dis(u, v)=dis(root, u)+dis(root, v)-2*dis(root, lca(u, v))$&lt;/p&gt;
+&lt;p&gt;那么题目就可以转化成求树上任意两点的 LCA 问题，因为有多个询问，可以用 &lt;strong&gt;Tarjan&lt;/strong&gt; 离线处理完。同时在 &lt;strong&gt;Tarjan&lt;/strong&gt; DFS 的过程中，可以处理上述的 $dis(root, i)$。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法题解" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
+    
+    
+      <category term="lca" scheme="http://blog.jetmuffin.com/tags/lca/"/>
+    
+      <category term="tarjan" scheme="http://blog.jetmuffin.com/tags/tarjan/"/>
+    
+  </entry>
   
   <entry>
     <title>部署 Matlab MDCE 计算集群</title>
@@ -1331,39 +1364,6 @@
     
     
       <category term="golang" scheme="http://blog.jetmuffin.com/tags/golang/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Golang 基础学习（一）</title>
-    <link href="http://blog.jetmuffin.com/2016/09/03/go-learning-1/"/>
-    <id>http://blog.jetmuffin.com/2016/09/03/go-learning-1/</id>
-    <published>2016-09-03T12:09:56.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>最初接触 go 是在 15 年，最开始对 go 的理解是写多线程的程序非常方便，于是学习了 go 的基本语法，并尝试写了一些 go 的简单应用，包括我的本科毕业设计也是使用 go 写的（<a href="https://github.com/icsnju/apt-mesos" target="_blank" rel="external">apt-mesos</a>）。但是对 go 也是停留在最基本的语法认识，有很多特性并未了解。所以想要从头再屡一遍 go 的所有内容。对每一块儿内容，以重学的角度深入学习。</p>
-<a id="more"></a>
-<h2 id="教程与代码"><a href="#教程与代码" class="headerlink" title="教程与代码"></a>教程与代码</h2><p>学习的过程将使用教程（<a href="https://gobyexample.com/" target="_blank" rel="external">https://gobyexample.com/</a>），它对 go 的每块儿内容提供了 demo，可以更易于理解。教程中的例程，将对其进行理解和实现，然后将代码整理在仓库 [<a href="https://github.com/JetMuffin/golearning.git" target="_blank" rel="external">JetMuffin/golearning</a>]中。</p>
-<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>任何语言的入门，都需要编写一个 Hello World 程序。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    fmt.Println(<span class="string">"hello world"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这是一段使用 <code>fmt</code> 进行输出 <code>hello world</code> 字符的代码，从语言的风格上看，go 使用 <code>package</code> 作为关键字进行包管理，这和 java 很像；而导入包的部分则又像 python；而主函数部分也比较独特。庆幸的是，go 中也不需要添加分号。</p>
-<p>go 和 python，ruby 等不同，它是解释型语言，因此在每次运行前需要进行编译，然后才可以进行执行，或者直接进行编译执行。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ go run helloworld.go</div><div class="line">hello world</div><div class="line"></div><div class="line">$ go build helloworld.go</div><div class="line">$ ls</div><div class="line">helloworld      helloworld.go</div><div class="line"></div><div class="line">$ ./helloworld</div><div class="line">hello world</div></pre></td></tr></table></figure>
-<p>这里需要知道的一点是，编译好后生成了 binary 文件，可以在同平台下直接进行运行，但并无法做到 runing everywhere，因为可能需要涉及到交叉编译的问题。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;目的&quot;&gt;&lt;a href=&quot;#目的&quot; class=&quot;headerlink&quot; title=&quot;目的&quot;&gt;&lt;/a&gt;目的&lt;/h2&gt;&lt;p&gt;最初接触 go 是在 15 年，最开始对 go 的理解是写多线程的程序非常方便，于是学习了 go 的基本语法，并尝试写了一些 go 的简单应用，包括我的本科毕业设计也是使用 go 写的（&lt;a href=&quot;https://github.com/icsnju/apt-mesos&quot;&gt;apt-mesos&lt;/a&gt;）。但是对 go 也是停留在最基本的语法认识，有很多特性并未了解。所以想要从头再屡一遍 go 的所有内容。对每一块儿内容，以重学的角度深入学习。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程语言" scheme="http://blog.jetmuffin.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
-    
-    
-      <category term="golang" scheme="http://blog.jetmuffin.com/tags/golang/"/>
-    
-      <category term="hello world" scheme="http://blog.jetmuffin.com/tags/hello-world/"/>
     
   </entry>
   

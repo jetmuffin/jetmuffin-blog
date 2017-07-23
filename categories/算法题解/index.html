@@ -78,6 +78,39 @@
 
   
   <h2 class="title">
+    <a href="/2017/07/23/hdu-2586-how-far-away-tarjan-lca/">
+      hdu 2586 how far away? tarjan lca
+    </a>
+  </h2>
+  
+  <time>
+    7月 23, 2017
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586">http://acm.hdu.edu.cn/showproblem.php?pid=2586</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>给定一棵无向带权树，询问其中若干个 (u, v) 的节点的距离。</p>
+<p>首先维护从 root 到每个节点的距离 $dis(root, i)$，那么任意两个节点的距离就可以转化为 $dis(u, v)=dis(root, u)+dis(root, v)-2*dis(root, lca(u, v))$</p>
+<p>那么题目就可以转化成求树上任意两点的 LCA 问题，因为有多个询问，可以用 <strong>Tarjan</strong> 离线处理完。同时在 <strong>Tarjan</strong> DFS 的过程中，可以处理上述的 $dis(root, i)$。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2017/07/23/hdu-2586-how-far-away-tarjan-lca/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/lca/">lca</a><a class="tag-link" href="/tags/tarjan/">tarjan</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/">
       fzu 2214 super capacitated knapsack problem
     </a>
@@ -344,40 +377,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/威尔逊定理/">威尔逊定理</a><a class="tag-link" href="/tags/拓展欧几里得/">拓展欧几里得</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/矩阵快速幂/">矩阵快速幂</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/">
-      hdu 5392 Infoplane in Tina Town
-    </a>
-  </h2>
-  
-  <time>
-    9月 4, 2015
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5392">http://acm.hdu.edu.cn/showproblem.php?pid=5392</a></p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定一个置换a，求序列1-n经过多少次a置换能够再次变回序列1-n</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题意很明显，是求置换群的循环长度。</p>
-<p>根据数论中的内容，循环长度等于所有循环节长度的最小公倍数，因此只要计算所有循环节的长度即可。</p>
-<p>但是题目中提到需要对最后的答案进行求模处理，然而欧几里得算法求最小公倍数无法去模，因此要用质因数分解法进行求最小公倍数<br>
-
-    
-	  <div class="readmore">
-      <a href="/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/最小公倍数/">最小公倍数</a><a class="tag-link" href="/tags/群论/">群论</a>
 	  </div>
     
 

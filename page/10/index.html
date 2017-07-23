@@ -74,6 +74,37 @@
 
   
   <h2 class="title">
+    <a href="/2014/10/30/poj-2248-shortest-addition-chain/">
+      最短加法链问题，POJ2248，BFS，搜索
+    </a>
+  </h2>
+  
+  <time>
+    10月 30, 2014
+  </time>
+  <section class="content">
+	  <p>该题也是算法导论的结课作业，看了一下貌似在POJ上有原题。</p>
+<p>宽搜<code>BFS</code>，因为要找到的是最短的加法链，宽搜是最快速的方法。算法的设计上，因为需要保存路径，所以用结构体<code>node（intid,int val, int pre)，保存每个节点，根据</code>pre<code>和</code>id`的映射关系使得路径成为链式，再宽搜路径即可</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/10/30/poj-2248-shortest-addition-chain/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/bfs/">bfs</a><a class="tag-link" href="/tags/加法链/">加法链</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2014/10/30/least-cost-shopping-dp/">
       最少费用购物问题，裸DP，动态规划
     </a>
@@ -362,39 +393,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/水题/">水题</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/10/08/genetic-algorithm/">
-      遗传算法求x^2+y^2的最大值，C++实现
-    </a>
-  </h2>
-  
-  <time>
-    10月 8, 2014
-  </time>
-  <section class="content">
-	  <p>最近和学院的教授开始学习数据挖掘和机器学习的课程，第一步就是学习简单的遗传算法。</p>
-<p>在网上找了篇教程，于是将其实现。文章地址<a href="http://blog.csdn.net/b2b160/article/details/4680853/">非常好的理解遗传算法的例子</a>。</p>
-<p>内容是求求f(x1,x2)=x1^2+x2^2的最大值 ，x1∈{1,2,3,4,5,6,7} , x2∈{1,2,3,4,5,6,7} 。</p>
-<p>选择样本数量为8，经过100代的迭代，效果还不错</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/10/08/genetic-algorithm/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/遗传算法/">遗传算法</a>
 	  </div>
     
 

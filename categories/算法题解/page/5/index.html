@@ -78,6 +78,38 @@
 
   
   <h2 class="title">
+    <a href="/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-solution/">
+      hdu 5105 Math Problem BestCoder#18 1002 求最大值
+    </a>
+  </h2>
+  
+  <time>
+    11月 19, 2014
+  </time>
+  <section class="content">
+	  <p><span style="white-space:pre"></span>f(x) = ax^3+bx^2+cx+d，最大&#20540;只会出现在几个地方：左端点，右端点，极&#20540;点。</p>
+<p><span style="white-space:pre"></span>求导后是个二次函数，可以求根，然后判断根是否在(L,R)范围内，若在范围内，直接求max(f(x),f(L),f(R))就是最大&#20540;了。</p>
+<p><span style="white-space:pre"></span>PS：要考虑a=0，b=0的情况，WA了一次ORZ</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-solution/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/数学/">数学</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2014/11/19/hdu-5104-Primes-Problem/">
       HDU 5104 BestCoder #18 1001 Primes Problem 水题
     </a>
@@ -365,39 +397,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/dfs/">dfs</a><a class="tag-link" href="/tags/剪枝/">剪枝</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/09/14/hdu-5012-ACM-ICPC-Xian-region-E-Dice/">
-      hdu5012 ACM-ICPC 西安赛区E题 Dice
-    </a>
-  </h2>
-  
-  <time>
-    9月 14, 2014
-  </time>
-  <section class="content">
-	  <p>题目的意思是给定骰子的一个开始状态（六个面的数字），再给定另一个结束状态，问从初始到结束状态最少要走几步，只能前后左右翻滚。</p>
-<p>一开始做题想简单了，以为模拟所有方案就可以了，后来发现模拟的越多越乱，结果没A出来。</p>
-<p>比赛结束后尝试BFS+Hash(记忆化搜索)，先确定四种操作各改变的数组元素，然后搜索，便可以A了。</p>
-<p>代码不够优美，毕竟菜鸟：</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/09/14/hdu-5012-ACM-ICPC-Xian-region-E-Dice/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/ACM网络赛/">ACM网络赛</a><a class="tag-link" href="/tags/bfs/">bfs</a>
 	  </div>
     
 
