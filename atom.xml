@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-08-06T07:48:13.000Z</updated>
+  <updated>2017-08-06T07:48:57.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://blog.jetmuffin.com/2017/08/06/hihocoder-1549-bit-and-sum/"/>
     <id>http://blog.jetmuffin.com/2017/08/06/hihocoder-1549-bit-and-sum/</id>
     <published>2017-08-06T07:11:54.000Z</published>
-    <updated>2017-08-06T07:48:13.000Z</updated>
+    <updated>2017-08-06T07:48:57.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://www.hihocoder.com/problemset/problem/1549" target="_blank" rel="external">http://www.hihocoder.com/problemset/problem/1549</a></p>
-<p>给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。</p>
+<p>给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^{20})$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。</p>
 <a id="more"></a>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>一开始算的时候一直觉得是个数位 dp 值，想用 dp[i][j][2] 表示使用 i 个数，使得第 j 位为 0 或 1 的方案数，那么 <code>dp[i+1][j][1] = (dp[i-t][j][0] * dp[t]j[1] + dp[i-t][j][1] * dp[t]j[0] + dp[i-t][j][1] * dp[t][j][1])</code>，但是这么做必然会出现重复选用的问题，然后越想越复杂。</p>
 <p>赛后看了下学弟的解，然后就明白怎么做了。一开始按每一位去算贡献的思路是对的，不过算法上不需要 dp。</p>
@@ -44,7 +44,7 @@
     <summary type="html">
     
       &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;链接 &lt;a href=&quot;http://www.hihocoder.com/problemset/problem/1549&quot;&gt;http://www.hihocoder.com/problemset/problem/1549&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。&lt;/p&gt;
+&lt;p&gt;给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^{20})$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。&lt;/p&gt;
     
     </summary>
     
