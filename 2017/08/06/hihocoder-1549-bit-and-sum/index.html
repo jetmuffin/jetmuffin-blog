@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="倦谈">
 <meta property="og:description" content="题目链接 http://www.hihocoder.com/problemset/problem/1549
 给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。">
-<meta property="og:updated_time" content="2017-08-06T07:43:38.000Z">
+<meta property="og:updated_time" content="2017-08-06T07:46:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hihocoder 1549 或运算和">
 <meta name="twitter:description" content="题目链接 http://www.hihocoder.com/problemset/problem/1549
@@ -84,15 +84,12 @@
 <a id="more"></a>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>一开始算的时候一直觉得是个数位 dp 值，想用 dp[i][j][2] 表示使用 i 个数，使得第 j 位为 0 或 1 的方案数，那么 <code>dp[i+1][j][1] = (dp[i-t][j][0] * dp[t]j[1] + dp[i-t][j][1] * dp[t]j[0] + dp[i-t][j][1] * dp[t][j][1])</code>，但是这么做必然会出现重复选用的问题，然后越想越复杂。</p>
 <p>赛后看了下学弟的解，然后就明白怎么做了。一开始按每一位去算贡献的思路是对的，不过算法上不需要 dp。</p>
-<p>对于任意位 $i$ 而言，要从 $n$ 个数里选 $k$ 个数使得这一位为 $0$，那么只有这 $k$ 个数在第 $i$ 位上都为 $0$ 才行。反之需要和在第 $i$ 位为 1，那么就减掉使得和为 0 的这种情况就行了。</p>
-<p>因此，我们预先统计所有数在第 $i$ 位为 1 出现的次数，用 $cnt_i$ 表示。</p>
-<p>那么使得第 $i$ 位为 1 总共的方案数为：</p>
+<p>对于任意位 $i$ 而言，要从 $n$ 个数里选 $k$ 个数使得这一位为 $0$，那么只有这 $k$ 个数在第 $i$ 位上都为 $0$ 才行。反之需要和在第 $i$ 位为 1，那么就减掉使得和为 0 的这种情况就行了。因此，我们预先统计所有数在第 $i$ 位为 1 出现的次数，用 $cnt_i$ 表示。那么使得第 $i$ 位为 1 总共的方案数为：</p>
 <p>$$f_i=\binom{n}{k}-\binom{n-cnt_i}{k}$$</p>
-<p>即从所有 $n$ 个数中选 $k$ 个数的方案数减去从第 $i$ 位的不为 1 的 $n-cnt_i$ 个数选 $k$ 个数的方案数即为使得这一位为 1 的方案数总和。</p>
-<p>那么最后把每一位换算成十进制，最后得到解即为：</p>
-<p>$$ ans = f_i <em> i </em> 2^i $$</p>
+<p>即从所有 $n$ 个数中选 $k$ 个数的方案数减去从第 $i$ 位的不为 1 的 $n-cnt_i$ 个数选 $k$ 个数的方案数即为使得这一位为 1 的方案数总和。那么最后把每一位换算成十进制，最后得到解即为：</p>
+<p>$$ans=f_i * i * 2^i$$</p>
 <p>其中需要运算组合数取模，不需要用卢卡斯定理，可以直接用公式 </p>
-<p>$$ \binom{n}{k} = \frac{n!}{k!*(n-k)!} $$</p>
+<p>$$\binom{n}{k}=\frac{n!}{k!*(n-k)!}$$</p>
 <p>其中分子部分直接用 $O(n)$ 预处理出所有的数的阶乘，分母则需要求出所有数阶乘的逆元，同样可以使用 $O(n)$ 进行预处理。最快速的方法就简单使用扩展欧几里得，即 </p>
 <p>$$inv_i \bmod p = inv(p \bmod i) * (p - p/i) \bmod p$$</p>
 <p>或者用费马小定理 </p>
