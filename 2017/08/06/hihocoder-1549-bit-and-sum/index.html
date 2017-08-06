@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="倦谈">
 <meta property="og:description" content="题目链接 http://www.hihocoder.com/problemset/problem/1549
 给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。">
-<meta property="og:updated_time" content="2017-08-06T07:46:47.000Z">
+<meta property="og:updated_time" content="2017-08-06T07:48:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hihocoder 1549 或运算和">
 <meta name="twitter:description" content="题目链接 http://www.hihocoder.com/problemset/problem/1549
@@ -91,7 +91,7 @@
 <p>其中需要运算组合数取模，不需要用卢卡斯定理，可以直接用公式 </p>
 <p>$$\binom{n}{k}=\frac{n!}{k!*(n-k)!}$$</p>
 <p>其中分子部分直接用 $O(n)$ 预处理出所有的数的阶乘，分母则需要求出所有数阶乘的逆元，同样可以使用 $O(n)$ 进行预处理。最快速的方法就简单使用扩展欧几里得，即 </p>
-<p>$$inv_i \bmod p = inv(p \bmod i) * (p - p/i) \bmod p$$</p>
+<p>$$inv<em>i \bmod p=inv</em>{p \bmod i} * (p - p/i) \bmod p$$</p>
 <p>或者用费马小定理 </p>
 <p>$$inv_i \bmod p = pow(i, p - 2) \bmod p$$</p>
 <p>对每个数求好逆元以后再用 $O(n)$ 递推一下即可。</p>
