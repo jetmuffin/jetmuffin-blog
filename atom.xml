@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-07-23T12:37:52.000Z</updated>
+  <updated>2017-08-06T07:43:38.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -16,11 +16,54 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>hihocoder 1549 或运算和</title>
+    <link href="http://blog.jetmuffin.com/2017/08/06/hihocoder-1549-bit-and-sum/"/>
+    <id>http://blog.jetmuffin.com/2017/08/06/hihocoder-1549-bit-and-sum/</id>
+    <published>2017-08-06T07:11:54.000Z</published>
+    <updated>2017-08-06T07:43:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://www.hihocoder.com/problemset/problem/1549" target="_blank" rel="external">http://www.hihocoder.com/problemset/problem/1549</a></p>
+<p>给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。</p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>一开始算的时候一直觉得是个数位 dp 值，想用 dp[i][j][2] 表示使用 i 个数，使得第 j 位为 0 或 1 的方案数，那么 <code>dp[i+1][j][1] = (dp[i-t][j][0] * dp[t]j[1] + dp[i-t][j][1] * dp[t]j[0] + dp[i-t][j][1] * dp[t][j][1])</code>，但是这么做必然会出现重复选用的问题，然后越想越复杂。</p>
+<p>赛后看了下学弟的解，然后就明白怎么做了。一开始按每一位去算贡献的思路是对的，不过算法上不需要 dp。</p>
+<p>对于任意位 $i$ 而言，要从 $n$ 个数里选 $k$ 个数使得这一位为 $0$，那么只有这 $k$ 个数在第 $i$ 位上都为 $0$ 才行。反之需要和在第 $i$ 位为 1，那么就减掉使得和为 0 的这种情况就行了。</p>
+<p>因此，我们预先统计所有数在第 $i$ 位为 1 出现的次数，用 $cnt_i$ 表示。</p>
+<p>那么使得第 $i$ 位为 1 总共的方案数为：</p>
+<p>$$f_i=\binom{n}{k}-\binom{n-cnt_i}{k}$$</p>
+<p>即从所有 $n$ 个数中选 $k$ 个数的方案数减去从第 $i$ 位的不为 1 的 $n-cnt_i$ 个数选 $k$ 个数的方案数即为使得这一位为 1 的方案数总和。</p>
+<p>那么最后把每一位换算成十进制，最后得到解即为：</p>
+<p>$$ ans = f_i <em> i </em> 2^i $$</p>
+<p>其中需要运算组合数取模，不需要用卢卡斯定理，可以直接用公式 </p>
+<p>$$ \binom{n}{k} = \frac{n!}{k!*(n-k)!} $$</p>
+<p>其中分子部分直接用 $O(n)$ 预处理出所有的数的阶乘，分母则需要求出所有数阶乘的逆元，同样可以使用 $O(n)$ 进行预处理。最快速的方法就简单使用扩展欧几里得，即 </p>
+<p>$$inv_i \bmod p = inv(p \bmod i) * (p - p/i) \bmod p$$</p>
+<p>或者用费马小定理 </p>
+<p>$$inv_i \bmod p = pow(i, p - 2) \bmod p$$</p>
+<p>对每个数求好逆元以后再用 $O(n)$ 递推一下即可。</p>
+<p>最后就是在模运算时注意加减乘除对应的操作。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">100010</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1000000007</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ll long long</span></div><div class="line">ll fac[maxn], inv[maxn];</div><div class="line"><span class="keyword">int</span> cnt[<span class="number">25</span>];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</div><div class="line">	fac[<span class="number">0</span>] = inv[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; maxn; i++) &#123;</div><div class="line">		fac[i] = fac[i - <span class="number">1</span>] * i % mod;</div><div class="line">	&#125;</div><div class="line">	inv[<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; maxn; i++) &#123;</div><div class="line">		inv[i] = inv[mod % i] * (mod - mod/i) % mod;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; maxn; i++) &#123;</div><div class="line">		inv[i] = inv[i] * inv[i<span class="number">-1</span>] % mod;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function">ll <span class="title">C</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> k &gt; n ? <span class="number">0</span> : fac[n] * inv[k] % mod * inv[n-k] % mod;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> t, n, k;</div><div class="line">	init();</div><div class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;t);</div><div class="line">	<span class="keyword">while</span>(t--) &#123;</div><div class="line">		<span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k)) &#123;</div><div class="line">			<span class="built_in">memset</span>(cnt, <span class="number">0</span>, <span class="keyword">sizeof</span>(cnt));</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">				<span class="keyword">int</span> x;</div><div class="line">				<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;x);</div><div class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">20</span>; j++) &#123;</div><div class="line">					cnt[j] += (x &gt;&gt; j) &amp; <span class="number">1</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			ll b = <span class="number">1</span>, ans = <span class="number">0</span>;</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">20</span>; j++) &#123;</div><div class="line">				ans = (ans + (C(n, k) - C(n - cnt[j], k) + mod) % mod * b % mod) % mod;</div><div class="line">				b *= <span class="number">2</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;链接 &lt;a href=&quot;http://www.hihocoder.com/problemset/problem/1549&quot;&gt;http://www.hihocoder.com/problemset/problem/1549&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法题解" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/"/>
+    
+    
+      <category term="数论" scheme="http://blog.jetmuffin.com/tags/%E6%95%B0%E8%AE%BA/"/>
+    
+  </entry>
+  
+  <entry>
     <title>hdu 2586 how far away? tarjan lca</title>
     <link href="http://blog.jetmuffin.com/2017/07/23/hdu-2586-how-far-away-tarjan-lca/"/>
     <id>http://blog.jetmuffin.com/2017/07/23/hdu-2586-how-far-away-tarjan-lca/</id>
     <published>2017-07-23T12:30:48.000Z</published>
-    <updated>2017-07-23T12:37:52.000Z</updated>
+    <updated>2017-08-02T11:50:36.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=2586</a></p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>给定一棵无向带权树，询问其中若干个 (u, v) 的节点的距离。</p>
@@ -1283,87 +1326,6 @@
     
     
       <category term="moore vote algorithm" scheme="http://blog.jetmuffin.com/tags/moore-vote-algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Golang 基础学习（二）类型</title>
-    <link href="http://blog.jetmuffin.com/2016/09/04/go-learning-2/"/>
-    <id>http://blog.jetmuffin.com/2016/09/04/go-learning-2/</id>
-    <published>2016-09-04T02:25:44.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。</p>
-<a id="more"></a>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"math/cmplx"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">var</span> (</div><div class="line">    flag   <span class="keyword">bool</span>       = <span class="literal">false</span></div><div class="line">    MaxInt <span class="keyword">uint64</span>     = <span class="number">1</span>&lt;&lt;<span class="number">64</span> - <span class="number">1</span></div><div class="line">    z      <span class="keyword">complex128</span> = cmplx.Sqrt(<span class="number">-5</span> + <span class="number">12i</span>)</div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line"></div><div class="line">    fmt.Println(<span class="string">"go"</span> + <span class="string">"lang"</span>)</div><div class="line"></div><div class="line">    fmt.Println(<span class="string">"1+1 = "</span>, <span class="number">1</span>+<span class="number">1</span>)</div><div class="line">    fmt.Println(<span class="string">"7.0/3.0 ="</span>, <span class="number">7.0</span>/<span class="number">3.0</span>)</div><div class="line"></div><div class="line">    fmt.Println(<span class="literal">true</span> &amp;&amp; <span class="literal">false</span>)</div><div class="line">    fmt.Println(<span class="literal">true</span> || <span class="literal">false</span>)</div><div class="line">    fmt.Println(!<span class="literal">true</span>)</div><div class="line"></div><div class="line">    <span class="keyword">const</span> f = <span class="string">"%T(%v)\n"</span></div><div class="line">    fmt.Printf(f, flag, flag)</div><div class="line">    fmt.Printf(f, MaxInt, MaxInt)</div><div class="line">    fmt.Printf(f, z, z)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h3><p>go 语言中的基础数据类型包括以下几种：</p>
-<ul>
-<li>int，Rune（Rune 是 int 的别名，代表一个 Unicode 码）</li>
-<li>int8，int16，int32，int64</li>
-<li>byte，uint8，uint16，uint32，uint64（byte 是 uint8 的别名）</li>
-<li>float32，float64</li>
-<li>bool</li>
-<li>string</li>
-<li>complex128，complex64（复数）</li>
-</ul>
-<p>源码中 <code>runtime.h</code> 对几种简单的基本类型先做了定义，然后用它们对其他的类型进行定义。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">char</span>             int8;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>           uint8;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">short</span>            int16;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">short</span>          uint16;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">int</span>              int32;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span>            uint32;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span>    int64;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">float</span>                   float32;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">double</span>                  float64;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> uint32                  uintptr</div><div class="line"><span class="keyword">typedef</span> int32                   intptr</div><div class="line"><span class="keyword">typedef</span> int32                   intgo</div><div class="line"><span class="keyword">typedef</span> uint32                  uintgo</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> uint8                   <span class="keyword">bool</span>;</div><div class="line"><span class="keyword">typedef</span> uint8                   byte;</div></pre></td></tr></table></figure>
-<p>从中可以看出 go 中的每个类型在 c 中对应的类型和占用字节大小。另外其中还定义了 <code>intptr</code> 和 <code>intgo</code>，其中 <code>intptr</code> 用于指针运算，<code>intgo</code> 相当于在源码中给 <code>int</code> 起的一个别名。</p>
-<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><p>string 类型事实上是一个结构体：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">struct String &#123;</div><div class="line">    byte*   str;</div><div class="line">    intgo   len;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里对于每个 string 类型，都确定了它的长度和字符数组，也就是说 golang 的字符串初始化话底层的结构就会被初始化。</p>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>go 中使用 <code>var</code> 作为关键字来进行变量声明。但和 javascript 里不同，go 中的变量是强类型。声明的方式有多种，包括：</p>
-<ul>
-<li><code>var a int</code>（仅声明不初始化）</li>
-<li><code>var a = 10</code>（声明同时初始化，但不指定类型，由编译器自动推导类型）</li>
-<li><code>var a int = 10</code>（声明、指定类型以及初始化）</li>
-<li><code>a := 10</code>（省略关键字，声明同时初始化，由编译器推导类型）</li>
-</ul>
-<p><strong>Note:</strong> 这里需要注意的是，<code>:=</code>是用于声明及赋值，而不是赋值，因此仅在变量定义时使用，开始写 go 的时候常常将 <code>:=</code> 用于赋值导致出错。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"initial"</span></div><div class="line">    fmt.Println(a)</div><div class="line"></div><div class="line">    <span class="keyword">var</span> b, c <span class="keyword">int</span> = <span class="number">1</span>, <span class="number">2</span></div><div class="line">    fmt.Println(b, c)</div><div class="line"></div><div class="line">    <span class="keyword">var</span> d = <span class="literal">true</span></div><div class="line">    fmt.Println(d)</div><div class="line"></div><div class="line">    <span class="keyword">var</span> e <span class="keyword">int</span></div><div class="line">    fmt.Println(e)</div><div class="line"></div><div class="line">    f := <span class="string">"short"</span></div><div class="line">    fmt.Println(f)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="类型推导"><a href="#类型推导" class="headerlink" title="类型推导"></a>类型推导</h3><p>对变量声明语句，编译器会对其进行自动的类型推导，可以用 <code>reflect</code> 包来查看变量的类型。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"reflect"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">var</span> a <span class="keyword">int</span> = <span class="number">10</span></div><div class="line">    <span class="keyword">var</span> b <span class="keyword">byte</span> = <span class="number">10</span></div><div class="line"></div><div class="line">    c := <span class="number">10.0</span></div><div class="line">    d := <span class="string">"10"</span></div><div class="line"></div><div class="line">    fmt.Printf(<span class="string">"a type:%s\n"</span>, reflect.TypeOf(a))</div><div class="line">    fmt.Printf(<span class="string">"b type:%s\n"</span>, reflect.TypeOf(b))</div><div class="line">    fmt.Printf(<span class="string">"c type:%s\n"</span>, reflect.TypeOf(c))</div><div class="line">    fmt.Printf(<span class="string">"d type:%s\n"</span>, reflect.TypeOf(d))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a type:int</div><div class="line">b type:uint8</div><div class="line">c type:float64</div><div class="line">d type:string</div></pre></td></tr></table></figure>
-<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>正常情况下，将类型 V 转化为 T 需要显式声明。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a := 5 // typeof(a) is int32</div><div class="line">b := int64(10) // typeof(b) is int64</div></pre></td></tr></table></figure>
-<p>若没有显式声明还需要进行类型转换 V -&gt; T，则需要满足 <code>assignability</code>，根据文档<a href="https://golang.org/ref/spec#Assignability" target="_blank" rel="external">assignability</a>，可能的条件如下：</p>
-<ul>
-<li>T 和 V 的类型相同</li>
-<li>T 和 V 的基础类型相同，并且其中至少一个并未显式指定类型</li>
-<li>T 是一个 <code>interface</code> 类型，并且 V 实现了 T (这在后面会提到)</li>
-<li>V 是一个双向的 <code>channel</code>，而 T 是一个 <code>channel</code>，同时 V 和 T 的元素类型相同</li>
-<li>V 是 nil 同时 T 是 <code>slice</code>, <code>function</code>, <code>map</code>, <code>channel</code>, <code>interface</code>, <code>pointer</code> 中的一种</li>
-<li>V 是未声明类型的常量</li>
-</ul>
-<p>在这些条件下，不需要显式声明，直接可以将 T 的值赋予 V。</p>
-<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>go 中的常量和 c 相同，需要在编译时确定值，并在编译时被创建。常量需要满足以下几个要求：</p>
-<ul>
-<li>类型必须是数值、字符串和布尔值之一</li>
-<li>可以使用表达式，但表达式必须在编译时可以计算的</li>
-<li>声明常量同时必须指定值（初始化），并且不能再修改值</li>
-</ul>
-<p>常量的关键字和 cpp 相同，用 <code>const</code> 进行声明，声明时可以显式指定数据类型，也可以不指定。多个常量可以同时进行批量声明，常见的使用方法如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"math"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">const</span> (</div><div class="line">    s <span class="keyword">string</span> = <span class="string">"constant"</span></div><div class="line">    one, two = <span class="number">1</span>, <span class="number">2</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    fmt.Println(s)</div><div class="line">    fmt.Println(one)</div><div class="line">    fmt.Println(two)</div><div class="line"></div><div class="line">    <span class="keyword">const</span> n = <span class="number">500000000</span></div><div class="line">    <span class="keyword">const</span> d = <span class="number">3e20</span> / n</div><div class="line">    fmt.Println(d)</div><div class="line"></div><div class="line">    fmt.Println(<span class="keyword">int64</span>(d))</div><div class="line"></div><div class="line">    fmt.Println(math.Sin(n))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="iota"><a href="#iota" class="headerlink" title="iota"></a>iota</h3><p>iota 在 go 中用于常量计数。iota 在 const 关键字出现时置 0，并且 const 内每增加一行讲使 itoa 计数一次，举个例子应该就很清楚了。</p>
-<p>```go<br>const a = iota // a = 0<br>const b = iota // b = 0<br>const (<br>    c = iota   // c = 0<br>    d = iota   // d = 1<br>    e = iota   // e = 2<br>)<br>const (<br>    f, g = iota, 1 &lt;&lt; iota // f = 0, g = 1<br>    h, i = iota, 1 &lt;&lt; iota // h = 1, i = 2<br>)</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://golang.org/ref/spec#Constant" target="_blank" rel="external">Golang Document</a></li>
-<li><a href="http://www.cnblogs.com/howDo/archive/2013/04/15/GoLang-Constant.html" target="_blank" rel="external">老虞学GoLang笔记</a></li>
-<li><a href="http://www.tuicool.com/articles/MJZvi27" target="_blank" rel="external">golang的类型转换的坑和分析</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;类型&quot;&gt;&lt;a href=&quot;#类型&quot; class=&quot;headerlink&quot; title=&quot;类型&quot;&gt;&lt;/a&gt;类型&lt;/h2&gt;&lt;p&gt;go 语言中有许多的类型，包括字符串、整形、浮点型、布尔型等等，这和一般的语言相同。这些类型之间可以进行基本的运算，这和 C, Java 等语言也是相同的。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程语言" scheme="http://blog.jetmuffin.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
-    
-    
-      <category term="golang" scheme="http://blog.jetmuffin.com/tags/golang/"/>
     
   </entry>
   

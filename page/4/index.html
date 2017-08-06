@@ -74,6 +74,39 @@
 
   
   <h2 class="title">
+    <a href="/2015/12/08/fzuoj-1759-super-a-b-mod-c/">
+      FZUOJ 1759 Super A^B mod C 指数循环节
+    </a>
+  </h2>
+  
+  <time>
+    12月 8, 2015
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=1759">http://acm.fzu.edu.cn/problem.php?pid=1759</a></p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定A，B和C的值，求$A^{B}modC的值，其中<code>1&lt;=A,C&lt;=1e10,1&lt;=B&lt;=10e1000000</code></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>今天刚刚学到一个内容，指数降幂公式，即$A^{B}modC=A^{Bmodphi(c)+phi(c)}modC$</p>
+<p>用这个公式，可以很方便地对大指数问题进行降维处理。<br>
+
+    
+	  <div class="readmore">
+      <a href="/2015/12/08/fzuoj-1759-super-a-b-mod-c/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/欧拉函数/">欧拉函数</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/11/29/solution-to-hdu-school-contest/">
       杭电校赛部分赛题题解
     </a>
@@ -342,37 +375,6 @@
   </section>
 </article>
   
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/10/22/compile-and-install-ambari/">
-      源码编译安装Ambari
-    </a>
-  </h2>
-  
-  <time>
-    10月 22, 2015
-  </time>
-  <section class="content">
-	  <h1 id="源码编译安装Ambari"><a href="#源码编译安装Ambari" class="headerlink" title="源码编译安装Ambari"></a>源码编译安装Ambari</h1><hr>
-<h2 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h2><p>笔者用源码编译的原因很简单，hortonworks的源太不稳定了，自己的几台Ubuntu的机子添加源后无法下载，且CentOS的机子添加源后无法下载ambari-agent，只能另辟蹊径使用源码编译</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/10/22/compile-and-install-ambari/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/ambari-hadoop/">ambari,hadoop</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
 </section>
 
 
@@ -546,5 +548,23 @@ if ($('.article').length == 1) {
 
   <script>setLoadingBarProgress(100);</script>
   
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
 </body>
 </html>

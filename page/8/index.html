@@ -74,6 +74,37 @@
 
   
   <h2 class="title">
+    <a href="/2015/03/28/blue-bridge-cup-training-reverse-couples/">
+      蓝桥杯算法训练-逆序对 解题报告
+    </a>
+  </h2>
+  
+  <time>
+    3月 28, 2015
+  </time>
+  <section class="content">
+	  <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>大体意思是，根据输入构建一棵二叉树，其中以其叶子节点从左到右为一数列，为了使得该数列的逆序对最少，可以对每个非叶子节点进行调换左右字数操作，求最少的逆序对。</p>
+<h3 id="算法思路"><a href="#算法思路" class="headerlink" title="算法思路"></a>算法思路</h3><p>题目标明用平衡二叉树进行处理，可以选择用Splay树或者AVL树进行处理，考虑到之前求逆序对的题目原型一般用归并排序进行，所以这里我打算用<strong>归并排序</strong>加<strong>动态规划</strong>处理。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/03/28/blue-bridge-cup-training-reverse-couples/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/动态规划/">动态规划</a><a class="tag-link" href="/tags/归并排序/">归并排序</a><a class="tag-link" href="/tags/蓝桥杯/">蓝桥杯</a><a class="tag-link" href="/tags/逆序对/">逆序对</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/03/07/hdu-5179-BestCoder-31-1002-beautiful-number-solution/">
       hdu 5179 BestCoder #31 1002 beautiful number 解题报告
     </a>
@@ -361,40 +392,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/期望/">期望</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/">
-      Codeforces #285 C Misha and Forest 队列维护 解题报告
-    </a>
-  </h2>
-  
-  <time>
-    1月 14, 2015
-  </time>
-  <section class="content">
-	  <p>题目大意为一个森林，对于每个节点记录它的度数degree和与它连接的点的异或和Sv。现在给出每个点的degree和Sv，求这个图有多少条边，并写出每条边的顶点。</p>
-<p>分析：</p>
-<p>首先从异或和出发，加入x^y^z = a，那么左右都异或x的话，(x^x)^y^z = a^x，即y^z = a^x，同理z = a^x^y。</p>
-<p>其次由于是森林，肯定有叶子节点，找出这些叶子节点，他们的degree均为1，且Sv为父节点的编号，每遍历一个叶子节点，将其父节点度数-1，Sv异或叶子节点编号，直到找到最后一个节点即可。</p>
-<p>最后，需要用队列维护，不然会T。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/森林/">森林</a><a class="tag-link" href="/tags/队列/">队列</a>
 	  </div>
     
 

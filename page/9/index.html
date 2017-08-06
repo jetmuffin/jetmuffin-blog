@@ -74,6 +74,40 @@
 
   
   <h2 class="title">
+    <a href="/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/">
+      Codeforces #285 C Misha and Forest 队列维护 解题报告
+    </a>
+  </h2>
+  
+  <time>
+    1月 14, 2015
+  </time>
+  <section class="content">
+	  <p>题目大意为一个森林，对于每个节点记录它的度数degree和与它连接的点的异或和Sv。现在给出每个点的degree和Sv，求这个图有多少条边，并写出每条边的顶点。</p>
+<p>分析：</p>
+<p>首先从异或和出发，加入x^y^z = a，那么左右都异或x的话，(x^x)^y^z = a^x，即y^z = a^x，同理z = a^x^y。</p>
+<p>其次由于是森林，肯定有叶子节点，找出这些叶子节点，他们的degree均为1，且Sv为父节点的编号，每遍历一个叶子节点，将其父节点度数-1，Sv异或叶子节点编号，直到找到最后一个节点即可。</p>
+<p>最后，需要用队列维护，不然会T。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/森林/">森林</a><a class="tag-link" href="/tags/队列/">队列</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/01/14/codeforces-285-B-Misha-and-Changing-Handles-solution/">
       CodeForces #285 B题Misha and Changing Handles解题报告
     </a>
@@ -357,36 +391,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/Nginx/">Nginx</a><a class="tag-link" href="/tags/缓存/">缓存</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/11/06/hadoop-java-api-hdfs/">
-      Hadoop java api ，HDFS文件操作，便于Web开发的集合
-    </a>
-  </h2>
-  
-  <time>
-    11月 6, 2014
-  </time>
-  <section class="content">
-	  <p><span style="white-space:pre"></span>最近在搞一个云计算比赛，要开发HDFS存储云，根据一个博客给的API写了一个完整的JAVA文件集成所有的HDFS文件操作，后期用JSP开发时只要导入这个包就OK了。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/11/06/hadoop-java-api-hdfs/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/HDFS/">HDFS</a><a class="tag-link" href="/tags/Hadoop/">Hadoop</a><a class="tag-link" href="/tags/云计算/">云计算</a>
 	  </div>
     
 

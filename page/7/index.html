@@ -74,6 +74,136 @@
 
   
   <h2 class="title">
+    <a href="/2015/07/26/hdu-5305-Friends-2015-summer-multi-school-trainning-search/">
+      hdu 5305 Friends 2015多校联训第二场 搜索
+    </a>
+  </h2>
+  
+  <time>
+    7月 26, 2015
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5305" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=5305</a></p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>对题意的理解可以抽象成，当前已知一个<code>图</code>，图最多的点数为<code>8</code>,然后将图中的部分边进行<code>染色</code>，然后使得每个点对应的边有一半是黑边，一半是白边。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>一开始接触题的想法是，既然数据范围小，可以直接进行搜索，然而一开始的策略是对点进行搜索，每个点枚举一半的边，进行染色，然后再搜下一个点进行染色，方法非常复杂，后来就没用继续下去了。</p>
+<p>然而及时看了下<code>staus</code>发现大家过得时间非常短，一般都是<code>15ms</code>或<code>30ms</code>就通过了，然后一度以为是结论题，只要统计边和点的信息就可以解出题了，结果不是。</p>
+<p>看了题解后发现做法应该是按边取搜索。可以先进行一次粗略的<code>剪枝</code>，统计每个点的度数，若出现奇数直接输出0；</p>
+<p>然后将每个点的<code>白边数</code>和<code>黑边数</code>分别置为度数的一半，然后枚举保存的边，分别按染白和染黑进行搜索，知道搜索出结果。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+<span class="meta">#<span class="meta-keyword">define</span> LL long long</span>
+<span class="meta">#<span class="meta-keyword">define</span> ULL unsigned long long</span>
+<span class="meta">#<span class="meta-keyword">define</span> MP make_pair</span>
+
+<span class="meta">#<span class="meta-keyword">define</span> mod 1000000007</span>
+<span class="meta">#<span class="meta-keyword">define</span> eps 1e-8</span>
+<span class="meta">#<span class="meta-keyword">define</span> pi acos(-1.0)</span>
+<span class="meta">#<span class="meta-keyword">define</span> inf 0x3fffffff</span>
+<span class="keyword">int</span> n,m;
+<span class="keyword">struct</span> edge{
+    <span class="keyword">int</span> u,v;
+}e[<span class="number">100</span>];
+<span class="keyword">int</span> deg[<span class="number">10</span>];
+<span class="keyword">int</span> c1[<span class="number">10</span>];
+<span class="keyword">int</span> c2[<span class="number">10</span>];
+<span class="keyword">int</span> ans = <span class="number">0</span>;
+<span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> cur)</span></span>{
+<span class="comment">//    cout&lt;&lt;"cur: "&lt;&lt;cur&lt;&lt;endl;</span>
+<span class="comment">//    for(int i = 1; i &lt;= n; i ++){</span>
+<span class="comment">//        cout&lt;&lt;c1[i]&lt;&lt;" ";</span>
+<span class="comment">//    }</span>
+<span class="comment">//    cout&lt;&lt;endl;</span>
+<span class="comment">//    for(int i = 1; i &lt;= n; i ++){</span>
+<span class="comment">//        cout&lt;&lt;c2[i]&lt;&lt;" ";</span>
+<span class="comment">//    }</span>
+<span class="comment">//    cout&lt;&lt;endl;    </span>
+    <span class="keyword">if</span>(cur == m+<span class="number">1</span>){
+        ans++;
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">int</span> v = e[cur].v;
+    <span class="keyword">int</span> u = e[cur].u;
+    <span class="keyword">if</span>(c1[u] &amp;&amp; c1[v]){
+        c1[u] --;
+        c1[v] --;
+        dfs(cur+<span class="number">1</span>);
+        c1[u] ++;
+        c1[v] ++;
+    }
+    <span class="keyword">if</span>(c2[u] &amp;&amp; c2[v]){
+        c2[u] --;
+        c2[v] --;
+        dfs(cur+<span class="number">1</span>);
+        c2[u] ++;
+        c2[v] ++;
+    }
+    <span class="keyword">return</span>;
+}
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+    <span class="meta">#<span class="meta-keyword">ifndef</span> ONLINE_JUDGE</span>
+        freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);
+        <span class="comment">//freopen("out.txt","w",stdout);</span>
+    <span class="meta">#<span class="meta-keyword">endif</span></span>
+
+    <span class="keyword">int</span> t;
+    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;t);
+    <span class="keyword">while</span>(t--){
+        <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m);
+        ans = <span class="number">0</span>;
+        <span class="built_in">memset</span>(deg,<span class="number">0</span>,<span class="keyword">sizeof</span>(deg));
+        <span class="built_in">memset</span>(c1,<span class="number">0</span>,<span class="keyword">sizeof</span>(c1));
+        <span class="built_in">memset</span>(c2,<span class="number">0</span>,<span class="keyword">sizeof</span>(c2));
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=m; i++){
+            <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;e[i].u,&amp;e[i].v);
+            deg[e[i].v]++;
+            deg[e[i].u]++;
+        }    
+        <span class="keyword">int</span> flag = <span class="number">1</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++){
+            <span class="keyword">if</span>(deg[i] &amp; <span class="number">1</span>){
+                flag = <span class="number">0</span>;
+                <span class="keyword">break</span>;
+            }
+            c1[i] = deg[i]/<span class="number">2</span>;
+            c2[i] = deg[i]/<span class="number">2</span>;
+        }
+        <span class="keyword">if</span>(!flag){
+            <span class="built_in">puts</span>(<span class="string">"0"</span>);
+            <span class="keyword">continue</span>;
+        }
+        dfs(<span class="number">1</span>);
+        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,ans);
+    }
+}
+</code></pre>
+
+
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/dfs/">dfs</a><a class="tag-link" href="/tags/搜索/">搜索</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/07/21/hdu-5088-2015-multi-school-training-1001-solution/">
       hdu 5088 2015多校联训第一场 1001 因数分解
     </a>
@@ -473,37 +603,6 @@ quicksort(q+1,r);
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/模拟/">模拟</a><a class="tag-link" href="/tags/编程之美/">编程之美</a><a class="tag-link" href="/tags/质数/">质数</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/03/28/blue-bridge-cup-training-reverse-couples/">
-      蓝桥杯算法训练-逆序对 解题报告
-    </a>
-  </h2>
-  
-  <time>
-    3月 28, 2015
-  </time>
-  <section class="content">
-	  <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>大体意思是，根据输入构建一棵二叉树，其中以其叶子节点从左到右为一数列，为了使得该数列的逆序对最少，可以对每个非叶子节点进行调换左右字数操作，求最少的逆序对。</p>
-<h3 id="算法思路"><a href="#算法思路" class="headerlink" title="算法思路"></a>算法思路</h3><p>题目标明用平衡二叉树进行处理，可以选择用Splay树或者AVL树进行处理，考虑到之前求逆序对的题目原型一般用归并排序进行，所以这里我打算用<strong>归并排序</strong>加<strong>动态规划</strong>处理。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/03/28/blue-bridge-cup-training-reverse-couples/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/动态规划/">动态规划</a><a class="tag-link" href="/tags/归并排序/">归并排序</a><a class="tag-link" href="/tags/蓝桥杯/">蓝桥杯</a><a class="tag-link" href="/tags/逆序对/">逆序对</a>
 	  </div>
     
 

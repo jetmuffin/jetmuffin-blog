@@ -78,6 +78,37 @@
 
   
   <h2 class="title">
+    <a href="/2017/08/06/hihocoder-1549-bit-and-sum/">
+      hihocoder 1549 或运算和
+    </a>
+  </h2>
+  
+  <time>
+    8月 6, 2017
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://www.hihocoder.com/problemset/problem/1549">http://www.hihocoder.com/problemset/problem/1549</a></p>
+<p>给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2017/08/06/hihocoder-1549-bit-and-sum/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/数论/">数论</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2017/03/15/method-of-computing-inverse-of-number/">
       除法取模（逆元求法）总结
     </a>
@@ -346,38 +377,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/结论题/">结论题</a><a class="tag-link" href="/tags/邀请赛/">邀请赛</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/02/04/hdu-4549-fermat-little-theorem/">
-      hdu 4549 费马小定理 矩阵快速幂
-    </a>
-  </h2>
-  
-  <time>
-    2月 4, 2015
-  </time>
-  <section class="content">
-	  <p>题目是斐波那契的变式，F[n]=F[n-1]*F[n-2]，F[0]=a，F[1]=b。</p>
-<p>可以推出最后的ans = a^x * b^y，然后x和y都是斐波那契相邻的两项，x=f(n-1)，y=f(n)。</p>
-<p>斐波那契和求幂都可以用快速幂搞定，中间数字特别大，快速幂过程容易溢出，然后WA+TLE了好几发，看了看discuss，群巨建议用费马小定理，查阅了一下，当a和p互质且p是质数时，a^(p-1)≡1，然后变式就是a^p=a^(p%Euler(MOD))%MOD，至于为什么，我之后还会再研究研究。。最近看数论比较有效率。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/02/04/hdu-4549-fermat-little-theorem/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/矩阵快速幂/">矩阵快速幂</a><a class="tag-link" href="/tags/费马小定理/">费马小定理</a>
 	  </div>
     
 

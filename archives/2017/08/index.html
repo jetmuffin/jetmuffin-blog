@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   
-  <title>Tag: 数论 | 倦谈</title>
+  <title>Archives: 2017/8 | 倦谈</title>
   <meta name="description" content="JetMuffin's blog." />
   <meta name="keywords" content="jetmuffin,blog" />
   <meta name="HandheldFriendly" content="True" />
@@ -13,7 +13,7 @@
   <meta name="description" content="JetMuffin&apos;s Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="倦谈">
-<meta property="og:url" content="http://blog.jetmuffin.com/tags/数论/page/2/index.html">
+<meta property="og:url" content="http://blog.jetmuffin.com/archives/2017/08/index.html">
 <meta property="og:site_name" content="倦谈">
 <meta property="og:description" content="JetMuffin&apos;s Blog">
 <meta name="twitter:card" content="summary">
@@ -63,11 +63,12 @@
     
     <main id="main" role="main">
       
-	<section class="page-header tag">
-    <h1>- <span>数论</span> -</h1>
+	
+
+
+	<section class="page-header archive">
+    <h1>- <span>2017.8</span> -</h1>
   </section>
-
-
 
 
 
@@ -78,65 +79,27 @@
 
   
   <h2 class="title">
-    <a href="/2015/02/04/hdu-4549-fermat-little-theorem/">
-      hdu 4549 费马小定理 矩阵快速幂
+    <a href="/2017/08/06/hihocoder-1549-bit-and-sum/">
+      hihocoder 1549 或运算和
     </a>
   </h2>
   
   <time>
-    2月 4, 2015
+    8月 6, 2017
   </time>
   <section class="content">
-	  <p>题目是斐波那契的变式，F[n]=F[n-1]*F[n-2]，F[0]=a，F[1]=b。</p>
-<p>可以推出最后的ans = a^x * b^y，然后x和y都是斐波那契相邻的两项，x=f(n-1)，y=f(n)。</p>
-<p>斐波那契和求幂都可以用快速幂搞定，中间数字特别大，快速幂过程容易溢出，然后WA+TLE了好几发，看了看discuss，群巨建议用费马小定理，查阅了一下，当a和p互质且p是质数时，a^(p-1)≡1，然后变式就是a^p=a^(p%Euler(MOD))%MOD，至于为什么，我之后还会再研究研究。。最近看数论比较有效率。</p>
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://www.hihocoder.com/problemset/problem/1549">http://www.hihocoder.com/problemset/problem/1549</a></p>
+<p>给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^20)$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。</p>
 
     
 	  <div class="readmore">
-      <a href="/2015/02/04/hdu-4549-fermat-little-theorem/">Read More</a>
+      <a href="/2017/08/06/hihocoder-1549-bit-and-sum/">Read More</a>
     </div>
     
     
     
 	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/矩阵快速幂/">矩阵快速幂</a><a class="tag-link" href="/tags/费马小定理/">费马小定理</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/07/21/hdu-4828-Grids-Astar-1002-solution/">
-      hdu4828 Grids 百度之星初赛1002解题报告
-    </a>
-  </h2>
-  
-  <time>
-    7月 21, 2014
-  </time>
-  <section class="content">
-	  <p>搞ACM起步比较晚，但是对这方面兴趣很大，第一次参加百度之星，资格赛水过一道题进入初赛，结果初赛被一道题难倒了。</p>
-<p>初赛分两场，每场筛选500人（赛程规定），而之后的结果上看，只有约250人A出题，而大多数人都是通过这道题拿到复赛入场券。这道题我一直觉得非常接近结果了，但是在最重要的环节，也就是取模上出了很大的问题，导致没有A出该题，下面是该题的分析。</p>
-<p>题干上，大多数人可以看出看出规律，即求卡特兰数，HDOJ上有相类似的题目，但是这道题的数据量非常大，有100万之多，因而题目上要求对1000000007取模。</p>
-<p>卡特兰数有很多递推公式，我选择的是h(n)=h(n-1)<em>(4</em>n-2)/(n+1);这条。</p>
-<p>由于数据量比较大，因而我选择用打表的方式，但是这里出现了一个问题，卡特兰数的数据在不断的增大，因而一定要在取模的基础上进行递推，然而简单地进行取模会造成递推公式出错，即不能在原结果上直接取模。</p>
-<p>比赛时就卡在这点上了，怎么想都想不出改进的方法。</p>
-<p>直到后来做到HDOJ的拓展欧几里德的题目（HDOJ 1576），才直到这道题的解法。</p>
-<p>除法的取模需要用extgcd的算法进行取逆，这是该题的关键。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/07/21/hdu-4828-Grids-Astar-1002-solution/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/百度之星/">百度之星</a>
+      <a class="tag-link" href="/tags/数论/">数论</a>
 	  </div>
     
 
@@ -146,16 +109,6 @@
 </section>
 
 
-  <nav id="page-nav">
-    
-    <a class="prev" rel="prev" href="/tags/数论/">
-      <span class="icon icon-chevron-left"></span>
-      <span class="text">Previous</span>
-    </a>
-    
-    
-  </nav>
-  
 
       <script>setLoadingBarProgress(60);</script>
     </main>
@@ -311,5 +264,23 @@ if ($('.article').length == 1) {
 
   <script>setLoadingBarProgress(100);</script>
   
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
 </body>
 </html>

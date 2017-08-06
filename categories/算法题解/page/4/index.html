@@ -78,6 +78,38 @@
 
   
   <h2 class="title">
+    <a href="/2015/02/03/poj-2676-blue-bridge-cup-training/">
+      蓝桥杯校内选拔赛第6题题解 poj 2676
+    </a>
+  </h2>
+  
+  <time>
+    2月 3, 2015
+  </time>
+  <section class="content">
+	  <p>题目就是输入一个9*9的数独，然后解出数独的最终解。</p>
+<p>大体思路还是搜索，dfs即可，写一个检查函数判断行、列、小方阵是否违规。</p>
+<p>dfs的函数变量一开始考虑用x,y坐标进行处理，然后对于每个点，枚举1-9个数字中可用的数字，但是由于每次到一行的末尾需要换行到下一行比较麻烦，索性将二维数组一维化，仅使用一个变量k即可。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/02/03/poj-2676-blue-bridge-cup-training/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/dfs/">dfs</a><a class="tag-link" href="/tags/poj/">poj</a><a class="tag-link" href="/tags/搜索/">搜索</a><a class="tag-link" href="/tags/蓝桥杯/">蓝桥杯</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/02/03/blu-bridge-cup-4/">
       蓝桥杯校内选拔第四题解题报告
     </a>
@@ -373,38 +405,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/容斥原理/">容斥原理</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/11/25/codeforces-279-A-Team-Olympiad/">
-      Codeforces #279 A Team Olympiad 瞎搞
-    </a>
-  </h2>
-  
-  <time>
-    11月 25, 2014
-  </time>
-  <section class="content">
-	  <p><span style="white-space:pre"></span>难得一场CF在下午5点打，果断参加，涨了100多分～</p>
-<p><span style="white-space:pre"></span>A题比较水，说的是n个学生，分别擅长体育，数学， 编程，要求把他们分成几组，每组里必须有会编程，会体育，会数学的各一人，求最多分多少组。</p>
-<p><span style="white-space:pre"></span>其实就是将三类学生分类，找到人数最少的一类，瞎搞搞就过了。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/11/25/codeforces-279-A-Team-Olympiad/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/CodeForces/">CodeForces</a><a class="tag-link" href="/tags/水题/">水题</a>
 	  </div>
     
 
