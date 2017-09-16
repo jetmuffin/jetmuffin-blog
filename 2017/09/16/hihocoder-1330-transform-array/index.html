@@ -4,21 +4,25 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   
-  <title>Tag: 循环节 | 倦谈</title>
+  <title>hihocoder 1330 数组变换 | 倦谈</title>
   <meta name="description" content="JetMuffin's blog." />
   <meta name="keywords" content="jetmuffin,blog" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="JetMuffin&apos;s Blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="倦谈">
-<meta property="og:url" content="http://blog.jetmuffin.com/tags/循环节/index.html">
+  <meta name="description" content="题目链接 http://hihocoder.com/problemset/solution/1172843
+给定一个 $1 - N$ 的排列 $P$，每次重排将第 $i$ 个元素放到第 $P_i$ 个位置上，例如 $P=(2,3,1)$，若初始数组是 $(1,2,3)$，重排一次后变为 $(3,1,2)$，重排三次后变回原数列。问给定一个置换，经过多少次回到原排列？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hihocoder 1330 数组变换">
+<meta property="og:url" content="http://blog.jetmuffin.com/2017/09/16/hihocoder-1330-transform-array/index.html">
 <meta property="og:site_name" content="倦谈">
-<meta property="og:description" content="JetMuffin&apos;s Blog">
+<meta property="og:description" content="题目链接 http://hihocoder.com/problemset/solution/1172843
+给定一个 $1 - N$ 的排列 $P$，每次重排将第 $i$ 个元素放到第 $P_i$ 个位置上，例如 $P=(2,3,1)$，若初始数组是 $(1,2,3)$，重排一次后变为 $(3,1,2)$，重排三次后变回原数列。问给定一个置换，经过多少次回到原排列？">
+<meta property="og:updated_time" content="2017-09-16T06:07:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="倦谈">
-<meta name="twitter:description" content="JetMuffin&apos;s Blog">
+<meta name="twitter:title" content="hihocoder 1330 数组变换">
+<meta name="twitter:description" content="题目链接 http://hihocoder.com/problemset/solution/1172843
+给定一个 $1 - N$ 的排列 $P$，每次重排将第 $i$ 个元素放到第 $P_i$ 个位置上，例如 $P=(2,3,1)$，若初始数组是 $(1,2,3)$，重排一次后变为 $(3,1,2)$，重排三次后变回原数列。问给定一个置换，经过多少次回到原排列？">
   
   
     <link rel="icon" href="/favicon.png">
@@ -62,148 +66,76 @@
     <script>setLoadingBarProgress(40);</script>
     
     <main id="main" role="main">
-      
-	<section class="page-header tag">
-    <h1>- <span>循环节</span> -</h1>
-  </section>
-
-
-
-
-
-
-<section class="post-list">
-	
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/09/16/hihocoder-1330-transform-array/">
-      hihocoder 1330 数组变换
+      <article id="post-hihocoder-1330-transform-array"
+  class="post article white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<h2 class="title">
+  	<a href="/2017/09/16/hihocoder-1330-transform-array/">
+    	hihocoder 1330 数组变换
     </a>
   </h2>
-  
-  <time>
-    9月 16, 2017
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://hihocoder.com/problemset/solution/1172843">http://hihocoder.com/problemset/solution/1172843</a></p>
+	<time>
+	  9月 16, 2017
+	</time>
+	<section class="content">
+  	<div class="article-entry" itemprop="articleBody">
+    	<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://hihocoder.com/problemset/solution/1172843" target="_blank" rel="external">http://hihocoder.com/problemset/solution/1172843</a></p>
 <p>给定一个 $1 - N$ 的排列 $P$，每次重排将第 $i$ 个元素放到第 $P_i$ 个位置上，例如 $P=(2,3,1)$，若初始数组是 $(1,2,3)$，重排一次后变为 $(3,1,2)$，重排三次后变回原数列。问给定一个置换，经过多少次回到原排列？</p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这里要用到群论的一个结论：对于任意一个置换 $T$，若 $T^k = e$（$e$ 为单位置换，即 $f(x) = x$，那么 $k$ 的最小整数解为 $T$ 的所有循环节长度的最小公倍数。</p>
+<p>因此只需要遍历一遍 $T$，计算各个循环节长度，计算 LCM 即可。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">105</span>;
+<span class="keyword">int</span> a[maxn], vis[maxn];
+<span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{
+    <span class="keyword">return</span> b == <span class="number">0</span> ? a : gcd(b, a%b);
+}
+<span class="function"><span class="keyword">int</span> <span class="title">lcm</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{
+    <span class="keyword">return</span> a * b / gcd(a, b);
+}
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{
+    <span class="keyword">int</span> n;
+    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n)) {
+        <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) {
+            <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;a[i]);
+        }
+        <span class="keyword">int</span> res = <span class="number">1</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n ; i++) {
+            <span class="keyword">int</span> cnt = <span class="number">0</span>;
+            <span class="keyword">if</span>(!vis[i]) {
+                <span class="keyword">int</span> p = i;
+                <span class="keyword">while</span>(!vis[p]) {
+                    vis[p] = <span class="number">1</span>;
+                    p = a[p];
+                    cnt++;
+                }
+                res = lcm(res, cnt);
+            }
+        }
+        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, res);
+    }
+}
+</code></pre>
 
-    
-	  <div class="readmore">
-      <a href="/2017/09/16/hihocoder-1330-transform-array/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/组合数学/">组合数学</a>
+  	</div>
+
+	  <div class="article-tags tags">
+		  
+        <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/组合数学/">组合数学</a>
+      
 	  </div>
-    
-
-  </section>
+	</section>
 </article>
-  
-    <article class="post ">
 
-  
-  <h2 class="title">
-    <a href="/2015/12/08/fzuoj-1759-super-a-b-mod-c/">
-      FZUOJ 1759 Super A^B mod C 指数循环节
-    </a>
-  </h2>
-  
-  <time>
-    12月 8, 2015
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=1759">http://acm.fzu.edu.cn/problem.php?pid=1759</a></p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定A，B和C的值，求$A^{B}modC的值，其中<code>1&lt;=A,C&lt;=1e10,1&lt;=B&lt;=10e1000000</code></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>今天刚刚学到一个内容，指数降幂公式，即$A^{B}modC=A^{Bmodphi(c)+phi(c)}modC$</p>
-<p>用这个公式，可以很方便地对大指数问题进行降维处理。<br>
 
-    
-	  <div class="readmore">
-      <a href="/2015/12/08/fzuoj-1759-super-a-b-mod-c/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/欧拉函数/">欧拉函数</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/09/20/generalized-fibonacci-sequence-to-find-the-circular-section/">
-      [转] 广义Fibonacci数列找循环节
-    </a>
-  </h2>
-  
-  <time>
-    9月 20, 2015
-  </time>
-  <section class="content">
-	  <h2 id="出处"><a href="#出处" class="headerlink" title="出处"></a>出处</h2><p>转自<a href="http://blog.csdn.net/ACdreamers">ACDreamer的博客</a></p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>给定<img src="http://img.blog.csdn.net/20140512141202250" alt="img-1">，满足<img src="http://img.blog.csdn.net/20140512141344500" alt="img-2">，求<img src="http://img.blog.csdn.net/20140512141547343" alt="img-3">的循环节长度。<br>
-
-    
-	  <div class="readmore">
-      <a href="/2015/09/20/generalized-fibonacci-sequence-to-find-the-circular-section/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/数论/">数论</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/">
-      hdu 5392 Infoplane in Tina Town
-    </a>
-  </h2>
-  
-  <time>
-    9月 4, 2015
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5392">http://acm.hdu.edu.cn/showproblem.php?pid=5392</a></p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定一个置换a，求序列1-n经过多少次a置换能够再次变回序列1-n</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题意很明显，是求置换群的循环长度。</p>
-<p>根据数论中的内容，循环长度等于所有循环节长度的最小公倍数，因此只要计算所有循环节的长度即可。</p>
-<p>但是题目中提到需要对最后的答案进行求模处理，然而欧几里得算法求最小公倍数无法去模，因此要用质因数分解法进行求最小公倍数<br>
-
-    
-	  <div class="readmore">
-      <a href="/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/循环节/">循环节</a><a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/最小公倍数/">最小公倍数</a><a class="tag-link" href="/tags/群论/">群论</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
+<section id="comments">
+	<div id="disqus_thread"></div>
 </section>
+
 
 
       <script>setLoadingBarProgress(60);</script>
@@ -316,11 +248,13 @@
 <script>
   var disqus_shortname = 'jetmuffin';
   
+  var disqus_url = 'http://blog.jetmuffin.com/2017/09/16/hihocoder-1330-transform-array/';
+  
   (function(){
     var dsq = document.createElement('script');
     dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
   })();
 </script>

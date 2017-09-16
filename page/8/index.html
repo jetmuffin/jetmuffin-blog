@@ -74,6 +74,38 @@
 
   
   <h2 class="title">
+    <a href="/2015/04/25/beautiful-of-coding-3/">
+      编程之美初赛第三题 质数相关 小数据解法
+    </a>
+  </h2>
+  
+  <time>
+    4月 25, 2015
+  </time>
+  <section class="content">
+	  <p><div class="limit"><div>时间限制:2000ms</div><div>单点时限:1000ms</div><div>内存限制:256MB</div></div><div></p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>两个数a和 b (a&lt;b)被称为质数相关，是指a × p = b，这里p是一个质数。一个集合S被称为质数相关，是指S中存在两个质数相关的数，否则称S为质数无关。如{2, 8, 17}质数无关，但{2, 8, 16}, {3, 6}质数相关。现在给定一个集合S，问S的所有质数无关子集中，最大的子集的大小。</p>
+<h3 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h3>
+
+    
+	  <div class="readmore">
+      <a href="/2015/04/25/beautiful-of-coding-3/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/模拟/">模拟</a><a class="tag-link" href="/tags/编程之美/">编程之美</a><a class="tag-link" href="/tags/质数/">质数</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/03/28/blue-bridge-cup-training-reverse-couples/">
       蓝桥杯算法训练-逆序对 解题报告
     </a>
@@ -357,41 +389,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/BestCoder/">BestCoder</a><a class="tag-link" href="/tags/dfs/">dfs</a><a class="tag-link" href="/tags/fibonacci/">fibonacci</a><a class="tag-link" href="/tags/hdu/">hdu</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/01/27/bestCoder-26-1002-card-expection-solution/">
-      BestCoder #26 1002 Card  期望 解题报告
-    </a>
-  </h2>
-  
-  <time>
-    1月 27, 2015
-  </time>
-  <section class="content">
-	  <p>题目的意思是，从x张牌里抽1张牌，然后放回重复b次，Sj为每次抽出牌的积分之和，问Sj的期望。</p>
-<p>一开始看这个题目的时候考虑用组合做，因为b最大为5，所以考虑Sj由5个数-1个数组成的情况，然后算概率，但是题目的a和T的范围太大，O(Tlog(a))都会T估计，这明摆着是要O(T)的节奏啊。。也就是说，给定一个x，一个b，就有公式可以推出答案。</p>
-<p>然后从另一个方向考虑，如果从组合考虑，即使给定几个数被抽到，还得考虑顺序情况，相当复杂，于是可以考虑对于每个数，其实只有2种状态（选中OR未选中），根据这两种状态去求期望会方便很多。</p>
-<p>每次抽牌，选中某一张牌的概率为1/x；</p>
-<p>抽b次牌结束后，某张牌被抽中概率为p = 1-(1-1/x)^b，（转化为相反的事件再转化回来）。</p>
-<p>因此抽中某一张牌对期望的贡献为 i <em> p ，因此总期望为 ∑(i=1~x) i </em> p ，即EX = (x + 1)<em>x</em> (1-(1-1/x)^b)。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2015/01/27/bestCoder-26-1002-card-expection-solution/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/期望/">期望</a>
 	  </div>
     
 

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-08-06T07:48:57.000Z</updated>
+  <updated>2017-09-16T06:07:12.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -14,6 +14,70 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hihocoder 1330 数组变换</title>
+    <link href="http://blog.jetmuffin.com/2017/09/16/hihocoder-1330-transform-array/"/>
+    <id>http://blog.jetmuffin.com/2017/09/16/hihocoder-1330-transform-array/</id>
+    <published>2017-09-16T06:00:44.000Z</published>
+    <updated>2017-09-16T06:07:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://hihocoder.com/problemset/solution/1172843" target="_blank" rel="external">http://hihocoder.com/problemset/solution/1172843</a></p>
+<p>给定一个 $1 - N$ 的排列 $P$，每次重排将第 $i$ 个元素放到第 $P_i$ 个位置上，例如 $P=(2,3,1)$，若初始数组是 $(1,2,3)$，重排一次后变为 $(3,1,2)$，重排三次后变回原数列。问给定一个置换，经过多少次回到原排列？</p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这里要用到群论的一个结论：对于任意一个置换 $T$，若 $T^k = e$（$e$ 为单位置换，即 $f(x) = x$，那么 $k$ 的最小整数解为 $T$ 的所有循环节长度的最小公倍数。</p>
+<p>因此只需要遍历一遍 $T$，计算各个循环节长度，计算 LCM 即可。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span>
+<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">105</span>;
+<span class="keyword">int</span> a[maxn], vis[maxn];
+<span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{
+    <span class="keyword">return</span> b == <span class="number">0</span> ? a : gcd(b, a%b);
+}
+<span class="function"><span class="keyword">int</span> <span class="title">lcm</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{
+    <span class="keyword">return</span> a * b / gcd(a, b);
+}
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{
+    <span class="keyword">int</span> n;
+    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n)) {
+        <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) {
+            <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;a[i]);
+        }
+        <span class="keyword">int</span> res = <span class="number">1</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n ; i++) {
+            <span class="keyword">int</span> cnt = <span class="number">0</span>;
+            <span class="keyword">if</span>(!vis[i]) {
+                <span class="keyword">int</span> p = i;
+                <span class="keyword">while</span>(!vis[p]) {
+                    vis[p] = <span class="number">1</span>;
+                    p = a[p];
+                    cnt++;
+                }
+                res = lcm(res, cnt);
+            }
+        }
+        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, res);
+    }
+}
+</code></pre>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h2&gt;&lt;p&gt;链接 &lt;a href=&quot;http://hihocoder.com/problemset/solution/1172843&quot;&gt;http://hihocoder.com/problemset/solution/1172843&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;给定一个 $1 - N$ 的排列 $P$，每次重排将第 $i$ 个元素放到第 $P_i$ 个位置上，例如 $P=(2,3,1)$，若初始数组是 $(1,2,3)$，重排一次后变为 $(3,1,2)$，重排三次后变回原数列。问给定一个置换，经过多少次回到原排列？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="循环节" scheme="http://blog.jetmuffin.com/tags/%E5%BE%AA%E7%8E%AF%E8%8A%82/"/>
+    
+      <category term="组合数学" scheme="http://blog.jetmuffin.com/tags/%E7%BB%84%E5%90%88%E6%95%B0%E5%AD%A6/"/>
+    
+  </entry>
   
   <entry>
     <title>hihocoder 1549 或运算和</title>
@@ -1278,51 +1342,6 @@
       <category term="markdown" scheme="http://blog.jetmuffin.com/tags/markdown/"/>
     
       <category term="gh-md-doc" scheme="http://blog.jetmuffin.com/tags/gh-md-doc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Moore vote algorithm 多数投票算法</title>
-    <link href="http://blog.jetmuffin.com/2016/09/04/moore-vote-algorithm/"/>
-    <id>http://blog.jetmuffin.com/2016/09/04/moore-vote-algorithm/</id>
-    <published>2016-09-04T12:24:16.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在刷 leetcode 时，发现一道题目 <a href="https://leetcode.com/problems/majority-element/" target="_blank" rel="external">Majority Element</a>，要求求出数组中出现元素超过 <code>n/2</code> 的元素。思考了许久也只能写出 <code>O(nlogn)</code> 的解法（即用 map 计数）。查阅资料后发现一个比较巧妙的算法 Moore vote algorithm，可以在 <code>O(n)</code> 时间和 <code>O(1)</code> 空间解决这个问题。</p>
-<a id="more"></a>
-<h2 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h2><p>算法的思想很简单，每次从数组中取一对数，如果相同就叠加，如果不同就一起删去，很明显最后留下的肯定是数量最多的一个数。再深入一步实现，只要用一个变量记录<strong>标记元素</strong>和<strong>标记元素的出现次数</strong>，然后找下一个元素，分以下情况：</p>
-<ul>
-<li>如果下一个元素和标记元素相同，那么标记元素出现次数加1；</li>
-<li>如果和标记元素不同，那么标记元素出现次数减1；</li>
-<li>如果标记元素变为 0，那么取下一个元素作为标记元素，初始出现次数为1；</li>
-</ul>
-<p>举个说明性的例子，数列 <code>[2,3,2,2,4,1,2]</code>，标记元素变量 <code>now</code>，出现次数 <code>count</code></p>
-<ol>
-<li>初始状态（取第一个数）：<code>now:2</code>，<code>count:1</code></li>
-<li>取第二个数 <code>3</code>，它和 <code>now</code> 不同，那么 <code>count--</code>，这时候 <code>count = 0</code>，那么拿下一个元素（第三个数）为标记元素 <code>now:2</code>，<code>count:1</code></li>
-<li>取第四个数 <code>2</code>，它和 <code>now</code> 相同，那么 <code>count++</code>，状态变为 <code>now:2</code>，<code>count:2</code></li>
-<li>取第五个数 <code>4</code>，它和 <code>now</code> 不同，那么 <code>count--</code>，状态变为 <code>now:2</code>，<code>count:1</code></li>
-<li>重复以上过程直到结尾，最后 <code>now:2</code>，所以数量超过 <code>n/2</code> 的元素为 2</li>
-</ol>
-<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><p>为了更好实现上述过程，事实上程序的伪代码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">For i from 0 to len(arr):</div><div class="line">    if count == 0:</div><div class="line">        now = arr[i]</div><div class="line">        count = 1</div><div class="line">    else:</div><div class="line">        if now == arr[i]:</div><div class="line">            count ++</div><div class="line">        else:</div><div class="line">            count --</div></pre></td></tr></table></figure>
-<p>即只要标记元素被删去了，那么访问的下一个元素就作为标记元素。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Solution &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">majorityElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> count = <span class="number">0</span>, now = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; nums.size(); i++) &#123;</div><div class="line">            <span class="keyword">if</span>(count == <span class="number">0</span>) &#123;</div><div class="line">                now = nums[i];</div><div class="line">                count = <span class="number">1</span>;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">if</span>(now == nums[i]) &#123;</div><div class="line">                    count ++;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    count --;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="http://www.cs.utexas.edu/~moore/best-ideas/mjrty/" target="_blank" rel="external">算法效果演示</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在刷 leetcode 时，发现一道题目 &lt;a href=&quot;https://leetcode.com/problems/majority-element/&quot;&gt;Majority Element&lt;/a&gt;，要求求出数组中出现元素超过 &lt;code&gt;n/2&lt;/code&gt; 的元素。思考了许久也只能写出 &lt;code&gt;O(nlogn)&lt;/code&gt; 的解法（即用 map 计数）。查阅资料后发现一个比较巧妙的算法 Moore vote algorithm，可以在 &lt;code&gt;O(n)&lt;/code&gt; 时间和 &lt;code&gt;O(1)&lt;/code&gt; 空间解决这个问题。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="算法分析" scheme="http://blog.jetmuffin.com/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/"/>
-    
-    
-      <category term="moore vote algorithm" scheme="http://blog.jetmuffin.com/tags/moore-vote-algorithm/"/>
     
   </entry>
   

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   
-  <title>Archives: 2017 | 倦谈</title>
+  <title>Archives: 2017/9 | 倦谈</title>
   <meta name="description" content="JetMuffin's blog." />
   <meta name="keywords" content="jetmuffin,blog" />
   <meta name="HandheldFriendly" content="True" />
@@ -13,7 +13,7 @@
   <meta name="description" content="JetMuffin&apos;s Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="倦谈">
-<meta property="og:url" content="http://blog.jetmuffin.com/archives/2017/index.html">
+<meta property="og:url" content="http://blog.jetmuffin.com/archives/2017/09/index.html">
 <meta property="og:site_name" content="倦谈">
 <meta property="og:description" content="JetMuffin&apos;s Blog">
 <meta name="twitter:card" content="summary">
@@ -67,7 +67,7 @@
 
 
 	<section class="page-header archive">
-    <h1>- <span>2017</span> -</h1>
+    <h1>- <span>2017.9</span> -</h1>
   </section>
 
 
@@ -106,291 +106,8 @@
   </section>
 </article>
   
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/08/06/hihocoder-1549-bit-and-sum/">
-      hihocoder 1549 或运算和
-    </a>
-  </h2>
-  
-  <time>
-    8月 6, 2017
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>链接 <a href="http://www.hihocoder.com/problemset/problem/1549">http://www.hihocoder.com/problemset/problem/1549</a></p>
-<p>给定 $n$ 个数字 $a_1,…,a_n(0 \leq a_i \leq 2^{20})$ 和一个正整数 $K$，$ans_i$ 表示从这 $n$ 个数中取 $k$ 个数的方案数，$i$ 为这个 k 个数的或运算和，求 $\sum ans_i * i$ 的值。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2017/08/06/hihocoder-1549-bit-and-sum/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/07/23/hdu-2586-how-far-away-tarjan-lca/">
-      hdu 2586 how far away? tarjan lca
-    </a>
-  </h2>
-  
-  <time>
-    7月 23, 2017
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2586">http://acm.hdu.edu.cn/showproblem.php?pid=2586</a></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>给定一棵无向带权树，询问其中若干个 (u, v) 的节点的距离。</p>
-<p>首先维护从 root 到每个节点的距离 $dis(root, i)$，那么任意两个节点的距离就可以转化为 $dis(u, v)=dis(root, u)+dis(root, v)-2*dis(root, lca(u, v))$</p>
-<p>那么题目就可以转化成求树上任意两点的 LCA 问题，因为有多个询问，可以用 <strong>Tarjan</strong> 离线处理完。同时在 <strong>Tarjan</strong> DFS 的过程中，可以处理上述的 $dis(root, i)$。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2017/07/23/hdu-2586-how-far-away-tarjan-lca/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/lca/">lca</a><a class="tag-link" href="/tags/tarjan/">tarjan</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/">
-      部署 Matlab MDCE 计算集群
-    </a>
-  </h2>
-  
-  <time>
-    6月 30, 2017
-  </time>
-  <section class="content">
-	  <h2 id="安装-Matlab-2017"><a href="#安装-Matlab-2017" class="headerlink" title="安装 Matlab 2017"></a>安装 Matlab 2017</h2>
-
-    
-	  <div class="readmore">
-      <a href="/2017/06/30/Deploy-Matlab-compute-cluster-on-centos-7-servers/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/centos/">centos</a><a class="tag-link" href="/tags/matlab/">matlab</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/06/25/a-view-of-tree-dp/">
-      树形 DP 总结
-    </a>
-  </h2>
-  
-  <time>
-    6月 25, 2017
-  </time>
-  <section class="content">
-	  <h2 id="占坑"><a href="#占坑" class="headerlink" title="占坑"></a>占坑</h2><blockquote>
-<p>某比赛被树形 DP 坑进去了，太弱，先占坑等有时间填上</p>
-</blockquote>
-
-
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/dp/">dp</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/">
-      fzu 2214 super capacitated knapsack problem
-    </a>
-  </h2>
-  
-  <time>
-    5月 23, 2017
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="http://acm.fzu.edu.cn/problem.php?pid=2214">Problem 2214 Knapsack problem</a></p>
-
-    
-	  <div class="readmore">
-      <a href="/2017/05/23/fzu-2214-super-capacitated-knapsack-problem/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/dp/">dp</a><a class="tag-link" href="/tags/背包/">背包</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/05/09/archive-of-system-and-architecture-conferences/">
-      2017 年系统软件与软件体系结构会议收集
-    </a>
-  </h2>
-  
-  <time>
-    5月 9, 2017
-  </time>
-  <section class="content">
-	  <p>收集整理了系统软件和体系结构方面的会议信息，具体如下：</p>
-
-    
-	  <div class="readmore">
-      <a href="/2017/05/09/archive-of-system-and-architecture-conferences/">Read More</a>
-    </div>
-    
-    
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/04/09/hihocoder-1489-legendary-items/">
-      hihocoder 1489 legendary items 微软2017笔试第一场
-    </a>
-  </h2>
-  
-  <time>
-    4月 9, 2017
-  </time>
-  <section class="content">
-	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址 <a href="http://hihocoder.com/problemset/problem/1489">http://hihocoder.com/problemset/problem/1489</a></p>
-<p>题目大意是，小 Hi 按一定的初始概率 <code>P</code> 夺宝（成功概率为 <code>P</code>，失败为 <code>1-P</code>，如果在某个关卡失败了，那么在下一个关卡他成功的概率会上升 <code>Q</code>；如果在某个关卡成功了，那么他在下个关卡成功的概率会变为 <code>⌊P/(2I)⌋</code>（<code>I</code> 为当前已经拿到的宝物数量）。问小 Hi 得到 N 个宝物需要闯关多少次。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2017/04/09/hihocoder-1489-legendary-items/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/概率dp/">概率dp</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/04/05/use-ansible-for-automatic-cluster-operation/">
-      使用Ansible进行服务器自动化运维
-    </a>
-  </h2>
-  
-  <time>
-    4月 5, 2017
-  </time>
-  <section class="content">
-	  <blockquote>
-<p>ansible是新出现的自动化运维工具，基于Python开发，集合了众多运维工具（puppet、cfengine、chef、func、fabric）的优点，实现了批量系统配置、批量程序部署、批量运行命令等功能。</p>
-</blockquote>
-
-    
-	  <div class="readmore">
-      <a href="/2017/04/05/use-ansible-for-automatic-cluster-operation/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/ansible/">ansible</a><a class="tag-link" href="/tags/centos/">centos</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2017/03/15/method-of-computing-inverse-of-number/">
-      除法取模（逆元求法）总结
-    </a>
-  </h2>
-  
-  <time>
-    3月 15, 2017
-  </time>
-  <section class="content">
-	  <p>最近刷的笔试题和以前打 ACM 中经常遇到求某个公式，最后的结果需要对某个数取模。我们都知道除法无法直接取模，即  $\frac{a}{b} \bmod c \neq \frac{a \bmod c}{b \bmod c} \bmod c$（当然，$ a \mid b $）。因此需要对 $b$ 求逆元，即 $\frac{a}{b} \bmod c = (a \bmod c)*(b^{‘} \bmod c) \bmod c $ 。这里总结一下求逆元的方法。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2017/03/15/method-of-computing-inverse-of-number/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/逆元/">逆元</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
 </section>
 
-
-  <nav id="page-nav">
-    
-    
-    <a class="next" rel="next" href="/archives/2017/page/2/">
-      <span class="text">Next</span>
-      <span class="icon icon-chevron-right"></span>
-    </a>
-    
-  </nav>
-  
 
 
       <script>setLoadingBarProgress(60);</script>

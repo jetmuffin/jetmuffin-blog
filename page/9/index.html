@@ -74,6 +74,41 @@
 
   
   <h2 class="title">
+    <a href="/2015/01/27/bestCoder-26-1002-card-expection-solution/">
+      BestCoder #26 1002 Card  期望 解题报告
+    </a>
+  </h2>
+  
+  <time>
+    1月 27, 2015
+  </time>
+  <section class="content">
+	  <p>题目的意思是，从x张牌里抽1张牌，然后放回重复b次，Sj为每次抽出牌的积分之和，问Sj的期望。</p>
+<p>一开始看这个题目的时候考虑用组合做，因为b最大为5，所以考虑Sj由5个数-1个数组成的情况，然后算概率，但是题目的a和T的范围太大，O(Tlog(a))都会T估计，这明摆着是要O(T)的节奏啊。。也就是说，给定一个x，一个b，就有公式可以推出答案。</p>
+<p>然后从另一个方向考虑，如果从组合考虑，即使给定几个数被抽到，还得考虑顺序情况，相当复杂，于是可以考虑对于每个数，其实只有2种状态（选中OR未选中），根据这两种状态去求期望会方便很多。</p>
+<p>每次抽牌，选中某一张牌的概率为1/x；</p>
+<p>抽b次牌结束后，某张牌被抽中概率为p = 1-(1-1/x)^b，（转化为相反的事件再转化回来）。</p>
+<p>因此抽中某一张牌对期望的贡献为 i <em> p ，因此总期望为 ∑(i=1~x) i </em> p ，即EX = (x + 1)<em>x</em> (1-(1-1/x)^b)。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2015/01/27/bestCoder-26-1002-card-expection-solution/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/期望/">期望</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/">
       Codeforces #285 C Misha and Forest 队列维护 解题报告
     </a>
@@ -359,38 +394,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/水题/">水题</a><a class="tag-link" href="/tags/素数/">素数</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/11/19/use-nginx-to-configurate-a-picture-cache-server/">
-      nginx 配置图片缓存服务器，nginx.conf的配置
-    </a>
-  </h2>
-  
-  <time>
-    11月 19, 2014
-  </time>
-  <section class="content">
-	  <p><span style="white-space:pre"></span>最近在搞云计算，弄了一个图片缓存服务器服务器，搭了一阵子，做个笔记。</p>
-<p><span style="white-space:pre"></span>教程转自<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:18px; text-align:center"><strong>Hermit_Macx，</strong></span><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:18px; text-align:center">感谢作者，地址<a href="http://hermit-macx.iteye.com/blog/1697375">http://hermit-macx.iteye.com/blog/1697375</a></span></p>
-<p><span style="white-space:pre"></span>PS：proxy_cache_purge 需要另外下载包，不然报错，先注释了把</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/11/19/use-nginx-to-configurate-a-picture-cache-server/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/Nginx/">Nginx</a><a class="tag-link" href="/tags/缓存/">缓存</a>
 	  </div>
     
 

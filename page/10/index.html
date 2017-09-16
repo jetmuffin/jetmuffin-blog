@@ -74,6 +74,38 @@
 
   
   <h2 class="title">
+    <a href="/2014/11/19/use-nginx-to-configurate-a-picture-cache-server/">
+      nginx 配置图片缓存服务器，nginx.conf的配置
+    </a>
+  </h2>
+  
+  <time>
+    11月 19, 2014
+  </time>
+  <section class="content">
+	  <p><span style="white-space:pre"></span>最近在搞云计算，弄了一个图片缓存服务器服务器，搭了一阵子，做个笔记。</p>
+<p><span style="white-space:pre"></span>教程转自<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:18px; text-align:center"><strong>Hermit_Macx，</strong></span><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:18px; text-align:center">感谢作者，地址<a href="http://hermit-macx.iteye.com/blog/1697375">http://hermit-macx.iteye.com/blog/1697375</a></span></p>
+<p><span style="white-space:pre"></span>PS：proxy_cache_purge 需要另外下载包，不然报错，先注释了把</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/11/19/use-nginx-to-configurate-a-picture-cache-server/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/Nginx/">Nginx</a><a class="tag-link" href="/tags/缓存/">缓存</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2014/11/06/hadoop-java-api-hdfs/">
       Hadoop java api ，HDFS文件操作，便于Web开发的集合
     </a>
@@ -361,38 +393,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/概率dp/">概率dp</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/10/14/codeforces-148D-Bags-of-mice-probability-dp/">
-      CodeForces 148D Bags of mice 概率dp
-    </a>
-  </h2>
-  
-  <time>
-    10月 14, 2014
-  </time>
-  <section class="content">
-	  <p>开始看概率dp的内容，碰到算期望的题目，一般就要用概率dp了。这是道入门的概率dp，弄清楚每一步发生的事件和对应的概率，求出递推公式就OK了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dp[i][j][0]表示轮到公主取，还剩下i只白鼠，j只黑鼠；</div><div class="line"></div><div class="line">dp[i][j][1]表示轮到龙取，还剩下i只白鼠，j只黑鼠；</div></pre></td></tr></table></figure></p>
-<p>获胜的期望就是dp[w][b][0]。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dp[i][j][0] = p1  //公主抽到的是白鼠概率p1，结束</div><div class="line"></div><div class="line">dp[i][j][0] += dp[i][j-1][1] * p2 //公主抽到的是黑鼠概率p2</div><div class="line"></div><div class="line">dp[i][j][1] += dp[i-1][j-1][0] * p3 // 龙抽到的是黑鼠，吓跑一只白鼠概率p3</div><div class="line"></div><div class="line">dp[i][j][1] += dp[i][j-2][0] * p4 //龙抽到黑鼠，吓跑一只黑鼠概率p4</div></pre></td></tr></table></figure></p>
-<p>再依次算概率 就OK了。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/10/14/codeforces-148D-Bags-of-mice-probability-dp/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/CodeForces/">CodeForces</a><a class="tag-link" href="/tags/概率dp/">概率dp</a>
 	  </div>
     
 

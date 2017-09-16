@@ -74,6 +74,35 @@
 
   
   <h2 class="title">
+    <a href="/2015/07/26/hdu-5311-Hidden-String-BestCoder-1st-Anniversary-B-search/">
+      hdu 5311 Hidden String BestCoder 1st Anniversary B 暴搜
+    </a>
+  </h2>
+  
+  <time>
+    7月 26, 2015
+  </time>
+  <section class="content">
+	  <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>题目地址：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=5311" target="_blank" rel="external">http://acm.hdu.edu.cn/showproblem.php?pid=5311</a></p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>指定串为”anniversary”，在输入串中找到不相交的三段，拼起来数指定串，<code>len(s)</code>范围为100</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这题卡了挺久主要是题意理解问题，一直以为这三段不需要顺序拼接，例如<code>sary1ver1anni</code>这种应该页输出<code>YES</code>，然而并不是。事实上是简单的顺序拼接，这样的话可以进行最最暴力的for循环搜索了，搜索过程可以用KMP加速以下，而KMP的起始位置是动态变化的就行了。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">getNext</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;p, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;next)</span></span></div><div class="line">&#123;</div><div class="line">    next.resize(p.size());</div><div class="line">    next[<span class="number">0</span>] = <span class="number">-1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">-1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (i != p.size() - <span class="number">1</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//这里注意，i==0的时候实际上求的是next[1]的值，以此类推</span></div><div class="line">        <span class="keyword">if</span> (j == <span class="number">-1</span> || p[i] == p[j])</div><div class="line">        &#123;</div><div class="line">            ++i;</div><div class="line">            ++j;</div><div class="line">            next[i] = j;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            j = next[j];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; s, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; p, <span class="keyword">const</span> <span class="keyword">int</span> sIndex = <span class="number">0</span>)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;next(p.size());</div><div class="line">    getNext(p, next);<span class="comment">//获取next数组，保存到vector中</span></div><div class="line"></div><div class="line">    <span class="keyword">int</span> i = sIndex, j = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(i != s.length() &amp;&amp; j != p.length())</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (j == <span class="number">-1</span> || s[i] == p[j])</div><div class="line">        &#123;</div><div class="line">            ++i;</div><div class="line">            ++j;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            j = next[j];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> j == p.length() ? i - j: <span class="number">-1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">string</span> s;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> T;</div><div class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;T);</div><div class="line">    <span class="keyword">while</span> (T--) &#123;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; s;</div><div class="line">        <span class="built_in">string</span> s0 = <span class="string">"anniversary"</span>;</div><div class="line">        <span class="keyword">int</span> len0 = s0.size();</div><div class="line">        <span class="built_in">string</span> s1, s2, s3;</div><div class="line">        <span class="keyword">bool</span> flag = <span class="literal">false</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len0; ++i) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; len0; ++j) &#123;</div><div class="line">                s1.clear();</div><div class="line">                s2.clear();</div><div class="line">                s3.clear();</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> t = <span class="number">0</span>; t &lt; i; ++t) &#123;</div><div class="line">                    s1 += s0[t];</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> t = i; t &lt; j; ++t) &#123;</div><div class="line">                    s2 += s0[t];</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> t = j; t &lt; len0; ++t) &#123;</div><div class="line">                    s3 += s0[t];</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// cout &lt;&lt; s1 &lt;&lt; " " &lt;&lt; s2 &lt;&lt; " " &lt;&lt; s3 &lt;&lt; endl;</span></div><div class="line">                <span class="keyword">int</span> idx = kmp(s, s1);</div><div class="line">                <span class="keyword">if</span> (idx == <span class="number">-1</span>) &#123;</div><div class="line">                    <span class="keyword">continue</span>;</div><div class="line">                &#125; </div><div class="line"></div><div class="line">                <span class="comment">//printf("%d %d   111\n", i, j);</span></div><div class="line">                idx = kmp(s, s2, idx + s1.size());</div><div class="line">                <span class="keyword">if</span> (idx == <span class="number">-1</span>) &#123;</div><div class="line">                    <span class="keyword">continue</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//printf("222\n");</span></div><div class="line">                idx = kmp(s, s3, idx + s2.size());</div><div class="line">                <span class="keyword">if</span> (idx == <span class="number">-1</span>) &#123;</div><div class="line">                    <span class="keyword">continue</span>;</div><div class="line">                &#125;</div><div class="line">                flag= <span class="literal">true</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (flag) &#123;</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"YES\n"</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"NO\n"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/搜索/">搜索</a><a class="tag-link" href="/tags/暴力/">暴力</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/07/26/hdu-5305-Friends-2015-summer-multi-school-trainning-search/">
       hdu 5305 Friends 2015多校联训第二场 搜索
     </a>
@@ -571,38 +600,6 @@ quicksort(q+1,r);
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/文本分类/">文本分类</a><a class="tag-link" href="/tags/文本挖掘/">文本挖掘</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/04/25/beautiful-of-coding-3/">
-      编程之美初赛第三题 质数相关 小数据解法
-    </a>
-  </h2>
-  
-  <time>
-    4月 25, 2015
-  </time>
-  <section class="content">
-	  <p><div class="limit"><div>时间限制:2000ms</div><div>单点时限:1000ms</div><div>内存限制:256MB</div></div><div></p>
-<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>两个数a和 b (a&lt;b)被称为质数相关，是指a × p = b，这里p是一个质数。一个集合S被称为质数相关，是指S中存在两个质数相关的数，否则称S为质数无关。如{2, 8, 17}质数无关，但{2, 8, 16}, {3, 6}质数相关。现在给定一个集合S，问S的所有质数无关子集中，最大的子集的大小。</p>
-<h3 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h3>
-
-    
-	  <div class="readmore">
-      <a href="/2015/04/25/beautiful-of-coding-3/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/模拟/">模拟</a><a class="tag-link" href="/tags/编程之美/">编程之美</a><a class="tag-link" href="/tags/质数/">质数</a>
 	  </div>
     
 
