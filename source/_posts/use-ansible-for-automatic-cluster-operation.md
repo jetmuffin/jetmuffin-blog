@@ -103,6 +103,7 @@ Setup 阶段 ansible 主要收集机器节点的一些信息，而在这个阶�
 
 ## 参考文档
 
+
 - [Ansible Documentation](docs.ansible.com)
 - [鸟哥的Linux 私房菜-- NFS 服务器
 ](http://cn.linux.vbird.org/linux_server/0330nfs.php)
