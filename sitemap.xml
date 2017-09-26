@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/</loc>
+    
+    <lastmod>2017-09-26T07:20:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2017/01/02/The-evolution-of-cluster-scheduler-architectures/</loc>
+    
+    <lastmod>2017-09-20T08:19:07.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2017/04/05/use-ansible-for-automatic-cluster-operation/</loc>
+    
+    <lastmod>2017-09-19T15:00:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2017/09/16/hihocoder-1330-transform-array/</loc>
     
     <lastmod>2017-09-16T06:07:12.000Z</lastmod>
@@ -79,13 +100,6 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2017/04/05/use-ansible-for-automatic-cluster-operation/</loc>
-    
-    <lastmod>2017-04-05T11:09:03.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.jetmuffin.com/2017/03/15/method-of-computing-inverse-of-number/</loc>
     
     <lastmod>2017-04-05T11:03:06.000Z</lastmod>
@@ -107,28 +121,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-solution/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/09/04/bellman-ford-compute-negative-weight-circle/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/01/27/bestCoder-26-1002-card-expection-solution/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/02/07/bestCoder-29-1002-hdu-5171-gty-s-birthday-gift-solution/</loc>
+    <loc>http://blog.jetmuffin.com/2015/03/06/hdu-5178-Pairs/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -142,7 +135,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/03/28/blue-bridge-cup-training-reverse-couples/</loc>
+    <loc>http://blog.jetmuffin.com/2015/02/07/bestCoder-29-1002-hdu-5171-gty-s-birthday-gift-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -163,14 +156,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/11/09/build-docker-cluster-with-mesos-and-marathon/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2014/10/14/codeforces-148D-Bags-of-mice-probability-dp/</loc>
+    <loc>http://blog.jetmuffin.com/2015/03/28/blue-bridge-cup-training-reverse-couples/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -184,14 +170,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/11/23/change-mesos-ui/</loc>
+    <loc>http://blog.jetmuffin.com/2015/11/09/build-docker-cluster-with-mesos-and-marathon/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/12/28/chronos-distributed-cron-on-dcos/</loc>
+    <loc>http://blog.jetmuffin.com/2015/11/23/change-mesos-ui/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -205,21 +191,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/10/22/compile-and-install-ambari/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2016/10/18/compile-shadowsocks-qt5-on-debian/</loc>
+    <loc>http://blog.jetmuffin.com/2015/12/28/chronos-distributed-cron-on-dcos/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -233,6 +205,20 @@
   </url>
   
   <url>
+    <loc>http://blog.jetmuffin.com/2014/10/14/codeforces-148D-Bags-of-mice-probability-dp/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/01/14/codeforces-285-C-Misha-and-Forest-solution/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2015/01/14/2014-Facebook-Hacker-Cup-qualification-B/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -240,91 +226,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/09/05/dijkstra-single-source-shortest-path-optimize-by-heap/</loc>
+    <loc>http://blog.jetmuffin.com/2016/10/18/compile-shadowsocks-qt5-on-debian/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/09/05/floyd-warshall-multi-source-shortest-path/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/09/14/2015-ACM-changchun-online-solution/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/12/08/fzuoj-1759-super-a-b-mod-c/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/09/20/generalized-fibonacci-sequence-to-find-the-circular-section/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2014/10/08/genetic-algorithm/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2016/09/03/go-learning-1/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2016/09/04/go-learning-2/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/06/27/hdu-1176-free-pie-dp/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2014/11/06/hadoop-java-api-hdfs/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/07/27/hdu-1054-Strategic-Game-greedy/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2014/10/15/hdu-2080-how-large-is-the-include-angle-II/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2014/10/12/hdu-2098-solution/</loc>
+    <loc>http://blog.jetmuffin.com/2015/10/22/compile-and-install-ambari/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -338,7 +247,84 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/10/14/hdu-3076-ssworld-VS-DDD/</loc>
+    <loc>http://blog.jetmuffin.com/2015/09/05/dijkstra-single-source-shortest-path-optimize-by-heap/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/12/08/fzuoj-1759-super-a-b-mod-c/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/09/05/floyd-warshall-multi-source-shortest-path/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/09/20/generalized-fibonacci-sequence-to-find-the-circular-section/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2016/09/04/go-learning-2/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2016/09/03/go-learning-1/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/10/08/genetic-algorithm/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/06/27/hdu-1176-free-pie-dp/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/10/15/hdu-2080-how-large-is-the-include-angle-II/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/07/27/hdu-1054-Strategic-Game-greedy/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/11/06/hadoop-java-api-hdfs/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/10/12/hdu-2098-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -352,7 +338,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/09/14/hdu-5011-xian-invitation-Game-game-theory/</loc>
+    <loc>http://blog.jetmuffin.com/2014/10/28/2014-ACM-ICPC-xian-region-conclusion/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/10/14/hdu-3076-ssworld-VS-DDD/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -366,7 +359,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/07/21/hdu-4828-Grids-Astar-1002-solution/</loc>
+    <loc>http://blog.jetmuffin.com/2014/09/14/hdu-5011-xian-invitation-Game-game-theory/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -380,7 +373,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/11/28/hdu-5072-Coprime-2014-anshan-reigion-C/</loc>
+    <loc>http://blog.jetmuffin.com/2014/07/21/hdu-4828-Grids-Astar-1002-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -394,13 +387,6 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/07/21/hdu-5088-2015-multi-school-training-1001-solution/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.jetmuffin.com/2014/11/19/hdu-5104-Primes-Problem/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -408,7 +394,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-solution/</loc>
+    <loc>http://blog.jetmuffin.com/2015/07/21/hdu-5088-2015-multi-school-training-1001-solution/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/11/28/hdu-5072-Coprime-2014-anshan-reigion-C/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -422,7 +415,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/03/06/hdu-5178-Pairs/</loc>
+    <loc>http://blog.jetmuffin.com/2014/07/24/2014-Multi-University-Training-Contest-2-1011-ZCC-Loves-Codefires-solution/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/11/19/hdu-5105-Math-Problem-BestCoder-18-1002-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -443,6 +443,13 @@
   </url>
   
   <url>
+    <loc>http://blog.jetmuffin.com/2015/06/06/hdu-5245-Joyful-ACM-shanghai-invitation-J-probability/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2015/07/26/hdu-5305-Friends-2015-summer-multi-school-trainning-search/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -457,13 +464,6 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5319-Painter-2015-summer-multi-school-training/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5317-RGCDQ-2015-multi-school-training/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -471,14 +471,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5326-Work-2015-summer-multi-school-training/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5327-Olympiad-2015-summer-multi-school-trainning/</loc>
+    <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5319-Painter-2015-summer-multi-school-training/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -492,7 +485,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/11/12/hdu-5546-Acient-go-CCPC-G-BFS/</loc>
+    <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5327-Olympiad-2015-summer-multi-school-trainning/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/08/01/hdu-5326-Work-2015-summer-multi-school-training/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -506,7 +506,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/06/06/hdu-5245-Joyful-ACM-shanghai-invitation-J-probability/</loc>
+    <loc>http://blog.jetmuffin.com/2015/11/12/hdu-5546-Acient-go-CCPC-G-BFS/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -520,14 +520,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2017/01/02/The-evoolution-of-cluster-scheduler-architectures/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2016/06/07/infiniband-technique/</loc>
+    <loc>http://blog.jetmuffin.com/2015/09/14/2015-ACM-changchun-online-solution/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -535,6 +528,13 @@
   
   <url>
     <loc>http://blog.jetmuffin.com/2015/12/28/authentication-of-mesos/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2016/06/07/infiniband-technique/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -569,7 +569,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2016/12/04/kubernetes-code-reading-storage-part-1-cache/</loc>
+    <loc>http://blog.jetmuffin.com/2014/10/30/least-cost-shopping-dp/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -583,7 +583,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/10/30/least-cost-shopping-dp/</loc>
+    <loc>http://blog.jetmuffin.com/2016/12/04/kubernetes-code-reading-storage-part-1-cache/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -591,13 +591,6 @@
   
   <url>
     <loc>http://blog.jetmuffin.com/2015/11/07/mesos-framework/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2016/09/04/moore-vote-algorithm/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -618,14 +611,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/10/30/poj-2248-shortest-addition-chain/</loc>
+    <loc>http://blog.jetmuffin.com/2016/09/04/moore-vote-algorithm/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/02/03/poj-2676-blue-bridge-cup-training/</loc>
+    <loc>http://blog.jetmuffin.com/2015/12/23/mesos-monitor-policy/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -639,6 +632,20 @@
   </url>
   
   <url>
+    <loc>http://blog.jetmuffin.com/2015/02/03/poj-2676-blue-bridge-cup-training/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/10/30/poj-2248-shortest-addition-chain/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2015/09/01/multiplicative-inverse-of-large-number/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
@@ -646,14 +653,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/03/04/popover/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2014/10/22/solution-to-cannot-save-on-row-editing/</loc>
+    <loc>http://blog.jetmuffin.com/2015/11/23/schedule-policy-of-mesos/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -667,7 +667,21 @@
   </url>
   
   <url>
+    <loc>http://blog.jetmuffin.com/2014/10/22/solution-to-cannot-save-on-row-editing/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.jetmuffin.com/2016/01/05/solution-to-no-mesos-in-java-library-path/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/03/04/popover/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -688,7 +702,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/11/23/schedule-policy-of-mesos/</loc>
+    <loc>http://blog.jetmuffin.com/2015/06/05/text-mining-chinese-segments/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -709,28 +723,7 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2015/06/05/text-mining-chinese-segments/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/04/25/beautiful-of-coding-3/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.jetmuffin.com/2015/11/16/use-docker-and-marathon-to-build-web-service-with-data-analysis/</loc>
-    
-    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.jetmuffin.com/2015/12/23/mesos-monitor-policy/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -744,7 +737,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/10/28/2014-ACM-ICPC-xian-region-conclusion/</loc>
+    <loc>http://blog.jetmuffin.com/2015/04/25/beautiful-of-coding-3/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2014/11/19/use-nginx-to-configurate-a-picture-cache-server/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -758,7 +758,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/2014/11/19/use-nginx-to-configurate-a-picture-cache-server/</loc>
+    <loc>http://blog.jetmuffin.com/2015/01/27/bestCoder-26-1002-card-expection-solution/</loc>
+    
+    <lastmod>2017-02-17T13:05:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.jetmuffin.com/2015/09/04/bellman-ford-compute-negative-weight-circle/</loc>
     
     <lastmod>2017-02-17T13:05:25.000Z</lastmod>
     
@@ -807,14 +814,14 @@
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/tags/index.html</loc>
+    <loc>http://blog.jetmuffin.com/categories/index.html</loc>
     
     <lastmod>2015-10-21T07:11:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.jetmuffin.com/categories/index.html</loc>
+    <loc>http://blog.jetmuffin.com/tags/index.html</loc>
     
     <lastmod>2015-10-21T07:11:48.000Z</lastmod>
     

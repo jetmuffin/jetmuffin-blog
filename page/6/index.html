@@ -74,6 +74,37 @@
 
   
   <h2 class="title">
+    <a href="/2015/09/04/bellman-ford-compute-negative-weight-circle/">
+      Bellman-ford算法 图论 单源最短路径 求负权环
+    </a>
+  </h2>
+  
+  <time>
+    9月 4, 2015
+  </time>
+  <section class="content">
+	  <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Bellman-ford算法可以用来计算图中的单源最短路径。同时该算法可以处理边权为负的情况（Dijkstra算法无法处理负权），同时可以判断图中是否含有负权环。</p>
+<p>设dis[v]为从源点s到v的最短路径长度。对于任意与v相连的顶点u，dis[v]可以满足三角不等式，即<code>dis[v]&lt;=dis[u]+w(u,v)</code>，根据该性质可以设置松弛操作。<br>
+
+    
+	  <div class="readmore">
+      <a href="/2015/09/04/bellman-ford-compute-negative-weight-circle/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/bellman-ford/">bellman-ford</a><a class="tag-link" href="/tags/图论/">图论</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2015/09/04/hdu-5392-Infoplane-in-Tina-Town/">
       hdu 5392 Infoplane in Tina Town
     </a>
@@ -575,88 +606,6 @@
     
 	  <div class="tags">
       <a class="tag-link" href="/tags/贪心/">贪心</a><a class="tag-link" href="/tags/队列/">队列</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2015/07/26/segment-tree/">
-      数据结构总结 - 线段树专题
-    </a>
-  </h2>
-  
-  <time>
-    7月 26, 2015
-  </time>
-  <section class="content">
-	  <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>线段数是一种特殊的数据结构，它是一颗<code>完全二叉树</code>，它的每个节点保存一条线段，主要用来做高效的动态查询。线段树的区间查询复杂度为<code>o(logn)</code>,更新复杂度也为<code>o(logn)</code></p>
-<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><ol>
-<li><p>构造 <code>void build(int l,int r, int rt)</code></p>
-<p>构造线段树的过程是一个递归的过程，不停二分给定的区间<code>[l,r]</code>，若<code>l=r</code>时，则直接赋值。<code>rt</code>表示当前要构建的节点，而<code>l</code>和<code>r</code>为递归区间，每次以<code>m=(l+r)/2</code>为二分点，构建左子树和右子树，然后将左子树和右子树的信息向上更新(<code>pushup</code>)。这里及以下代码以求区间和的线段树为例。</p>
-<p>void build(int l,int r, int rt){</p>
-<pre><code>add[rt] = 0;
-if(l == r){
-    return;
-}
-int m = (l + r) &gt;&gt; 1;
-build(lson);
-build(rson);
-pushup(rt);
-</code></pre><p>}<br>`</p>
-</li>
-<li><p>查询<code>query(int L,int R,int l, int r, int rt)</code><br>线段树查询也运用了分治的思想，不断二分起始区间，直到和查询出现交集，再回溯并合并到结果中，若有延迟更新标记，则进行更新再进行回溯。查询区间<code>[L,R]</code>和二分区间<code>[l,r]</code>满足关系有以下几种（m为二分区间中点）：</p>
-</li>
-</ol>
-<ul>
-<li><code>L &lt;= l &lt;= r &lt;= R</code>，即二分区间在查询区间以内，则直接回溯<code>[l,r]</code>合并到查询结果中</li>
-<li><code>L &lt;= m</code>,则继续二分左儿子，直至<code>m &lt; L</code>，并把属于区间内的结果回溯到最后的结果</li>
-<li><code>m &lt;= R</code>，则继续二分右儿子，直至<code>m &gt; R</code>，并把结果回溯刀最后结果<pre>`LL query(int L,int R,int l, int r, int rt){
-    if(L <= l="" &&="" r="" <="R){" return="" sum[rt];="" }="" pushdown(rt,="" -="" +="" 1);="" int="" m="(l" r)="">> 1;
-    LL ret = 0;
-    if(L <= m)="" ret="" +="query(L," r,="" lson);="" if(m="" <="" r)="" rson);="" return="" ret;="" }="" `<="" pre="">
-</=></=></pre></li>
-</ul>
-<ol>
-<li>更新</li>
-</ol>
-<ul>
-<li><p>点更新<code>void updatep(int p, int add, int l, int r, int rt)</code><br>点更新的操作比较无闹，不断二分区间<code>[l,r]</code>，直至<code>l == r</code>，就相当于在区间<code>[l,r]</code>中二分查找p，然后将其加上需要加的数即可。</p>
-<pre>`void updatep(int p, int add, int l, int r, int rt)  
-{  
-    if( l == r )  
-    {  
-        sum[rt] += add;  
-        return ;  
-    }  
-    int m = ( l + r ) >> 1;  
-    if(p <= m)="" updatep(p,="" add,="" lson);="" else="" rson);="" pushup(rt);="" }="" `<="" pre="">
-</=></pre></li>
-<li><p>区间更新<code>void update(int L,int R,int c,int l,int r,int rt)</code><br>区间更新的二分过程和区间查询的过程相同，二分出现出现区间查询中的情况一则进行更新，但是需要注意的是，为了降低区间更新复杂度，需要使用延迟标记，等到查询时再向下更新到底。因此对于情况一只进行标记更新和当前节点更新，同时做一次向下更新。对于情况二和情况三，分别更新左右子树，并向上做一次更新。<br><pre>`void update(int L,int R,int c,int l,int r,int rt){</pre></p>
-<pre><code>if(L &lt;= l &amp;&amp; r &lt;=R){
-    add[rt] += c;
-    sum[rt] += (LL)c * (r - l + 1);
-    return;
-}
-pushdown(rt,r - l + 1);
-int m = (l+r) &gt;&gt; 1;
-if(L &lt;= m) update(L, R, c, lson);
-if(m &lt; R) update(L, R, c, rson);
-pushup(rt);
-</code></pre><p>}</p>
-</li>
-</ul>
-<h2 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h2><h3 id="线段树普遍题型有区间求和及区间最值（RMQ），之后会慢慢在此博客进行持续更新。"><a href="#线段树普遍题型有区间求和及区间最值（RMQ），之后会慢慢在此博客进行持续更新。" class="headerlink" title="线段树普遍题型有区间求和及区间最值（RMQ），之后会慢慢在此博客进行持续更新。"></a>线段树普遍题型有区间求和及区间最值（RMQ），之后会慢慢在此博客进行持续更新。</h3>
-
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数据结构/">数据结构</a><a class="tag-link" href="/tags/线段树/">线段树</a>
 	  </div>
     
 

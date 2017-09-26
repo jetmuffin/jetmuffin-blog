@@ -74,6 +74,46 @@
 
   
   <h2 class="title">
+    <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD/">
+      hdu 3076 ssworld VS DDD 概率dp
+    </a>
+  </h2>
+  
+  <time>
+    10月 14, 2014
+  </time>
+  <section class="content">
+	  <p>题意应该很明显，甩骰子决定谁扣血，输的扣血，赢的不变，平局双方都不变。</p>
+<p>解题时有好几个地方想错了：</p>
+<ol>
+<li><p>原本以为dp[i][j]表示当前A和B的血量，结果想反了，整个思路貌似有点偏</p>
+</li>
+<li><p>以为平局的概率也要加入，事实上也是错误1引起的，修改为dp[i][j]表示A和B赢的次数就好理解了，简化问题，去掉平局，p1 = win/(win+lose) ; p2 = lose/(win+lose)</p>
+</li>
+<li><p>最后的答案不是dp数组中的一个，而是A赢了hp2次的概率，就是dp[hp2-1][j(j从0到hp1-1求和)]*win </p>
+</li>
+</ol>
+<p>解决了这几个问题，结果提交还是WA，后来看了discuss才发现数据错了，两人血量反了，所以把其中的i和j互换。</p>
+
+    
+	  <div class="readmore">
+      <a href="/2014/10/14/hdu-3076-ssworld-VS-DDD/">Read More</a>
+    </div>
+    
+    
+    
+	  <div class="tags">
+      <a class="tag-link" href="/tags/概率dp/">概率dp</a>
+	  </div>
+    
+
+  </section>
+</article>
+  
+    <article class="post ">
+
+  
+  <h2 class="title">
     <a href="/2014/10/14/codeforces-148D-Bags-of-mice-probability-dp/">
       CodeForces 148D Bags of mice 概率dp
     </a>
@@ -362,43 +402,6 @@
   </section>
 </article>
   
-    <article class="post ">
-
-  
-  <h2 class="title">
-    <a href="/2014/07/21/hdu-4828-Grids-Astar-1002-solution/">
-      hdu4828 Grids 百度之星初赛1002解题报告
-    </a>
-  </h2>
-  
-  <time>
-    7月 21, 2014
-  </time>
-  <section class="content">
-	  <p>搞ACM起步比较晚，但是对这方面兴趣很大，第一次参加百度之星，资格赛水过一道题进入初赛，结果初赛被一道题难倒了。</p>
-<p>初赛分两场，每场筛选500人（赛程规定），而之后的结果上看，只有约250人A出题，而大多数人都是通过这道题拿到复赛入场券。这道题我一直觉得非常接近结果了，但是在最重要的环节，也就是取模上出了很大的问题，导致没有A出该题，下面是该题的分析。</p>
-<p>题干上，大多数人可以看出看出规律，即求卡特兰数，HDOJ上有相类似的题目，但是这道题的数据量非常大，有100万之多，因而题目上要求对1000000007取模。</p>
-<p>卡特兰数有很多递推公式，我选择的是h(n)=h(n-1)<em>(4</em>n-2)/(n+1);这条。</p>
-<p>由于数据量比较大，因而我选择用打表的方式，但是这里出现了一个问题，卡特兰数的数据在不断的增大，因而一定要在取模的基础上进行递推，然而简单地进行取模会造成递推公式出错，即不能在原结果上直接取模。</p>
-<p>比赛时就卡在这点上了，怎么想都想不出改进的方法。</p>
-<p>直到后来做到HDOJ的拓展欧几里德的题目（HDOJ 1576），才直到这道题的解法。</p>
-<p>除法的取模需要用extgcd的算法进行取逆，这是该题的关键。</p>
-
-    
-	  <div class="readmore">
-      <a href="/2014/07/21/hdu-4828-Grids-Astar-1002-solution/">Read More</a>
-    </div>
-    
-    
-    
-	  <div class="tags">
-      <a class="tag-link" href="/tags/数论/">数论</a><a class="tag-link" href="/tags/百度之星/">百度之星</a>
-	  </div>
-    
-
-  </section>
-</article>
-  
 </section>
 
 
@@ -409,6 +412,11 @@
       <span class="text">Previous</span>
     </a>
     
+    
+    <a class="next" rel="next" href="/page/12/">
+      <span class="text">Next</span>
+      <span class="icon icon-chevron-right"></span>
+    </a>
     
   </nav>
   

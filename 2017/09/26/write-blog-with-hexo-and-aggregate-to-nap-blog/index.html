@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>使用 Hexo 搭建个人博客并聚合到 NAP-blog | 倦谈</title>
+  <meta name="description" content="JetMuffin's blog." />
+  <meta name="keywords" content="jetmuffin,blog" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Hexo is a fast, simple &amp;amp; powerful blog framework.
+
+Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Hexo 搭建个人博客并聚合到 NAP-blog">
+<meta property="og:url" content="http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/index.html">
+<meta property="og:site_name" content="倦谈">
+<meta property="og:description" content="Hexo is a fast, simple &amp;amp; powerful blog framework.
+
+Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。">
+<meta property="og:image" content="http://cdn.jetmuffin.com/posts/hexo-website.png">
+<meta property="og:image" content="http://cdn.jetmuffin.com/posts/hexo-article.png">
+<meta property="og:updated_time" content="2017-09-26T07:20:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Hexo 搭建个人博客并聚合到 NAP-blog">
+<meta name="twitter:description" content="Hexo is a fast, simple &amp;amp; powerful blog framework.
+
+Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。">
+<meta name="twitter:image" content="http://cdn.jetmuffin.com/posts/hexo-website.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("IxqcEzmebHkRECv72mAIKAAk-gzGzoHsz", "JIhGNtTGcnfuLSkHRx70dlVw");</script>
+  
+
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+  <script>setLoadingBarProgress(20)</script>
+  
+  <div id="site-wrapper">
+    
+    <header id="header">
+	<div id="header-wrapper" class="clearfix">
+		<a id="logo" href="/">
+			<img src="/images/logo.png" />
+			<span id="site-desc">
+			  kai zo ku, ore wa naru
+      </span>
+		</a>
+		<button id="site-nav-switch">
+	    <span class="icon icon-menu"></span>
+	  </button>
+	</div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+    
+    <main id="main" role="main">
+      <article id="post-write-blog-with-hexo-and-aggregate-to-nap-blog"
+  class="post article white-box article-type-post"
+  itemscope itemprop="blogPost">
+	<h2 class="title">
+  	<a href="/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/">
+    	使用 Hexo 搭建个人博客并聚合到 NAP-blog
+    </a>
+  </h2>
+	<time>
+	  9月 26, 2017
+	</time>
+	<section class="content">
+  	<div class="article-entry" itemprop="articleBody">
+    	<blockquote>
+<p>Hexo is a fast, simple &amp; powerful blog framework.</p>
+</blockquote>
+<p>Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。</p>
+<a id="more"></a>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>Hexo 是用 node.js 编写的框架，因此需要 <code>node</code> 环境，同时如果需要 hexo 部署到 github pages 上，还需要配置 <code>git</code> 环境，鉴于这两者配置相对简单，这里给出教程地址：</p>
+<ul>
+<li><a href="https://nodejs.org/en/download/" target="_blank" rel="external">下载 node.js</a> / <a href="http://www.runoob.com/nodejs/nodejs-install-setup.html" target="_blank" rel="external">安装 node.js</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137396287703354d8c6c01c904c7d9ff056ae23da865a000" target="_blank" rel="external">安装 git</a></li>
+</ul>
+<p>安装完毕后，分别使用以下命令确定是否正确安装，安装的版本根据个人所需而定。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ node -v</div><div class="line">v4.4.0</div><div class="line">$ npm -v</div><div class="line">2.14.20</div><div class="line">$ git --version</div><div class="line">git version 2.11.0 (Apple Git-81)</div></pre></td></tr></table></figure>
+<h3 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h3><p>首先需要在全局环境下安装 <code>hexo-cli</code>，在命令行下键入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install hexo-cli -g</div></pre></td></tr></table></figure>
+<p>待安装完毕后，再使用确定 <code>hexo-cli</code> 是否正确安装完毕：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo -v</div></pre></td></tr></table></figure>
+<h3 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h3><p>找一个合适的路径，创建一个用于存放你的 hexo 文件和代码的文件夹，例如 <code>~/blog</code>，进入该文件夹后通过 <code>hexo init</code> 初始化 hexo 目录结构，再通过 <code>npm install</code> 安装 hexo 所需的所有依赖。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$ mkdir ~/blog</div><div class="line">$ <span class="built_in">cd</span> ~/blog</div><div class="line">$ hexo init</div><div class="line">INFO  Copying data to ~/blog-test</div><div class="line">INFO  You are almost <span class="keyword">done</span>! Don<span class="string">'t forget to run '</span>npm install<span class="string">' before you start blogging with Hexo!</span></div><div class="line">$ npm install</div><div class="line">hexo@3.3.9 node_modules/hexo</div><div class="line">├── abbrev@1.1.0</div><div class="line">├── pretty-hrtime@1.0.3</div><div class="line">├── hexo-front-matter@0.2.3</div><div class="line">├── archy@1.0.0</div><div class="line">├── titlecase@1.1.2</div><div class="line">├── text-table@0.2.0</div><div class="line">......</div><div class="line">├── nunjucks@2.5.2 (asap@2.0.6, yargs@3.32.0, chokidar@1.7.0)</div><div class="line">└── hexo-fs@0.2.2 (escape-string-regexp@1.0.5, graceful-fs@4.1.11, chokidar@1.7.0)</div></pre></td></tr></table></figure>
+<p>OK，到这一步一个全新的 hexo 博客已经搭建完毕了，这里只要用命令 <code>hexo s</code> 或 <code>hexo server</code> 即可运行搭建好的博客，博客运行的地址为 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
+<p>打开浏览器，键入运行的地址，可以看到已经可以查看博客的内容了。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/hexo-website.png" alt="hexo-website"> </p>
+<h3 id="编写博客"><a href="#编写博客" class="headerlink" title="编写博客"></a>编写博客</h3><p>Hexo 博客默认自带一篇教程《Hello World》，告诉用户如何去创建一篇新的文章。创建文章其实也很方便，首先需要在命令行中键入 <code>hexo new post &lt;title&gt;</code>，这里 <code>&lt;title&gt;</code> 是文章的标题（这里建议使用英文，对 url 比较友好，实际显示的标题可以到 markdown 文件中修改）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo new post <span class="string">"my first article"</span></div><div class="line">INFO  Created: ~/blog-test/<span class="built_in">source</span>/_posts/my-first-article.md</div></pre></td></tr></table></figure>
+<p>从命令的输出也可以看到，hexo 会在 <code>&lt;blog_directory&gt;/source/_posts</code> 文件夹下创建一个 <code>.md</code> 的 markdown 文档，文件名则是将标题中的空格替换成 <code>-</code> 的结果，例如这里的 <code>my-first-article.md</code>。</p>
+<p>OK，然后你就可以用任何你喜欢的 markdown 编辑器打开这个文档尽情进行编辑了。markdown 文件里的 <code>title</code> 是实际显示的标题，可用和文件名的 title 不一致。另外可用添加 <code>tags</code> 和 <code>categories</code>，用于制作标签和分类进行索引。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">title: my first article</div><div class="line">date: 2017-09-26 14:34:41</div><div class="line">tags: [xiashuo]</div><div class="line"><span class="section">categories: xiashuo</span></div><div class="line">---</div><div class="line">GNU is Not Unix</div><div class="line">&lt;!--more--&gt;</div><div class="line"></div><div class="line"><span class="strong">**GNU**</span> is Not Unix is Not Unix is Not Unix is Not Unix is Not Unix is Not Unix...</div><div class="line"></div><div class="line"><span class="bullet">* </span>GNU</div><div class="line"><span class="bullet">* </span>is</div><div class="line"><span class="bullet">* </span>Not</div><div class="line"><span class="bullet">* </span>Unix</div></pre></td></tr></table></figure>
+<blockquote>
+<p>tips: 在编写时，注意使用 <code>&lt;!--more--&gt;</code>，hexo 的首页默认是会把整篇文章渲染出来，使用 <code>&lt;!--more--&gt;</code> 之后只会显示该标签之上的内容，利用这个标签可用让文章在首页只显示摘要。</p>
+</blockquote>
+<p>另外，这里推荐几个可能的编辑环境和 preview 插件：</p>
+<ul>
+<li>vim + vim-markdown + vim-instant-markdown</li>
+<li>vscode + 内置 Instant Markdown</li>
+<li>sublime + MarkdownEditing + MarkdownPreview</li>
+<li>各平台下的 markdown 软件，如 MacDown 等</li>
+</ul>
+<p>编写完毕后，运行命令 <code>hexo generate</code> 或者 <code>hexo g</code> 可用生成对应的静态 HTML 文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ hexo g</div><div class="line">INFO  Start processing</div><div class="line">INFO  Files loaded <span class="keyword">in</span> 359 ms</div><div class="line">INFO  Generated: index.html</div><div class="line">INFO  Generated: archives/index.html</div><div class="line">INFO  Generated: fancybox/blank.gif</div><div class="line">...</div><div class="line">INFO  Generated: css/fonts/fontawesome-webfont.ttf</div><div class="line">INFO  Generated: 2017/09/26/hello-world/index.html</div><div class="line">INFO  Generated: 2017/09/26/my-first-article/index.html</div><div class="line">INFO  31 files generated <span class="keyword">in</span> 1.75 s</div></pre></td></tr></table></figure>
+<p>使用命令 <code>hexo server</code> 或者 <code>hexo s</code> 可用在本地调试已经写完的文章（使用 <code>hexo s</code> 会自动生成静态文件，因此不必在 <code>hexo s</code> 之前运行 <code>hexo g</code>）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
+<p>再次登录页面后可以看到已经有已经写完的文章了。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/hexo-article.png" alt="hexo-article"></p>
+<h3 id="部署到-Github-Pages"><a href="#部署到-Github-Pages" class="headerlink" title="部署到 Github Pages"></a>部署到 Github Pages</h3><p>Hexo 最方便的一点是可以配合 Github Pages 使用。</p>
+<blockquote>
+<p>Github Pages is Websites for you and your projects. Hosted directly from your GitHub repository. Just edit, push, and your changes are live.</p>
+</blockquote>
+<p>首先登录你的 Github 主页，新建一个名为 <code>&lt;yourname&gt;.github.io</code> 的仓库，这里 <code>&lt;yourname&gt;</code> 指的是你的 github 用户名，例如笔者用户名为 jetmuffin，则新建一个名为 <code>jetmuffin.github.io</code> 的仓库。这个仓库名和未来访问的地址绑定，即之后可以通过 <a href="#">http://yourname.github.io</a> 来访问你的博客。如果你需要自己绑定一个域名，那么可以不按这个规则来创建。</p>
+<p>然后编辑你的 hexo 目录下的 <code>_config.yml</code> 文件，笔者的 hexo 目录为 <code>~/blog</code>，那么则需要编辑 <code>~/blog/_config.yml</code>。在文件的最底部可以看到 <code>Deployment</code> 的配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Deployment</span></div><div class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></div><div class="line"><span class="attr">deploy:</span></div><div class="line"><span class="attr">  type:</span></div></pre></td></tr></table></figure>
+<p>把它修改为你的 github 对应地址：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Deployment</span></div><div class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></div><div class="line"><span class="attr">deploy:</span></div><div class="line"><span class="attr">  type:</span> git</div><div class="line"><span class="attr">  repo:</span> git@github.com:jetmuffin/jetmuffin.github.io.git</div><div class="line"><span class="attr">  branch:</span> master</div></pre></td></tr></table></figure>
+<p>这里需要解释一下配置的内容：</p>
+<ul>
+<li><code>repo</code> 对应刚刚创建的仓库的地址（带 .git），切记使用 <code>ssh</code> 模式，不然每次 deploy 都要输密码</li>
+<li><code>branch</code> 是指 hexo generate 出来的静态 HTML 存放的分支，这里可以直接使用 <code>master</code>，或者选择其他分支，但是需要配合 github pages 里的设置。</li>
+</ul>
+<p>修改完毕后，使用命令 <code>hexo deploy</code> 或者 <code>hexo d</code> 就可以把生成的静态 HTML 部署上 github pages 了。</p>
+<p>```bash<br>$ hexo deploy</p>
+
+  	</div>
+
+	  <div class="article-tags tags">
+		  
+        <a class="tag-link" href="/tags/blog/">blog</a><a class="tag-link" href="/tags/hexo/">hexo</a>
+      
+	  </div>
+	</section>
+</article>
+
+
+<section id="comments">
+	<div id="disqus_thread"></div>
+</section>
+
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </main>
+    
+    <footer id="footer" class="clearfix">
+  
+  
+	<div class="search">
+	  <form name="searchform" id="searchform" class="u-search-form">
+	    <input type="text" id="searchinput" class="u-search-input" placeholder="Looking for something?" />
+	    <button type="submit" id="u-search-btn-submit" class="u-search-btn-submit">
+	      <span class="icon icon-search"></span>
+	    </button>
+	  </form>
+	</div>
+	
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="mailto:jeffchen328@gmail.com" class="social email"
+          target="_blank" rel="external">
+          <span class="icon icon-email"></span>
+        </a>
+      
+        <a href="https://github.com/JetMuffin" class="social github"
+          target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss"
+          target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+        <a href="https://plus.google.com/u/0/104827733284453469708" class="social google"
+          target="_blank" rel="external">
+          <span class="icon icon-google"></span>
+        </a>
+      
+        <a href="http://weibo.com/1922357801" class="social sina-weibo"
+          target="_blank" rel="external">
+          <span class="icon icon-sina-weibo"></span>
+        </a>
+      
+    
+  </div>
+  
+  <div>Theme <span class="codename">Typescript</span> designed by <a href="http://rakugaki.me/" target="_blank">Art Chen</a>.</div>
+  <div>&copy; <a href="/">倦谈</a></div>
+  
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+
+    <div class="overlay"></div>
+    
+  </div>
+
+  <div class="site-sidebar" id="site-sidebar">
+    <div class="sidebar-switch clearfix" style="display:none"><a class="dark-btn active" data-toggle="toc"><span
+                    class="icon icon-list"></span> <span class="text">Index</span> </a><a class="dark-btn"
+                                                                                          data-toggle="bio"><span
+                    class="icon icon-person"></span> <span class="text">Bio</span></a></div>
+    <div class="site-toc" style="display:none">
+        <div class="no-index">No Index</div>
+    </div>
+    <div class="site-bio show" style="display:block">
+        <div class="about-me clearfix">
+            <div class="avatar"><img src="/images/avatar.jpeg"></div>
+            <div class="info"><a class="name dark-btn" href="/about">JetMuffin</a></div>
+            <div class="info"><span class="item desc">kai zo ku, ore wa naru</span></div>
+        </div>
+        <div class="menu section">
+            <ul class="clearfix">
+                
+                <li class="left"><a href="/" onfocus="this.blur()"
+                                    class="nav-home dark-btn block">Home</a></li>
+
+                
+
+                <li class="right"><a href="/about" onfocus="this.blur()"
+                                     class="nav-about dark-btn block">About</a></li>
+
+                </a>
+                
+                <li class="left"><a href="/archives" onfocus="this.blur()"
+                                    class="nav-archives dark-btn block">Archives</a></li>
+
+                
+
+                <li class="right"><a href="/links" onfocus="this.blur()"
+                                     class="nav-links dark-btn block">Links</a></li>
+
+                </a>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="shortcuts"><a href="#header" class="top window-nav dark-btn" id="go-top"><span
+                    class="icon icon-chevron-thin-up"></span> </a><a class="close dark-btn" id="sidebar-close"><span
+                    class="icon icon-close"></span> </a><a href="#footer" class="top window-nav dark-btn"
+                                                           id="go-bottom"><span
+                    class="icon icon-chevron-thin-down"></span></a></div>
+</div>
+
+  
+<script>
+  var disqus_shortname = 'jetmuffin';
+  
+  var disqus_url = 'http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+<!--page counter part-->
+<script src="/js/leancloud.js"></script>
+<script>
+var Counter = AV.Object.extend("Counter");
+
+if ($('.article').length == 1) {
+  addCount(Counter);
+}
+  
+</script>
+<script src="/js/jquery.fitvids.js"></script>
+<script>
+	var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+	var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+	var ALGOLIA_API_KEY = "";
+	var ALGOLIA_APP_ID = "";
+	var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var BAIDU_API_ID = "";
+  var SEARCH_SERVICE = "hexo";
+</script>
+<script src="/js/search.js"></script>
+<script src="/js/app.js"></script>
+
+
+  <script>setLoadingBarProgress(100);</script>
+  
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-09-16T06:07:12.000Z</updated>
+  <updated>2017-09-26T07:20:20.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -14,6 +14,90 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 Hexo 搭建个人博客并聚合到 NAP-blog</title>
+    <link href="http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/"/>
+    <id>http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/</id>
+    <published>2017-09-26T05:52:44.000Z</published>
+    <updated>2017-09-26T07:20:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>Hexo is a fast, simple &amp; powerful blog framework.</p>
+</blockquote>
+<p>Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。</p>
+<a id="more"></a>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>Hexo 是用 node.js 编写的框架，因此需要 <code>node</code> 环境，同时如果需要 hexo 部署到 github pages 上，还需要配置 <code>git</code> 环境，鉴于这两者配置相对简单，这里给出教程地址：</p>
+<ul>
+<li><a href="https://nodejs.org/en/download/" target="_blank" rel="external">下载 node.js</a> / <a href="http://www.runoob.com/nodejs/nodejs-install-setup.html" target="_blank" rel="external">安装 node.js</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137396287703354d8c6c01c904c7d9ff056ae23da865a000" target="_blank" rel="external">安装 git</a></li>
+</ul>
+<p>安装完毕后，分别使用以下命令确定是否正确安装，安装的版本根据个人所需而定。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ node -v</div><div class="line">v4.4.0</div><div class="line">$ npm -v</div><div class="line">2.14.20</div><div class="line">$ git --version</div><div class="line">git version 2.11.0 (Apple Git-81)</div></pre></td></tr></table></figure>
+<h3 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h3><p>首先需要在全局环境下安装 <code>hexo-cli</code>，在命令行下键入命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install hexo-cli -g</div></pre></td></tr></table></figure>
+<p>待安装完毕后，再使用确定 <code>hexo-cli</code> 是否正确安装完毕：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo -v</div></pre></td></tr></table></figure>
+<h3 id="创建-Hexo-博客"><a href="#创建-Hexo-博客" class="headerlink" title="创建 Hexo 博客"></a>创建 Hexo 博客</h3><p>找一个合适的路径，创建一个用于存放你的 hexo 文件和代码的文件夹，例如 <code>~/blog</code>，进入该文件夹后通过 <code>hexo init</code> 初始化 hexo 目录结构，再通过 <code>npm install</code> 安装 hexo 所需的所有依赖。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$ mkdir ~/blog</div><div class="line">$ <span class="built_in">cd</span> ~/blog</div><div class="line">$ hexo init</div><div class="line">INFO  Copying data to ~/blog-test</div><div class="line">INFO  You are almost <span class="keyword">done</span>! Don<span class="string">'t forget to run '</span>npm install<span class="string">' before you start blogging with Hexo!</span></div><div class="line">$ npm install</div><div class="line">hexo@3.3.9 node_modules/hexo</div><div class="line">├── abbrev@1.1.0</div><div class="line">├── pretty-hrtime@1.0.3</div><div class="line">├── hexo-front-matter@0.2.3</div><div class="line">├── archy@1.0.0</div><div class="line">├── titlecase@1.1.2</div><div class="line">├── text-table@0.2.0</div><div class="line">......</div><div class="line">├── nunjucks@2.5.2 (asap@2.0.6, yargs@3.32.0, chokidar@1.7.0)</div><div class="line">└── hexo-fs@0.2.2 (escape-string-regexp@1.0.5, graceful-fs@4.1.11, chokidar@1.7.0)</div></pre></td></tr></table></figure>
+<p>OK，到这一步一个全新的 hexo 博客已经搭建完毕了，这里只要用命令 <code>hexo s</code> 或 <code>hexo server</code> 即可运行搭建好的博客，博客运行的地址为 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
+<p>打开浏览器，键入运行的地址，可以看到已经可以查看博客的内容了。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/hexo-website.png" alt="hexo-website"> </p>
+<h3 id="编写博客"><a href="#编写博客" class="headerlink" title="编写博客"></a>编写博客</h3><p>Hexo 博客默认自带一篇教程《Hello World》，告诉用户如何去创建一篇新的文章。创建文章其实也很方便，首先需要在命令行中键入 <code>hexo new post &lt;title&gt;</code>，这里 <code>&lt;title&gt;</code> 是文章的标题（这里建议使用英文，对 url 比较友好，实际显示的标题可以到 markdown 文件中修改）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo new post <span class="string">"my first article"</span></div><div class="line">INFO  Created: ~/blog-test/<span class="built_in">source</span>/_posts/my-first-article.md</div></pre></td></tr></table></figure>
+<p>从命令的输出也可以看到，hexo 会在 <code>&lt;blog_directory&gt;/source/_posts</code> 文件夹下创建一个 <code>.md</code> 的 markdown 文档，文件名则是将标题中的空格替换成 <code>-</code> 的结果，例如这里的 <code>my-first-article.md</code>。</p>
+<p>OK，然后你就可以用任何你喜欢的 markdown 编辑器打开这个文档尽情进行编辑了。markdown 文件里的 <code>title</code> 是实际显示的标题，可用和文件名的 title 不一致。另外可用添加 <code>tags</code> 和 <code>categories</code>，用于制作标签和分类进行索引。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">title: my first article</div><div class="line">date: 2017-09-26 14:34:41</div><div class="line">tags: [xiashuo]</div><div class="line"><span class="section">categories: xiashuo</span></div><div class="line">---</div><div class="line">GNU is Not Unix</div><div class="line">&lt;!--more--&gt;</div><div class="line"></div><div class="line"><span class="strong">**GNU**</span> is Not Unix is Not Unix is Not Unix is Not Unix is Not Unix is Not Unix...</div><div class="line"></div><div class="line"><span class="bullet">* </span>GNU</div><div class="line"><span class="bullet">* </span>is</div><div class="line"><span class="bullet">* </span>Not</div><div class="line"><span class="bullet">* </span>Unix</div></pre></td></tr></table></figure>
+<blockquote>
+<p>tips: 在编写时，注意使用 <code>&lt;!--more--&gt;</code>，hexo 的首页默认是会把整篇文章渲染出来，使用 <code>&lt;!--more--&gt;</code> 之后只会显示该标签之上的内容，利用这个标签可用让文章在首页只显示摘要。</p>
+</blockquote>
+<p>另外，这里推荐几个可能的编辑环境和 preview 插件：</p>
+<ul>
+<li>vim + vim-markdown + vim-instant-markdown</li>
+<li>vscode + 内置 Instant Markdown</li>
+<li>sublime + MarkdownEditing + MarkdownPreview</li>
+<li>各平台下的 markdown 软件，如 MacDown 等</li>
+</ul>
+<p>编写完毕后，运行命令 <code>hexo generate</code> 或者 <code>hexo g</code> 可用生成对应的静态 HTML 文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ hexo g</div><div class="line">INFO  Start processing</div><div class="line">INFO  Files loaded <span class="keyword">in</span> 359 ms</div><div class="line">INFO  Generated: index.html</div><div class="line">INFO  Generated: archives/index.html</div><div class="line">INFO  Generated: fancybox/blank.gif</div><div class="line">...</div><div class="line">INFO  Generated: css/fonts/fontawesome-webfont.ttf</div><div class="line">INFO  Generated: 2017/09/26/hello-world/index.html</div><div class="line">INFO  Generated: 2017/09/26/my-first-article/index.html</div><div class="line">INFO  31 files generated <span class="keyword">in</span> 1.75 s</div></pre></td></tr></table></figure>
+<p>使用命令 <code>hexo server</code> 或者 <code>hexo s</code> 可用在本地调试已经写完的文章（使用 <code>hexo s</code> 会自动生成静态文件，因此不必在 <code>hexo s</code> 之前运行 <code>hexo g</code>）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
+<p>再次登录页面后可以看到已经有已经写完的文章了。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/hexo-article.png" alt="hexo-article"></p>
+<h3 id="部署到-Github-Pages"><a href="#部署到-Github-Pages" class="headerlink" title="部署到 Github Pages"></a>部署到 Github Pages</h3><p>Hexo 最方便的一点是可以配合 Github Pages 使用。</p>
+<blockquote>
+<p>Github Pages is Websites for you and your projects. Hosted directly from your GitHub repository. Just edit, push, and your changes are live.</p>
+</blockquote>
+<p>首先登录你的 Github 主页，新建一个名为 <code>&lt;yourname&gt;.github.io</code> 的仓库，这里 <code>&lt;yourname&gt;</code> 指的是你的 github 用户名，例如笔者用户名为 jetmuffin，则新建一个名为 <code>jetmuffin.github.io</code> 的仓库。这个仓库名和未来访问的地址绑定，即之后可以通过 <a href="#">http://yourname.github.io</a> 来访问你的博客。如果你需要自己绑定一个域名，那么可以不按这个规则来创建。</p>
+<p>然后编辑你的 hexo 目录下的 <code>_config.yml</code> 文件，笔者的 hexo 目录为 <code>~/blog</code>，那么则需要编辑 <code>~/blog/_config.yml</code>。在文件的最底部可以看到 <code>Deployment</code> 的配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Deployment</span></div><div class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></div><div class="line"><span class="attr">deploy:</span></div><div class="line"><span class="attr">  type:</span></div></pre></td></tr></table></figure>
+<p>把它修改为你的 github 对应地址：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Deployment</span></div><div class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></div><div class="line"><span class="attr">deploy:</span></div><div class="line"><span class="attr">  type:</span> git</div><div class="line"><span class="attr">  repo:</span> git@github.com:jetmuffin/jetmuffin.github.io.git</div><div class="line"><span class="attr">  branch:</span> master</div></pre></td></tr></table></figure>
+<p>这里需要解释一下配置的内容：</p>
+<ul>
+<li><code>repo</code> 对应刚刚创建的仓库的地址（带 .git），切记使用 <code>ssh</code> 模式，不然每次 deploy 都要输密码</li>
+<li><code>branch</code> 是指 hexo generate 出来的静态 HTML 存放的分支，这里可以直接使用 <code>master</code>，或者选择其他分支，但是需要配合 github pages 里的设置。</li>
+</ul>
+<p>修改完毕后，使用命令 <code>hexo deploy</code> 或者 <code>hexo d</code> 就可以把生成的静态 HTML 部署上 github pages 了。</p>
+<p>```bash<br>$ hexo deploy</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Hexo is a fast, simple &amp;amp; powerful blog framework.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://blog.jetmuffin.com/tags/hexo/"/>
+    
+      <category term="blog" scheme="http://blog.jetmuffin.com/tags/blog/"/>
+    
+  </entry>
   
   <entry>
     <title>hihocoder 1330 数组变换</title>
@@ -612,7 +696,7 @@
     <link href="http://blog.jetmuffin.com/2017/04/05/use-ansible-for-automatic-cluster-operation/"/>
     <id>http://blog.jetmuffin.com/2017/04/05/use-ansible-for-automatic-cluster-operation/</id>
     <published>2017-04-05T11:04:04.000Z</published>
-    <updated>2017-04-05T11:09:03.000Z</updated>
+    <updated>2017-09-19T15:00:40.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>ansible是新出现的自动化运维工具，基于Python开发，集合了众多运维工具（puppet、cfengine、chef、func、fabric）的优点，实现了批量系统配置、批量程序部署、批量运行命令等功能。</p>
@@ -853,10 +937,10 @@
   
   <entry>
     <title>集群调度架构的发展</title>
-    <link href="http://blog.jetmuffin.com/2017/01/02/The-evoolution-of-cluster-scheduler-architectures/"/>
-    <id>http://blog.jetmuffin.com/2017/01/02/The-evoolution-of-cluster-scheduler-architectures/</id>
+    <link href="http://blog.jetmuffin.com/2017/01/02/The-evolution-of-cluster-scheduler-architectures/"/>
+    <id>http://blog.jetmuffin.com/2017/01/02/The-evolution-of-cluster-scheduler-architectures/</id>
     <published>2017-01-02T12:41:33.000Z</published>
-    <updated>2017-02-17T13:05:25.000Z</updated>
+    <updated>2017-09-20T08:19:07.000Z</updated>
     
     <content type="html"><![CDATA[<p>文章翻译自<a href="http://firmament.io/blog/scheduler-architectures.html" target="_blank" rel="external">《The evolution of cluster scheduler architectures》</a>，原作者为 Cambridge 的 Sys@Scale 实验室。</p>
 <a id="more"></a>
@@ -904,7 +988,7 @@
 <p>最后，特定的分析和 OLAP 风格的应用（例如 Dremel 或 SparkSQL queries）适用于完全分布式调度器。然而，完全分布式调度器（例如 Sparrow）受到一系列的约束，而在任务相同时工作效果最好。我们会在之后的文章中更加详细地解释完全分布式调度器和混合调度器中的分布式组件部分的内容。而现在足以说明从观察的结果看出，这种架构在调度策略上过于简单，以致于没法支持多类资源类型，资源超售和资源重分配等功能。</p>
 <p>总体的说，从图 2 的表格中可以看出目前的开源调度框架还有很多的功能需要去支持和改进。这应该成为一个行动号召，解决这些框架中缺少的功能，低下的使用率，不可预测的任务性能等问题。</p>
 <p>然而，一个好消息是，许多框架采用中央调度模式的调度框架正在往更加灵活的设计上发展。Kubernetes 已经支持了可插件化的调度器（<code>kube-scheduler</code> pod 可以被其他兼容 API 的调度器 pod 替代），从 v1.2 开始支持多调度器，以及正在开发的支持用户自定义的调度策略等。Docker Swarm 在未来可能同样会变得可插件化。</p>
-<h2 id="下回预告"><a href="#下回预告" class="headerlink" title="下回预告"></a>下回预告</h2><p>本系列的下篇文章会关注完全分布式架构的主要问题。同时，我们会关注 resource-fitting 策略，以及最后讨论为什么我们的 Firmament scheduling 平台综合了其他调度架构所有的优点。</p>
+<h2 id="下回预告"><a href="#下回预告" class="headerlink" title="下回预告"></a>下回预告</h2><p>本系列的下篇文章会关注完全分布式架构的主要问题。同时，我们会关注 resource-fitting 策略，以及最后讨论为什么我们的 Firmament scheduling 平台综合了其他调度架构所有的优点。 </p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
 <li>Verma A, Pedrosa L, Korupolu M, et al. Large-scale cluster management at Google with Borg[C]//Proceedings of the Tenth European Conference on Computer Systems. ACM, 2015: 18.</li>
 <li>Hindman B, Konwinski A, Zaharia M, et al. Mesos: A Platform for Fine-Grained Resource Sharing in the Data Center[C]//NSDI. 2011, 11: 22-22.</li>
@@ -1291,57 +1375,6 @@
       <category term="shadowsocks" scheme="http://blog.jetmuffin.com/tags/shadowsocks/"/>
     
       <category term="debian" scheme="http://blog.jetmuffin.com/tags/debian/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用 gh-md-doc 生成 markdown 文章结构</title>
-    <link href="http://blog.jetmuffin.com/2016/09/13/use-gh-md-doc-to-generate-toc-of-blog/"/>
-    <id>http://blog.jetmuffin.com/2016/09/13/use-gh-md-doc-to-generate-toc-of-blog/</id>
-    <published>2016-09-13T12:23:11.000Z</published>
-    <updated>2017-04-06T01:21:46.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>本篇技巧来自于我在 <a href="http://www.iqiyi.com" target="_blank" rel="external">iQiyi</a> 的云平台部门实习时的内部分享，主要用于文档编写。<br>在开发开源项目或进行团队协作时，总要写一些文档，并把代码托管在 git 上，对于长篇文档希望能够生成文档的结构，这里就用到了一个非常好的插件 <a href="https://github.com/ekalinin/github-markdown-toc" target="_blank" rel="external">gh-md-toc</a>。</p>
-<a id="more"></a>
-<h2 id="生成-markdown-table-of-contents"><a href="#生成-markdown-table-of-contents" class="headerlink" title="生成 markdown table of contents"></a>生成 markdown table of contents</h2><hr>
-<p>常常项目开发的文档都是用 markdown 格式编写，并且以代码的形式托管在 Git 上，<br>同时，那么就可以使用 <a href="https://github.com/ekalinin/github-markdown-toc" target="_blank" rel="external">gh-md-toc</a><br>来生成文档目录。</p>
-<p>但是，gh-md-toc 会直接将结果打印到 stout，而我们想要的最好的效果是直接将其添加到文档头部，<br>而不是从 stdout 再复制粘贴，然后还要格式化空行。</p>
-<p>以本文档为例，gh-md-toc 生成的 table of contents 如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Table of Contents</div><div class="line">=================</div><div class="line"></div><div class="line">    * [生成 markdown table of contents](#生成-markdown-table-of-contents)</div><div class="line">    * [使用 gh-md-toc 的奇技淫巧](#使用-gh-md-toc-的奇技淫巧)</div><div class="line"></div><div class="line">Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)</div></pre></td></tr></table></figure>
-<p>显然，我们需要将这段文字添加到文件的头部，并且<strong>删除第一行空行，在最后一行添加一行空行</strong>。</p>
-<h2 id="使用-gh-md-toc-的奇技淫巧"><a href="#使用-gh-md-toc-的奇技淫巧" class="headerlink" title="使用 gh-md-toc 的奇技淫巧"></a>使用 gh-md-toc 的奇技淫巧</h2><p>OK，Let’s Rock!</p>
-<p>先看一条命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gh-md-toc file.md | (tail -n +2 &amp;&amp; echo &quot;&quot; &amp;&amp; cat file.md) | sponge file.md</div></pre></td></tr></table></figure>
-<p>你会惊讶的发现，这条命令就完成了所有事，为 file.md 生成了 table of<br>contents，并且自动添加在了 file.md 的头部，并且完美的处理了空行。</p>
-<p>这里使用了一个好工具 <code>sponge</code>，需要安装包 <code>moreutils</code>。想想为什么不能直接重定向到 file.md 呢？</p>
-<p>但是，追求极致的程序员不会止步，因为上面的命令中 file.md 这个待处理的文件出现了<br>3 次，所以也挺烦人的，对吧，即使使用命令替换也来得不如一次直接。</p>
-<p>OK，Let’s Rock Again!</p>
-<p>添加一个函数，重定义 gh-md-toc，添加下面的函数定义到你的 shell rc，例如：</p>
-<ul>
-<li>bash，~/.bashrc</li>
-<li>zsh，~/.zshrc</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> gh-md-<span class="function"><span class="title">toc</span></span>() &#123;</div><div class="line">  <span class="keyword">if</span> [ -z <span class="string">"<span class="variable">$1</span>"</span> ]; <span class="keyword">then</span></div><div class="line">      <span class="built_in">echo</span> <span class="string">"gh-md-toc &lt;markdown file&gt;"</span></div><div class="line">      <span class="built_in">return</span> 1</div><div class="line">  <span class="keyword">fi</span></div><div class="line">  /home/chengwei/Github/github-markdown-toc/gh-md-toc <span class="variable">$1</span> | (tail -n +2 &amp;&amp; <span class="built_in">echo</span> <span class="string">""</span> &amp;&amp; cat <span class="variable">$1</span>) | sponge <span class="variable">$1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>将上面的 <code>/home/chengwei/Github/github-markdown-toc/gh-md-toc</code> 替换成 gh-md-doc<br>在你的系统上的路径。</p>
-<p><strong>注意：如果你把 gh-md-doc 放在了 $PATH 中，必须用绝对路径调用，否则就无限递归了 :-)</strong></p>
-<p>最后，source shell rc 配置文件，生效</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">source</span> ~/.bashrc</div><div class="line">OR</div><div class="line">$ <span class="built_in">source</span> ~/.zshrc</div></pre></td></tr></table></figure>
-<p>现在，要为某个 markdown 文件添加 table of contents 只需要执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gh-md-toc file.md</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;本篇技巧来自于我在 &lt;a href=&quot;http://www.iqiyi.com&quot;&gt;iQiyi&lt;/a&gt; 的云平台部门实习时的内部分享，主要用于文档编写。&lt;br&gt;在开发开源项目或进行团队协作时，总要写一些文档，并把代码托管在 git 上，对于长篇文档希望能够生成文档的结构，这里就用到了一个非常好的插件 &lt;a href=&quot;https://github.com/ekalinin/github-markdown-toc&quot;&gt;gh-md-toc&lt;/a&gt;。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="设计开发" scheme="http://blog.jetmuffin.com/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/"/>
-    
-    
-      <category term="markdown" scheme="http://blog.jetmuffin.com/tags/markdown/"/>
-    
-      <category term="gh-md-doc" scheme="http://blog.jetmuffin.com/tags/gh-md-doc/"/>
     
   </entry>
   
