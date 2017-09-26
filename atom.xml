@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.jetmuffin.com/"/>
-  <updated>2017-09-26T07:20:20.000Z</updated>
+  <updated>2017-09-26T08:08:17.000Z</updated>
   <id>http://blog.jetmuffin.com/</id>
   
   <author>
@@ -20,14 +20,14 @@
     <link href="http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/"/>
     <id>http://blog.jetmuffin.com/2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/</id>
     <published>2017-09-26T05:52:44.000Z</published>
-    <updated>2017-09-26T07:20:20.000Z</updated>
+    <updated>2017-09-26T08:08:17.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>Hexo is a fast, simple &amp; powerful blog framework.</p>
 </blockquote>
 <p>Hexo 是一个很流行的博客框架，组里的同学大多都使用 hexo 来撰写个人博客，刚好之前写了一个基于 webhook 的博客聚合，将组里所有人的博客自动合并到一个总的博客中。这篇文章主要讲一下如何从头搭建一个 hexo 博客，以及如何聚合到 NAP-blog 上。</p>
 <a id="more"></a>
-<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>Hexo 是用 node.js 编写的框架，因此需要 <code>node</code> 环境，同时如果需要 hexo 部署到 github pages 上，还需要配置 <code>git</code> 环境，鉴于这两者配置相对简单，这里给出教程地址：</p>
+<h2 id="搭建-Hexo-博客"><a href="#搭建-Hexo-博客" class="headerlink" title="搭建 Hexo 博客"></a>搭建 Hexo 博客</h2><h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>Hexo 是用 node.js 编写的框架，因此需要 <code>node</code> 环境，同时如果需要 hexo 部署到 github pages 上，还需要配置 <code>git</code> 环境，鉴于这两者配置相对简单，这里给出教程地址：</p>
 <ul>
 <li><a href="https://nodejs.org/en/download/" target="_blank" rel="external">下载 node.js</a> / <a href="http://www.runoob.com/nodejs/nodejs-install-setup.html" target="_blank" rel="external">安装 node.js</a></li>
 <li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137396287703354d8c6c01c904c7d9ff056ae23da865a000" target="_blank" rel="external">安装 git</a></li>
@@ -80,7 +80,49 @@
 <li><code>branch</code> 是指 hexo generate 出来的静态 HTML 存放的分支，这里可以直接使用 <code>master</code>，或者选择其他分支，但是需要配合 github pages 里的设置。</li>
 </ul>
 <p>修改完毕后，使用命令 <code>hexo deploy</code> 或者 <code>hexo d</code> 就可以把生成的静态 HTML 部署上 github pages 了。</p>
-<p>```bash<br>$ hexo deploy</p>
+<blockquote>
+<p>tips: <code>hexo deploy</code> 只会 diff 静态 HTML 文件，因此如果要 deploy，必须提前执行过 <code>hexo generate</code> 把修改或者添加的内容更新到静态的 HTML 上。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div><div class="line">[master 96f3fef] Site updated: 2017-09-26 15:20:43</div><div class="line"> 43 files changed, 2533 insertions(+), 687 deletions(-)</div><div class="line"> create mode 100644 2017/09/26/write-blog-with-hexo-and-aggregate-to-nap-blog/index.html</div><div class="line"> ...</div><div class="line">remote: This repository moved. Please use the new location:</div><div class="line">remote:   git@github.com:JetMuffin/jetmuffin-blog.git</div><div class="line">To github.com:JetMuffin/jetmuffin.github.io.git</div><div class="line">   3c38954..96f3fef  master -&gt; gh-pages</div><div class="line">Branch master <span class="built_in">set</span> up to track remote branch gh-pages from git@github.com:JetMuffin/jetmuffin.github.io.git.</div><div class="line">INFO  Deploy <span class="keyword">done</span>: git</div></pre></td></tr></table></figure>
+<p>接着打开 <a href="http://yourname.github.io" target="_blank" rel="external">http://yourname.github.io</a> 就可以看到文章已经部署上去了。</p>
+<h3 id="保存-Hexo-源码"><a href="#保存-Hexo-源码" class="headerlink" title="保存 Hexo 源码"></a>保存 Hexo 源码</h3><p>除了利用 github 托管博客生成的静态 HTML 文件外，这里建议把 hexo 源码也托管到 github 上。可以使用之前创建的 <code>&lt;yourname&gt;.github.io</code> 这个仓库，放在不同的分支上，例如这里我放在 <code>hexo</code> 这个 branch 上。</p>
+<p>首先在本地 <code>git init</code>，添加 <code>.gitignore</code>，再添加博客目录下的内容。添加一个 <code>remote</code>，指向 <code>&lt;yourname&gt;.github.io</code> 仓库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/blog</div><div class="line">$ git init</div><div class="line">Initialized empty Git repository <span class="keyword">in</span> /Users/jeff/blog-test/.git/</div><div class="line">$ git checkout -b hexo</div><div class="line">$ <span class="built_in">echo</span> <span class="string">'node_modules'</span> &gt;&gt; .gitignore</div><div class="line">$ git add .</div><div class="line">$ git commit -m <span class="string">"Fisrt commit"</span></div><div class="line">79 files changed, 5414 insertions(+)</div><div class="line"> create mode 100644 .gitignore</div><div class="line"> create mode 100644 _config.yml</div><div class="line"> ...</div><div class="line">$ git remote add origin git@github.com:JetMuffin/jetmuffin.github.io.git</div><div class="line">$ git push origin hexo</div></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>NOTE:</strong> 一定要把 <code>node_modles</code> 添加到 <code>.gitignore</code>，不然会有大量的依赖文件被追踪；git push 时需要手动 git checkout 切换到 push 的分支。</p>
+</blockquote>
+<p>另外也可以将源码放在 master 分支，生成的静态页面放在其他的分支（例如 <code>gh-pages</code> 分支），这样的话不需要进行分支切换，但是需要手动到项目仓库 <code>settings/Options/GitHub Pages</code> 下配置 github page 对应的分支，如下图：</p>
+<p><img src="http://cdn.jetmuffin.com/posts/gh-pages.png" alt="gh-pages"></p>
+<p>至此，hexo 博客就搭建完毕了。</p>
+<p>另外，hexo 的其他具体使用可以查阅 hexo 对应的文档：</p>
+<ul>
+<li><a href="https://hexo.io/zh-cn/docs/commands.html" target="_blank" rel="external">hexo 命令介绍</a></li>
+<li><a href="https://hexo.io/zh-cn/docs/themes.html" target="_blank" rel="external">hexo 添加主题</a></li>
+<li><a href="https://hexo.io/zh-cn/docs/templates.html" target="_blank" rel="external">hexo 模板介绍</a></li>
+</ul>
+<h2 id="使用-NAP-blog-webhook"><a href="#使用-NAP-blog-webhook" class="headerlink" title="使用 NAP-blog-webhook"></a>使用 NAP-blog-webhook</h2><p>NAP-blog-webhook 是基于开源项目 <a href="https://github.com/NetEaseGame/git-webhook" target="_blank" rel="external">NetEaseGame/git-webhook</a> 修改的项目，所以这里先感谢一波原作者。</p>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>首先介绍一下什么是 Git 的 WebHook？以 GitHub 为例，在项目的 Setting 页面，可以看到一栏 WebHook 菜单，可以配置这个项目的 WebHook，也就是可以指定当项目发生某些情况的时候，去 POST 请求一个 Web Url 地址，同时携带当前项目的一些信息。</p>
+<p>同样的，任何 Git 服务都有这样的 WebHook 设置。我们利用 Git 的这个机制，可以在 Web Url 这里做拉取代码，自动部署，代码增量检查，CI 等等，同样，包括 Travis-ci 等很多 GitHub 第三方集成都是这样的一个原理。</p>
+<p>本项目（NAP-blog-webhook）就是基于这样的原理，做的一个博客聚合,当注册的博客更新后,会通过 webhook 告知 robot, robot 抓取相应修改并聚合到 NAP 组的博客中。</p>
+<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><p>首先需要注册 webhook，在 Blog 标签页里点击添加新的博客，在 Git Repository 里填写 你的博客仓库名(例如 <code>jetmuffin-blog</code>, <code>konnase.github.io</code>). 然后在 Branch 一栏填写博客源代码所在分支(即上文提到的 hexo 分支，或有 <code>source/_posts/xxx.md</code> 的分支)。最后在 URL 一栏填写博客的访问地址，如下图所示：</p>
+<p><img src="http://cdn.jetmuffin.com/posts/webhook-step1.png" alt="step1"></p>
+<p>然后点击 <strong>Operate 里的复制按钮</strong>，将分配到的 webhook 地址拷贝到粘贴板。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/webhook-step2.png" alt="step2"></p>
+<p>接着需要到博客对应的仓库，即上文创建的仓库里添加 git webhook，在项目的 <code>settings/webhooks/Add webhook</code> 界面中填写信息。其中 <code>Payload URL</code> 填写刚刚复制到粘贴板的地址，<code>Content type</code> 需要修改为 <code>application/json</code>，如下图所示：</p>
+<p><img src="http://cdn.jetmuffin.com/posts/webhook-step3.png" alt="step3"></p>
+<p>然后每当更新一篇文章后，除了用 <code>hexo deploy</code> 部署到 github-pages 外，还需要把源码提交到源码仓库，以触发 webhook。需要在 git commit 提交时，加入关键字 <strong>robot</strong>，来互换机器人爬取这篇文章（只要 commit 信息中出现 <strong>robot</strong> 这个单词即可）。</p>
+<blockquote>
+<p><strong>NOTE:</strong> 必须是源码进行提交才会被爬取，hexo deploy 生成的静态文件提交不会被爬取。</p>
+</blockquote>
+<p><img src="http://cdn.jetmuffin.com/posts/webhook-step4.png" alt="step4"></p>
+<p>接着在 NAP-blog-webhook 的 <a href="http://webhook.njuics.cn/#/blog" target="_blank" rel="external">Dashboard</a> 里可以看到触发的 webhook，点击博客名可以看到 webhook 触发历史和爬取日志。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/webhook-step5.png" alt="step5"></p>
+<p>最后，爬取的文章会被汇聚到 Gitlab 的仓库中，并且以 Merge Request 的形式等待审阅。</p>
+<p>如果你是仓库的管理员，那么你可以自己 review 这个 MR，如果保证没有错误，便可以 Merge 这个 MR。Merge 操作会触发 Continuous Delivery，自动更新文章到 NAP-blog 上。如果你不是管理员，那么需要喊一个管理员来帮你 review 这个 MR。</p>
+<p><img src="http://cdn.jetmuffin.com/posts/webhook-step6.png" alt="step6"></p>
+<h3 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h3><h4 id="1-为什么我的提交被-Skipped-了？"><a href="#1-为什么我的提交被-Skipped-了？" class="headerlink" title="1. 为什么我的提交被 Skipped 了？"></a>1. 为什么我的提交被 Skipped 了？</h4><p>目前 NAP-blog-webhook 只会爬取 commit 信息中修改过的 <code>source/_posts</code> 路径下的 <code>*.md</code> 文件，其余会被跳过，因此你需要检查一下你的提交是否正确。</p>
+<h4 id="2-我提交了一个错误的-commit-没有抓取文章怎么办？"><a href="#2-我提交了一个错误的-commit-没有抓取文章怎么办？" class="headerlink" title="2. 我提交了一个错误的 commit 没有抓取文章怎么办？"></a>2. 我提交了一个错误的 commit 没有抓取文章怎么办？</h4><p>没关系，到这篇文章里，随便找个地方加个空格或者换行什么的，这样就有 diff 了，再重新单独 commit 这篇文章，再次触发 webhook 即可。</p>
+<h4 id="3-我的提交是正确的，但是抓取出错了怎么办？"><a href="#3-我的提交是正确的，但是抓取出错了怎么办？" class="headerlink" title="3. 我的提交是正确的，但是抓取出错了怎么办？"></a>3. 我的提交是正确的，但是抓取出错了怎么办？</h4><p>在 Dashboard 中，把鼠标放在 status 的 <code>成功/失败/异常/未知/执行</code> 状态标签上，会出现一个 retry 的按钮，点击按钮可以手动重新触发 webhook。如果还有错误，那么很抱歉，代码里有 BUG，请联系 <a href="mailto:564936642@qq.com" target="_blank" rel="external">JetMuffin</a> [手动笑哭.png]。</p>
 ]]></content>
     
     <summary type="html">
